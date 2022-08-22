@@ -23,7 +23,7 @@ typedef struct NodeList {
   int listLen;
 }NodeList;
 
-TSLanguage *tree_sitter_c();
+// TSLanguage *tree_sitter_c();
 
 void init_node_list(NodeList * node_list);
 
@@ -36,4 +36,4 @@ void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const 
 
 void parse_decompiler_output(TSTree *tree, const char *source, const char *node_filter);
 
-void read_source(const char *filename, char * source_buf);
+char * read_source(const char *filename);

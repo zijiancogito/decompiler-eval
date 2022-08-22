@@ -7,6 +7,8 @@
 #include <assert.h>
 #include <tree_sitter/api.h>
 
+TSLanguage *tree_sitter_c();
+
 enum Decompiler {
 	HexRays,
 	Ghidra,
@@ -23,7 +25,7 @@ void process_hexrays(const char * source) {}
 void process_retdec(const char * source) {}
 void process_binaryninja(const char * source) {}
 void process_ghidra(const char * source) {
-	char *node_filter = "";
+	char *node_filter = "call_expression";
 	// Create a parser
 	TSParser *parser = ts_parser_new();
 	// Set the parser's language
@@ -37,14 +39,13 @@ void process_ghidra(const char * source) {
 			);
 	
 	parse_decompiler_output(tree, source, node_filter);
+	ts_tree_delete(tree);
+	ts_parser_delete(parser);
 
 }
 void process(enum Decompiler decompiler, const char * filename) {
-	char * source = NULL;
-	printf("%s\n", filename);
-	read_source(filename, source);
+	char * source = read_source(filename);
 	assert(source);
-	printf("%s", source);
 	if(decompiler == HexRays) {
 		process_hexrays(source);		
 	}
@@ -60,6 +61,7 @@ void process(enum Decompiler decompiler, const char * filename) {
 	else{
 		unknow_decompiler();
 	}
+	free(source);
 }
 
 int main(){

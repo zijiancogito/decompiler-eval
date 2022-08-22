@@ -148,17 +148,16 @@ void parse_decompiler_output(TSTree * tree, const char * source, const char *nod
   // ts_parser_delete(parser);
 }
 
-void read_source(const char * filename, char * source_buf) {
+char * read_source(const char * filename) {
 	FILE *fp = fopen(filename, "rb");
 	assert(fp);
 	fseek(fp, 0, SEEK_END);
 	int len = ftell(fp);
-	printf("%d\n", len);
-	rewind(fp);
-	source_buf = (char*)malloc(len);
-	printf("%s\n", source_buf);
-	fread(source_buf, 0, len, fp);
+	fseek(fp, 0, SEEK_SET);
+	char * source_buf = (char*)malloc(len+1);
+	fread(source_buf, 1, len+1, fp);
 	fclose(fp);
+	return source_buf;
 }
 //int main(){
   //const char *src = "int a = func(b);";
