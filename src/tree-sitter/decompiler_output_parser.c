@@ -112,21 +112,21 @@ void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const 
   }
 }
 
-void parse_decompiler_output(const char * source, const char *node_filter){
+void parse_decompiler_output(TSTree * tree, const char * source, const char *node_filter){
   // Create a parser.
-  TSParser *parser = ts_parser_new();
+  // TSParser *parser = ts_parser_new();
   
   // Set the parser's language (C in this case).
-  ts_parser_set_language(parser, tree_sitter_c());
+  // ts_parser_set_language(parser, tree_sitter_c());
 
   // Build a syntax tree based on source code stored
   // in a string.
-  TSTree *tree = ts_parser_parse_string(
-      parser,
-      NULL,
-      source,
-      strlen(source)
-      );
+  // TSTree *tree = ts_parser_parse_string(
+      // parser,
+      // NULL,
+      // source,
+      // strlen(source)
+      // );
 
   // Get the root node of the syntax tree.
   TSNode root_node = ts_tree_root_node(tree);
@@ -144,10 +144,22 @@ void parse_decompiler_output(const char * source, const char *node_filter){
     tmp = tmp->next;
     printf("%s\n", ts_node_type(tmp->data));
   }
-  ts_tree_delete(tree);
-  ts_parser_delete(parser);
+  // ts_tree_delete(tree);
+  // ts_parser_delete(parser);
 }
 
+void read_source(const char * filename, char * source_buf) {
+	FILE *fp = fopen(filename, "rb");
+	assert(fp);
+	fseek(fp, 0, SEEK_END);
+	int len = ftell(fp);
+	printf("%d\n", len);
+	rewind(fp);
+	source_buf = (char*)malloc(len);
+	printf("%s\n", source_buf);
+	fread(source_buf, 0, len, fp);
+	fclose(fp);
+}
 //int main(){
   //const char *src = "int a = func(b);";
   //const char *node_filter = "";
