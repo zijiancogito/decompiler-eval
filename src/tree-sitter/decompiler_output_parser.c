@@ -1,29 +1,4 @@
 #include "decompiler_output_parser.h"
-// #include <assert.h>
-// #include <string.h>
-// #include <stdio.h>
-// #include <tree_sitter/api.h>
-// // 
-// enum MOVE {
-  // UP,
-  // DOWN,
-  // // LEFT,
-  // RIGHT
-// };
-
-// TSNode list 
-// typedef struct Node {
-  // TSNode data;
-  // struct Node * next;
-// }Node;
-
-// typedef struct NodeList {
-  // struct Node * head;
-  // struct Node * tail;
-  // int listLen;
-// }NodeList;
-
-// TSLanguage *tree_sitter_c();
 
 void init_node_list(NodeList *node_list) {
   Node *head = (Node*)malloc(sizeof(Node));
@@ -31,10 +6,8 @@ void init_node_list(NodeList *node_list) {
 
   // Head is a NULL Node that point to the first TSNode
   // of the NodeList.
-  // head->data= NULL;
   head->next = tail;
   // Tail is a the last TSNode in the NodeList.
-  // tail->data= NULL;
   tail->next = NULL;
   node_list->head = head;
   node_list->tail = tail;
@@ -56,17 +29,17 @@ void append_node(NodeList *all_nodes, TSNode data) {
   all_nodes->listLen++;
 }    
 
-void free_node_list(NodeList *list){
-  Node *tmp = list->head;
-  for(int i = 0; i < list->listLen; i++) {
-    if(tmp == NULL)
-      break;
-    Node *p = tmp;
-    tmp = tmp->next;
-    free(p);
-  }
-  free(list->head);
-}
+// void free_node_list(NodeList *list){
+  // Node *tmp = list->head;
+  // for(int i = 0; i < list->listLen; i++) {
+    // if(tmp == NULL)
+      // break;
+    // Node *p = tmp;
+    // tmp = tmp->next;
+    // free(p);
+  // }
+  // free(list->head);
+// }
 
 void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const char * node_filter) {
   TSNode currentNode = ts_tree_cursor_current_node(cursor);
@@ -112,40 +85,17 @@ void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const 
   }
 }
 
-void parse_decompiler_output(TSTree * tree, const char * source, const char *node_filter){
-  // Create a parser.
-  // TSParser *parser = ts_parser_new();
-  
-  // Set the parser's language (C in this case).
-  // ts_parser_set_language(parser, tree_sitter_c());
-
-  // Build a syntax tree based on source code stored
-  // in a string.
-  // TSTree *tree = ts_parser_parse_string(
-      // parser,
-      // NULL,
-      // source,
-      // strlen(source)
-      // );
-
+void parse_decompiler_output(TSTree * tree, const char * source, const char *node_filter, NodeList * all_nodes){
   // Get the root node of the syntax tree.
   TSNode root_node = ts_tree_root_node(tree);
   // Initialize the cursor from root_node.
   TSTreeCursor cursor = ts_tree_cursor_new(root_node);
   
-  // Save filtered nodes in all_nodes.
-  NodeList all_nodes;
-  init_node_list(&all_nodes);
+  // Initialize all_nodes.
+  init_node_list(all_nodes);
   
   // Walk the syntax tree and get filtered nodes.
-  make_move(&cursor, DOWN, &all_nodes, node_filter);
-  Node *tmp = all_nodes.head;
-  for (int i = 0; i < all_nodes.listLen; i++) {
-    tmp = tmp->next;
-    printf("%s\n", ts_node_type(tmp->data));
-  }
-  // ts_tree_delete(tree);
-  // ts_parser_delete(parser);
+  make_move(&cursor, DOWN, all_nodes, node_filter);
 }
 
 char * read_source(const char * filename) {
@@ -159,6 +109,11 @@ char * read_source(const char * filename) {
 	fclose(fp);
 	return source_buf;
 }
+
+void walk_expression(TSTreeCursor * cursor) {
+    
+}
+
 //int main(){
   //const char *src = "int a = func(b);";
   //const char *node_filter = "";
