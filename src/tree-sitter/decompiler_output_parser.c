@@ -29,18 +29,6 @@ void append_node(NodeList *all_nodes, TSNode data) {
   all_nodes->listLen++;
 }    
 
-// void free_node_list(NodeList *list){
-  // Node *tmp = list->head;
-  // for(int i = 0; i < list->listLen; i++) {
-    // if(tmp == NULL)
-      // break;
-    // Node *p = tmp;
-    // tmp = tmp->next;
-    // free(p);
-  // }
-  // free(list->head);
-// }
-
 void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const char * node_filter) {
   TSNode currentNode = ts_tree_cursor_current_node(cursor);
   const char *nodeType = ts_node_type(currentNode);
@@ -73,9 +61,6 @@ void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const 
     }
   }
   else if (move == UP) {
-    if (strcmp(node_filter, "") == 0 || strcmp(node_filter, nodeType) == 0){
-      append_node(all_nodes, currentNode);
-    }
     if (ts_tree_cursor_goto_next_sibling(cursor)){
       make_move(cursor, RIGHT, all_nodes, node_filter);
     }
@@ -107,6 +92,10 @@ char * read_source(const char * filename) {
 	char * source_buf = (char*)malloc(len+1);
 	fread(source_buf, 1, len+1, fp);
 	fclose(fp);
+	for (int i = 0; i < strlen(source_buf); i++) {
+	    if(source_buf[i]=='\n')
+		source_buf[i] = ' ';
+	}
 	return source_buf;
 }
 
