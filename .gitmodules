@@ -25,3 +25,6 @@
 [submodule "src/call/uthash"]
 	path = src/call/uthash
 	url = https://github.com/troydhanson/uthash.git
+[submodule "src/data_flow/uthash"]
+	path = src/data_flow/uthash
+	url = https://github.com/troydhanson/uthash.git
