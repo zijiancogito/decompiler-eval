@@ -250,6 +250,24 @@ void create_var_map(Variable **var_map, TSNode var_node, const char *source, boo
     char *type = get_content_in_source(type_node, source);
     char *name = get_content_in_source(identifier_node, source);
     
+    if (strstr(name, "*") != NULL)
+    {
+        int num = 0;
+        for (int i = 0; i < strlen(name); i ++ )
+            if (name[i] == '*') num ++;
+        char *tmp_type = type;
+        char *tmp_name = name;
+        type = (char*)malloc(strlen(tmp_type) + num);
+        name = (char*)malloc(strlen(tmp_name) - num);
+        strcpy(type, tmp_type);
+        for (int i = 0; i < num; i ++ )
+            strcat(type, "*");
+        strcpy(name, tmp_name + num);
+    }
+
+    if (strcmp(type, "void") == 0)
+        return ;
+
     Variable *v;
     v = (Variable *)malloc(sizeof(*v));
     v->type = type;
@@ -983,13 +1001,25 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
     make_move(&cursor, DOWN, &all_nodes, "");
 
     Node *tmp = all_nodes.head;
+    TSNode *restart_node = NULL;
     int output_num = 0;
-    for (int i = 0; i < all_nodes.listLen; i++)
+    while (tmp->next != all_nodes.tail)
     {
         tmp = tmp->next;
+        if (restart_node != NULL)
+        {
+            if (ts_node_eq(tmp->data, *restart_node))
+            {
+                free(restart_node);
+                restart_node = NULL;
+            }
+            else
+                continue;
+        }
+
         const char *node_type = ts_node_type(tmp->data);
         char *cnt = get_content_in_source(tmp->data, source);
-        
+
         if (in_node_list(ignore_nodes, tmp->data))
             continue;
 
@@ -1049,13 +1079,31 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
             return;
         }
 
+        else if (strcmp(node_type, "else") == 0)
+        {
+            
+            TSNode next = ts_node_next_sibling(tmp->data);
+            char *cnt = get_content_in_source(next, source);
+            Branch_Node *b = NULL;
+            HASH_FIND_STR(*branch_map, cnt, b);
+            if (b != NULL)
+            {
+                Branch_Node *tmpb = b;
+                while (tmpb->is_else)
+                    tmpb = tmpb->false_branch;
+
+                restart_node = (TSNode*)malloc(sizeof(TSNode));
+                *restart_node = ts_tree_cursor_current_node(tmpb->start);
+            }
+        }
+
         else if (is_branch_statement(node_type))
         {
             find_for_tail(ignore_nodes, tmp->data);
             find_for_head(tmp->data, source, var_map, &changed_vars);
             branch_node = find_branch_condition(tmp->data, source);
             parse_branch_condition(branch_node, source, var_map, true_con, false_con);
-            if (root->id == NULL)
+            if (root->end == NULL)
             {
                 // This branch is not end, but there is another branch statement 
                 // in this branch, should go to the new branch
@@ -1115,7 +1163,7 @@ void process(enum Decompiler decompiler, const char * filename)
     );
 
     //get_variables(tree, source);
-
+    
     SCFG scfg;
     Branch_Node *branch_map = NULL;
     get_scfg(tree, source, &scfg, &branch_map);
@@ -1134,7 +1182,7 @@ void process(enum Decompiler decompiler, const char * filename)
     init_path_condition(&path);
     init_node_list(&ignore_nodes);
     symbolic_execution(&branch_map, scfg.entry, &var_map, &path, &out_list, &ignore_nodes, source);
-
+    
     /*
     // Save filtered nodes in all_nodes
     NodeList all_nodes;
@@ -1147,32 +1195,17 @@ void process(enum Decompiler decompiler, const char * filename)
     for (int i = 0; i < all_nodes.listLen; i++) {
         tmp = tmp->next;
         
-        if (is_branch_statement(ts_node_type(tmp->data)))
+        if (strcmp(ts_node_type(tmp->data), "else") == 0)
         {
-            TSNode con = find_branch_condition(tmp->data, source);
-            condition_list true_con;
-            condition_list false_con;
-            init_condition_list(&true_con);
-            init_condition_list(&false_con);
-            parse_branch_condition(con, source, &var_map, &true_con, &false_con);
-            condition_node *t = true_con.head;
-            condition_node *f = false_con.head;
-            
-            for (int j = 0; j < true_con.len; j ++)
-            {
-                t = t->next;
-                printf("true:\n");
-                printf("%s\n", t->condition);
-                printf("\n");
-            }
-            for (int j = 0; j < false_con.len; j ++ )
-            {
-                f = f->next;
-                printf("false:\n");
-                printf("%s\n", f->condition);
-                printf("\n");
-            }
-            
+            TSNode par = ts_node_next_sibling(tmp->data);
+            // par = ts_node_parent(par);
+            char *content = NULL;
+            printf("%s:\n", ts_node_type(par));
+            content = get_content_in_source(par, source);
+            // printf("%s\n", ts_node_string(tmp->data));
+            printf("%s\n", content);
+            printf("\n");
+            free(content);
         }
         
         char *content = NULL;
@@ -1182,6 +1215,7 @@ void process(enum Decompiler decompiler, const char * filename)
         printf("%s\n", content);
         printf("\n");
         free(content);
+        
     }
     */
     ts_tree_delete(tree);

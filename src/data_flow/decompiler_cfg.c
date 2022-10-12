@@ -8,6 +8,7 @@ const char *branch_statements[] = {
     "for_statement",
     "if_statement",
     "while_statement",
+    "else"
 };
 
 char *get_content_in_source(TSNode node, const char *source)
@@ -47,37 +48,86 @@ bool is_branch_statement(const char *node_type)
 
 void add_branch(SCFG *scfg, Branch_Node **branch_map, TSTreeCursor cursor, const char *source)
 {
-    bool successful = false;
+    TSNode current_node = ts_tree_cursor_current_node(&cursor);
     Branch_Node *new_true_branch_node = (Branch_Node*)malloc(sizeof(Branch_Node));
     Branch_Node *new_false_branch_node = (Branch_Node*)malloc(sizeof(Branch_Node));
     TSTreeCursor cursor_copy = ts_tree_cursor_copy(&cursor);
     Branch_Node *tmp = scfg->entry;
+    bool successful = false;
+
+    if (strcmp(ts_node_type(current_node), "else") == 0)
+    {
+        ts_tree_cursor_goto_next_sibling(&cursor_copy);
+        TSNode next_node = ts_tree_cursor_current_node(&cursor_copy);
+        ts_tree_cursor_goto_parent(&cursor);
+        TSNode par_node = ts_tree_cursor_current_node(&cursor);
+        char *cnt = get_content_in_source(par_node, source);
+        Branch_Node *b;
+        HASH_FIND_STR(*branch_map, cnt, b);
+        Branch_Node *f = b->false_branch;
+        Branch_Node *else_node = (Branch_Node*)malloc(sizeof(Branch_Node));
+        else_node->start = (TSTreeCursor*)malloc(sizeof(TSTreeCursor));
+        *else_node->start = cursor_copy;
+        else_node->id = get_content_in_source(next_node, source);
+        else_node->is_else = true;
+        else_node->false_branch = f;
+        TSTreeCursor c_true = ts_tree_cursor_copy(&cursor_copy);
+        if (strcmp(ts_node_type(next_node), "if_statement") == 0)
+        {
+            else_node->end = (TSTreeCursor*)malloc(sizeof(TSTreeCursor));
+            *else_node->end = cursor_copy;
+            ts_tree_cursor_goto_first_child(&c_true);
+            ts_tree_cursor_goto_next_sibling(&c_true);
+            ts_tree_cursor_goto_next_sibling(&c_true);
+        }
+        else
+            else_node->end = NULL;
+
+        new_true_branch_node->start = (TSTreeCursor*)malloc(sizeof(TSTreeCursor));
+        *new_true_branch_node->start = c_true;
+        new_true_branch_node->end = NULL;
+        new_true_branch_node->id = NULL;
+        new_true_branch_node->true_branch = NULL;
+        new_true_branch_node->false_branch = NULL;
+        new_true_branch_node->is_else = false;
+
+        else_node->true_branch = new_true_branch_node;
+        HASH_ADD_STR(*branch_map, id, else_node);
+
+        b->false_branch = else_node;
+
+        return ;
+    }
+    else
+    {
+        char *cnt = get_content_in_source(current_node, source);
+        Branch_Node *b;
+        HASH_FIND_STR(*branch_map, cnt, b);
+        if (b != NULL) return ;
+    }
 
     while (ts_tree_cursor_goto_parent(&cursor))
     {
         TSNode par_node = ts_tree_cursor_current_node(&cursor);
-        if (is_branch_statement(ts_node_type(par_node)))
+        char *content = get_content_in_source(par_node, source);
+        Branch_Node *par_branch = NULL;
+        HASH_FIND_STR(*branch_map, content, par_branch);
+        if (par_branch != NULL)
         {
-            Branch_Node *par_branch = NULL;
-            char *content = get_content_in_source(par_node, source);
-            HASH_FIND_STR(*branch_map, content, par_branch);
-            if (par_branch != NULL)
+            if (par_branch->true_branch->end == NULL)
             {
-                if (par_branch->true_branch->end == NULL)
-                {
-                    successful = true; 
-                    par_branch->true_branch->end = (TSTreeCursor*)malloc(sizeof(TSTreeCursor));
-                    *par_branch->true_branch->end = cursor_copy;
-                }
-                tmp = par_branch->true_branch;
+                successful = true; 
+                par_branch->true_branch->end = (TSTreeCursor*)malloc(sizeof(TSTreeCursor));
+                *par_branch->true_branch->end = cursor_copy;
             }
+            tmp = par_branch->true_branch;
             break;
         }
     }
 
     if (!successful)
     {
-        while (tmp->end != NULL && tmp->false_branch != NULL)
+        while (tmp->false_branch != NULL)
             tmp = tmp->false_branch;
         tmp->end = (TSTreeCursor*)malloc(sizeof(TSTreeCursor));
         *tmp->end = cursor_copy;
@@ -95,6 +145,7 @@ void add_branch(SCFG *scfg, Branch_Node **branch_map, TSTreeCursor cursor, const
     *new_true_branch_node->start = c_true;
     new_true_branch_node->end = NULL;
     new_true_branch_node->id = NULL;
+    new_true_branch_node->is_else = false;
     new_true_branch_node->true_branch = NULL;
     new_true_branch_node->false_branch = NULL;
 
@@ -108,6 +159,7 @@ void add_branch(SCFG *scfg, Branch_Node **branch_map, TSTreeCursor cursor, const
     else new_false_branch_node->start = NULL;
     new_false_branch_node->end = NULL;
     new_false_branch_node->id = NULL;
+    new_false_branch_node->is_else = false;
     new_false_branch_node->true_branch = NULL;
     new_false_branch_node->false_branch = NULL;
 

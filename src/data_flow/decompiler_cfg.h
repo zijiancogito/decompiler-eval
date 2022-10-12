@@ -16,6 +16,7 @@ typedef struct Branch_Node {
   TSTreeCursor *end;
   struct Branch_Node *true_branch;
   struct Branch_Node *false_branch;
+  bool is_else;
   UT_hash_handle hh;
 }Branch_Node;
 

@@ -1,29 +1,22 @@
-void  FUN_00101189(int param_1)
+int f(int param_1,int param_2)
+
 {
-int iVar1;
-long in_FS_OFFSET;
-int local_24;
-int local_20;
-int local_1c;
-int local_18;
-uint local_14;
-long local_10;
-local_10 = *(long *)(in_FS_OFFSET + 0x28);
-local_14 = 0;
-__isoc99_scanf(&DAT_00102004,&local_20);
-for (local_1c = 1; local_1c <= local_20; local_1c = local_1c + 1) {
-    __isoc99_scanf(&DAT_00102004,&local_24);
-    for (local_18 = 2; local_18 <= local_24; local_18 = local_18 + 1) {
-        local_18 = 2;
-        if (local_24 % local_18 == 0) {
-            iVar1 = FUN_00101261(local_24, local_18);
-            local_14 = local_14 + iVar1;
-        }
+  int iVar1;
+  int local_10;
+  int local_c;
+  
+  local_10 = 0;
+  if (param_2 == param_1) {
+    local_10 = 1;
+  }
+  else {
+    param_1 = param_1 / param_2;
+    for (local_c = param_2; local_c <= param_1; local_c = local_c + 1) {
+      if (param_1 % local_c == 0) {
+        iVar1 = f(param_1,local_c);
+        local_10 = local_10 + iVar1;
+      }
     }
-    printf("%d\n",(ulong)local_14);
-    local_14 = 0;
-}
-if (local_10 != *(long *)(in_FS_OFFSET + 0x28)) {
-    __stack_chk_fail();
-}
+  }
+  return local_10;
 }
