@@ -898,7 +898,7 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
 void print_input(Variable *var_map)
 {
     printf("input:  ");
-    Variable *v = var_map->hh.next;
+    Variable *v = var_map;
     while (v != NULL)
     {
         if (v->is_input)
