@@ -1,5 +1,4 @@
-// #include "decompiler_output_parser.h"
-#include "../data_flow/decompiler_se.h"
+#include "decompiler_output_parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,6 +38,15 @@ typedef struct{
 	UT_hash_handle hh;
 }VarMap;
 
+char * get_content_in_source(int start, int end, const char *source) {
+    char * content = (char*)malloc((end-start+1)*sizeof(char));
+    for(int i = 0; i < end - start; i++){
+	content[i] = source[start+i];
+    }
+    content[end-start+1] = '\0';
+    return content;
+}
+
 int is_other_symbol(const char * symbol) {
 	if (strcmp(symbol, "(") == 0) {
 		return 1;
@@ -70,7 +78,7 @@ int parse_call_expression(TSNode node, Argument ** arguments, const char *source
     for(int i = 0; i< child_count; i++) {
 	TSNode arg_node = ts_tree_cursor_current_node(&args);
 	const char *tp = ts_node_type(arg_node);
-	char *type = (char*)malloc(strlen(ts_node_type(arg_node)) + 1);	    
+	char *type = (char*)malloc(strlen(ts_node_type(arg_node))*sizeof(char));	    
 	strcpy(type, ts_node_type(arg_node));
 	(*arguments)[i].type = type;    
 	int start = ts_node_start_point(arg_node).column;
@@ -90,7 +98,7 @@ void parse_declaration(TSNode node, VarMap ** var_map, const char * source) {
 	TSNode identifier_node = ts_tree_cursor_current_node(&cursor);
 
 	Type *tp = (Type*)malloc(sizeof(Type));
-	tp->type_type = (char*)malloc(strlen(type_type) + 1);
+	tp->type_type = (char*)malloc(strlen(type_type)*sizeof(char));
 	strcpy(tp->type_type, type_type);
 	int type_start = ts_node_start_point(type_node).column;
 	int type_end = ts_node_end_point(type_node).column;
@@ -126,9 +134,9 @@ void build_variable_map(NodeList all_var_nodes, const char *source, VarMap **var
 }
 
 char * get_variable_name(const char * var) {
-	char * result = (char*)malloc(strlen(var) + 1);
+	char * result = (char*)malloc(strlen(var));
 	int cnt = 0;
-	for (int i = 0; i <= strlen(var); i++) {
+	for (int i = 0; i < strlen(var); i++) {
 		if (var[i] != '&' && var[i] != '*') {
 			result[cnt] = var[i];
 			cnt++;
@@ -187,9 +195,6 @@ void process(enum Decompiler decompiler, const char * filename) {
 	}
 	printf("\n");
     }
-
-	run_se(tree, source, &all_call_nodes);
-
     ts_tree_delete(tree);
     ts_parser_delete(parser);
     free(source);

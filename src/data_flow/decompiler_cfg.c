@@ -11,11 +11,16 @@ const char *branch_statements[] = {
     "else"
 };
 
-char *get_content_in_source(TSNode node, const char *source)
+char *get_content(TSNode node, const char *source)
 {
     int start = ts_node_start_point(node).column;
     int end = ts_node_end_point(node).column;
-    char *content = (char*)malloc((end-start+1));
+    return get_content_in_source(start, end, source);
+}
+
+char *get_content_in_source(int start, int end, const char *source)
+{
+    char *content = (char*)malloc(end-start+1);
     for(int i = 0; i < end - start; i++)
 	    content[i] = source[start+i];
     content[end-start] = '\0';
@@ -61,14 +66,14 @@ void add_branch(SCFG *scfg, Branch_Node **branch_map, TSTreeCursor cursor, const
         TSNode next_node = ts_tree_cursor_current_node(&cursor_copy);
         ts_tree_cursor_goto_parent(&cursor);
         TSNode par_node = ts_tree_cursor_current_node(&cursor);
-        char *cnt = get_content_in_source(par_node, source);
+        char *cnt = get_content(par_node, source);
         Branch_Node *b;
         HASH_FIND_STR(*branch_map, cnt, b);
         Branch_Node *f = b->false_branch;
         Branch_Node *else_node = (Branch_Node*)malloc(sizeof(Branch_Node));
         else_node->start = (TSTreeCursor*)malloc(sizeof(TSTreeCursor));
         *else_node->start = cursor_copy;
-        else_node->id = get_content_in_source(next_node, source);
+        else_node->id = get_content(next_node, source);
         else_node->is_else = true;
         else_node->false_branch = f;
         TSTreeCursor c_true = ts_tree_cursor_copy(&cursor_copy);
@@ -100,7 +105,7 @@ void add_branch(SCFG *scfg, Branch_Node **branch_map, TSTreeCursor cursor, const
     }
     else
     {
-        char *cnt = get_content_in_source(current_node, source);
+        char *cnt = get_content(current_node, source);
         Branch_Node *b;
         HASH_FIND_STR(*branch_map, cnt, b);
         if (b != NULL) return ;
@@ -109,7 +114,7 @@ void add_branch(SCFG *scfg, Branch_Node **branch_map, TSTreeCursor cursor, const
     while (ts_tree_cursor_goto_parent(&cursor))
     {
         TSNode par_node = ts_tree_cursor_current_node(&cursor);
-        char *content = get_content_in_source(par_node, source);
+        char *content = get_content(par_node, source);
         Branch_Node *par_branch = NULL;
         HASH_FIND_STR(*branch_map, content, par_branch);
         if (par_branch != NULL)
@@ -134,7 +139,7 @@ void add_branch(SCFG *scfg, Branch_Node **branch_map, TSTreeCursor cursor, const
     }
     
     TSNode end_node = ts_tree_cursor_current_node(tmp->end);
-    tmp->id = get_content_in_source(end_node, source);
+    tmp->id = get_content(end_node, source);
     HASH_ADD_STR(*branch_map, id, tmp);
 
     TSTreeCursor c_true = ts_tree_cursor_copy(tmp->end);

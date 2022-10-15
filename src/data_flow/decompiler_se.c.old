@@ -120,8 +120,8 @@ void delete_tail_output(output_list *out_list)
     del->prev->next = del->next;
     del->next->prev = del->prev;
 
-    free(del->output);
-    free(del);
+    // free(del->output);
+    // free(del);
 
     out_list->len -- ;
 }
@@ -173,7 +173,7 @@ void delete_tail_condition_list(path_condition *path)
     del->prev->next = path->tail;
     path->tail->prev = del->prev;
     path->len -- ;
-
+/*
     condition_node *tmp = del->head;
     
     for (int i = 0; i < del->len; i ++ )
@@ -190,7 +190,7 @@ void delete_tail_condition_list(path_condition *path)
     }
 
     free(del);
-
+*/
 }
 
 void init_variable_list(Variable_list *var_list)
@@ -223,17 +223,17 @@ Variable *variable_copy(Variable *v)
     new_v->value = NULL;
     if (v->type != NULL)
     {
-        new_v->type = (char*)malloc(strlen(v->type) + 1);
+        new_v->type = (char*)malloc(strlen(v->type));
         strcpy(new_v->type, v->type);
     }
     if (v->name != NULL)
     {
-        new_v->name = (char*)malloc(strlen(v->name) + 1);
+        new_v->name = (char*)malloc(strlen(v->name));
         strcpy(new_v->name, v->name);
     }
     if (v->value != NULL)
     {
-        new_v->value = (char*)malloc(strlen(v->value) + 1);
+        new_v->value = (char*)malloc(strlen(v->value));
         strcpy(new_v->value, v->value);
     }
     return new_v;
@@ -247,8 +247,8 @@ void create_var_map(Variable **var_map, TSNode var_node, const char *source, boo
     ts_tree_cursor_goto_next_sibling(&cursor);
     TSNode identifier_node = ts_tree_cursor_current_node(&cursor);
 
-    char *type = get_content(type_node, source);
-    char *name = get_content(identifier_node, source);
+    char *type = get_content_in_source(type_node, source);
+    char *name = get_content_in_source(identifier_node, source);
     
     if (strstr(name, "*") != NULL)
     {
@@ -257,8 +257,8 @@ void create_var_map(Variable **var_map, TSNode var_node, const char *source, boo
             if (name[i] == '*') num ++;
         char *tmp_type = type;
         char *tmp_name = name;
-        type = (char*)malloc(strlen(tmp_type) + 1 + num);
-        name = (char*)malloc(strlen(tmp_name) + 1 - num);
+        type = (char*)malloc(strlen(tmp_type) + num);
+        name = (char*)malloc(strlen(tmp_name) - num);
         strcpy(type, tmp_type);
         for (int i = 0; i < num; i ++ )
             strcat(type, "*");
@@ -286,7 +286,7 @@ void update_var_map_with_var_list(Variable **var_map, Variable_list var_list)
         Variable *replaced;
         tmp = tmp->next;
         HASH_REPLACE_STR(*var_map, name, tmp->var, replaced);
-        free_variable(replaced);
+        // free_variable(replaced);
     }
 }
 
@@ -311,7 +311,7 @@ void find_input_variables(TSTree *tree, const char *source, Variable **var_map)
         tmp = tmp->next;
         TSNode func_node = ts_node_child(tmp->data, 0);
         char *content = NULL;
-        content = get_content(func_node, source);
+        content = get_content_in_source(func_node, source);
 
         if (strstr(content, "scanf") != NULL)
         {
@@ -324,7 +324,7 @@ void find_input_variables(TSTree *tree, const char *source, Variable **var_map)
             for (int j = 0; j < pnodes.listLen; j ++ )
             {
                 tmp = tmp->next;
-                char *name = get_content(tmp->data, source);
+                char *name = get_content_in_source(tmp->data, source);
                 Variable *v = NULL;
                 HASH_FIND_STR(*var_map, name, v);
                 if (v != NULL)
@@ -335,14 +335,14 @@ void find_input_variables(TSTree *tree, const char *source, Variable **var_map)
             }
         }
 
-        free(content);
+        // free(content);
     }
 }
 
-TSNode *find_branch_condition(TSNode node, const char* source)
+TSNode find_branch_condition(TSNode node, const char* source)
 {
     TSTreeCursor cursor = ts_tree_cursor_new(node);
-    TSNode *result = NULL;
+    TSNode result;
     NodeList all_nodes;
     char *split;
     init_node_list(&all_nodes);
@@ -358,13 +358,12 @@ TSNode *find_branch_condition(TSNode node, const char* source)
         tmp = tmp->next;
         if (strcmp(ts_node_type(tmp->data), split) == 0)
         {
-            result = (TSNode*)malloc(sizeof(TSNode));
-            *result = tmp->next->data;
+            result = tmp->next->data;
             break;
         }
     }
     // printf("%s\n", ts_node_type(result));
-    // printf("%s\n", get_content(result, source));
+    // printf("%s\n", get_content_in_source(result, source));
     return result;
 }
 
@@ -373,7 +372,7 @@ void find_for_tail(NodeList *tail_nodes, TSNode for_node)
     if (strcmp(ts_node_type(for_node), "for_statement") != 0) return ;
 
     TSTreeCursor cursor = ts_tree_cursor_new(for_node);
-    TSNode *result = NULL;
+    TSNode result;
     NodeList all_nodes;
     int num = 0;
     init_node_list(&all_nodes);
@@ -386,27 +385,23 @@ void find_for_tail(NodeList *tail_nodes, TSNode for_node)
         {
             if (num == 1)
             {
-                result = (TSNode*)malloc(sizeof(TSNode));
-                *result = tmp->next->data;
+                result = tmp->next->data;
                 break;
             }
             num ++ ;
         }
     }
-    if (result != NULL)
+    cursor = ts_tree_cursor_new(result);
+    NodeList list;
+    init_node_list(&list);
+    make_move(&cursor, DOWN, &list, "");
+    tmp = list.head;
+    for (int i = 0; i < list.listLen; i ++)
     {
-        cursor = ts_tree_cursor_new(*result);
-        NodeList list;
-        init_node_list(&list);
-        make_move(&cursor, DOWN, &list, "");
-        tmp = list.head;
-        for (int i = 0; i < list.listLen; i ++)
+        tmp = tmp->next;
+        if (strcmp(ts_node_type(tmp->data), "assignment_expression") == 0 || strcmp(ts_node_type(tmp->data), "update_expression") == 0)
         {
-            tmp = tmp->next;
-            if (strcmp(ts_node_type(tmp->data), "assignment_expression") == 0 || strcmp(ts_node_type(tmp->data), "update_expression") == 0)
-            {
-                append_node(tail_nodes, tmp->data);
-            }
+            append_node(tail_nodes, tmp->data);
         }
     }
 }
@@ -468,13 +463,13 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
     const char *node_type = ts_node_type(expression_node);
     if (strcmp("identifier", node_type) == 0)
     {
-        char *id_name = get_content(expression_node, source);
+        char *id_name = get_content_in_source(expression_node, source);
         Variable *v = NULL;
         HASH_FIND_STR(*var_map, id_name, v);
         if (v == NULL)
         {
             Variable *new_v;
-            new_v = (Variable *)malloc(sizeof(Variable));
+            new_v = (Variable *)malloc(sizeof(*new_v));
             new_v->type = NULL;
             new_v->name = id_name;
             new_v->value = NULL;
@@ -486,20 +481,20 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
         char *cnt = NULL;
         if (v->value != NULL)
         {
-            cnt = (char*)malloc(strlen(v->value) + 1);
+            cnt = (char*)malloc(sizeof(char) * strlen(v->value));
             strcpy(cnt, v->value);
             return cnt;
         }
         else
         {
-            cnt = (char*)malloc(strlen(v->name) + 1);
+            cnt = (char*)malloc(sizeof(char) * strlen(v->name));
             strcpy(cnt, v->name);
             return cnt;
         }
     }
     else if (strstr(node_type, "_literal") != NULL && strstr(node_type, "literal_") == NULL)
     {
-        return get_content(expression_node, source);
+        return get_content_in_source(expression_node, source);
     }
     else if (strcmp("cast_expression", node_type) == 0)
     {
@@ -510,25 +505,25 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
     {
         TSNode pointer_node = ts_node_child(expression_node, 0);
         if (strcmp(ts_node_type(pointer_node), "&") == 0)
-            return get_content(expression_node, source);
+            return get_content_in_source(expression_node, source);
         
         TSNode cnt_node = ts_node_next_sibling(pointer_node);
         char *cnt = parse_expression(cnt_node, source, var_map);
-        char *full_cnt = (char*)malloc(strlen("*") + strlen(cnt) + 1);
+        char *full_cnt = (char*)malloc(sizeof(char) * (strlen("*") + strlen(cnt)));
         strcpy(full_cnt, "*");
         strcat(full_cnt, cnt);
-        free(cnt);
+        // free(cnt);
         return full_cnt;
     }
     else if (strcmp("parenthesized_expression", node_type) == 0)
     {
         TSNode cnt_node = ts_node_child(expression_node, 1);
         char *cnt = parse_expression(cnt_node, source, var_map);
-        char *full_cnt = (char*)malloc(strlen("(") + strlen(cnt) + strlen(")") + 1);
+        char *full_cnt = (char*)malloc(sizeof(char) * (strlen("(") + strlen(cnt) + strlen(")")));
         strcpy(full_cnt, "(");
         strcat(full_cnt, cnt);
         strcat(full_cnt, ")");
-        free(cnt);
+        // free(cnt);
         return full_cnt;
     }
     else if (strcmp("binary_expression", node_type) == 0)
@@ -538,12 +533,12 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
         char *cnt1 = parse_expression(left, source, var_map);
         const char *cnt2 = ts_node_type(ts_node_child(expression_node, 1));
         char *cnt3 = parse_expression(right, source, var_map);
-        char *full_cnt = (char*)malloc(strlen(cnt1) + strlen(cnt2) + strlen(cnt3) + 1);
+        char *full_cnt = (char*)malloc(sizeof(char) * (strlen(cnt1) + strlen(cnt2) + strlen(cnt3)));
         strcpy(full_cnt, cnt1);
         strcat(full_cnt, cnt2);
         strcat(full_cnt, cnt3);
-        free(cnt1);
-        free(cnt3);
+        // free(cnt1);
+        // free(cnt3);
         return full_cnt;
     }
     else if (strcmp("update_expression", node_type) == 0)
@@ -555,17 +550,17 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
         if (strcmp(ts_node_type(second_node), "++") == 0 || strcmp(ts_node_type(second_node), "--") == 0)
         {
             // full_cnt = parse_expression(first_node, source, var_map);
-            full_cnt = get_content(first_node, source);
+            full_cnt = get_content_in_source(first_node, source);
         }
         else
         {
             const char *op = ts_node_type(first_node);
             // cnt = parse_expression(second_node, source, var_map);
-            cnt = get_content(second_node, source);
-            char *single_op = (char*)malloc(strlen(op) + 1);
+            cnt = get_content_in_source(second_node, source);
+            char *single_op = (char*)malloc(strlen(op));
             strcpy(single_op, op);
             single_op[strlen(op) - 1] = '\0';
-            char *full_cnt = (char*)malloc(strlen(cnt) + strlen(single_op) + strlen("1") + 1);
+            char *full_cnt = (char*)malloc(strlen(cnt) + strlen(single_op) + strlen("1"));
             strcpy(full_cnt, cnt);
             strcat(full_cnt, single_op);
             strcat(full_cnt, "1");
@@ -575,7 +570,7 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
     }
     else if (strcmp("call_expression", node_type) == 0)
     {
-        char *func_name = get_content(ts_node_child(expression_node, 0), source);
+        char *func_name = get_content_in_source(ts_node_child(expression_node, 0), source);
         TSNode argument_list = ts_node_child(expression_node, 1);
         int argument_num = ts_node_child_count(argument_list);
         char **arguments = (char**)malloc(sizeof(char*) * argument_num);
@@ -590,16 +585,12 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
                 length += strlen(arguments[real_arg_num - 1]);
             }
         }
-        if (real_arg_num > 0)
-            length += (real_arg_num - 1) * strlen(", ");
-        char *func = (char*)malloc(length + 1);
+        length += (real_arg_num - 1) * strlen(", ");
+        char *func = (char*)malloc(sizeof(char) * length);
         strcpy(func, func_name);
         strcat(func, "(");
-        if (real_arg_num > 0)
-        {
-            strcat(func, arguments[0]);
-            free(arguments[0]);
-        }
+        strcat(func, arguments[0]);
+        free(arguments[0]);
         for (int i = 1; i < real_arg_num; i ++ )
         {
             strcat(func, ", ");
@@ -617,7 +608,7 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
         char *return_cnt = parse_expression(return_node, source, var_map);
         if (return_cnt == NULL)
             return NULL;
-        char *full_cnt = (char*)malloc(strlen("return ") + strlen(return_cnt) + 1);
+        char *full_cnt = (char*)malloc(strlen("return ") + strlen(return_cnt));
         strcpy(full_cnt, "return ");
         strcat(full_cnt, return_cnt);
         free(return_cnt);
@@ -648,21 +639,20 @@ void parse_assignment_expression(TSNode assign_node, const char* source, Variabl
             op_node = first_node;
         }
         const char *op = ts_node_type(op_node);
-        char *cnt = get_content(var_node, source);
-        char *single_op = (char*)malloc(strlen(op) + 1);
+        char *cnt = get_content_in_source(var_node, source);
+        char *single_op = (char*)malloc(strlen(op));
         strcpy(single_op, op);
         single_op[strlen(op) - 1] = '\0';
-        value = (char*)malloc(strlen(cnt) + strlen(single_op) + strlen("1") + 1);
+        value = (char*)malloc(strlen(cnt) + strlen(single_op) + strlen("1"));
         strcpy(value, cnt);
         strcat(value, single_op);
         strcat(value, "1");
-        free(cnt);
-        free(single_op);
+        // free(cnt);
     }
     else
         var_node = ts_node_child(assign_node, 0);
     const char* var_type = ts_node_type(var_node);
-    char *var_name = get_content(var_node, source);
+    char *var_name = get_content_in_source(var_node, source);
     Variable *v = NULL;
     HASH_FIND_STR(*var_map, var_name, v);
     if (v == NULL)
@@ -691,13 +681,13 @@ void parse_assignment_expression(TSNode assign_node, const char* source, Variabl
         if (belong_to(op, self_ops, 12))
         {
             v->value = NULL;
-            char *single_op = (char*)malloc(strlen(op) + 1);
+            char *single_op = (char*)malloc(strlen(op));
             strcpy(single_op, op);
             single_op[strlen(op) - 1] = '\0';
-            append = (char*)malloc(strlen(var_name) + strlen(single_op) + 1);
+            append = (char*)malloc(strlen(var_name) + strlen(single_op));
             strcpy(append, var_name);
             strcat(append, single_op);
-            free(single_op);
+            // free(single_op);
         }
         
         if (v->value != NULL)
@@ -710,7 +700,7 @@ void parse_assignment_expression(TSNode assign_node, const char* source, Variabl
             for (int i = 0; i < all_nodes.listLen; i++ )
             {
                 tmp = tmp->next;
-                char *cnt = get_content(tmp->data, source);
+                char *cnt = get_content_in_source(tmp->data, source);
                 if (strcmp(cnt, v->name) == 0)
                 {
                     v->value = NULL;
@@ -723,12 +713,12 @@ void parse_assignment_expression(TSNode assign_node, const char* source, Variabl
     }
     if (append == NULL)
     {
-        v->value = (char*)malloc(strlen(value) + 1);
+        v->value = (char*)malloc(strlen(value));
         strcpy(v->value, value);
     }
     else
     {
-        v->value = (char*)malloc(strlen(append) + strlen(value) + 1);
+        v->value = (char*)malloc(strlen(append) + strlen(value));
         strcpy(v->value, append);
         strcat(v->value, value);
     }
@@ -750,8 +740,8 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
             char *right_cnt = parse_expression(right_node, source, var_map);
             char *opposite_op_type = opposite_relation(op_type);
 
-            char *true_cnt = (char*)malloc(strlen(left_cnt) + strlen(op_type) + strlen(right_cnt) + 1);
-            char *false_cnt = (char*)malloc(strlen(left_cnt) + strlen(opposite_op_type) + strlen(right_cnt) + 1);
+            char *true_cnt = (char*)malloc(strlen(left_cnt) + strlen(op_type) + strlen(right_cnt));
+            char *false_cnt = (char*)malloc(strlen(left_cnt) + strlen(opposite_op_type) + strlen(right_cnt));
 
             strcpy(true_cnt, left_cnt);
             strcat(true_cnt, op_type);
@@ -761,8 +751,8 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
             strcat(false_cnt, opposite_op_type);
             strcat(false_cnt, right_cnt);
 
-            free(left_cnt);
-            free(right_cnt);
+            // free(left_cnt);
+            // free(right_cnt);
 
             append_condition(true_conditions, true_cnt);
             append_condition(false_conditions, false_cnt);
@@ -792,7 +782,7 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
                 for (int i = 0; i < left_true_con.len; i ++ )
                 {
                     left_true = left_true->next;
-                    char *con = (char*)malloc(strlen(left_true->condition) + 1);
+                    char *con = (char*)malloc(strlen(left_true->condition));
                     strcpy(con, left_true->condition);
                     append_condition(true_conditions, con);
                 }
@@ -803,7 +793,7 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
                     for (int j = 0; j < right_true_con.len; j ++ )
                     {
                         right_true = right_true->next;
-                        char *con = (char*)malloc(strlen(left_false->condition) + strlen(", ") + strlen(right_true->condition) + 1);
+                        char *con = (char*)malloc(strlen(left_false->condition) + strlen(", ") + strlen(right_true->condition));
                         strcpy(con, left_false->condition);
                         strcat(con, ", ");
                         strcat(con, right_true->condition);
@@ -813,7 +803,7 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
                     for (int j = 0; j < right_false_con.len; j ++)
                     {
                         right_false = right_false->next;
-                        char *con = (char*)malloc(strlen(left_false->condition) + strlen(", ") + strlen(right_false->condition) + 1);
+                        char *con = (char*)malloc(strlen(left_false->condition) + strlen(", ") + strlen(right_false->condition));
                         strcpy(con, left_false->condition);
                         strcat(con, ", ");
                         strcat(con, right_false->condition);
@@ -826,7 +816,7 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
                 for (int i = 0; i < left_false_con.len; i ++ )
                 {
                     left_false = left_false->next;
-                    char *con = (char*)malloc(strlen(left_false->condition) + 1);
+                    char *con = (char*)malloc(strlen(left_false->condition));
                     strcpy(con, left_false->condition);
                     append_condition(false_conditions, con);
                 }
@@ -837,7 +827,7 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
                     for (int j = 0; j < right_false_con.len; j ++ )
                     {
                         right_false = right_false->next;
-                        char *con = (char*)malloc(strlen(left_true->condition) + strlen(", ") + strlen(right_false->condition) + 1);
+                        char *con = (char*)malloc(strlen(left_true->condition) + strlen(", ") + strlen(right_false->condition));
                         strcpy(con, left_true->condition);
                         strcat(con, ", ");
                         strcat(con, right_false->condition);
@@ -847,7 +837,7 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
                     for (int j = 0; j < right_true_con.len; j ++)
                     {
                         right_true = right_true->next;
-                        char *con = (char*)malloc(strlen(left_true->condition) + strlen(", ") + strlen(right_true->condition) + 1);
+                        char *con = (char*)malloc(strlen(left_true->condition) + strlen(", ") + strlen(right_true->condition));
                         strcpy(con, left_true->condition);
                         strcat(con, ", ");
                         strcat(con, right_true->condition);
@@ -870,8 +860,8 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
             TSNode cnt_node = ts_node_child(branch_node, 1);
             char *cnt = parse_expression(cnt_node, source, var_map);
 
-            char *true_cnt = (char*)malloc(strlen(cnt) + strlen("==0") + 1);
-            char *false_cnt = (char*)malloc(strlen(cnt) + strlen("!=0") + 1);
+            char *true_cnt = (char*)malloc(strlen(cnt) + strlen("==0"));
+            char *false_cnt = (char*)malloc(strlen(cnt) + strlen("!=0"));
 
             strcpy(true_cnt, cnt);
             strcat(true_cnt, "==0");
@@ -879,7 +869,7 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
             strcpy(false_cnt, cnt);
             strcat(false_cnt, "!=0");
 
-            free(cnt);
+            // free(cnt);
 
             append_condition(true_conditions, true_cnt);
             append_condition(false_conditions, false_cnt);
@@ -889,8 +879,8 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
     {
         char *cnt = parse_expression(branch_node, source, var_map);
 
-        char *true_cnt = (char*)malloc(strlen(cnt) + strlen("!=0") + 1);
-        char *false_cnt = (char*)malloc(strlen(cnt) + strlen("==0") + 1);
+        char *true_cnt = (char*)malloc(strlen(cnt) + strlen("!=0"));
+        char *false_cnt = (char*)malloc(strlen(cnt) + strlen("==0"));
 
         strcpy(true_cnt, cnt);
         strcat(true_cnt, "!=0");
@@ -898,7 +888,7 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
         strcpy(false_cnt, cnt);
         strcat(false_cnt, "==0");
 
-        free(cnt);
+        // free(cnt);
 
         append_condition(true_conditions, true_cnt);
         append_condition(false_conditions, false_cnt);
@@ -938,7 +928,7 @@ void print(path_condition *path, output_list *out_list, Variable *var_map)
         char **tmp_pathes = (char**)malloc(sizeof(char*) * n);
         for (int j = 0; j < n; j ++ )
         {
-            char *tmp_path = (char*)malloc(strlen(pathes[j]) + 1);
+            char *tmp_path = (char*)malloc(strlen(pathes[j]));
             strcpy(tmp_path, pathes[j]);
             tmp_pathes[j] = tmp_path;
         }
@@ -949,7 +939,7 @@ void print(path_condition *path, output_list *out_list, Variable *var_map)
             tmp2 = tmp2->next;
             for (int k = 0; k < n; k ++ )
             {
-                char *p = (char*)malloc(strlen(tmp_pathes[k]) + strlen(", ") + strlen(tmp2->condition) + 1);
+                char *p = (char*)malloc(strlen(tmp_pathes[k]) + strlen(", ") + strlen(tmp2->condition));
                 strcpy(p, tmp_pathes[k]);
                 strcat(p, ", ");
                 strcat(p, tmp2->condition);
@@ -957,14 +947,14 @@ void print(path_condition *path, output_list *out_list, Variable *var_map)
             }
             if (n == 0)
             {
-                char *p = (char*)malloc(strlen(tmp2->condition) + 1);
+                char *p = (char*)malloc(strlen(tmp2->condition));
                 strcpy(p, tmp2->condition);
                 pathes[num ++ ] = p;
             }
         }
-        for (int j = 0; j < n; j ++ )
-            free(tmp_pathes[j]);
-        if (tmp_pathes != NULL) free(tmp_pathes);
+        // for (int j = 0; j < n; j ++ )
+            // free(tmp_pathes[j]);
+        // if (tmp_pathes != NULL) free(tmp_pathes);
         if (n != 0) num = tmp->len * n;
         n = num;
     }
@@ -979,7 +969,6 @@ void print(path_condition *path, output_list *out_list, Variable *var_map)
             t = t->next;
             printf("%s  ", t->output);
         }
-        /*
         Variable *v = var_map->hh.next;
         while (v != NULL)
         {
@@ -987,19 +976,18 @@ void print(path_condition *path, output_list *out_list, Variable *var_map)
                 printf("%s=%s  ", v->name, v->value);
             v = v->hh.next;
         }
-        */
         printf("\n");
     }
 
 }
 
-void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable **var_map, path_condition *path, output_list *out_list, NodeList *ignore_nodes, NodeList* analyze_nodes, const char *source)
+void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable **var_map, path_condition *path, output_list *out_list, NodeList *ignore_nodes, const char *source)
 {
     if (!root) return;
 
     Variable_list changed_vars;
     init_variable_list(&changed_vars);
-    
+
     condition_list *true_con = (condition_list*)malloc(sizeof(condition_list));
     condition_list *false_con = (condition_list*)malloc(sizeof(condition_list));
     init_condition_list(true_con);
@@ -1030,44 +1018,72 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
         }
 
         const char *node_type = ts_node_type(tmp->data);
-        char *cnt = get_content(tmp->data, source);
+        char *cnt = get_content_in_source(tmp->data, source);
 
         if (in_node_list(ignore_nodes, tmp->data))
             continue;
 
-        if (in_node_list(analyze_nodes, tmp->data))
-        {
-            char *out_put = parse_expression(tmp->data, source, var_map);
-            // printf("%s\n", out_put);
-            output_num ++;
-            append_output(out_list, out_put);
-        }
-
-        else if (strcmp(node_type, "assignment_expression") == 0 || strcmp(node_type, "update_expression") == 0)
+        if (strcmp(node_type, "assignment_expression") == 0 || strcmp(node_type, "update_expression") == 0)
         {
             parse_assignment_expression(tmp->data, source, var_map, &changed_vars);
         }
 
-        /*
         else if (strcmp(node_type, "call_expression") == 0)
         {
             TSNode func_node = ts_node_child(tmp->data, 0);
-            char *cnt = get_content(func_node, source);
+            char *cnt = get_content_in_source(func_node, source);
             if (strstr(cnt, "printf") != NULL || strstr(cnt, "putchar") != NULL || strstr(cnt, "puts") != NULL)
             {
                 char *out_put = parse_expression(tmp->data, source, var_map);
                 // printf("%s\n", out_put);
                 output_num ++;
                 append_output(out_list, out_put);
+                /*
+                TSNode argument_node = ts_node_child(tmp->data, 1);
+                TSTreeCursor cursor = ts_tree_cursor_new(argument_node);
+                NodeList pnodes;
+                init_node_list(&pnodes);
+                make_move(&cursor, DOWN, &pnodes, "identifier");
+                Node *tmp = pnodes.head;
+                for (int j = 0; j < pnodes.listLen; j ++ )
+                {
+                    tmp = tmp->next;
+                    char *name = get_content_in_source(tmp->data, source);
+                    Variable *v = NULL;
+                    HASH_FIND_STR(*var_map, name, v);
+                    if (v != NULL)
+                    {
+                        if (v->value != NULL)
+                            printf("%s\n", v->value);
+                        else
+                            printf("%s\n", v->name);
+                    }
+                }
+                */
             }
         }
-        */
         
+        else if (strcmp(node_type, "return_statement") == 0)
+        {
+            char *return_cnt = parse_expression(tmp->data, source, var_map);
+            if (return_cnt != NULL)
+            {
+                output_num ++;
+                append_output(out_list, return_cnt);
+            }
+
+            // Return statement means the end of this path
+            print(path, out_list, *var_map);
+            delete_output_by_num(out_list, output_num);
+            update_var_map_with_var_list(var_map, changed_vars);
+            return;
+        }
+
         else if (strcmp(node_type, "else") == 0)
         {
             
             TSNode next = ts_node_next_sibling(tmp->data);
-            char *cnt = get_content(next, source);
+            char *cnt = get_content_in_source(next, source);
             Branch_Node *b = NULL;
             HASH_FIND_STR(*branch_map, cnt, b);
             if (b != NULL)
@@ -1085,12 +1101,8 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
         {
             find_for_tail(ignore_nodes, tmp->data);
             find_for_head(tmp->data, source, var_map, &changed_vars);
-            TSNode *n = find_branch_condition(tmp->data, source);
-            if (n != NULL)
-            {
-                branch_node = *n;
-                parse_branch_condition(branch_node, source, var_map, true_con, false_con);
-            }
+            branch_node = find_branch_condition(tmp->data, source);
+            parse_branch_condition(branch_node, source, var_map, true_con, false_con);
             if (root->end == NULL)
             {
                 // This branch is not end, but there is another branch statement 
@@ -1100,10 +1112,10 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
                 if (branch != NULL)
                 {
                     append_condition_list(path, false_con);
-                    symbolic_execution(branch_map, branch->false_branch, var_map, path, out_list, ignore_nodes, analyze_nodes, source);
+                    symbolic_execution(branch_map, branch->false_branch, var_map, path, out_list, ignore_nodes, source);
                     delete_tail_condition_list(path);
                     append_condition_list(path, true_con);
-                    symbolic_execution(branch_map, branch->true_branch, var_map, path, out_list, ignore_nodes, analyze_nodes, source);
+                    symbolic_execution(branch_map, branch->true_branch, var_map, path, out_list, ignore_nodes, source);
                     delete_tail_condition_list(path);
                     delete_output_by_num(out_list, output_num);
                     update_var_map_with_var_list(var_map, changed_vars);
@@ -1113,24 +1125,8 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
             // Reach the end of this branch
             break;
         }
-        if (strcmp(node_type, "return_statement") == 0)
-        {
-            /*
-            char *return_cnt = parse_expression(tmp->data, source, var_map);
-            if (return_cnt != NULL)
-            {
-                output_num ++;
-                append_output(out_list, return_cnt);
-            }
-            */
-            // Return statement means the end of this path
-            print(path, out_list, *var_map);
-            delete_output_by_num(out_list, output_num);
-            update_var_map_with_var_list(var_map, changed_vars);
-            return;
-        }
     }
-    free_node_list(&all_nodes);
+    // free_node_list(&all_nodes);
 
     if (root->false_branch == NULL && root->true_branch == NULL)
     {
@@ -1140,18 +1136,32 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
     else
     {
         append_condition_list(path, false_con);
-        symbolic_execution(branch_map, root->false_branch, var_map, path, out_list, ignore_nodes, analyze_nodes, source);
+        symbolic_execution(branch_map, root->false_branch, var_map, path, out_list, ignore_nodes, source);
         delete_tail_condition_list(path);
         append_condition_list(path, true_con);
-        symbolic_execution(branch_map, root->true_branch, var_map, path, out_list, ignore_nodes, analyze_nodes, source);
+        symbolic_execution(branch_map, root->true_branch, var_map, path, out_list, ignore_nodes, source);
         delete_tail_condition_list(path);
     }
     delete_output_by_num(out_list, output_num);
     update_var_map_with_var_list(var_map, changed_vars);
 }
 
-void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
+void process(enum Decompiler decompiler, const char * filename)
 {
+    char * source = read_source(filename);
+    assert(source);
+     
+    // Create a parser
+    TSParser * parser = ts_parser_new();
+    // Set the parser's language
+    ts_parser_set_language(parser, tree_sitter_c());
+    TSTree *tree = ts_parser_parse_string(
+        parser,
+        NULL,
+        source,
+        strlen(source)
+    );
+
     //get_variables(tree, source);
     
     SCFG scfg;
@@ -1171,7 +1181,7 @@ void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
     init_output_list(&out_list);
     init_path_condition(&path);
     init_node_list(&ignore_nodes);
-    symbolic_execution(&branch_map, scfg.entry, &var_map, &path, &out_list, &ignore_nodes, analyze_nodes, source);
+    symbolic_execution(&branch_map, scfg.entry, &var_map, &path, &out_list, &ignore_nodes, source);
     
     /*
     // Save filtered nodes in all_nodes
@@ -1191,7 +1201,7 @@ void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
             // par = ts_node_parent(par);
             char *content = NULL;
             printf("%s:\n", ts_node_type(par));
-            content = get_content(par, source);
+            content = get_content_in_source(par, source);
             // printf("%s\n", ts_node_string(tmp->data));
             printf("%s\n", content);
             printf("\n");
@@ -1200,7 +1210,7 @@ void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
         
         char *content = NULL;
         printf("%s:\n", ts_node_type(tmp->data));
-        content = get_content(tmp->data, source);
+        content = get_content_in_source(tmp->data, source);
         //printf("%s\n", ts_node_string(tmp->data));
         printf("%s\n", content);
         printf("\n");
@@ -1208,30 +1218,6 @@ void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
         
     }
     */
-
-}
-
-void process(const char* filename)
-{
-    char * source = read_source(filename);
-    assert(source);
-
-    // Create a parser
-    TSParser * parser = ts_parser_new();
-    // Set the parser's language
-    ts_parser_set_language(parser, tree_sitter_c());
-    TSTree *tree = ts_parser_parse_string(
-        parser,
-        NULL,
-        source,
-        strlen(source)
-    );
-
-    // test call_expression
-    NodeList analyze_nodes;
-    parse_decompiler_output(tree, source, "call_expression", &analyze_nodes);
-    run_se(tree, source, &analyze_nodes);
-
     ts_tree_delete(tree);
     ts_parser_delete(parser);
     free(source);
@@ -1239,6 +1225,6 @@ void process(const char* filename)
 
 int main()
 {
-    process("test.c");
+    process(Ghidra, "test.c");
     return 0;
 }

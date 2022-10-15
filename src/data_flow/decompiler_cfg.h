@@ -28,7 +28,9 @@ typedef struct {
 
 bool is_branch_statement(const char *node_type);
 
-char *get_content_in_source(TSNode node, const char *source);
+char *get_content(TSNode node, const char *source);
+
+char *get_content_in_source(int start, int end, const char *source);
 
 void init_scfg(SCFG *scfg, TSNode root_node);
 

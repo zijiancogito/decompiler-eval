@@ -5,14 +5,6 @@
 
 TSLanguage *tree_sitter_c();
 
-enum Decompiler {
-    HexRays,
-    Ghidra,
-    RetDec,
-    BinaryNinja,
-    Unknow	
-};
-
 typedef struct {
     char *type;
     char *name;
@@ -124,7 +116,7 @@ void get_variables(TSTree *tree, Variable **var_map, const char *source, const c
 
 void find_input_variables(TSTree *tree, const char *source, Variable **var_map);
 
-TSNode find_branch_condition(TSNode node, const char* source);
+TSNode *find_branch_condition(TSNode node, const char* source);
 
 void find_for_tail(NodeList *tail_nodes, TSNode for_node);
 
@@ -146,8 +138,8 @@ void print_input(Variable *var_map);
 
 void print(path_condition *path, output_list *out_list, Variable *var_map);
 
-void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable **var_map, path_condition *path, output_list *out_list, NodeList *ignore_nodes, const char *source);
+void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable **var_map, path_condition *path, output_list *out_list, NodeList *ignore_nodes, NodeList* analyze_nodes, const char *source);
 
-void process(enum Decompiler decompiler, const char * filename);
+void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes);
 
 #endif
