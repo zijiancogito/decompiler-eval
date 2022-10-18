@@ -133,6 +133,10 @@ void build_variable_map(NodeList all_var_nodes, const char *source, VarMap **var
 	}
 }
 
+void build_function_return_map() {
+
+}
+
 char * get_variable_name(const char * var) {
 	char * result = (char*)malloc(strlen(var));
 	int cnt = 0;
@@ -143,6 +147,11 @@ char * get_variable_name(const char * var) {
 		}
 	}
 	return result;
+}
+
+
+int is_global(enum Decompiler decompiler, const char * variable) {
+		
 }
 
 void process(enum Decompiler decompiler, const char * filename) {
