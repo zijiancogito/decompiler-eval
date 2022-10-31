@@ -128,6 +128,7 @@ bool belong_to(const char *op, char **ops, int size);
 
 bool in_node_list(NodeList *all_nodes, TSNode node);
 
+// Returns the value of the node at this time
 char *parse_expression(TSNode expression_node, const char* source, Variable **var_map);
 
 void parse_assignment_expression(TSNode assign_node, const char* source, Variable **var_map, Variable_list *changed_vars);
@@ -136,7 +137,7 @@ void parse_branch_condition(TSNode branch_node, const char* source, Variable **v
 
 void print_input(Variable *var_map);
 
-void print(path_condition *path, output_list *out_list, Variable *var_map);
+void print_analyze_nodes(path_condition *path, output_list *out_list, Variable *var_map);
 
 void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable **var_map, path_condition *path, output_list *out_list, NodeList *ignore_nodes, NodeList* analyze_nodes, const char *source);
 

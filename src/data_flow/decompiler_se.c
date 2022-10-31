@@ -470,8 +470,10 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
     {
         char *id_name = get_content(expression_node, source);
         Variable *v = NULL;
+        // use variable name to find the variable struct
         HASH_FIND_STR(*var_map, id_name, v);
-        if (v == NULL)
+        
+        if (v == NULL)  // If not found, the variable is considered global
         {
             Variable *new_v;
             new_v = (Variable *)malloc(sizeof(Variable));
@@ -479,39 +481,44 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
             new_v->name = id_name;
             new_v->value = NULL;
             new_v->is_input = false;
-            new_v->is_global = true;
+            new_v->is_global = true;  // set the global field to ture
             HASH_ADD_STR(*var_map, name, new_v);
             HASH_FIND_STR(*var_map, id_name, v);
         }
         char *cnt = NULL;
-        if (v->value != NULL)
+        if (v->value != NULL)  // check whether the variable is assigned
         {
             cnt = (char*)malloc(strlen(v->value) + 1);
-            strcpy(cnt, v->value);
+            strcpy(cnt, v->value);  // get the variable value
             return cnt;
         }
         else
         {
             cnt = (char*)malloc(strlen(v->name) + 1);
-            strcpy(cnt, v->name);
+            strcpy(cnt, v->name);  // get the variable name (the variable is not assigned)
             return cnt;
         }
     }
     else if (strstr(node_type, "_literal") != NULL && strstr(node_type, "literal_") == NULL)
     {
+        // Get the value of the literal directly
         return get_content(expression_node, source);
     }
     else if (strcmp("cast_expression", node_type) == 0)
     {
+        // Get the variable node from a cast node and parse it
         TSNode cnt_node = ts_node_child(expression_node, 3);
         return parse_expression(cnt_node, source, var_map);
     }
     else if (strcmp("pointer_expression", node_type) == 0)
     {
         TSNode pointer_node = ts_node_child(expression_node, 0);
+
+        // if reference, return the source content directly
         if (strcmp(ts_node_type(pointer_node), "&") == 0)
             return get_content(expression_node, source);
         
+        // if dereference, parse the variable node
         TSNode cnt_node = ts_node_next_sibling(pointer_node);
         char *cnt = parse_expression(cnt_node, source, var_map);
         char *full_cnt = (char*)malloc(strlen("*") + strlen(cnt) + 1);
@@ -522,6 +529,7 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
     }
     else if (strcmp("parenthesized_expression", node_type) == 0)
     {
+        // parse the node in parentheses
         TSNode cnt_node = ts_node_child(expression_node, 1);
         char *cnt = parse_expression(cnt_node, source, var_map);
         char *full_cnt = (char*)malloc(strlen("(") + strlen(cnt) + strlen(")") + 1);
@@ -554,13 +562,13 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
         char *cnt = NULL, *full_cnt = NULL;
         if (strcmp(ts_node_type(second_node), "++") == 0 || strcmp(ts_node_type(second_node), "--") == 0)
         {
-            // full_cnt = parse_expression(first_node, source, var_map);
+            // postfix operation, return the variable itself
             full_cnt = get_content(first_node, source);
         }
         else
         {
+            // prefix operation, the variable incremented/decremented by one
             const char *op = ts_node_type(first_node);
-            // cnt = parse_expression(second_node, source, var_map);
             cnt = get_content(second_node, source);
             char *single_op = (char*)malloc(strlen(op) + 1);
             strcpy(single_op, op);
@@ -574,14 +582,16 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
         return full_cnt;
     }
     else if (strcmp("call_expression", node_type) == 0)
-    {
+    { // parse each argument of the function
+
         char *func_name = get_content(ts_node_child(expression_node, 0), source);
+        // get argument_list node
         TSNode argument_list = ts_node_child(expression_node, 1);
         int argument_num = ts_node_child_count(argument_list);
         char **arguments = (char**)malloc(sizeof(char*) * argument_num);
         int real_arg_num = 0, length = strlen(func_name) + strlen("(") + strlen(")");
         for (int i = 0; i < argument_num; i ++ )
-        {
+        {  // parse arguments one by one
             TSNode argument = ts_node_child(argument_list, i);
             const char *argument_type = ts_node_type(argument);
             if (strcmp(argument_type, "(") != 0 && strcmp(argument_type, ",") != 0 && strcmp(argument_type, ")") != 0)
@@ -630,10 +640,13 @@ char *parse_expression(TSNode expression_node, const char* source, Variable **va
 void parse_assignment_expression(TSNode assign_node, const char* source, Variable **var_map, Variable_list *changed_vars)
 {
     TSNode var_node;
-    char *value = NULL;
+    char *value = NULL;  // The value of the variable obtained by this assignment statement
     if (strcmp(ts_node_type(assign_node), "update_expression") == 0)
-    {
-        // Only consider identifier update
+    {  // Only consider identifier update
+
+        // If it is an update statement, the variable is 
+        // considered to be an iteration variable, and
+        // can be retained as an output value
         TSNode first_node = ts_node_child(assign_node, 0);
         TSNode second_node = ts_node_child(assign_node, 1);
         TSNode op_node;
@@ -647,6 +660,8 @@ void parse_assignment_expression(TSNode assign_node, const char* source, Variabl
             var_node = second_node;
             op_node = first_node;
         }
+
+        // set the value
         const char *op = ts_node_type(op_node);
         char *cnt = get_content(var_node, source);
         char *single_op = (char*)malloc(strlen(op) + 1);
@@ -661,11 +676,13 @@ void parse_assignment_expression(TSNode assign_node, const char* source, Variabl
     }
     else
         var_node = ts_node_child(assign_node, 0);
+
+    // Find variable node from the var_map by variable name
     const char* var_type = ts_node_type(var_node);
     char *var_name = get_content(var_node, source);
     Variable *v = NULL;
     HASH_FIND_STR(*var_map, var_name, v);
-    if (v == NULL)
+    if (v == NULL)  // If not found, the variable is considered global
     {
         Variable *new_v;
         new_v = (Variable *)malloc(sizeof(Variable));
@@ -673,23 +690,26 @@ void parse_assignment_expression(TSNode assign_node, const char* source, Variabl
         new_v->name = var_name;
         new_v->value = NULL;
         new_v->is_input = false;
-        new_v->is_global = true;
+        new_v->is_global = true;  // set the global field to ture
         HASH_ADD_STR(*var_map, name, new_v);
         HASH_FIND_STR(*var_map, var_name, v);
     }
 
+    // After the assignment statement, the value of 
+    // the variable will change, record the previous 
+    // value, convenient recovery
     Variable *changed_v = variable_copy(v);
     append_variable(changed_vars, changed_v);
     char *append = NULL;
 
     if (strcmp(ts_node_type(assign_node), "update_expression") != 0)
-    {
+    {  // set the value
         TSNode right_node = ts_node_child(assign_node, 2);
-
         TSNode op_node = ts_node_child(assign_node, 1);
         const char *op = ts_node_type(op_node);
-        if (belong_to(op, self_ops, 12))
-        {
+        if (belong_to(op, self_ops, 12))  // "+=", "-=", "*=", etc.
+        {  // Lvalue variable of self-operate statements is 
+           // also considered to be a iteration variable
             v->value = NULL;
             char *single_op = (char*)malloc(strlen(op) + 1);
             strcpy(single_op, op);
@@ -701,7 +721,8 @@ void parse_assignment_expression(TSNode assign_node, const char* source, Variabl
         }
         
         if (v->value != NULL)
-        {
+        {   // Check that the right expression contains Lvalue variable, if
+            // it does, consider the variable as an iteration variable
             TSTreeCursor cursor = ts_tree_cursor_new(right_node);
             NodeList all_nodes;
             init_node_list(&all_nodes);
@@ -732,7 +753,6 @@ void parse_assignment_expression(TSNode assign_node, const char* source, Variabl
         strcpy(v->value, append);
         strcat(v->value, value);
     }
-    // printf("%s = %s\n", v->name, v->value);
 }
 
 void parse_branch_condition(TSNode branch_node, const char* source, Variable **var_map, condition_list *true_conditions, condition_list *false_conditions)
@@ -918,7 +938,7 @@ void print_input(Variable *var_map)
     printf("\n");
 }
 
-void print(path_condition *path, output_list *out_list, Variable *var_map)
+void print_analyze_nodes(path_condition *path, output_list *out_list, Variable *var_map)
 {
     int path_num = 1;
 
@@ -997,9 +1017,11 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
 {
     if (!root) return;
 
+    // Save the original value of the changed variables, used to protect the site
     Variable_list changed_vars;
     init_variable_list(&changed_vars);
     
+    // Save all true and false conditions for the branch
     condition_list *true_con = (condition_list*)malloc(sizeof(condition_list));
     condition_list *false_con = (condition_list*)malloc(sizeof(condition_list));
     init_condition_list(true_con);
@@ -1013,17 +1035,20 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
     make_move(&cursor, DOWN, &all_nodes, "");
 
     Node *tmp = all_nodes.head;
-    TSNode *restart_node = NULL;
+    TSNode *jump_target_node = NULL;
     int output_num = 0;
     while (tmp->next != all_nodes.tail)
     {
         tmp = tmp->next;
-        if (restart_node != NULL)
+        // Find the jump target node and execute from the jump
+        // target point, because only forward jump is involved,
+        // so just traverse and match the node.
+        if (jump_target_node != NULL)
         {
-            if (ts_node_eq(tmp->data, *restart_node))
+            if (ts_node_eq(tmp->data, *jump_target_node))
             {
-                free(restart_node);
-                restart_node = NULL;
+                free(jump_target_node);
+                jump_target_node = NULL;
             }
             else
                 continue;
@@ -1032,40 +1057,28 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
         const char *node_type = ts_node_type(tmp->data);
         char *cnt = get_content(tmp->data, source);
 
+        // ignore the third node of the "for" statement
         if (in_node_list(ignore_nodes, tmp->data))
             continue;
 
+        // match the nodes to analyze and perform the analysis
         if (in_node_list(analyze_nodes, tmp->data))
         {
             char *out_put = parse_expression(tmp->data, source, var_map);
-            // printf("%s\n", out_put);
             output_num ++;
             append_output(out_list, out_put);
         }
 
+        // Parse assignment statements and update variable values
         else if (strcmp(node_type, "assignment_expression") == 0 || strcmp(node_type, "update_expression") == 0)
         {
             parse_assignment_expression(tmp->data, source, var_map, &changed_vars);
         }
-
-        /*
-        else if (strcmp(node_type, "call_expression") == 0)
-        {
-            TSNode func_node = ts_node_child(tmp->data, 0);
-            char *cnt = get_content(func_node, source);
-            if (strstr(cnt, "printf") != NULL || strstr(cnt, "putchar") != NULL || strstr(cnt, "puts") != NULL)
-            {
-                char *out_put = parse_expression(tmp->data, source, var_map);
-                // printf("%s\n", out_put);
-                output_num ++;
-                append_output(out_list, out_put);
-            }
-        }
-        */
         
         else if (strcmp(node_type, "else") == 0)
         {
-            
+            // When an else statement is encountered, jump out of the
+            // entire if statement, look for the jump target node.
             TSNode next = ts_node_next_sibling(tmp->data);
             char *cnt = get_content(next, source);
             Branch_Node *b = NULL;
@@ -1076,14 +1089,16 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
                 while (tmpb->is_else)
                     tmpb = tmpb->false_branch;
 
-                restart_node = (TSNode*)malloc(sizeof(TSNode));
-                *restart_node = ts_tree_cursor_current_node(tmpb->start);
+                jump_target_node = (TSNode*)malloc(sizeof(TSNode));
+                *jump_target_node = ts_tree_cursor_current_node(tmpb->start);
             }
         }
 
         else if (is_branch_statement(node_type))
         {
+            // Find the third node in the "for" statement and add to ignore_nodes
             find_for_tail(ignore_nodes, tmp->data);
+            // Before parsing the branching condition, find and parse the first node of the "for" statement
             find_for_head(tmp->data, source, var_map, &changed_vars);
             TSNode *n = find_branch_condition(tmp->data, source);
             if (n != NULL)
@@ -1099,14 +1114,14 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
                 HASH_FIND_STR(*branch_map, cnt, branch);
                 if (branch != NULL)
                 {
-                    append_condition_list(path, false_con);
+                    append_condition_list(path, false_con); // False branch is entered, add false condition
                     symbolic_execution(branch_map, branch->false_branch, var_map, path, out_list, ignore_nodes, analyze_nodes, source);
-                    delete_tail_condition_list(path);
-                    append_condition_list(path, true_con);
+                    delete_tail_condition_list(path);  // Restore the site, delete false condition
+                    append_condition_list(path, true_con); // True branch is entered, add true condition
                     symbolic_execution(branch_map, branch->true_branch, var_map, path, out_list, ignore_nodes, analyze_nodes, source);
-                    delete_tail_condition_list(path);
-                    delete_output_by_num(out_list, output_num);
-                    update_var_map_with_var_list(var_map, changed_vars);
+                    delete_tail_condition_list(path);  // Restore the site, delete true condition
+                    delete_output_by_num(out_list, output_num);  // Restore the site, delete analyze_nodes from this path
+                    update_var_map_with_var_list(var_map, changed_vars);  // Restore the site, updates changed variable with the original value
                     return ;
                 }
             }
@@ -1115,18 +1130,10 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
         }
         if (strcmp(node_type, "return_statement") == 0)
         {
-            /*
-            char *return_cnt = parse_expression(tmp->data, source, var_map);
-            if (return_cnt != NULL)
-            {
-                output_num ++;
-                append_output(out_list, return_cnt);
-            }
-            */
             // Return statement means the end of this path
-            print(path, out_list, *var_map);
-            delete_output_by_num(out_list, output_num);
-            update_var_map_with_var_list(var_map, changed_vars);
+            print_analyze_nodes(path, out_list, *var_map);
+            delete_output_by_num(out_list, output_num);  // Restore the site, delete analyze_nodes from this path
+            update_var_map_with_var_list(var_map, changed_vars);  // Restore the site, updates changed variable with the original value
             return;
         }
     }
@@ -1134,20 +1141,20 @@ void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable *
 
     if (root->false_branch == NULL && root->true_branch == NULL)
     {
-        // No true or false branch means the end of this path
-        print(path, out_list, *var_map);
+        // No true or false branch, means the end of this path
+        print_analyze_nodes(path, out_list, *var_map);
     }
     else
     {
-        append_condition_list(path, false_con);
+        append_condition_list(path, false_con); // False branch is entered, add false condition
         symbolic_execution(branch_map, root->false_branch, var_map, path, out_list, ignore_nodes, analyze_nodes, source);
-        delete_tail_condition_list(path);
-        append_condition_list(path, true_con);
+        delete_tail_condition_list(path);  // Restore the site, delete false condition
+        append_condition_list(path, true_con); // True branch is entered, add true condition
         symbolic_execution(branch_map, root->true_branch, var_map, path, out_list, ignore_nodes, analyze_nodes, source);
-        delete_tail_condition_list(path);
+        delete_tail_condition_list(path);  // Restore the site, delete true condition
     }
-    delete_output_by_num(out_list, output_num);
-    update_var_map_with_var_list(var_map, changed_vars);
+    delete_output_by_num(out_list, output_num);  // Restore the site, delete analyze_nodes from this path
+    update_var_map_with_var_list(var_map, changed_vars);  // Restore the site, updates changed variable with the original value
 }
 
 void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
@@ -1159,14 +1166,22 @@ void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
     get_scfg(tree, source, &scfg, &branch_map);
 
     Variable *var_map = NULL;
+    // get variables
     get_variables(tree, &var_map, source, "declaration", false);
+    // get parameters
     get_variables(tree, &var_map, source, "parameter_declaration", true);
 
+    // get input from scanf function
     find_input_variables(tree, source, &var_map);
     print_input(var_map);
 
-    output_list out_list;
-    path_condition path;
+    output_list out_list;  // A list of outputs for a path 
+    path_condition path;  // records the branch condition in a path
+
+    // Assume that the third node of the "for" statement is ignored, 
+    // ( eg. "for(i = 1; i < n; i += 1)", ignore i += 1 )
+    // because the loop is assumed to execute once, 
+    // this node is not considered. 
     NodeList ignore_nodes;
     init_output_list(&out_list);
     init_path_condition(&path);
@@ -1227,7 +1242,7 @@ void process(const char* filename)
         strlen(source)
     );
 
-    // test call_expression
+    // Test call_expression
     NodeList analyze_nodes;
     parse_decompiler_output(tree, source, "call_expression", &analyze_nodes);
     run_se(tree, source, &analyze_nodes);
