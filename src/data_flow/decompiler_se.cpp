@@ -746,17 +746,17 @@ char *parse_branch_condition(TSNode con_node, const char* source, std::unordered
     return NULL;
 }
 
-void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, bool> &visit, const char *source, NodeList *analyze_nodes, std::unordered_map<std::string, Variable*> &var_map, std::vector<char*> &conditions, std::vector<char*> &outputs) 
+void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, bool> &visit, const char *source, NodeList *analyze_nodes, std::unordered_map<std::string, Variable*> &var_map, std::vector<std::string> &conditions, std::vector<std::string> &outputs) 
 {
     BasicBlock *bb = edge->get_destination();
     if (bb == cfg->get_exit()) {
         // print
         for (int i = 0; i < conditions.size(); i ++ ) {
-            printf("%s, ", conditions.at(i));
+            std::cout << conditions.at(i) << ", ";
         }
         printf("output: ");
         for (int i = 0; i < outputs.size(); i ++ ) {
-            printf("%s  ", outputs.at(i));
+            std::cout << outputs.at(i) << "  ";
         }
         puts("");
         return ;
@@ -781,6 +781,7 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
     std::vector<CFGEdges*> out_edges = bb->get_out_edges();
     std::vector<TSNode> nodes = bb->get_contained_nodes();
     int output_num = 0;
+
     // parse statements in basic block
     for (int i = 0; i < nodes.size(); i ++ ) {
         TSNode node = nodes.at(i);
@@ -790,6 +791,8 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
             parse_assignment_expression(node, source, var_map, changed_vars);
         }
         // match the nodes to analyze and perform the analysis
+        if (strcmp(node_type, "switch_statement") == 0 || strcmp(node_type, "case_statement") == 0)
+            continue;
         NodeList sub_nodes;
         TSTreeCursor cursor = ts_tree_cursor_new(node);
         init_node_list(&sub_nodes);
@@ -805,10 +808,21 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
             }
         }
     }
+
+    // judge switch statement
+    bool is_switch = false;
+    char *switch_condition = NULL;
+    TSNode n = nodes.back();
+    is_switch = (strcmp(ts_node_type(n), "switch_statement") == 0);
+    if (is_switch) {
+        TSNode con_node = ts_node_child_by_field_name(n, "condition", strlen("condition"));
+        TSNode cnt_node = ts_node_child(con_node, 1);
+        switch_condition = parse_expression(cnt_node, source, var_map);
+    }
+
     // DFS
     for (int i = 0; i < out_edges.size(); i ++ ) {
         CFGEdges *out_edge = out_edges.at(i);
-        BasicBlock *des_bb = out_edge->get_destination();
         char *con = NULL;
         if (out_edge->get_condition() == TRUE) {
             con = parse_branch_condition(nodes.back(), source, var_map, true);
@@ -818,14 +832,51 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
             con = parse_branch_condition(nodes.back(), source, var_map, false);
             if (con != NULL)
                 conditions.push_back(con);
-        } else {
+        } else if (is_switch && switch_condition != NULL) {
             // TODO: consider the situation of switch statement
+            BasicBlock *des_bb = out_edge->get_destination();
+            TSNode case_node = des_bb->get_contained_nodes().at(0);
+            TSNode type_node = ts_node_child(case_node, 0);
+            if (strcmp(ts_node_type(type_node), "case") == 0) {
+                TSNode value_node = ts_node_child_by_field_name(case_node, "value", strlen("value"));
+                char *value = parse_expression(value_node, source, var_map);
+                con = (char*)malloc(strlen(switch_condition) + strlen("==") + strlen(value) + 1);
+                strcpy(con, switch_condition);
+                strcat(con, "==");
+                strcat(con, value);
+                conditions.push_back(con);
+                free(value);
+            } else {
+                // default
+                con = switch_condition;
+                std::string condition;
+                for (int j = 0; j < out_edges.size(); j ++ ) {
+                    CFGEdges *edge = out_edges.at(j);
+                    if (edge->get_condition() == JMP) {
+                        BasicBlock *des_bb = edge->get_destination();
+                        TSNode case_node = des_bb->get_contained_nodes().at(0);
+                        TSNode type_node = ts_node_child(case_node, 0);
+                        if (strcmp(ts_node_type(type_node), "case") == 0) {
+                            TSNode value_node = ts_node_child_by_field_name(case_node, "value", strlen("value"));
+                            char *value = parse_expression(value_node, source, var_map);
+                            condition.append(switch_condition);
+                            condition.append("!=");
+                            condition.append(value);
+                            condition.append(", ");
+                            free(value);
+                        }
+                    }
+                }
+                condition = condition.substr(0, condition.length() - 2);
+                conditions.push_back(condition);
+            }
         }
         symbolic_execution(cfg, out_edge, visit, source, analyze_nodes, var_map, conditions, outputs);
         // Restore the site
         if (con != NULL)
             conditions.pop_back();
     }
+
     // Restore the site
     while (output_num -- ) outputs.pop_back();
     for (std::unordered_map<std::string, Variable*>::iterator it = changed_vars.begin(); it != changed_vars.end(); it ++ ) {
@@ -865,8 +916,8 @@ void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
     find_input_variables(tree, source, var_map);
     print_input(var_map);
 
-    std::vector<char*> conditions;
-    std::vector<char*> outputs;
+    std::vector<std::string> conditions;
+    std::vector<std::string> outputs;
     symbolic_execution(cfg, entry_edge, visit, source, analyze_nodes, var_map, conditions, outputs);
 }
 
