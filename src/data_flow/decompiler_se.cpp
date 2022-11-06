@@ -823,33 +823,36 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
     // DFS
     for (int i = 0; i < out_edges.size(); i ++ ) {
         CFGEdges *out_edge = out_edges.at(i);
-        char *con = NULL;
+        // Parse jump conditions
+        int con_num = 0;
         if (out_edge->get_condition() == TRUE) {
-            con = parse_branch_condition(nodes.back(), source, var_map, true);
-            if (con != NULL)
+            char *con = parse_branch_condition(nodes.back(), source, var_map, true);
+            if (con != NULL) {
+                con_num ++ ;
                 conditions.push_back(con);
+            }
         } else if (out_edge->get_condition() == FALSE) {
-            con = parse_branch_condition(nodes.back(), source, var_map, false);
-            if (con != NULL)
+            char *con = parse_branch_condition(nodes.back(), source, var_map, false);
+            if (con != NULL) {
+                con_num ++ ;
                 conditions.push_back(con);
+            }
         } else if (is_switch && switch_condition != NULL) {
-            // TODO: consider the situation of switch statement
             BasicBlock *des_bb = out_edge->get_destination();
             TSNode case_node = des_bb->get_contained_nodes().at(0);
             TSNode type_node = ts_node_child(case_node, 0);
             if (strcmp(ts_node_type(type_node), "case") == 0) {
+                std::string con;
                 TSNode value_node = ts_node_child_by_field_name(case_node, "value", strlen("value"));
                 char *value = parse_expression(value_node, source, var_map);
-                con = (char*)malloc(strlen(switch_condition) + strlen("==") + strlen(value) + 1);
-                strcpy(con, switch_condition);
-                strcat(con, "==");
-                strcat(con, value);
+                con.append(switch_condition);
+                con.append("==");
+                con.append(value);
+                con_num ++ ;
                 conditions.push_back(con);
                 free(value);
             } else {
                 // default
-                con = switch_condition;
-                std::string condition;
                 for (int j = 0; j < out_edges.size(); j ++ ) {
                     CFGEdges *edge = out_edges.at(j);
                     if (edge->get_condition() == JMP) {
@@ -857,23 +860,23 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
                         TSNode case_node = des_bb->get_contained_nodes().at(0);
                         TSNode type_node = ts_node_child(case_node, 0);
                         if (strcmp(ts_node_type(type_node), "case") == 0) {
+                            std::string con;
                             TSNode value_node = ts_node_child_by_field_name(case_node, "value", strlen("value"));
                             char *value = parse_expression(value_node, source, var_map);
-                            condition.append(switch_condition);
-                            condition.append("!=");
-                            condition.append(value);
-                            condition.append(", ");
+                            con.append(switch_condition);
+                            con.append("!=");
+                            con.append(value);
+                            con_num ++ ;
+                            conditions.push_back(con);
                             free(value);
                         }
                     }
                 }
-                condition = condition.substr(0, condition.length() - 2);
-                conditions.push_back(condition);
             }
         }
         symbolic_execution(cfg, out_edge, visit, source, analyze_nodes, var_map, conditions, outputs);
         // Restore the site
-        if (con != NULL)
+        while (con_num --)
             conditions.pop_back();
     }
 
