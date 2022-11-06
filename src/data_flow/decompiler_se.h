@@ -1,9 +1,13 @@
 #ifndef DECOMPILER_SE_H
 #define DECOMPILER_SE_H
 
-#include "decompiler_cfg.h"
+#include "decompiler_output_parser.h"
+#include <tree_sitter/api.h>
 
+extern "C" {
 TSLanguage *tree_sitter_c();
+}
+
 
 typedef struct {
     char *type;
@@ -11,7 +15,6 @@ typedef struct {
     char *value;
     bool is_input;
     bool is_global;
-    UT_hash_handle hh;
 }Variable;
 
 typedef struct Variable_node{
@@ -55,7 +58,7 @@ typedef struct output_list{
     int len;
 }output_list;
 
-char *relational_ops[6] = {
+const char *relational_ops[6] = {
     ">=",
     "<=",
     "!=",
@@ -64,7 +67,7 @@ char *relational_ops[6] = {
     "<"
 };
 
-char *self_ops[12] = {
+const char *self_ops[12] = {
     "%%=",
     "&=",
     "*=",
@@ -79,7 +82,7 @@ char *self_ops[12] = {
     "--"
 };
 
-
+/*
 void free_variable(Variable *v);
 
 void free_variable_list(Variable_list *var_list);
@@ -122,7 +125,7 @@ void find_for_tail(NodeList *tail_nodes, TSNode for_node);
 
 void find_for_head(TSNode for_node, const char* source, Variable **var_map, Variable_list *changed_vars);
 
-char *opposite_relation(const char* relational_op);
+const char *opposite_relation(const char* relational_op);
 
 bool belong_to(const char *op, char **ops, int size);
 
@@ -139,8 +142,8 @@ void print_input(Variable *var_map);
 
 void print_analyze_nodes(path_condition *path, output_list *out_list, Variable *var_map);
 
-void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable **var_map, path_condition *path, output_list *out_list, NodeList *ignore_nodes, NodeList* analyze_nodes, const char *source);
+// void symbolic_execution(Branch_Node **branch_map, Branch_Node * root, Variable **var_map, path_condition *path, output_list *out_list, NodeList *ignore_nodes, NodeList* analyze_nodes, const char *source);
 
 void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes);
-
+*/
 #endif

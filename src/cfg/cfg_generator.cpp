@@ -33,24 +33,29 @@ void CFG::get_ast_nodes()
     Node *tmp = all_nodes->head;
     while (tmp->next != all_nodes->tail) {
         tmp = tmp->next;
-        cur_row = ts_node_start_point(tmp->data).row;
+        TSNode node = tmp->data;
+        cur_row = ts_node_start_point(node).row;
         // compound_statement contains many following statements, ignore it
-        if (strcmp(ts_node_type(tmp->data), "compound_statement") == 0)
+        if (strcmp(ts_node_type(node), "compound_statement") == 0)
             continue;
 
         // Add ATS nodes
         if (cur_row != pre_row) {
             // Add the first node of the new row
-            this->all_nodes.push_back(tmp->data);
+            if (strcmp(ts_node_type(node), "expression_statement") == 0)
+                node = ts_node_child(node, 0);
+            this->all_nodes.push_back(node);
             pre_row = cur_row;
         } else {
             // Add other nodes in the same row
             TSNode pre_node = this->all_nodes.back();
-            int cur_col = ts_node_start_point(tmp->data).column;
+            int cur_col = ts_node_start_point(node).column;
             int pre_end_row = ts_node_end_point(pre_node).row;
             int pre_end_col = ts_node_end_point(pre_node).column;
             if (pre_end_row == pre_row && cur_col >= pre_end_col) {
-                this->all_nodes.push_back(tmp->data);
+                if (strcmp(ts_node_type(node), "expression_statement") == 0)
+                    node = ts_node_child(node, 0);
+                this->all_nodes.push_back(node);
             }
         }
     }
@@ -114,8 +119,8 @@ BasicBlock *CFG::parse_branches(BasicBlock *cur_bb, TSNode branch_node)
         std::vector<CFGEdges*> cur_out = cur_bb->get_out_edges();
         BasicBlock *par_jump_bb = NULL;
         for (int i = 0; i < cur_out.size(); i ++ ) {
-            if (cur_out.at(i)->get_edge_condition() == JMP) {
-                par_jump_bb = cur_out.at(i)->get_edge_destination();
+            if (cur_out.at(i)->get_condition() == JMP) {
+                par_jump_bb = cur_out.at(i)->get_destination();
                 cur_bb->delete_out_edge(cur_out.at(i));
                 par_jump_bb->delete_in_edge(cur_out.at(i));
                 break;
@@ -198,7 +203,7 @@ BasicBlock *CFG::parse_branches(BasicBlock *cur_bb, TSNode branch_node)
             BasicBlock *con_bb = *it;
             std::vector<CFGEdges*> out_edges = con_bb->get_out_edges();
             if (out_edges.size() == 1) {
-                CONDITION c = out_edges.at(0)->get_edge_condition();
+                CONDITION c = out_edges.at(0)->get_condition();
                 if (c == FALSE) {
                     CFGEdges *edge = new CFGEdges(con_bb, bb_true, TRUE);
                     if (con_bb->add_out_edges(edge))
@@ -221,8 +226,8 @@ BasicBlock *CFG::parse_branches(BasicBlock *cur_bb, TSNode branch_node)
         std::vector<CFGEdges*> cur_out = cur_bb->get_out_edges();
         BasicBlock *par_jump_bb = NULL;
         for (int i = 0; i < cur_out.size(); i ++ ) {
-            if (cur_out.at(i)->get_edge_condition() == JMP) {
-                par_jump_bb = cur_out.at(i)->get_edge_destination();
+            if (cur_out.at(i)->get_condition() == JMP) {
+                par_jump_bb = cur_out.at(i)->get_destination();
                 cur_bb->delete_out_edge(cur_out.at(i));
                 par_jump_bb->delete_in_edge(cur_out.at(i));
                 break;
@@ -273,8 +278,8 @@ BasicBlock *CFG::parse_branches(BasicBlock *cur_bb, TSNode branch_node)
             case_bb->add_nodes(tmp->data);
             this->basic_blocks.push_back(case_bb);
             std::vector<CFGEdges *> out_edges = cur_bb->get_out_edges();
-            if (!out_edges.empty() && out_edges.back()->get_edge_condition() == JMP) {
-                BasicBlock *pre_case_bb = out_edges.back()->get_edge_destination();
+            if (!out_edges.empty() && out_edges.back()->get_condition() == JMP) {
+                BasicBlock *pre_case_bb = out_edges.back()->get_destination();
                 CFGEdges *case_e = new CFGEdges(pre_case_bb, case_bb, JMP);
                 pre_case_bb->add_out_edges(case_e);
                 case_bb->add_in_edges(case_e);
@@ -297,8 +302,8 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
         std::vector<CFGEdges*> cur_out = cur_bb->get_out_edges();
         BasicBlock *par_jump_bb = NULL;
         for (int i = 0; i < cur_out.size(); i ++ ) {
-            if (cur_out.at(i)->get_edge_condition() == JMP) {
-                par_jump_bb = cur_out.at(i)->get_edge_destination();
+            if (cur_out.at(i)->get_condition() == JMP) {
+                par_jump_bb = cur_out.at(i)->get_destination();
                 cur_bb->delete_out_edge(cur_out.at(i));
                 par_jump_bb->delete_in_edge(cur_out.at(i));
                 break;
@@ -369,7 +374,7 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
             BasicBlock *con_bb = *it;
             std::vector<CFGEdges*> out_edges = con_bb->get_out_edges();
             if (out_edges.size() == 1) {
-                CONDITION c = out_edges.at(0)->get_edge_condition();
+                CONDITION c = out_edges.at(0)->get_condition();
                 if (c == FALSE) {
                     CFGEdges *edge = new CFGEdges(con_bb, bb_true, TRUE);
                     if (con_bb->add_out_edges(edge))
@@ -392,8 +397,8 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
         std::vector<CFGEdges*> cur_out = cur_bb->get_out_edges();
         BasicBlock *par_jump_bb = NULL;
         for (int i = 0; i < cur_out.size(); i ++ ) {
-            if (cur_out.at(i)->get_edge_condition() == JMP) {
-                par_jump_bb = cur_out.at(i)->get_edge_destination();
+            if (cur_out.at(i)->get_condition() == JMP) {
+                par_jump_bb = cur_out.at(i)->get_destination();
                 cur_bb->delete_out_edge(cur_out.at(i));
                 par_jump_bb->delete_in_edge(cur_out.at(i));
                 break;
@@ -450,6 +455,8 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
         }
 
         BasicBlock *bb_true = cur_bb;
+        TSNode do_node = ts_node_child(loop_node, 0);
+        bb_true->add_nodes(do_node);
         CFGEdges *edge = new CFGEdges(bb_true, con_bb, JMP);
         if (bb_true->add_out_edges(edge))
             con_bb->add_in_edges(edge);
@@ -466,7 +473,7 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
             BasicBlock *con_bb = *it;
             std::vector<CFGEdges*> out_edges = con_bb->get_out_edges();
             if (out_edges.size() == 1) {
-                CONDITION c = out_edges.at(0)->get_edge_condition();
+                CONDITION c = out_edges.at(0)->get_condition();
                 if (c == FALSE) {
                     CFGEdges *edge = new CFGEdges(con_bb, bb_true, TRUE);
                     if (con_bb->add_out_edges(edge))
@@ -489,8 +496,8 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
         std::vector<CFGEdges*> cur_out = cur_bb->get_out_edges();
         BasicBlock *par_jump_bb = NULL;
         for (int i = 0; i < cur_out.size(); i ++ ) {
-            if (cur_out.at(i)->get_edge_condition() == JMP) {
-                par_jump_bb = cur_out.at(i)->get_edge_destination();
+            if (cur_out.at(i)->get_condition() == JMP) {
+                par_jump_bb = cur_out.at(i)->get_destination();
                 cur_bb->delete_out_edge(cur_out.at(i));
                 par_jump_bb->delete_in_edge(cur_out.at(i));
                 break;
@@ -581,7 +588,7 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
             BasicBlock *con_bb = *it;
             std::vector<CFGEdges*> out_edges = con_bb->get_out_edges();
             if (out_edges.size() == 1) {
-                CONDITION c = out_edges.at(0)->get_edge_condition();
+                CONDITION c = out_edges.at(0)->get_condition();
                 if (c == FALSE) {
                     CFGEdges *edge = new CFGEdges(con_bb, bb_true, TRUE);
                     if (con_bb->add_out_edges(edge))
@@ -623,7 +630,7 @@ BasicBlock *CFG::parse_jump(BasicBlock *cur_bb, TSNode jump_node)
                     BasicBlock *jump_to_bb = jump_to_map.at(byte);
                     std::vector<CFGEdges*> out_edges = cur_bb->get_out_edges();
                     while (!out_edges.empty()) {
-                        BasicBlock *des_bb = out_edges.at(0)->get_edge_destination();
+                        BasicBlock *des_bb = out_edges.at(0)->get_destination();
                         cur_bb->delete_out_edge(out_edges.at(0));
                         des_bb->delete_in_edge(out_edges.at(0));
                         out_edges = cur_bb->get_out_edges();
@@ -637,7 +644,7 @@ BasicBlock *CFG::parse_jump(BasicBlock *cur_bb, TSNode jump_node)
                     BasicBlock *jump_out_bb = jump_out_map.at(byte);
                     std::vector<CFGEdges*> out_edges = cur_bb->get_out_edges();
                     while (!out_edges.empty()) {
-                        BasicBlock *des_bb = out_edges.at(0)->get_edge_destination();
+                        BasicBlock *des_bb = out_edges.at(0)->get_destination();
                         cur_bb->delete_out_edge(out_edges.at(0));
                         des_bb->delete_in_edge(out_edges.at(0));
                         out_edges = cur_bb->get_out_edges();
@@ -660,7 +667,7 @@ BasicBlock *CFG::parse_jump(BasicBlock *cur_bb, TSNode jump_node)
                 BasicBlock *jump_to_bb = jump_to_map.at(byte);
                 std::vector<CFGEdges*> out_edges = cur_bb->get_out_edges();
                 while (!out_edges.empty()) {
-                    BasicBlock *des_bb = out_edges.at(0)->get_edge_destination();
+                    BasicBlock *des_bb = out_edges.at(0)->get_destination();
                     cur_bb->delete_out_edge(out_edges.at(0));
                     des_bb->delete_in_edge(out_edges.at(0));
                     out_edges = cur_bb->get_out_edges();
@@ -676,7 +683,7 @@ BasicBlock *CFG::parse_jump(BasicBlock *cur_bb, TSNode jump_node)
         std::string lable_str = get_content(label_node, this->source);
         std::vector<CFGEdges*> out_edges = cur_bb->get_out_edges();
         while (!out_edges.empty()) {
-            BasicBlock *des_bb = out_edges.at(0)->get_edge_destination();
+            BasicBlock *des_bb = out_edges.at(0)->get_destination();
             cur_bb->delete_out_edge(out_edges.at(0));
             des_bb->delete_in_edge(out_edges.at(0));
             out_edges = cur_bb->get_out_edges();
@@ -745,7 +752,7 @@ BasicBlock *CFG::parse_condition(BasicBlock *cur_bb, TSNode condition_node, std:
             for (int i = idx; i < basic_blocks.size(); i ++ ) {
                 std::vector<CFGEdges*> out_edges = basic_blocks.at(i)->get_out_edges();
                 if (out_edges.size() == 1) {
-                    CONDITION c = out_edges.at(0)->get_edge_condition();
+                    CONDITION c = out_edges.at(0)->get_condition();
                     if (c != JMP) {
                         CFGEdges *edge = new CFGEdges(basic_blocks.at(i), bb, CONDITION(c ^ 1));
                         if (basic_blocks.at(i)->add_out_edges(edge))
@@ -824,8 +831,8 @@ BasicBlock *CFG::parse_node(BasicBlock *cur_bb, TSNode node)
             std::vector<CFGEdges*> out_edges = cur_bb->get_out_edges();
             for (int i = 0; i < out_edges.size(); i ++ ) {
                 CFGEdges *oe = out_edges.at(i);
-                BasicBlock *des_bb = oe->get_edge_destination();
-                CONDITION con = oe->get_edge_condition();
+                BasicBlock *des_bb = oe->get_destination();
+                CONDITION con = oe->get_condition();
                 des_bb->delete_in_edge(oe);
                 cur_bb->delete_out_edge(oe);
                 CFGEdges *e = new CFGEdges(label_bb, des_bb, con);
@@ -842,6 +849,8 @@ BasicBlock *CFG::parse_node(BasicBlock *cur_bb, TSNode node)
         
         TSNode child_node = ts_node_child(node, 2);
         cur_bb = parse_node(label_bb, child_node);
+    } else if (type == "expression_statement") {
+        cur_bb = parse_node(cur_bb, ts_node_child(node, 0));
     } else {
         TSTreeCursor cursor = ts_tree_cursor_new(node);
         NodeList *sub_all_nodes = new NodeList;
@@ -883,7 +892,7 @@ void CFG::cfg_build()
         std::vector<CFGEdges*> out_edges = goto_bb->get_out_edges();
         for (int i = 0; i < out_edges.size(); i ++ ) {
             CFGEdges *e = out_edges.at(i);
-            BasicBlock *des_bb = e->get_edge_destination();
+            BasicBlock *des_bb = e->get_destination();
             if (des_bb == NULL) {
                 e->set_destination(label_bb);
                 label_bb->add_in_edges(e);
@@ -908,13 +917,13 @@ void CFG::cfg_build()
         if (nodes.empty()) {
             // 删除空基本块
             std::vector<CFGEdges*> out_edges = bb->get_out_edges();
-            if (out_edges.size() == 1 && out_edges.at(0)->get_edge_condition() == JMP) {
-                BasicBlock *des_bb = out_edges.at(0)->get_edge_destination();
+            if (out_edges.size() == 1 && out_edges.at(0)->get_condition() == JMP) {
+                BasicBlock *des_bb = out_edges.at(0)->get_destination();
                 des_bb->delete_in_edge(out_edges.at(0));
                 std::vector<CFGEdges*> in_edges = bb->get_in_edges();
                 for (int j = 0; j < in_edges.size(); j ++ ) {
-                    BasicBlock *src_bb = in_edges.at(j)->get_edge_source();
-                    CONDITION con = in_edges.at(j)->get_edge_condition();
+                    BasicBlock *src_bb = in_edges.at(j)->get_source();
+                    CONDITION con = in_edges.at(j)->get_condition();
                     src_bb->delete_out_edge(in_edges.at(j));
                     CFGEdges *edge = new CFGEdges(src_bb, des_bb, con);
                     if (src_bb->add_out_edges(edge))
@@ -930,7 +939,7 @@ void CFG::cfg_build()
                 if (strcmp(ts_node_type(nodes.at(j)), "return_statement") == 0) {
                     std::vector<CFGEdges*> out_edges = bb->get_out_edges();
                     while (!out_edges.empty()) {
-                        BasicBlock *des_bb = out_edges.at(0)->get_edge_destination();
+                        BasicBlock *des_bb = out_edges.at(0)->get_destination();
                         bb->delete_out_edge(out_edges.at(0));
                         des_bb->delete_in_edge(out_edges.at(0));
                         out_edges = bb->get_out_edges();
@@ -964,15 +973,15 @@ void CFG::print_cfg()
         }
         printf("Preds (%zu): ", in_edges.size());
         for (int j = 0; j < in_edges.size(); j ++ ) {
-            BasicBlock *src = in_edges.at(j)->get_edge_source();
+            BasicBlock *src = in_edges.at(j)->get_source();
             std::vector<BasicBlock*>::iterator it = std::find(basic_blocks.begin(), basic_blocks.end(), src);
             std::cout << "B" << (it - basic_blocks.begin()) << " ";
         }
         std::cout << std::endl;
         printf("Succs (%zu): ", out_edges.size());
         for (int j = 0; j < out_edges.size(); j ++ ) {
-            BasicBlock *des = out_edges.at(j)->get_edge_destination();
-            int con = out_edges.at(j)->get_edge_condition();
+            BasicBlock *des = out_edges.at(j)->get_destination();
+            int con = out_edges.at(j)->get_condition();
             std::vector<BasicBlock*>::iterator it = std::find(basic_blocks.begin(), basic_blocks.end(), des);
             std::cout << con << ' ' << "B" << (it - basic_blocks.begin()) << " ";
         }
@@ -980,6 +989,21 @@ void CFG::print_cfg()
         std::cout << std::endl;
     }
     
+}
+
+BasicBlock *CFG::get_entry()
+{
+    return this->entry;
+}
+
+BasicBlock *CFG::get_exit()
+{
+    return this->exit;
+}
+
+std::vector<BasicBlock*> CFG::get_bbs()
+{
+    return this->basic_blocks;
 }
 
 BasicBlock::BasicBlock() 
@@ -1012,14 +1036,14 @@ bool BasicBlock::add_out_edges(CFGEdges *out_edge)
 {
     if (!this->nodes.empty() && strcmp(ts_node_type(this->nodes.back()), "switch_statement") == 0) {
         // Switch can have multiple JMP edges
-        if (out_edge->get_edge_condition() == JMP) {
+        if (out_edge->get_condition() == JMP) {
             this->out_edges.push_back(out_edge);
             return true;
         }
     }
     for (int i = 0; i < this->out_edges.size(); i ++ ) {
         // Only one edge in the same condition
-        if (this->out_edges.at(i)->get_edge_condition() == out_edge->get_edge_condition()) {
+        if (this->out_edges.at(i)->get_condition() == out_edge->get_condition()) {
             return false;
         }
     }
@@ -1091,17 +1115,17 @@ std::vector<CFGEdges*> BasicBlock::get_out_edges()
 CFGEdges::CFGEdges(BasicBlock *source, BasicBlock *destination, CONDITION condition): 
     source(source), destination(destination), condition(condition) { }
 
-BasicBlock *CFGEdges::get_edge_source()
+BasicBlock *CFGEdges::get_source()
 {
     return this->source;
 }
 
-BasicBlock *CFGEdges::get_edge_destination()
+BasicBlock *CFGEdges::get_destination()
 {
     return this->destination;
 }
 
-CONDITION CFGEdges::get_edge_condition()
+CONDITION CFGEdges::get_condition()
 {
     return this->condition;
 }
@@ -1121,6 +1145,7 @@ void CFGEdges::set_destination(BasicBlock *des)
     this->destination = des;
 }
 
+/*
 int main()
 {
     char *source = read_source("../t.c");
@@ -1141,18 +1166,19 @@ int main()
     // cfg.get_ast_nodes();
     cfg.cfg_build();
     cfg.print_cfg();
-    /*
-    NodeList *all_nodes = cfg.get_ast_nodes();
+    
+    // NodeList *all_nodes = cfg.get_ast_nodes();
 
-    Node *tmp = all_nodes->head;
-    for (int i = 0; i < all_nodes->listLen; i++) {
-	    tmp = tmp->next;
-        const char * type = ts_node_type(tmp->data);
-        std::cout << type << std::endl;
-    }
-    */
+    // Node *tmp = all_nodes->head;
+    // for (int i = 0; i < all_nodes->listLen; i++) {
+	    // tmp = tmp->next;
+        // const char * type = ts_node_type(tmp->data);
+        // std::cout << type << std::endl;
+    // }
+    
     ts_tree_delete(tree);
     ts_parser_delete(parser);
     free(source);
     return 0;
 }
+*/

@@ -1,6 +1,10 @@
 #ifndef CFG_GENERATOR_H_
 #define CFG_GENERATOR_H_
 
+#include <iostream>
+#include <vector>
+#include <set>
+#include <unordered_map>
 #include <tree_sitter/api.h>
 #include "decompiler_output_parser.h"
 
@@ -28,9 +32,6 @@ private:
     std::unordered_map<BasicBlock*, std::string> goto_map;
     std::unordered_map<std::string, BasicBlock*> label_map;
     std::unordered_map<int, BasicBlock*> map;
-public:
-    // construct function
-    CFG(TSTree *tree, const char *source);
     // Get all nodes of the AST
     void get_ast_nodes();
     void get_variables();
@@ -44,7 +45,13 @@ public:
     BasicBlock *parse_branches(BasicBlock *cur_bb, TSNode branch_node);
     BasicBlock *parse_jump(BasicBlock *cur_bb, TSNode jump_node);
     BasicBlock *parse_condition(BasicBlock *cur_bb, TSNode contidion_node, std::set<BasicBlock*> &record_bbs);
+public:
+    // construct function
+    CFG(TSTree *tree, const char *source);
     void cfg_build();
+    BasicBlock *get_entry();
+    BasicBlock *get_exit();
+    std::vector<BasicBlock*> get_bbs();
     void print_cfg();
 };
 
@@ -92,11 +99,11 @@ public:
     // construct function
     CFGEdges(BasicBlock *source, BasicBlock *destination, CONDITION condition);
     // Get the condition of the edge
-    CONDITION get_edge_condition();
+    CONDITION get_condition();
     // Get the source basic block of the edge
-    BasicBlock *get_edge_source();
+    BasicBlock *get_source();
     // Get the destination basic block of the edge
-    BasicBlock *get_edge_destination();
+    BasicBlock *get_destination();
     void set_condition(CONDITION con);
     void set_source(BasicBlock *src);
     void set_destination(BasicBlock *des);
