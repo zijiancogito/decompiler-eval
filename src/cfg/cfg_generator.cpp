@@ -567,9 +567,16 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
 
         TSNode condition_node = ts_node_child_by_field_name(loop_node, "condition", strlen("condition"));
         std::set<BasicBlock*> record_bbs;
-        parse_condition(cur_bb, condition_node, record_bbs);
+        if (!ts_node_is_null(condition_node))
+            parse_condition(cur_bb, condition_node, record_bbs);
 
-        BasicBlock *bb_true = new BasicBlock;
+        BasicBlock *bb_true = NULL;
+        if (!cur_bb->get_contained_nodes().empty()) {
+            bb_true = new BasicBlock;
+            this->basic_blocks.push_back(bb_true);
+        } else {
+            bb_true = cur_bb;
+        }
         BasicBlock *jump_to = jump_to_map.at(ts_node_start_byte(loop_node));
         CFGEdges *edge = new CFGEdges(bb_true, jump_to, JMP);
         if (bb_true->add_out_edges(edge))
@@ -577,14 +584,13 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
         
         TSNode body_node = ts_node_child_by_field_name(loop_node, "body", strlen("body"));
         body_node = find_node_in_all_nodes(body_node);
-        this->basic_blocks.push_back(bb_true);
         bb = parse_node(bb_true, body_node);
 
         BasicBlock *bb_false = jump_to_bb;
         if (std::count(this->basic_blocks.begin(), this->basic_blocks.end(), bb_false) == 0)
             this->basic_blocks.push_back(bb_false);
 
-        for (std::set<BasicBlock*>::iterator it = record_bbs.begin(); it != record_bbs.end(); it ++ ) {
+        for (auto it = record_bbs.begin(); it != record_bbs.end(); it ++ ) {
             BasicBlock *con_bb = *it;
             std::vector<CFGEdges*> out_edges = con_bb->get_out_edges();
             if (out_edges.size() == 1) {
