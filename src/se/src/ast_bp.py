@@ -73,7 +73,7 @@ class AST:
         while True:
             if len(simgr.active) < 1:
                 break
-           #  
+
             #  visited_all_succ_states = True
             # for s in simgr.active:
                 # if s.addr not in visited:
