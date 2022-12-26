@@ -103,3 +103,4 @@ def find_ret_points(proj, func_addr):
         if mne == 'ret':
             ret_eax.append(insn.address)
 
+    return ret_eax

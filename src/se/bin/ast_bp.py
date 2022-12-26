@@ -51,11 +51,27 @@ class AST:
         # init registers with args
         self._init_args_registers(entry_state)
         
+        # hook other function call instructions
         for addr, length in self.proj.hook_points[self.func_addr]:
             @self.proj.hook(addr, length=length)
-            def my_hook(state):
+            def call_hook(state):
                 ret = claripy.BVS(f"func_{hex(state.addr)}", 32)
                 state.regs.eax = ret
+                # TODO: symbolic parameters might be written
+
+        # hook ret instructions
+        for addr in self.proj.ret_points[self.func_addr]:
+            @self.proj.hook(addr)
+            def ret_hook(state):
+                rax_val = state.regs.rax
+                eax_val = state.regs.eax
+                ax_val = state.regs.ax
+                al_val = state.regs.al
+                print(f"\t{rax_val}")
+                print(f"\t{eax_val}")
+                print(f"\t{ax_val}")
+                print(f"\t{al_val}")
+                print()
 
         simgr = self.proj.factory.simulation_manager(entry_state)
 
@@ -82,8 +98,9 @@ class AST:
                     # print(f"\t{len(simgr.active)} \
                             # \t{hex(state.addr)}")
                     # break
-            for s in simgr.active:
-                print(f"\t{hex(s.addr)}")
+            # for s in simgr.active:
+                # print(f"\t{hex(s.addr)}")
+
             simgr.step(num_inst=1)
             
         
