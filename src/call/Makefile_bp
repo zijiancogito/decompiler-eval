@@ -1,0 +1,18 @@
+CC       = clang
+CFLAGS   = -Wall -O -fPIC
+CXXFLAGS =
+INCLUDE  = -I ./ -I ../tree-sitter/tree-sitter/lib/include -I ../tree-sitter/
+LIBS = ../tree-sitter/tree-sitter/libtree-sitter.a  ../tree-sitter/libparser.so
+TARGET   = test
+
+OBJS     = decompiler_call.o
+SRCS     = decompiler_call.c
+
+$(OBJS):$(SRCS)
+	$(CC) $(CFLAGS) $(INCLUDE) ../tree-sitter/tree-sitter-c/src/parser.c -c $<
+
+all:$(OBJS)
+	$(CC) -fPIC $(INCLUDE) -o $(TARGET) $(OBJS) $(LIBS)
+
+clean:
+	rm -f $(TARGET)

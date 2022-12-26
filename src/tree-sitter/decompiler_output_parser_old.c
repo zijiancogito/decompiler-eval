@@ -1,28 +1,4 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
 #include "decompiler_output_parser.h"
-
-char *get_content_in_source(int start, int end, const char *source)
-{
-    char *content = (char*)malloc(end-start+1);
-    for(int i = 0; i < end - start; i++)
-	    content[i] = source[start+i];
-    content[end-start] = '\0';
-    // printf("%s\n", content);
-    for (int i = 0; i < strlen(content); i++) {
-	    if(content[i]=='\n')
-        content[i] = ' ';
-	}
-    return content;
-}
-
-char *get_content(TSNode node, const char *source)
-{
-    int start = ts_node_start_byte(node);
-    int end = ts_node_end_byte(node);
-    return get_content_in_source(start, end, source);
-}
 
 void init_node_list(NodeList *node_list) {
   Node *head = (Node*)malloc(sizeof(Node));
@@ -53,8 +29,7 @@ void append_node(NodeList *all_nodes, TSNode data) {
   all_nodes->listLen++;
 }    
 
-void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const char *node_filter)
-{
+void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const char * node_filter) {
   TSNode currentNode = ts_tree_cursor_current_node(cursor);
   const char *nodeType = ts_node_type(currentNode);
   if (move == DOWN) {
@@ -95,7 +70,7 @@ void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const 
   }
 }
 
-void parse_decompiler_output(TSTree * tree, NodeList * all_nodes, const char *node_filter) {
+void parse_decompiler_output(TSTree * tree, const char * source, const char *node_filter, NodeList * all_nodes){
   // Get the root node of the syntax tree.
   TSNode root_node = ts_tree_root_node(tree);
   // Initialize the cursor from root_node.
@@ -108,23 +83,24 @@ void parse_decompiler_output(TSTree * tree, NodeList * all_nodes, const char *no
   make_move(&cursor, DOWN, all_nodes, node_filter);
 }
 
-char *read_source(const char * filename) {
+char * read_source(const char * filename) {
 	FILE *fp = fopen(filename, "rb");
-  if (fp == NULL) {
-    printf("Fail to open file!\n");
-    exit(0);
-  }
+	assert(fp);
 	fseek(fp, 0, SEEK_END);
 	int len = ftell(fp);
 	fseek(fp, 0, SEEK_SET);
 	char * source_buf = (char*)malloc(len+1);
 	fread(source_buf, 1, len+1, fp);
-  // for (int i = 0; i < strlen(source_buf); i++) {
-	    // if(source_buf[i]=='\n')
-        // source_buf[i] = ' ';
-	// }
 	fclose(fp);
+	for (int i = 0; i < strlen(source_buf); i++) {
+	    if(source_buf[i]=='\n')
+		source_buf[i] = ' ';
+	}
 	return source_buf;
+}
+
+void walk_expression(TSTreeCursor * cursor) {
+    
 }
 
 //int main(){

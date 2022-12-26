@@ -1,0 +1,27 @@
+[submodule "src/call/src/call/uthash"]
+	path = src/call/src/call/uthash
+	url = https://github.com/troydhanson/uthash.git
+[submodule "src/tree-sitter/src/tree-sitter/tree-sitter-c"]
+	path = src/tree-sitter/src/tree-sitter/tree-sitter-c
+	url = https://github.com/tree-sitter/tree-sitter-c.git
+[submodule "src/tree-sitter/src/tree-sitter/tree-sitter"]
+	path = src/tree-sitter/src/tree-sitter/tree-sitter
+	url = https://github.com/tree-sitter/tree-sitter.git
+[submodule "src/src/tree-sitter/tree-sitter"]
+	path = src/src/tree-sitter/tree-sitter
+	url = https://github.com/tree-sitter/tree-sitter.git
+[submodule "src/src/tree-sitter/tree-sitter-c"]
+	path = src/src/tree-sitter/tree-sitter-c
+	url = https://github.com/tree-sitter/tree-sitter-c.git
+[submodule "src/src/call/uthash"]
+	path = src/src/call/uthash
+	url = https://github.com/troydhanson/uthash.git
+[submodule "src/tree-sitter/tree-sitter-c"]
+	path = src/tree-sitter/tree-sitter-c
+	url = https://github.com/tree-sitter/tree-sitter-c.git
+[submodule "src/tree-sitter/tree-sitter"]
+	path = src/tree-sitter/tree-sitter
+	url = https://github.com/tree-sitter/tree-sitter.git
+[submodule "src/call/uthash"]
+	path = src/call/uthash
+	url = https://github.com/troydhanson/uthash.git

@@ -1,18 +1,39 @@
-CC       = clang
-CFLAGS   = -Wall -O -fPIC
-CXXFLAGS =
-INCLUDE  = -I ./ -I ../tree-sitter/tree-sitter/lib/include -I ../tree-sitter/
-LIBS = ../tree-sitter/tree-sitter/libtree-sitter.a  ../tree-sitter/libparser.so
-TARGET   = test
+ifndef VERBOSE
+	QUIET:=@
+endif
 
-OBJS     = decompiler_output.o
-SRCS     = decompiler_output.c
+SRC_DIR = ./src
 
-$(OBJS):$(SRCS)
-	$(CC) $(CFLAGS) $(INCLUDE) ../tree-sitter/tree-sitter-c/src/parser.c -c $<
+LLVM_CONFIG?=llvm-config-10
+LDFLAGS+=$(shell $(LLVM_CONFIG) --ldflags)
+LDFLAGS+=-ldl -ltinfo -lpthread -L.
+COMMON_FLAGS=-Wall -Wextra -fno-rtti
+CXX_FLAGS+=$(COMMON_FLAGS) $(shell $(LLVM_CONFIG) --cxxflags)
+CPP_FLAGS+=$(shell $(LLVM_CONFIG) --cppflags) -I$(SRC_DIR)
 
-all:$(OBJS)
-	$(CC) -fPIC $(INCLUDE) -o $(TARGET) $(OBJS) $(LIBS)
+LLVMLIBS=$(shell $(LLVM_CONFIG) --libs --system-libs)
+
+BUILD_DIR = build
+INCLUDE_DIR = src
+
+SRC = ir_call
+OBJ = $(join $(addsuffix $(BUILD_DIR)/, $(dir $(SRC))), $(notdir $(SRC:=.o)))
+EXE = $(SRC)
+
+all: default
+
+default: directory $(OBJ)
+	@echo Linking Project
+	$(QUIET) $(CXX) -I$(INCLUDE_DIR) -o $(EXE) $(CXXFLAGS) $(OBJ) $(LLVMLIBS) $(LDFLAGS)
+directory:
+	mkdir -p $(BUILD_DIR)
+
+
+
+$(BUILD_DIR)/%.o : $(SRC_DIR)/%.cpp
+	@echo Compiling $*.cpp
+	$(QUIET) $(CXX) -fPIC -o $@ -c $(CPPFLAGS) $(CXXFLAGS) $<
 
 clean:
-	rm -f $(TARGET)
+	$(QUIET)rm -rf $(EXE) $(BUILD_DIR)
+
