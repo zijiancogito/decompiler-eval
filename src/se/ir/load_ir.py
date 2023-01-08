@@ -160,7 +160,6 @@ def symbolic_execution(function):
             block = blks_dict[label]
             # TODO
             execution_block(block, tmp_dict)
-    print(tmp_dict)
 
 def process_functions(llvm_ir):
     mod = llvm.parse_assembly(llvm_ir)
