@@ -68,10 +68,6 @@ class AST:
                 ax_val = state.regs.ax
                 al_val = state.regs.al
                 print(f"\t{rax_val}")
-                print(f"\t{eax_val}")
-                print(f"\t{ax_val}")
-                print(f"\t{al_val}")
-                print()
 
         simgr = self.proj.factory.simulation_manager(entry_state)
 

@@ -40,7 +40,7 @@ def test_simplify():
     print(f"Pass {sum(test_res)} of {len(cases)} cases")
 
 example_0 = '../random1'
-# proj_0 = test_load(example_0)
-# test_ast(proj_0)
+proj_0 = test_load(example_0)
+test_ast(proj_0)
 
-test_simplify()
+# test_simplify()
