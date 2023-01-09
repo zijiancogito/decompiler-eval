@@ -172,6 +172,6 @@ def process_functions(llvm_ir):
             continue
         symbolic_execution(function)
 
-llvm_ir = read_ir("../random1.ll")
+llvm_ir = read_ir("../616.ll")
 process_functions(llvm_ir)
     

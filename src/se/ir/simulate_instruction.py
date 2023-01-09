@@ -618,13 +618,15 @@ def execution_cmpxchg(instruction, tmp_dict):
     return result, new
 
 def execution_getelementptr(instruction, tmp_dict):
-    pattern = "([\S]+) = getelementptr .*, (([^,\n]+)|([0-9]+ x [^,\n]+)) ([^,\n]+)(, .*)*"
+    pattern = "([\S]+) = getelementptr [^,\n]*, (([^,\n]+)|([0-9]+ x [^,\n]+)) ([^,\n]+)(, .*)*"
     match = re.match(pattern, instruction)
     if not match:
         return None
     result = match.group(1)
     ptr = match.group(5)
     range_str = match.group(6)
+    print(instruction)
+    print(f"range_str={range_str}")
     pattern_range = ', [^,\n] ([0-9]+)'
     findall = re.findall(pattern_range, range_str)
     indexes = []
