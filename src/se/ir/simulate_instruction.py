@@ -625,8 +625,6 @@ def execution_getelementptr(instruction, tmp_dict):
     result = match.group(1)
     ptr = match.group(5)
     range_str = match.group(6)
-    print(instruction)
-    print(f"range_str={range_str}")
     pattern_range = ', [^,\n] ([0-9]+)'
     findall = re.findall(pattern_range, range_str)
     indexes = []
