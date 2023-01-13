@@ -77,7 +77,6 @@ def parse_call(instruction):
     return func_name, params
 
 def parse_ret(instruction):
-    print(instruction)
     pattern_non_void = 'ret [\S]+ ([\S]+)'
     pattern_void = 'ret void'
 
