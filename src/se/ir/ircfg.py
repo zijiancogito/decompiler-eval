@@ -23,7 +23,6 @@ class IRCFG():
         for node in self.cfg.nodes:
             for succ in self.cfg.successors(node):
                 self.edge_cfg.add_node(f"{node}-{succ}")
-        print(self.edge_cfg.nodes)
         for edge1 in self.edge_cfg.nodes:
             edge1_s = int(edge1.split('-')[0])
             edge1_e = int(edge1.split('-')[1])
@@ -37,7 +36,6 @@ class IRCFG():
         for edge in self.edge_cfg.nodes:
             s = int(edge.split('-')[0])
             e = int(edge.split('-')[1])
-            print(f"s = {s}, e = {e}, entry = {self.entry}, exit = {self.exit}")
             if s == self.entry:
                 self.edge_cfg_entry.append(edge)
             if e == self.exit:
