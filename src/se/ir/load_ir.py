@@ -97,12 +97,12 @@ def symbolic_execution(function):
     # print(output_symbols)
 
     tmp_dict = {}
-    # for path in cfg.paths:
-        # for ver in path:
-            # label =  cfg.idx2ver[ver]
-            # block = blks_dict[label]
-            # # TODO
-            # execution_block(block, tmp_dict)
+    for path in cfg.paths:
+        for ver in path:
+            label =  cfg.idx2ver[ver]
+            block = blks_dict[label]
+            # TODO
+            execution_block(block, tmp_dict)
 
 def process_functions(llvm_ir):
     mod = llvm.parse_assembly(llvm_ir)

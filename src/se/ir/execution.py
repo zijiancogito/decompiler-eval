@@ -94,11 +94,34 @@ def parse_ret(instruction):
     else:
         return None
 
+def parse_br(instruction):
+    pattern1 = "br i1 %([\S]+), label %([\S]+), label %([\S]+)"
+    pattern2 = "br label %([\S]+)"
+    match1 = re.match(pattern1, instruction)
+    match2 = re.match(pattern2, instruction)
+    if match1:
+        cond = match.group(1)
+        true_dest = match.group(2)
+        false_dest = match.group(3)
+        return cond, true_dest, false_dest
+    elif match2:
+        dest = match.group(1)
+        return dest
+    else:
+        return None
+
 def execution_block(block, tmp_dict):
+    last_insn = None
     for instruction in block.instructions:
         res = execution_instruction(instruction, tmp_dict)
         if res == None:
             print(instruction)
+        last_insn = instruction
+
+    # if last_insn.opcode == "br":
+        # jump = 
+    
+        
     return None
 
 def execution_instruction(instruction, tmp_dict):
