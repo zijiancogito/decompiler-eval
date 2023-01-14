@@ -99,7 +99,7 @@ def symbolic_execution(function):
     tmp_dict = {}
     for path in cfg.paths:
         for ver in path:
-            label =  cfg.idx2ver[ver]
+            label =  int(ver.split("-")[0])
             block = blks_dict[label]
             # TODO
             execution_block(block, tmp_dict)
