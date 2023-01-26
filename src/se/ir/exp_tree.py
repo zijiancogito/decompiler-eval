@@ -1,8 +1,8 @@
 
 class ExpTree:
     def __init__(self, root_tag, root_data):
-        self.root_tag = root_tag
-        self.root_data = root_data
+        self.root_tag = root_tag # ex. "add"
+        self.root_data = root_data # ex. "+"
         self.children = []
 
     def show(self, depth=0):

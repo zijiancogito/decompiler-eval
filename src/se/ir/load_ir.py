@@ -117,12 +117,16 @@ def symbolic_execution(function):
                 cond.append(curr_cond)
         path_cond.append(cond)
         path_exps.append(tmp_dict)
+    print("Condition:")
     for path in path_cond:
         for cond in path:
             cond.show()
+            print()
+    print("Expression:")
     for path in path_exps:
         for var in tmp_dict:
             tmp_dict[var].show()
+            print()
 
 def process_functions(llvm_ir):
     mod = llvm.parse_assembly(llvm_ir)
