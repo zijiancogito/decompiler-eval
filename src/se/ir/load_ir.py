@@ -2,7 +2,8 @@ import os
 import sys
 sys.path.append('../utils')
 sys.path.append('.')
-sys.setrecursionlimit(500)
+# sys.setrecursionlimit(500)
+from func_timeout import func_set_timeout
 import utils
 from ctypes import CFUNCTYPE, c_double
 import llvmlite.binding as llvm
@@ -77,9 +78,16 @@ def build_cfg(function):
     cfg.build_edge_cfg()
     for s in cfg.edge_cfg_entry:
         for e in cfg.edge_cfg_exit:
-            for path in nx.all_simple_paths(cfg.edge_cfg, s, e):
-                cfg.paths.append(path)
+            try:
+                path_tracer(cfg.paths, cfg.edge_cfg, s, e, cutoff=len(cfg.edge_cfg.nodes))
+            except:
+                continue
     return cfg
+
+@func_set_timeout(600)
+def path_tracer(paths, graph, start, end, cutoff):
+    for path in nx.all_simple_paths(graph, start, end, cutoff):
+        paths.append(path)
 
 def symbolic_execution(function):
     cfg = build_cfg(function)
@@ -95,14 +103,26 @@ def symbolic_execution(function):
     output_symbols = find_output_variables(function)
     # print(input_symbols)
     # print(output_symbols)
-
-    tmp_dict = {}
+    path_exps = []
+    path_cond = []
     for path in cfg.paths:
+        tmp_dict = {}
+        cond = []    
         for ver in path:
             label =  int(ver.split("-")[0])
             block = blks_dict[label]
             # TODO
-            execution_block(block, tmp_dict)
+            curr_cond = execution_block(block, tmp_dict, int(ver.split("-")[1]))
+            if curr_cond != None:
+                cond.append(curr_cond)
+        path_cond.append(cond)
+        path_exps.append(tmp_dict)
+    for path in path_cond:
+        for cond in path:
+            cond.show()
+    for path in path_exps:
+        for var in tmp_dict:
+            tmp_dict[var].show()
 
 def process_functions(llvm_ir):
     mod = llvm.parse_assembly(llvm_ir)
@@ -115,9 +135,11 @@ def process_functions(llvm_ir):
             continue
         symbolic_execution(function)
 
-files = os.listdir('../err_lls')
-for f in files:
-    print(f"File: {f}")
-    llvm_ir = read_ir(os.path.join('../err_lls',f))
-    process_functions(llvm_ir)
+llvm_ir = read_ir("../random1.ll")
+process_functions(llvm_ir)
+# files = os.listdir('../err_lls')
+# for f in files:
+    # print(f"File: {f}")
+    # llvm_ir = read_ir(os.path.join('../err_lls',f))
+    # process_functions(llvm_ir)
     

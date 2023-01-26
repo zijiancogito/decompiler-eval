@@ -11,7 +11,6 @@ class IRCFG():
         self.edge_cfg_entry = []
         self.edge_cfg_exit = []
         self.paths = []
-        
 
     def set_entry(self, entry):
         self.entry = entry

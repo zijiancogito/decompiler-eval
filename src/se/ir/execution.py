@@ -2,6 +2,7 @@ import re
 import sys
 sys.path.append('.')
 from simulate_instruction import *
+from treelib import Tree, Node
 
 
 def find_output_variables(function):
@@ -47,6 +48,30 @@ def find_input_variables(function):
 
     return input_symbols_dict
         
+def execution_block(block, tmp_dict, next_block):
+    last_insn = None
+    for instruction in block.instructions:
+        res = execution_instruction(instruction, tmp_dict)
+        # if res == None:
+            # print(instruction)
+        last_insn = instruction
+
+    curr_cond = None 
+    if last_insn.opcode == "br":
+        jump_kind, res = parse_br(str(last_insn).strip())
+        if jump_kind == "jc":
+            cond = res[0]
+            true_dest = int(res[1])
+            false_dest = int(res[2])
+            if true_dest == next_block:
+                curr_cond = tmp_dict[cond]
+            elif false_dest == next_block:
+                curr_cond = ExpTree("not", "!")
+                curr_cond.add_child(tmp_dict[cond])
+        if curr_cond != None:
+            curr_cond.show()
+    return curr_cond
+
 def parse_call(instruction):
     pattern = "[\s\S]*call [\s\S]*@([^(]+)\([\s\S]*\)"
     match = re.match(pattern, instruction)
@@ -95,34 +120,20 @@ def parse_ret(instruction):
         return None
 
 def parse_br(instruction):
-    pattern1 = "br i1 %([\S]+), label %([\S]+), label %([\S]+)"
+    pattern1 = "br i1 (%[\S]+), label %([\S]+), label %([\S]+)"
     pattern2 = "br label %([\S]+)"
     match1 = re.match(pattern1, instruction)
-    match2 = re.match(pattern2, instruction)
     if match1:
-        cond = match.group(1)
-        true_dest = match.group(2)
-        false_dest = match.group(3)
-        return cond, true_dest, false_dest
-    elif match2:
-        dest = match.group(1)
-        return dest
-    else:
-        return None
-
-def execution_block(block, tmp_dict):
-    last_insn = None
-    for instruction in block.instructions:
-        res = execution_instruction(instruction, tmp_dict)
-        if res == None:
-            print(instruction)
-        last_insn = instruction
-
-    # if last_insn.opcode == "br":
-        # jump = 
+        cond = match1.group(1)
+        true_dest = match1.group(2)
+        false_dest = match1.group(3)
+        return "jc", [cond, true_dest, false_dest]
     
-        
-    return None
+    match2 = re.match(pattern2, instruction)
+    if match2:
+        dest = match2.group(1)
+        return "jmp", dest
+    return "none", None
 
 def execution_instruction(instruction, tmp_dict):
     opcode = instruction.opcode
@@ -233,11 +244,17 @@ def execution_instruction(instruction, tmp_dict):
         tmp_dict[res[0]] = res[1]
         return f"{res[0]} = {res[1]}"
     if opcode == "lshr":
-        # TODO
-        return None
+        res = execution_lshr(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "ashr":
-        # TODO
-        return None
+        res = execution_ashr(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "and":
         res = execution_and(str(instruction).strip(), tmp_dict)
         if res == None:
@@ -289,11 +306,7 @@ def execution_instruction(instruction, tmp_dict):
     if opcode == "fence":
         return None
     if opcode == "cmpxchg":
-        res = execution_cmpxchg(str(instruction).strip(), tmp_dict)
-        if res == None:
-            return None
-        tmp_dict[res[0]] = res[1]
-        return f"{res[0]} = {res[1]}"
+        return None
     if opcode == "atomicrmw":
         # TODO
         return None
@@ -330,11 +343,23 @@ def execution_instruction(instruction, tmp_dict):
     if opcode == "addrspacecast":
         return None
     if opcode == "icmp":
-        return None
+        res = execution_icmp(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "fcmp":
-        return None
+        res = execution_fcmp(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "phi":
-        return None
+        res = execution_phi(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "select":
         return None
     if opcode == "freeze":
@@ -353,33 +378,4 @@ def execution_instruction(instruction, tmp_dict):
         return None
     if opcode == "cleanuppad":
         return None
-
-        
-def execution_callbr(instruction, tmp_dict):
-    pattern_non_void = "(.*) = callbr .*"
-    pattern_void = "callbr .*"
-
-    pattern_label = "label ([\S]+)"
-    pattern_param = ".* (%[0-9]+)"
-
-    if re.match(pattern_void, instruction):
-        return None
-    match = re.match(pattern_non_void, instruction)
-    if not match:
-        return None
-    result = match.group(1)
-    find_label = re.find(pattern_label, instruction)
-    label = find_label[0][0]
-    find_param = re.findall(pattern_param, instruction)
-    params = []
-    for p in find_param:
-        if re.match(pattern_label, p):
-            continue
-        if p in tmp_dict:
-            params.append(tmp_dict[p[0]])
-        else:
-            params.append(p[0])
-    
-    exp = f"{result}({','.join(params)})"
-    return result, exp
 
