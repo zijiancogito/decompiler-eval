@@ -18,3 +18,10 @@ class ExpTree:
 
     def add_child(self, child):
         self.children.append(child)
+
+def load_from_json():
+    #TODO: return ExpTree or dict of ExpTree of a function
+    # dict: 
+    #   key: variable
+    #   value: ExpTree
+     return 
