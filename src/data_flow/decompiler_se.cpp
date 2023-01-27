@@ -17,232 +17,40 @@ void free_node_list(NodeList *node_list)
     }
 }
 
+
 void free_variable(Variable *v)
 {
-    if (v == NULL)
-        return;
-    if (v->type != NULL)
-    {
-        free(v->type);
-        v->type = NULL;
-    }
-    if (v->name != NULL)
-    {
-        free(v->name);
-        v->name = NULL;
-    }
-    if (v->value != NULL)
-    {
-        free(v->value);
-        v->value = NULL;
-    }
-    free(v);
-    v = NULL;
-}
-
-void free_variable_list(Variable_list *var_list)
-{
-    Variable_node *tmp = NULL;
-    while (var_list->head != NULL)
-    {
-        tmp = var_list->head;
-        var_list->head = var_list->head->next;
-        free_variable(tmp->var);
-        free(tmp);
+    if (v != NULL) {
+        delete v;
+        v = NULL;
     }
 }
-
-void init_condition_list(condition_list *con_list)
-{
-    condition_node *head = (condition_node*)malloc(sizeof(condition_node));
-    condition_node *tail = (condition_node*)malloc(sizeof(condition_node));
-
-    head->next = tail;
-    
-    head->condition = NULL;
-    tail->condition = NULL;
-    tail->next = NULL;
-    con_list->head = head;
-    con_list->tail = tail;
-    con_list->len = 0;
-}
-
-void append_condition(condition_list *con_list, char *condition)
-{
-    condition_node * new_tail = NULL;
-  
-    // Alloc space for new tail.
-    new_tail = (condition_node*)malloc(sizeof(condition_node));
-    // Copy data to new node.
-    new_tail->next = NULL;
-    new_tail->condition = NULL;
-
-    // Change the old tail.
-    con_list->tail->condition = condition;
-    con_list->tail->next = new_tail;
-    con_list->tail = new_tail;
-    con_list->len++;
-}
-
-void init_output_list(output_list *out_list)
-{
-    output_node *head = (output_node*)malloc(sizeof(output_node));
-    output_node *tail = (output_node*)malloc(sizeof(output_node));
-
-    head->next = tail;
-    tail->prev = head;
-    
-    head->output = NULL;
-    head->prev = NULL;
-    tail->output = NULL;
-    tail->next = NULL;
-    out_list->head = head;
-    out_list->tail = tail;
-    out_list->len = 0;
-}
-
-void append_output(output_list *out_list, char *output)
-{
-    output_node * new_tail = NULL;
-  
-    // Alloc space for new tail.
-    new_tail = (output_node*)malloc(sizeof(output_node));
-    // Copy data to new node.
-    new_tail->prev = out_list->tail;
-    new_tail->next = NULL;
-    new_tail->output = NULL;
-
-    // Change the old tail.
-    out_list->tail->output = output;
-    out_list->tail->next = new_tail;
-    out_list->tail = new_tail;
-    out_list->len++;
-}
-
-void delete_tail_output(output_list *out_list)
-{
-    if (out_list->len == 0) return ;
-    output_node *del = out_list->tail->prev;
-    del->prev->next = del->next;
-    del->next->prev = del->prev;
-
-    free(del->output);
-    free(del);
-
-    out_list->len -- ;
-}
-
-void delete_output_by_num(output_list *out_list, int num)
-{
-    while (num --)
-    {
-        delete_tail_output(out_list);
-    }
-}
-
-void init_path_condition(path_condition *path)
-{
-    condition_list *head = (condition_list*)malloc(sizeof(condition_list));
-    condition_list *tail = (condition_list*)malloc(sizeof(condition_list));
-
-    head->next = tail;
-    tail->prev = head;
-    
-    head->head = NULL;
-    head->tail = NULL;
-    head->prev = NULL;
-    head->len = 0;
-
-    tail->head = NULL;
-    tail->tail = NULL;
-    tail->next = NULL;
-    tail->len = 0;
-
-    path->head = head;
-    path->tail = tail;
-    path->len = 0;
-}
-
-void append_condition_list(path_condition *path, condition_list *con_list)
-{
-    path->tail->prev->next = con_list;
-    con_list->prev = path->tail->prev;
-    con_list->next = path->tail;
-    path->tail->prev = con_list;
-    path->len ++ ;
-}
-
-void delete_tail_condition_list(path_condition *path)
-{
-    condition_list *del = path->tail->prev;
-    if (del == path->head) return;
-    del->prev->next = path->tail;
-    path->tail->prev = del->prev;
-    path->len -- ;
-
-    condition_node *tmp = del->head;
-    
-    for (int i = 0; i < del->len; i ++ )
-    {
-        tmp = tmp->next;
-        free(tmp->condition);
-    }
-    
-    while (del->head != NULL)
-    {
-        tmp = del->head;
-        del->head = del->head->next;
-        free(tmp);
-    }
-
-    free(del);
-
-}
-
-void init_variable_list(Variable_list *var_list)
-{
-    Variable_node *head = (Variable_node*)malloc(sizeof(Variable_node));
-    head->var = NULL;
-    head->next = NULL;
-    var_list->head = head;
-    var_list->len = 0;
-}
-
-void append_variable(Variable_list *var_list, Variable *var)
-{
-    // Head insertion method
-    Variable_node * new_var = NULL;
-    new_var = (Variable_node*)malloc(sizeof(Variable_node));
-    new_var->var = var;
-    new_var->next = var_list->head->next;
-    var_list->head->next = new_var;
-    var_list->len++;
-}
-
 Variable *variable_copy(Variable *v)
 {
-    Variable *new_v = (Variable *)malloc(sizeof(Variable));
+    Variable *new_v = new Variable;
     new_v->is_input = v->is_input;
+    new_v->is_output = v->is_output;
     new_v->is_global = v->is_global;
-    new_v->type = NULL;
-    new_v->name = NULL;
-    new_v->value = NULL;
-    if (v->type != NULL)
-    {
-        new_v->type = (char*)malloc(strlen(v->type) + 1);
-        strcpy(new_v->type, v->type);
+    new_v->expression = v->expression;
+    if (!v->type.empty()) {
+        new_v->type = v->type;
     }
-    if (v->name != NULL)
-    {
-        new_v->name = (char*)malloc(strlen(v->name) + 1);
-        strcpy(new_v->name, v->name);
-    }
-    if (v->value != NULL)
-    {
-        new_v->value = (char*)malloc(strlen(v->value) + 1);
-        strcpy(new_v->value, v->value);
+    if (!v->name.empty()) {
+        new_v->name =  v->name;
     }
     return new_v;
+}
+
+void print_input(std::unordered_map<std::string, Variable*> &var_map)
+{
+    printf("input:  ");
+    Variable *v = NULL;
+    for (std::unordered_map<std::string, Variable*>::iterator it = var_map.begin(); it != var_map.end(); it ++) {
+        v = (*it).second;
+        if (v->is_input)
+            printf("%s  ", v->name);
+    }
+    printf("\n");
 }
 
 void create_var_map(std::unordered_map<std::string, Variable*> &var_map, TSNode var_node, const char *source, bool is_input)
@@ -275,10 +83,10 @@ void create_var_map(std::unordered_map<std::string, Variable*> &var_map, TSNode 
         return ;
 
     Variable *v;
-    v = (Variable *)malloc(sizeof(*v));
+    v = new Variable;
     v->type = type;
     v->name = name;
-    v->value = NULL;
+    v->expression = Json::nullValue;
     v->is_input = is_input;
     v->is_global = false;
     var_map.emplace(name, v);
@@ -333,22 +141,16 @@ void find_input_variables(TSTree *tree, const char *source, std::unordered_map<s
     }
 }
 
-const char *opposite_relation(const char* relational_op)
+std::string opposite_relation(std::string relational_op)
 {
-    for (int i = 0; i < 6; i ++ )
-        if (relational_ops[i] == relational_op)
-            return relational_ops[5 - i];
-    return NULL;
-}
-
-bool belong_to(const char *op, const char **ops, int size)
-{
-    for (int i = 0; i < size; i ++ )
-    {
-        if (strcmp(op, ops[i]) == 0)
-            return true;;
+    std::string res;
+    for (int i = 0; i < 6; i ++ ) {
+        if (relational_ops[i] == relational_op) {
+            res = relational_ops[5 - i];
+            break;
+        }
     }
-    return false;
+    return res;
 }
 
 bool in_node_list(NodeList *all_nodes, TSNode node)
@@ -365,214 +167,151 @@ bool in_node_list(NodeList *all_nodes, TSNode node)
     return false;
 }
 
-char *parse_expression(TSNode expression_node, const char* source, std::unordered_map<std::string, Variable*> &var_map)
+Json::Value parse_expression(TSNode expression_node, const char* source, std::unordered_map<std::string, Variable*> &var_map)
 {
-    const char *node_type = ts_node_type(expression_node);
-    if (strcmp("identifier", node_type) == 0)
-    {
+    std::string node_type = ts_node_type(expression_node);
+    Json::Value ret;
+    if (node_type == "identifier") {
         char *id_name = get_content(expression_node, source);
         Variable *v = NULL;
         // Use variable name to find the variable struct, if
         // not found, the variable is considered global
-        if (var_map.find(id_name) == var_map.end())  
-        {
+        if (var_map.find(id_name) == var_map.end()) {
             Variable *new_v;
-            new_v = (Variable *)malloc(sizeof(Variable));
-            new_v->type = NULL;
+            new_v = new Variable;
             new_v->name = id_name;
-            new_v->value = NULL;
+            new_v->expression = Json::nullValue;
             new_v->is_input = false;
+            new_v->is_output = false;
             new_v->is_global = true;  // set the global field to ture
             var_map.emplace(id_name, new_v);
         }
         v = var_map.at(id_name);
-        char *cnt = NULL;
-        if (v->value != NULL)  // check whether the variable is assigned
-        {
-            cnt = (char*)malloc(strlen(v->value) + 1);
-            strcpy(cnt, v->value);  // get the variable value
-            return cnt;
+        // check whether the variable is assigned
+        if (!v->expression.empty()) {
+            ret = v->expression;
+        } else {
+            ret["type"] = node_type;
+            ret["value"] = v->name;
         }
-        else
-        {
-            cnt = (char*)malloc(strlen(v->name) + 1);
-            strcpy(cnt, v->name);  // get the variable name (the variable is not assigned)
-            return cnt;
-        }
-    }
-    else if (strstr(node_type, "_literal") != NULL && strstr(node_type, "literal_") == NULL)
-    {
+    } else if (node_type.find("_literal") != std::string::npos && 
+             node_type.find("literal_") == std::string::npos) {
         // Get the value of the literal directly
-        return get_content(expression_node, source);
-    }
-    else if (strcmp("cast_expression", node_type) == 0)
-    {
+        ret["type"] = node_type;
+        ret["value"] = get_content(expression_node, source);
+    } else if (node_type == "cast_expression") {
         // Get the variable node from a cast node and parse it
         TSNode cnt_node = ts_node_child(expression_node, 3);
-        return parse_expression(cnt_node, source, var_map);
-    }
-    else if (strcmp("pointer_expression", node_type) == 0)
-    {
-        TSNode pointer_node = ts_node_child(expression_node, 0);
-
-        // if reference, return the source content directly
-        if (strcmp(ts_node_type(pointer_node), "&") == 0)
-            return get_content(expression_node, source);
-        
-        // if dereference, parse the variable node
-        TSNode cnt_node = ts_node_next_sibling(pointer_node);
-        char *cnt = parse_expression(cnt_node, source, var_map);
-        char *full_cnt = (char*)malloc(strlen("*") + strlen(cnt) + 1);
-        strcpy(full_cnt, "*");
-        strcat(full_cnt, cnt);
-        free(cnt);
-        return full_cnt;
-    }
-    else if (strcmp("parenthesized_expression", node_type) == 0)
-    {
+        ret = parse_expression(cnt_node, source, var_map);
+    } else if (node_type == "parenthesized_expression") {
         // parse the node in parentheses
         TSNode cnt_node = ts_node_child(expression_node, 1);
-        char *cnt = parse_expression(cnt_node, source, var_map);
-        char *full_cnt = (char*)malloc(strlen("(") + strlen(cnt) + strlen(")") + 1);
-        strcpy(full_cnt, "(");
-        strcat(full_cnt, cnt);
-        strcat(full_cnt, ")");
-        free(cnt);
-        return full_cnt;
+        ret = parse_expression(cnt_node, source, var_map);
+    } else if (node_type == "pointer_expression") {
+        TSNode pointer_node = ts_node_child(expression_node, 0);
+        TSNode cnt_node = ts_node_next_sibling(pointer_node);
+        std::string op = ts_node_type(pointer_node);
+        ret["type"] = node_type;
+        ret["op"] = op;
+        if (op == "&") {
+            // if reference, return the source content directly
+            ret["value"]["type"] = "identifier";
+            ret["value"]["value"] = get_content(cnt_node, source);
+        } else {
+            // if dereference, parse the variable node
+            ret["value"] = parse_expression(cnt_node, source, var_map);
+        }
     }
-    else if (strcmp("binary_expression", node_type) == 0)
-    {
-        TSNode left = ts_node_child(expression_node, 0);
-        TSNode right = ts_node_child(expression_node, 2);
-        char *cnt1 = parse_expression(left, source, var_map);
-        const char *cnt2 = ts_node_type(ts_node_child(expression_node, 1));
-        char *cnt3 = parse_expression(right, source, var_map);
-        char *full_cnt = (char*)malloc(strlen(cnt1) + strlen(cnt2) + strlen(cnt3) + 1);
-        strcpy(full_cnt, cnt1);
-        strcat(full_cnt, cnt2);
-        strcat(full_cnt, cnt3);
-        free(cnt1);
-        free(cnt3);
-        return full_cnt;
+    else if (node_type == "binary_expression") {
+        TSNode left_node = ts_node_child(expression_node, 0);
+        TSNode right_node = ts_node_child(expression_node, 2);
+        Json::Value cnt1 = parse_expression(left_node, source, var_map);
+        Json::Value op = ts_node_type(ts_node_child(expression_node, 1));
+        Json::Value cnt3 = parse_expression(right_node, source, var_map);
+        ret["type"] = node_type;
+        ret["left"] = cnt1;
+        ret["op"] = op;
+        ret["right"] = cnt3;
     }
-    else if (strcmp("update_expression", node_type) == 0)
-    {
+    else if (node_type == "update_expression") {
         // Only consider identifier update
         TSNode first_node = ts_node_child(expression_node, 0);
         TSNode second_node = ts_node_child(expression_node, 1);
-        char *cnt = NULL, *full_cnt = NULL;
-        if (strcmp(ts_node_type(second_node), "++") == 0 || strcmp(ts_node_type(second_node), "--") == 0)
-        {
+        if (strcmp(ts_node_type(second_node), "++") == 0 || strcmp(ts_node_type(second_node), "--") == 0) {
             // postfix operation, return the variable itself
-            full_cnt = get_content(first_node, source);
-        }
-        else
-        {
+            ret = parse_expression(first_node, source, var_map);
+        } else {
             // prefix operation, the variable incremented/decremented by one
             const char *op = ts_node_type(first_node);
-            cnt = get_content(second_node, source);
+            Json::Value cnt = parse_expression(second_node, source, var_map);
             char *single_op = (char*)malloc(strlen(op) + 1);
             strcpy(single_op, op);
             single_op[strlen(op) - 1] = '\0';
-            char *full_cnt = (char*)malloc(strlen(cnt) + strlen(single_op) + strlen("1") + 1);
-            strcpy(full_cnt, cnt);
-            strcat(full_cnt, single_op);
-            strcat(full_cnt, "1");
+            ret["type"] = "binary_expression";
+            ret["left"] = cnt;
+            ret["op"] = single_op;
+            ret["right"] = "1";
         }
-
-        return full_cnt;
     }
-    else if (strcmp("call_expression", node_type) == 0)
-    { // parse each argument of the function
-
-        char *func_name = get_content(ts_node_child(expression_node, 0), source);
+    else if (node_type == "call_expression") { 
+        // parse each argument of the function
+        Json::Value func_name = get_content(ts_node_child(expression_node, 0), source);
         // get argument_list node
+        Json::Value arguments;
         TSNode argument_list = ts_node_child(expression_node, 1);
         int argument_num = ts_node_child_count(argument_list);
-        char **arguments = (char**)malloc(sizeof(char*) * argument_num);
-        int real_arg_num = 0, length = strlen(func_name) + strlen("(") + strlen(")");
-        for (int i = 0; i < argument_num; i ++ )
-        {  // parse arguments one by one
+        for (int i = 0; i < argument_num; i ++ ) {
+            // parse arguments one by one
             TSNode argument = ts_node_child(argument_list, i);
-            const char *argument_type = ts_node_type(argument);
-            if (strcmp(argument_type, "(") != 0 && strcmp(argument_type, ",") != 0 && strcmp(argument_type, ")") != 0)
-            {
-                arguments[real_arg_num ++ ] = parse_expression(argument, source, var_map);
-                length += strlen(arguments[real_arg_num - 1]);
-            }
+            std::string argument_type = ts_node_type(argument);
+            if (argument_type != "(" && argument_type != "," && argument_type != ")")
+                arguments.append(parse_expression(argument, source, var_map));
         }
-        if (real_arg_num > 0)
-            length += (real_arg_num - 1) * strlen(", ");
-        char *func = (char*)malloc(length + 1);
-        strcpy(func, func_name);
-        strcat(func, "(");
-        if (real_arg_num > 0)
-        {
-            strcat(func, arguments[0]);
-            free(arguments[0]);
-        }
-        for (int i = 1; i < real_arg_num; i ++ )
-        {
-            strcat(func, ", ");
-            strcat(func, arguments[i]);
-            free(arguments[i]);
-        }
-        strcat(func, ")");
-        free(func_name);
-        free(arguments);
-        return func;
+        ret["type"] = node_type;
+        ret["func"] = func_name;
+        ret["args"] = arguments;
     }
-    else if (strcmp("return_statement", node_type) == 0)
-    {
+    else if (node_type == "return_statement") {
         TSNode return_node = ts_node_child(expression_node, 1);
-        char *return_cnt = parse_expression(return_node, source, var_map);
-        if (return_cnt == NULL)
-            return NULL;
-        char *full_cnt = (char*)malloc(strlen("return ") + strlen(return_cnt) + 1);
-        strcpy(full_cnt, "return ");
-        strcat(full_cnt, return_cnt);
-        free(return_cnt);
-        return full_cnt;
+        Json::Value return_cnt = parse_expression(return_node, source, var_map);
+        if (!return_cnt.empty()) {
+            ret["type"] = node_type;
+            ret["value"] = return_cnt;
+        }
     }
 
-    return NULL;
+    return ret;
 }
 
 void parse_assignment_expression(TSNode assign_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars)
 {
     TSNode var_node;
-    char *value = NULL;  // The value of the variable obtained by this assignment statement
+    Json::Value expression;  // The expression of the variable obtained by this assignment statement
     if (strcmp(ts_node_type(assign_node), "update_expression") == 0)
     {  // Only consider identifier update
 
-        // If it is an update statement, the variable is considered to be an
-        // iteration variable, and can be retained as an output value.
         TSNode first_node = ts_node_child(assign_node, 0);
         TSNode second_node = ts_node_child(assign_node, 1);
         TSNode op_node;
-        if (strcmp(ts_node_type(second_node), "++") == 0 || strcmp(ts_node_type(second_node), "--") == 0)
-        {
+        if (strcmp(ts_node_type(second_node), "++") == 0 || strcmp(ts_node_type(second_node), "--") == 0) {
             var_node = first_node;
             op_node = second_node;
-        }
-        else
-        {
+        } else {
             var_node = second_node;
             op_node = first_node;
         }
 
-        // set the value
+        // set the expression
+        Json::Value cnt = parse_expression(var_node, source, var_map);
         const char *op = ts_node_type(op_node);
-        char *cnt = get_content(var_node, source);
         char *single_op = (char*)malloc(strlen(op) + 1);
         strcpy(single_op, op);
         single_op[strlen(op) - 1] = '\0';
-        value = (char*)malloc(strlen(cnt) + strlen(single_op) + strlen("1") + 1);
-        strcpy(value, cnt);
-        strcat(value, single_op);
-        strcat(value, "1");
-        free(cnt);
-        free(single_op);
+        expression["type"] = "binary_expression";
+        expression["left"] = cnt;
+        expression["op"] = single_op;
+        expression["right"]["type"] = "number_literal";
+        expression["right"]["value"] = "1";
     }
     else
         var_node = ts_node_child(assign_node, 0);
@@ -584,181 +323,208 @@ void parse_assignment_expression(TSNode assign_node, const char* source, std::un
     if (var_map.find(var_name) == var_map.end())  // If not found, the variable is considered global
     {
         Variable *new_v;
-        new_v = (Variable *)malloc(sizeof(Variable));
-        new_v->type = NULL;
+        new_v = new Variable;
         new_v->name = var_name;
-        new_v->value = NULL;
+        new_v->expression = Json::nullValue;
         new_v->is_input = false;
+        new_v->is_output = false;
         new_v->is_global = true;  // set the global field to ture
         var_map.emplace(var_name, new_v);
     }
     v = var_map.at(var_name);
 
-    // After the assignment statement, the value of the variable will  
-    // change, record the previous value, convenient recovery
+    // After the assignment statement, the expression of the variable will  
+    // change, record the previous expression, convenient recovery
     Variable *changed_v = variable_copy(v);
     changed_vars.emplace(changed_v->name, changed_v);
-    char *append = NULL;
 
-    if (strcmp(ts_node_type(assign_node), "update_expression") != 0)
-    {  // set the value
+    if (expression.empty()) {
+        // not the update_expression
+        // set the expression
         TSNode right_node = ts_node_child(assign_node, 2);
         TSNode op_node = ts_node_child(assign_node, 1);
         const char *op = ts_node_type(op_node);
-        if (belong_to(op, self_ops, 12))  // "+=", "-=", "*=", etc.
-        {  // Lvalue variable of self-operate statements is 
-           // also considered to be a iteration variable
-            v->value = NULL;
+        if (std::find(begin(self_ops), end(self_ops), op) != end(self_ops)) {
+            // "+=", "-=", "*=", etc.
             char *single_op = (char*)malloc(strlen(op) + 1);
             strcpy(single_op, op);
             single_op[strlen(op) - 1] = '\0';
-            append = (char*)malloc(strlen(var_name) + strlen(single_op) + 1);
-            strcpy(append, var_name);
-            strcat(append, single_op);
-            free(single_op);
-        }
-        
-        if (v->value != NULL)
-        {   // Check that the right expression contains Lvalue variable, if
-            // it does, consider the variable as an iteration variable
-            TSTreeCursor cursor = ts_tree_cursor_new(right_node);
-            NodeList all_nodes;
-            init_node_list(&all_nodes);
-            make_move(&cursor, DOWN, &all_nodes, var_type);
-            Node *tmp = all_nodes.head;
-            for (int i = 0; i < all_nodes.listLen; i++ )
-            {
-                tmp = tmp->next;
-                char *cnt = get_content(tmp->data, source);
-                if (strcmp(cnt, v->name) == 0)
-                {
-                    v->value = NULL;
-                    break;
-                }
+            Json::Value right = parse_expression(right_node, source, var_map);
+            if (v->expression.empty()) {
+                expression["left"]["type"] = "identifier";
+                expression["left"]["value"] = v->name;
+            } else {
+                expression["left"] = v->expression;
             }
+            expression["op"] = single_op;
+            expression["right"] = right;
+            expression["type"] = "binary_expression";
+            free(single_op);
+        } else {
+            expression = parse_expression(right_node, source, var_map);
         }
+    }
 
-        value = parse_expression(right_node, source, var_map);
-    }
-    if (append == NULL)
-    {
-        v->value = (char*)malloc(strlen(value) + 1);
-        strcpy(v->value, value);
-    }
-    else
-    {
-        v->value = (char*)malloc(strlen(append) + strlen(value) + 1);
-        strcpy(v->value, append);
-        strcat(v->value, value);
-    }
+    v->expression = expression;
 }
 
-void print_input(std::unordered_map<std::string, Variable*> &var_map)
+Json::Value parse_branch_condition(TSNode con_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars, bool condition)
 {
-    printf("input:  ");
-    Variable *v = NULL;
-    for (std::unordered_map<std::string, Variable*>::iterator it = var_map.begin(); it != var_map.end(); it ++) {
-        v = (*it).second;
-        if (v->is_input)
-            printf("%s  ", v->name);
-    }
-    printf("\n");
-}
-
-char *parse_branch_condition(TSNode con_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, bool condition)
-{
-    const char *node_type = ts_node_type(con_node);
-    if (strcmp(node_type, "binary_expression") == 0)
-    {
+    std::string node_type = ts_node_type(con_node);
+    Json::Value ret;
+    TSNode var_node;
+    Json::Value expression = Json::nullValue;
+    if (node_type == "binary_expression") {
         TSNode left_node = ts_node_child(con_node, 0);
         TSNode op_node = ts_node_child(con_node, 1);
         TSNode right_node = ts_node_child(con_node, 2);
-        const char *op_type = ts_node_type(op_node);
-        if (belong_to(op_type, relational_ops, 6))
-        {
-            char *left_cnt = parse_expression(left_node, source, var_map);
-            char *right_cnt = parse_expression(right_node, source, var_map);
-            char *cnt = NULL;
+        std::string op_type = ts_node_type(op_node);
+        if (std::find(begin(relational_ops), end(relational_ops), op_type) != end(relational_ops)) {
+            Json::Value left_cnt = parse_expression(left_node, source, var_map);
+            Json::Value right_cnt = parse_expression(right_node, source, var_map);
 
             if (condition == false) {
                 op_type = opposite_relation(op_type);
             }
 
-            cnt = (char*)malloc(strlen(left_cnt) + strlen(op_type) + strlen(right_cnt) + 1);
-            strcpy(cnt, left_cnt);
-            strcat(cnt, op_type);
-            strcat(cnt, right_cnt);
-
-            free(left_cnt);
-            free(right_cnt);
-            return cnt;
+            ret["type"] = node_type;
+            ret["left"] = left_cnt;
+            ret["op"] = op_type;
+            ret["right"] = right_cnt;
+            
+            if (op_type == "==") {
+                std::string left_type = ts_node_type(left_node);
+                std::string right_type = ts_node_type(right_node);
+                if (left_type == "identifier" && right_type == "number_literal") {
+                    var_node = left_node;
+                    expression["type"] = "number_literal";
+                    expression["value"] = get_content(right_node, source);
+                } else if (left_type == "number_literal" && right_type == "identifier") {
+                    var_node = right_node;
+                    expression["type"] = "number_literal";
+                    expression["value"] = get_content(left_node, source);
+                }
+            }
         }
-    }
-    else if (strcmp(node_type, "parenthesized_expression") == 0)
-    {
+    } else if (node_type == "parenthesized_expression") {
         TSNode child = ts_node_child(con_node, 1);
-        parse_branch_condition(child, source, var_map, condition);
-    }
-    else if (strcmp(node_type, "unary_expression") == 0)
-    {
-        TSNode unary_node = ts_node_child(con_node, 0);
-        if (strcmp(ts_node_type(unary_node), "!") == 0)
-        {
-            TSNode expression_node = ts_node_child(con_node, 1);
-            char *expression_cnt = parse_expression(expression_node, source, var_map);
-            const char *op = NULL;
+        ret = parse_branch_condition(child, source, var_map, changed_vars, condition);
+    } else if (node_type == "unary_expression") {
+        TSNode unary_node = ts_node_child_by_field_name(con_node, "operator", strlen("operator"));
+        if (strcmp(ts_node_type(unary_node), "!") == 0) {
+            TSNode expression_node = ts_node_child_by_field_name(con_node, "argument", strlen("argument"));
+            Json::Value expression_cnt = parse_expression(expression_node, source, var_map);
+            std::string op;
 
             if (condition == true) {
-                op = "==0";
+                op = "==";
             } else {
-                op = "!=0";
+                op = "!=";
             }
 
-            char *cnt = (char*)malloc(strlen(expression_cnt) + strlen(op) + 1);
+            ret["type"] = "binary_expression";
+            ret["left"] = expression_cnt;
+            ret["op"] = op;
+            ret["right"]["type"] = "number_literal";
+            ret["right"]["value"] = "0";
 
-            strcpy(cnt, expression_cnt);
-            strcat(cnt, op);
-
-            free(expression_cnt);
-            return cnt;
+            if (op == "==") {
+                std::string expression_type = ts_node_type(expression_node);
+                if (expression_type == "identifier") {
+                    var_node = expression_node;
+                    expression["type"] = "number_literal";
+                    expression["value"] = "0";
+                }
+            }
         }
-    }
-    else
-    {
-        char *expression_cnt = parse_expression(con_node, source, var_map);
-        const char *op = NULL;
+    } else {
+        Json::Value expression_cnt = parse_expression(con_node, source, var_map);
+        std::string op;
 
         if (condition == true) {
-            op = "==0";
+            op = "!=";
         } else {
-            op = "!=0";
+            op = "==";
         }
 
-        char *cnt = (char*)malloc(strlen(expression_cnt) + strlen("!=0") + 1);
+        ret["type"] = "binary_expression";
+        ret["left"] = expression_cnt;
+        ret["op"] = op;
+        ret["right"]["type"] = "number_literal";
+        ret["right"]["value"] = "0";
 
-        strcpy(cnt, expression_cnt);
-        strcat(cnt, op);
-
-        free(expression_cnt);
-        return cnt;
+        if (op == "==") {
+            std::string expression_type = ts_node_type(con_node);
+            if (expression_type == "identifier") {
+                var_node = con_node;
+                expression["type"] = "number_literal";
+                expression["value"] = "0";
+            }
+        }
     }
-    
-    return NULL;
+
+    if (!expression.empty()) {
+        // Find variable node from the var_map by variable name
+        std::string var_type = ts_node_type(var_node);
+        char *var_name = get_content(var_node, source);
+        Variable *v = NULL;
+        if (var_map.find(var_name) == var_map.end())  // If not found, the variable is considered global
+        {
+            Variable *new_v;
+            new_v = new Variable;
+            new_v->name = var_name;
+            new_v->expression = Json::nullValue;
+            new_v->is_input = false;
+            new_v->is_output = false;
+            new_v->is_global = true;  // set the global field to ture
+            var_map.emplace(var_name, new_v);
+        }
+        v = var_map.at(var_name);
+
+        // After changing the expression of the variable, record the
+        // previous expression, convenient recovery
+        std::vector<Variable *> var_list;
+        var_list.push_back(v);
+        Variable *tmp = v;
+        while (!tmp->expression.empty() && tmp->expression["type"] == "identifier") {
+            std::string name = tmp->expression["value"].asString();
+            tmp = var_map.at(name);
+            var_list.push_back(tmp);
+        }
+
+        for (int i = 0; i < var_list.size(); i ++ ) {
+            Variable *var = var_list[i];
+            Variable *changed_v = variable_copy(var);
+            changed_vars.emplace(changed_v->name, changed_v);
+            var->expression = expression;
+        }
+    }
+
+    return ret;
+
 }
 
-void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, bool> &visit, const char *source, NodeList *analyze_nodes, std::unordered_map<std::string, Variable*> &var_map, std::vector<std::string> &conditions, std::vector<std::string> &outputs) 
+void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, bool> &visit, const char *source, NodeList *analyze_nodes, std::unordered_map<std::string, Variable*> &var_map, Json::Value &paths, Json::Value &conditions, Json::Value &outputs) 
 {
     BasicBlock *bb = edge->get_destination();
     if (bb == cfg->get_exit()) {
-        // print
-        for (int i = 0; i < conditions.size(); i ++ ) {
-            std::cout << conditions.at(i) << ", ";
+        Json::Value path;
+        Json::Value outs = outputs;
+        for (auto var: var_map) {
+            if (var.second->is_output) {
+                if (var.second->expression.empty()){
+                    Json::Value expression;
+                    expression["type"] = "identifier";
+                    expression["value"] = var.first;
+                    outs.append(expression);
+                } else {
+                    outs.append(var.second->expression);
+                }
+            }
         }
-        printf("output: ");
-        for (int i = 0; i < outputs.size(); i ++ ) {
-            std::cout << outputs.at(i) << "  ";
-        }
-        puts("");
+        path["conditions"] = conditions;
+        path["outputs"] = outs;
+        paths.append(path);
         return ;
     }
     // Only enter loop once
@@ -802,16 +568,18 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
         {
             tmp = tmp->next;
             if (in_node_list(analyze_nodes, tmp->data)) {
-                char *out_put = parse_expression(tmp->data, source, var_map);
+                Json::Value out_put = parse_expression(tmp->data, source, var_map);
                 output_num ++;
-                outputs.push_back(out_put);
+                while (out_put["type"] == "return_statement")
+                    out_put = out_put["value"];
+                outputs.append(out_put);
             }
         }
     }
 
     // judge switch statement
     bool is_switch = false;
-    char *switch_condition = NULL;
+    Json::Value switch_condition;
     TSNode n = nodes.back();
     is_switch = (strcmp(ts_node_type(n), "switch_statement") == 0);
     if (is_switch) {
@@ -822,35 +590,35 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
 
     // DFS
     for (int i = 0; i < out_edges.size(); i ++ ) {
+        std::unordered_map<std::string, Variable*> branch_changed_vars;
         CFGEdges *out_edge = out_edges.at(i);
         // Parse jump conditions
         int con_num = 0;
         if (out_edge->get_condition() == TRUE) {
-            char *con = parse_branch_condition(nodes.back(), source, var_map, true);
-            if (con != NULL) {
+            Json::Value con = parse_branch_condition(nodes.back(), source, var_map, branch_changed_vars, true);
+            if (!con.empty()) {
                 con_num ++ ;
-                conditions.push_back(con);
+                conditions.append(con);
             }
         } else if (out_edge->get_condition() == FALSE) {
-            char *con = parse_branch_condition(nodes.back(), source, var_map, false);
-            if (con != NULL) {
+            Json::Value con = parse_branch_condition(nodes.back(), source, var_map, branch_changed_vars, false);
+            if (!con.empty()) {
                 con_num ++ ;
-                conditions.push_back(con);
+                conditions.append(con);
             }
-        } else if (is_switch && switch_condition != NULL) {
+        } else if (is_switch && !switch_condition.empty()) {
             BasicBlock *des_bb = out_edge->get_destination();
             TSNode case_node = des_bb->get_contained_nodes().at(0);
             TSNode type_node = ts_node_child(case_node, 0);
             if (strcmp(ts_node_type(type_node), "case") == 0) {
-                std::string con;
+                Json::Value con;
                 TSNode value_node = ts_node_child_by_field_name(case_node, "value", strlen("value"));
-                char *value = parse_expression(value_node, source, var_map);
-                con.append(switch_condition);
-                con.append("==");
-                con.append(value);
+                Json::Value value = parse_expression(value_node, source, var_map);
+                con["left"] = switch_condition;
+                con["op"] = "==";
+                con["right"] = value;
                 con_num ++ ;
-                conditions.push_back(con);
-                free(value);
+                conditions.append(con);
             } else {
                 // default
                 for (int j = 0; j < out_edges.size(); j ++ ) {
@@ -860,36 +628,37 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
                         TSNode case_node = des_bb->get_contained_nodes().at(0);
                         TSNode type_node = ts_node_child(case_node, 0);
                         if (strcmp(ts_node_type(type_node), "case") == 0) {
-                            std::string con;
+                            Json::Value con;
                             TSNode value_node = ts_node_child_by_field_name(case_node, "value", strlen("value"));
-                            char *value = parse_expression(value_node, source, var_map);
-                            con.append(switch_condition);
-                            con.append("!=");
-                            con.append(value);
+                            Json::Value value = parse_expression(value_node, source, var_map);
+                            con["left"] = switch_condition;
+                            con["op"] = "!=";
+                            con["right"] = value;
                             con_num ++ ;
-                            conditions.push_back(con);
-                            free(value);
+                            conditions.append(con);
                         }
                     }
                 }
             }
         }
-        symbolic_execution(cfg, out_edge, visit, source, analyze_nodes, var_map, conditions, outputs);
+        symbolic_execution(cfg, out_edge, visit, source, analyze_nodes, var_map, paths, conditions, outputs);
         // Restore the site
+        for (auto it = branch_changed_vars.begin(); it != branch_changed_vars.end(); it ++ ) {
+            var_map.at((*it).first) = (*it).second;
+        }
         while (con_num --)
-            conditions.pop_back();
+            conditions.removeIndex(conditions.size()-1, NULL);
     }
 
     // Restore the site
-    while (output_num -- ) outputs.pop_back();
-    for (std::unordered_map<std::string, Variable*>::iterator it = changed_vars.begin(); it != changed_vars.end(); it ++ ) {
-        Variable *replaced = var_map.at((*it).first);
+    while (output_num -- ) outputs.removeIndex(outputs.size()-1, NULL);
+    for (auto it = changed_vars.begin(); it != changed_vars.end(); it ++ ) {
         var_map.at((*it).first) = (*it).second;
     }
     visit.at(edge) = false;
 }
 
-void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
+Json::Value run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
 {
     //get_variables(tree, source);
     
@@ -919,9 +688,11 @@ void run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
     find_input_variables(tree, source, var_map);
     print_input(var_map);
 
-    std::vector<std::string> conditions;
-    std::vector<std::string> outputs;
-    symbolic_execution(cfg, entry_edge, visit, source, analyze_nodes, var_map, conditions, outputs);
+    Json::Value conditions = Json::arrayValue;
+    Json::Value outputs = Json::arrayValue;
+    Json::Value paths;
+    symbolic_execution(cfg, entry_edge, visit, source, analyze_nodes, var_map, paths, conditions, outputs);
+    return paths;
 }
 
 void process(const char* filename)

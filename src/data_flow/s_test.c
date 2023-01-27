@@ -1,18 +1,26 @@
-void  FUN_00101189(int param_1, int param_2)
+undefined8 main(void)
+
 {
-    int v1;
-    scanf("%d", v1);
-    
-    switch(v1){
-        case 1:
-            puts("1");
-            break;
-        case 2:
-            puts("2");
-        default:
-            puts("3");
-            break;
-    }
-    if (param_1 > param_2)
-        printf("2: %d\n", param_2);
+  int iVar1;
+  long in_FS_OFFSET;
+  int local_18;
+  int local_14;
+  long local_10;
+  
+  local_10 = *(long *)(in_FS_OFFSET + 0x28);
+  __isoc99_scanf(&DAT_00102004,&local_18);
+  __isoc99_scanf(&DAT_00102004,&local_14);
+  if (local_14 < 10) {
+    iVar1 = local_14 + local_18;
+    iVar1 = ((iVar1 + local_14 * local_18) * -6 + local_18) * iVar1 - (local_14 * local_18) / iVar1;
+  }
+  else {
+    iVar1 = (local_14 + local_18) * local_14 + local_18 * -2 + 3;
+  }
+  __printf_chk(1,&DAT_00102004,iVar1);
+  if (local_10 == *(long *)(in_FS_OFFSET + 0x28)) {
+    return 0;
+  }
+                    // WARNING: Subroutine does not return
+  __stack_chk_fail();
 }

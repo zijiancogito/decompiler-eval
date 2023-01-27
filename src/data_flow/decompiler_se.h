@@ -1,14 +1,24 @@
 #ifndef DECOMPILER_SE_H
 #define DECOMPILER_SE_H
 
-#include "decompiler_output_parser.h"
+#include <jsoncpp/json/json.h>
 #include <tree_sitter/api.h>
+#include "decompiler_output_parser.h"
 
 extern "C" {
 TSLanguage *tree_sitter_c();
 }
 
+typedef struct {
+    std::string type;
+    std::string name;
+    Json::Value expression;
+    bool is_input;
+    bool is_output;
+    bool is_global;
+} Variable;
 
+/*
 typedef struct {
     char *type;
     char *name;
@@ -16,59 +26,19 @@ typedef struct {
     bool is_input;
     bool is_global;
 }Variable;
+*/
 
-typedef struct Variable_node{
-    Variable *var;
-    struct Variable_node *next;
-}Variable_node;
-
-typedef struct Variable_list{
-    Variable_node *head;
-    int len;
-}Variable_list;
-
-typedef struct condition_node{
-    char *condition;
-    struct condition_node *next;
-}condition_node;
-
-typedef struct condition_list{
-    condition_node *head;
-    condition_node *tail;
-    int len;
-    struct condition_list *prev;
-    struct condition_list *next;
-}condition_list;
-
-typedef struct path_condition{
-    condition_list *head;
-    condition_list *tail;
-    int len;
-}path_condition;
-
-typedef struct output_node{
-    char *output;
-    struct output_node *prev;
-    struct output_node *next;
-}output_node;
-
-typedef struct output_list{
-    output_node *head;
-    output_node *tail;
-    int len;
-}output_list;
-
-const char *relational_ops[6] = {
+std::string relational_ops[] = {
     ">=",
     "<=",
     "!=",
     "==",
     ">",
-    "<"
+    "<",
 };
 
-const char *self_ops[12] = {
-    "%%=",
+std::string self_ops[] = {
+    "%=",
     "&=",
     "*=",
     "+=",
@@ -79,7 +49,7 @@ const char *self_ops[12] = {
     "^=",
     "|=",
     "++",
-    "--"
+    "--",
 };
 
 /*
