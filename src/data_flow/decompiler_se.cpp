@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <algorithm>
 #include <assert.h>
-#include "../cfg/cfg_generator.h"
+#include "cfg_generator.h"
 #include "decompiler_se.h"
 
 void free_node_list(NodeList *node_list)
@@ -17,7 +17,6 @@ void free_node_list(NodeList *node_list)
     }
 }
 
-
 void free_variable(Variable *v)
 {
     if (v != NULL) {
@@ -25,6 +24,7 @@ void free_variable(Variable *v)
         v = NULL;
     }
 }
+
 Variable *variable_copy(Variable *v)
 {
     Variable *new_v = new Variable;
@@ -48,7 +48,7 @@ void print_input(std::unordered_map<std::string, Variable*> &var_map)
     for (std::unordered_map<std::string, Variable*>::iterator it = var_map.begin(); it != var_map.end(); it ++) {
         v = (*it).second;
         if (v->is_input)
-            printf("%s  ", v->name);
+            printf("%s  ", v->name.c_str());
     }
     printf("\n");
 }
@@ -504,26 +504,24 @@ Json::Value parse_branch_condition(TSNode con_node, const char* source, std::uno
 
 }
 
-void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, bool> &visit, const char *source, NodeList *analyze_nodes, std::unordered_map<std::string, Variable*> &var_map, Json::Value &paths, Json::Value &conditions, Json::Value &outputs) 
+void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, bool> &visit, const char *source, NodeList *analyze_nodes, std::unordered_map<std::string, Variable*> &var_map, Json::Value &paths, Json::Value &conditions) 
 {
     BasicBlock *bb = edge->get_destination();
     if (bb == cfg->get_exit()) {
         Json::Value path;
-        Json::Value outs = outputs;
+        Json::Value outputs;
         for (auto var: var_map) {
-            if (var.second->is_output) {
-                if (var.second->expression.empty()){
-                    Json::Value expression;
-                    expression["type"] = "identifier";
-                    expression["value"] = var.first;
-                    outs.append(expression);
-                } else {
-                    outs.append(var.second->expression);
-                }
+            if (var.second->expression.empty()){
+                Json::Value expression;
+                expression["type"] = "identifier";
+                expression["value"] = var.first;
+                outputs[var.first] = expression;
+            } else {
+                outputs[var.first] = var.second->expression;
             }
         }
         path["conditions"] = conditions;
-        path["outputs"] = outs;
+        path["outputs"] = outputs;
         paths.append(path);
         return ;
     }
@@ -559,22 +557,6 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
         // match the nodes to analyze and perform the analysis
         if (strcmp(node_type, "switch_statement") == 0 || strcmp(node_type, "case_statement") == 0)
             continue;
-        NodeList sub_nodes;
-        TSTreeCursor cursor = ts_tree_cursor_new(node);
-        init_node_list(&sub_nodes);
-        make_move(&cursor, DOWN, &sub_nodes, "");
-        Node *tmp = sub_nodes.head;
-        for (int j = 0; j < sub_nodes.listLen; j ++)
-        {
-            tmp = tmp->next;
-            if (in_node_list(analyze_nodes, tmp->data)) {
-                Json::Value out_put = parse_expression(tmp->data, source, var_map);
-                output_num ++;
-                while (out_put["type"] == "return_statement")
-                    out_put = out_put["value"];
-                outputs.append(out_put);
-            }
-        }
     }
 
     // judge switch statement
@@ -641,7 +623,7 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
                 }
             }
         }
-        symbolic_execution(cfg, out_edge, visit, source, analyze_nodes, var_map, paths, conditions, outputs);
+        symbolic_execution(cfg, out_edge, visit, source, analyze_nodes, var_map, paths, conditions);
         // Restore the site
         for (auto it = branch_changed_vars.begin(); it != branch_changed_vars.end(); it ++ ) {
             var_map.at((*it).first) = (*it).second;
@@ -651,14 +633,13 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
     }
 
     // Restore the site
-    while (output_num -- ) outputs.removeIndex(outputs.size()-1, NULL);
     for (auto it = changed_vars.begin(); it != changed_vars.end(); it ++ ) {
         var_map.at((*it).first) = (*it).second;
     }
     visit.at(edge) = false;
 }
 
-Json::Value run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
+const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
 {
     //get_variables(tree, source);
     
@@ -686,16 +667,17 @@ Json::Value run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
     get_variables(tree, var_map, source, "parameter_declaration", true);
     // get input from scanf function
     find_input_variables(tree, source, var_map);
-    print_input(var_map);
+    // print_input(var_map);
 
     Json::Value conditions = Json::arrayValue;
-    Json::Value outputs = Json::arrayValue;
     Json::Value paths;
-    symbolic_execution(cfg, entry_edge, visit, source, analyze_nodes, var_map, paths, conditions, outputs);
-    return paths;
+    symbolic_execution(cfg, entry_edge, visit, source, analyze_nodes, var_map, paths, conditions);
+    char *ret = new char[strlen(paths.toStyledString().c_str()) + 1];
+    strcpy(ret, paths.toStyledString().c_str());
+    return ret;
 }
 
-void process(const char* filename)
+extern "C" const char *process(const char* filename)
 {
     char * source = read_source(filename);
     assert(source);
@@ -712,13 +694,16 @@ void process(const char* filename)
     );
 
     // Test call_expression
-    NodeList analyze_nodes;
-    parse_decompiler_output(tree, &analyze_nodes, "call_expression");
-    run_se(tree, source, &analyze_nodes);
+    // NodeList analyze_nodes;
+    // parse_decompiler_output(tree, &analyze_nodes, "call_expression");
+    NodeList *analyze_nodes = NULL;
+    const char *ret = run_se(tree, source, analyze_nodes);
 
     ts_tree_delete(tree);
     ts_parser_delete(parser);
     free(source);
+
+    return ret;
 }
 
 int main()

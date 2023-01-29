@@ -19,24 +19,36 @@ class ExpTree:
     def add_child(self, child):
         self.children.append(child)
 
-def load_from_json(json_data: dict):
+def data_to_tag(data):
+    # TODO
+    return data
+
+def json_to_exptree(json_data: dict):
     # return ExpTree
     tree = None
     if json_data['type'] == 'binary_expression':
-        tree = ExpTree(json_data['op'], json_data['op'])
-        tree.add_child(load_from_json(json_data['left']))
-        tree.add_child(load_from_json(json_data['right']))
-    elif json_data['type'] == 'literal' or json_data['type'] == 'identifier':
-        tree = ExpTree(json_data['value'], json_data['value'])
+        tree = ExpTree(data_to_tag(json_data['op']), json_data['op'])
+        tree.add_child(json_to_exptree(json_data['left']))
+        tree.add_child(json_to_exptree(json_data['right']))
+    elif 'literal' in json_data['type'] or json_data['type'] == 'identifier':
+        tree = ExpTree(data_to_tag(json_data['value']), json_data['value'])
     elif json_data['type'] == 'call_expression':
-        tree = ExpTree(json_data['func'], json_data['func'])
+        tree = ExpTree(data_to_tag(json_data['func']), json_data['func'])
         for arg in json_data['args']:
-            tree.add_child(load_from_json(arg))
+            tree.add_child(json_to_exptree(arg))
     elif json_data['type'] == 'pointer_expression':
-        tree = ExpTree(json_data['op'], json_data['op'])
-        tree.add_child(load_from_json(json_data['value']))
+        tree = ExpTree(data_to_tag(json_data['op']), json_data['op'])
+        tree.add_child(json_to_exptree(json_data['value']))
 
     return tree
+
+def load_from_json(json_data):
+    for i in range(len(json_data)):
+        for j in range(len(json_data[i]['conditions'])):
+            json_data[i]['conditions'][j] = json_to_exptree(json_data[i]['conditions'][j])
+        for k in json_data[i]['outputs'].keys():
+            json_data[i]['outputs'][k] = json_to_exptree(json_data[i]['outputs'][k])
+    return json_data
 
 if __name__ == '__main__':
     s = '''{
