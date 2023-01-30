@@ -1,0 +1,51 @@
+undefined4 main(void)
+
+{
+  int local_20;
+  int local_1c;
+  int local_18;
+  int local_10;
+  undefined4 local_c;
+  
+  local_c = 0;
+  scanf("%d",&local_20);
+  for (local_1c = 0; local_1c < local_20; local_1c = local_1c + 1) {
+    local_18 = 1;
+    l = 0;
+    scanf("%d",&x);
+    for (local_10 = 2; local_10 <= x; local_10 = local_10 + 1) {
+      if (x % local_10 == 0) {
+        *(int *)(a + (long)local_18 * 4) = local_10;
+        local_18 = local_18 + 1;
+      }
+    }
+    fff(local_18 + -1,1);
+    _end("%d\n",(ulong)l);
+  }
+  return local_c;
+}
+
+
+
+undefined4 fff(int param_1,int param_2)
+
+{
+  long lVar1;
+  int local_18;
+  undefined4 local_c;
+  
+  for (local_18 = param_2; local_18 <= param_1; local_18 = local_18 + 1) {
+    if (x % *(int *)(a + (long)local_18 * 4) == 0) {
+      lVar1 = (long)x;
+      x = x / *(int *)(a + (long)local_18 * 4);
+      if (x == 1) {
+        l = l + 1;
+      }
+      if (1 < x) {
+        fff(param_1,local_18,lVar1 % (long)*(int *)(a + (long)local_18 * 4) & 0xffffffff);
+      }
+      x = x * *(int *)(a + (long)local_18 * 4);
+    }
+  }
+  return local_c;
+}
