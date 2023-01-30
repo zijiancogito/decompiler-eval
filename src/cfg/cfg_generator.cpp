@@ -354,16 +354,24 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
 
         TSNode condition_node = ts_node_child_by_field_name(loop_node, "condition", strlen("condition"));
         std::set<BasicBlock*> record_bbs;
-        parse_condition(cur_bb, condition_node, record_bbs);
+        if (strcmp(ts_node_type(ts_node_child(condition_node, 1)), "true")!= 0) {
+            parse_condition(cur_bb, condition_node, record_bbs);
+        }
 
-        BasicBlock *bb_true = new BasicBlock;
+        BasicBlock *bb_true = NULL;
+        if (!cur_bb->get_contained_nodes().empty()) {
+            bb_true = new BasicBlock;
+            this->basic_blocks.push_back(bb_true);
+        } else {
+            bb_true = cur_bb;
+        }
+
         CFGEdges *edge = new CFGEdges(bb_true, cur_bb, JMP);
         if (bb_true->add_out_edges(edge))
             cur_bb->add_in_edges(edge);
         
         TSNode body_node = ts_node_child_by_field_name(loop_node, "body", strlen("body"));
         body_node = find_node_in_all_nodes(body_node);
-        this->basic_blocks.push_back(bb_true);
         bb = parse_node(bb_true, body_node);
 
         BasicBlock *bb_false = jump_to_bb;
@@ -416,12 +424,19 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
         }
 
         // 分析条件节点
-        BasicBlock *con_bb = new BasicBlock;
-        this->basic_blocks.push_back(con_bb);
         TSNode condition_node = ts_node_child_by_field_name(loop_node, "condition", strlen("condition"));
         std::set<BasicBlock*> record_bbs;
-        parse_condition(con_bb, condition_node, record_bbs);
-        jump_to_map.emplace(ts_node_start_byte(loop_node), con_bb);
+        BasicBlock *con_bb = NULL;
+        if (strcmp(ts_node_type(ts_node_child(condition_node, 1)), "true")!= 0) {
+            con_bb = new BasicBlock;
+            this->basic_blocks.push_back(con_bb);
+            parse_condition(con_bb, condition_node, record_bbs);
+        }
+        if (con_bb == NULL) {
+            jump_to_map.emplace(ts_node_start_byte(loop_node), cur_bb);
+        } else {
+            jump_to_map.emplace(ts_node_start_byte(loop_node), con_bb);
+        }
 
         // 分析内部之前，先找到跳出节点基本块
         BasicBlock *jump_to_bb = NULL;
@@ -567,7 +582,7 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
 
         TSNode condition_node = ts_node_child_by_field_name(loop_node, "condition", strlen("condition"));
         std::set<BasicBlock*> record_bbs;
-        if (!ts_node_is_null(condition_node))
+        if (!ts_node_is_null(condition_node) && strcmp(ts_node_type(condition_node), "true") != 0)
             parse_condition(cur_bb, condition_node, record_bbs);
 
         BasicBlock *bb_true = NULL;
