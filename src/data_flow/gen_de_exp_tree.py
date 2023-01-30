@@ -1,5 +1,4 @@
 import os
-os.chdir('../../data_flow')
 import sys
 sys.path.append('.')
 sys.path.append('../')
@@ -7,7 +6,6 @@ from exp_tree.exp_tree import *
 import json
 from ctypes import *
 
-print(os.getcwd())
 dese = cdll.LoadLibrary("libse.so")
 run_se = dese.process
 run_se.argtypes = [POINTER(c_char)]

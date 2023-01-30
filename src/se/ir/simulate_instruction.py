@@ -1,7 +1,8 @@
 import re
 import sys
 sys.path.append('.')
-from exp_tree import  ExpTree
+sys.path.append('../../')
+from exp_tree.exp_tree import  ExpTree
 
 def execution_callbr(instruction, tmp_dict):
     pattern_non_void = "(.*) = callbr .*"

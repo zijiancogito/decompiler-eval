@@ -117,16 +117,17 @@ def symbolic_execution(function):
                 cond.append(curr_cond)
         path_cond.append(cond)
         path_exps.append(tmp_dict)
-    print("Condition:")
-    for path in path_cond:
-        for cond in path:
-            cond.show()
+    for cond, exp in zip(path_cond, path_exps):
+        print("Condition:")
+        for c in cond:
+            c.show()
             print()
-    print("Expression:")
-    for path in path_exps:
-        for var in tmp_dict:
-            tmp_dict[var].show()
-            print()
+        print("Expression:")
+        for var in exp:
+            print(f"{var} = ")
+            exp[var].show()
+            print("---------------------------------------------------")
+
 
 def process_functions(llvm_ir):
     mod = llvm.parse_assembly(llvm_ir)
@@ -139,7 +140,7 @@ def process_functions(llvm_ir):
             continue
         symbolic_execution(function)
 
-llvm_ir = read_ir("../random1.ll")
+llvm_ir = read_ir("/root/decompiler-eval/test-manual/13.ll")
 process_functions(llvm_ir)
 # files = os.listdir('../err_lls')
 # for f in files:

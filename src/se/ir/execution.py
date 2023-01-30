@@ -1,8 +1,9 @@
 import re
 import sys
 sys.path.append('.')
+sys.path.append('../../')
+from exp_tree.exp_tree import ExpTree
 from simulate_instruction import *
-from treelib import Tree, Node
 
 
 def find_output_variables(function):
@@ -52,6 +53,8 @@ def execution_block(block, tmp_dict, next_block):
     last_insn = None
     for instruction in block.instructions:
         res = execution_instruction(instruction, tmp_dict)
+        #print(instruction)
+        #print(tmp_dict)
         # if res == None:
             # print(instruction)
         last_insn = instruction
@@ -68,8 +71,8 @@ def execution_block(block, tmp_dict, next_block):
             elif false_dest == next_block:
                 curr_cond = ExpTree("not", "!")
                 curr_cond.add_child(tmp_dict[cond])
-        if curr_cond != None:
-            curr_cond.show()
+        #if curr_cond != None:
+            #curr_cond.show()
     return curr_cond
 
 def parse_call(instruction):
