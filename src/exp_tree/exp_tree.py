@@ -38,7 +38,7 @@ def data_to_tag(data):
 
 def exptree_to_json(tree):
     #TODO
-    return
+    return {}
 
 def json_to_exptree(json_data: dict):
     # return ExpTree

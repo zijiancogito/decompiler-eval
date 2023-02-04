@@ -8,19 +8,26 @@ from simulate_instruction import *
 
 def find_output_variables(function):
     #TODO
-    output_symbols = []
+    output_symbols = {}
+    ret_cnt = 0
+    printf_cnt = 0
     for blk in  function.blocks:
         for insn in blk.instructions:
             opc = insn.opcode
             if opc == 'ret':
                 opd = parse_ret(str(insn).strip())
                 if opd != None:
-                    output_symbols.append(opd) 
+                    output_symbols[opd] = f'return{ret_cnt}'
+                    # output_symbols.append((opd, f'return{ret_cnt}')) 
+                    ret_cnt += 1
             # TODO : add other output type instructions
             if opc == 'call':
                 func_name, ps = parse_call(str(insn).strip())
                 if func_name == "printf":
-                    output_symbols.extend(ps[1:])
+                    for var in ps[1:]:
+                        output_symbols[var] = f'printf{printf_cnt}'
+                    # output_symbols.extend((ps[1:], f'printf{printf_cnt}'))
+                        printf_cnt += 1
 
     return output_symbols
                 
@@ -34,17 +41,25 @@ def find_input_variables(function):
     params_str = match.group(1)
     params_with_type = [i.strip() for i in params_str.strip(',')]
     pattern_params = "[\S\s]+ (%[p0-9]+)"
+
+    params_cnt = 0
     for p in params_with_type:
         match = re.match(pattern_params, p)
         if match:
-            input_symbols.append(match.group(1))
+            input_symbols[match.group(1)] = f'param{params_cnt}'
+            # input_symbols.append((match.group(1), f'param{params_cnt}'))
+            params_cnt += 1
 
+    scanf_cnt = 0
     for blk in function.blocks:
         for insn in blk.instructions:
             if insn.opcode == 'call':
                 func_name, ps = parse_call(str(insn).strip())
                 if func_name == '__isoc99_scanf' or func_name == 'scanf':
-                    input_symbols.extend(ps[1:])
+                    for var in ps[1:]:
+                        input_symbols[var] = f'scanf{scanf_cnt}'
+                    # input_symbols.extend((ps[1:], f'scanf{scanf_cnt}'))
+                        scanf_cnt += 1
             # TODO: add more situations
 
     return input_symbols
@@ -58,9 +73,9 @@ def execution_block(block, tmp_dict, next_block):
         if res == None:
             if instruction.opcode == 'br' or instruction.opcode == 'alloca':
                 pass
-            else:
-                print(instruction.opcode)
-                print(instruction)
+            #else:
+                #print(instruction.opcode)
+                #print(instruction)
         last_insn = instruction
 
     curr_cond = None 

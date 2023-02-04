@@ -2,6 +2,7 @@ import os
 import sys
 sys.path.append('../utils')
 sys.path.append('.')
+sys.path.append('../..')
 # sys.setrecursionlimit(500)
 from func_timeout import func_set_timeout
 import utils
@@ -13,6 +14,10 @@ import networkx as nx
 
 from execution import find_input_variables, find_output_variables
 from execution import execution_block
+
+from exp_tree.exp_tree import *
+
+import json
 
 llvm.initialize()
 llvm.initialize_native_target()
@@ -90,7 +95,6 @@ def path_tracer(paths, graph, start, end, cutoff):
         paths.append(path)
 
 def symbolic_execution(function):
-    # print(function.name)
     cfg = build_cfg(function)
     if cfg == None:
         return None
@@ -117,16 +121,25 @@ def symbolic_execution(function):
             curr_cond = execution_block(block, tmp_dict, int(ver.split("-")[1]))
             if curr_cond != None:
                 cond.append(curr_cond)
-            last_block = int(ver.split("-")[1])
-        last_block = blks_dict[label]
+            last_label = int(ver.split("-")[1])
+        last_block = blks_dict[last_label]
         last_cond = execution_block(last_block, tmp_dict, -1)
         if last_cond != None:
             cond.append(last_cond)
 
         path_cond.append(cond)
-        path_exps.append(tmp_dict)
+        key_var_exps = key_variable_expression(tmp_dict, output_symbols)
+        path_exps.append(key_var_exps)
 
     # print_exps(path_cond, path_exps, cfg.paths, output_symbols)
+    return path_cond, path_exps, input_symbols, output_symbols
+
+def key_variable_expression(all_vars, output_symbols):
+    key_vars = {}
+    for var in all_vars:
+        if var in output_symbols:
+            key_vars[var] = copy_tree(all_vars[var])
+    return key_vars
 
 def print_exps(path_cond, path_exps, paths, output_symbols):
     for cond, exp, path in zip(path_cond, path_exps, paths):
@@ -148,8 +161,28 @@ def print_exps(path_cond, path_exps, paths, output_symbols):
                 exp[var].show()
                 print("---------------------------------------------------")
 
+def dump_to_file(save_to, filename, funcname, conds, exps, inputs, outputs):
+    if not os.path.exists(os.path.join(save_to, filename)):
+        os.makedirs(os.path.join(save_to, filename))
+    outfile = os.path.join(save_to, filename, f'{funcname}.json')
+    js_dict = {}
+    path_cnt = 0
+    js_dict['expressions'] = []
+    for cond, exp in zip(conds, exps):
+        expression = {}
+        expression['condition'] = []
+        expression['variables'] = {}
+        for c in cond:
+            expression['condition'].append(exptree_to_json(c))
+        for v in exp:
+            expression['variables'][v] = exptree_to_json(exp[v])
+        js_dict['expressions'].append(expression)
+    js_dict['input_symbols'] = inputs
+    js_dict['output_symbols'] = outputs
+    with open(outfile, 'w') as out:
+        json.dump(js_dict, out)
 
-def process_functions(llvm_ir):
+def process_functions(llvm_ir, filename, save_to):
     mod = llvm.parse_assembly(llvm_ir)
     mod.verify()
 
@@ -158,13 +191,19 @@ def process_functions(llvm_ir):
             continue
         if function.name in utils.syscall_funcs:
             continue
-        symbolic_execution(function)
+        result = symbolic_execution(function)
+        if result != None:
+            conds = result[0]
+            exps = result[1]
+            input_symbols = result[2]
+            output_symbols = result[3]
+            dump_to_file(save_to, filename, function.name, conds, exps, input_symbols, output_symbols)
 
-# llvm_ir = read_ir("/root/decompiler-eval/test-manual/13.ll")
-# process_functions(llvm_ir)
-files = os.listdir('../err_lls')
-for f in files:
-    #print(f"File: {f}")
-    llvm_ir = read_ir(os.path.join('../err_lls',f))
-    process_functions(llvm_ir)
+llvm_ir = read_ir("/root/decompiler-eval/test-manual/13.ll")
+process_functions(llvm_ir, '13', '.')
+#files = os.listdir('../err_lls')
+#for f in files:
+    ##print(f"File: {f}")
+    #llvm_ir = read_ir(os.path.join('../err_lls',f))
+    #process_functions(llvm_ir)
     
