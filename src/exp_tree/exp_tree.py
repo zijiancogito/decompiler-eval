@@ -63,8 +63,12 @@ def load_from_json(json_data):
     for i in range(len(json_data)):
         for j in range(len(json_data[i]['conditions'])):
             json_data[i]['conditions'][j] = json_to_exptree(json_data[i]['conditions'][j])
+        for j in range(len(json_data[i]['outputs'])):
+            json_data[i]['outputs'][j] = json_to_exptree(json_data[i]['outputs'][j])
+        '''
         for k in json_data[i]['outputs'].keys():
             json_data[i]['outputs'][k] = json_to_exptree(json_data[i]['outputs'][k])
+        '''
     return json_data
 
 if __name__ == '__main__':
@@ -83,7 +87,7 @@ if __name__ == '__main__':
 				"type" : "binary_expression"
 			}'''
     j = json.loads(s)
-    tree = load_from_json(j)
+
+
+    tree = json_to_exptree(j)
     tree.show()
-
-
