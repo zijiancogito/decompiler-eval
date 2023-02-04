@@ -2,25 +2,30 @@ import re
 import sys
 sys.path.append('.')
 sys.path.append('../../')
-from exp_tree.exp_tree import ExpTree
+from exp_tree.exp_tree import *
 from simulate_instruction import *
 
 
 def find_output_variables(function):
     #TODO
-    output_symbols_dict = {}
+    output_symbols = []
     for blk in  function.blocks:
         for insn in blk.instructions:
             opc = insn.opcode
             if opc == 'ret':
                 opd = parse_ret(str(insn).strip())
                 if opd != None:
-                    output_symbols_dict[opd] = '' 
+                    output_symbols.append(opd) 
             # TODO : add other output type instructions
-    return output_symbols_dict 
+            if opc == 'call':
+                func_name, ps = parse_call(str(insn).strip())
+                if func_name == "printf":
+                    output_symbols.extend(ps[1:])
+
+    return output_symbols
                 
 def find_input_variables(function):
-    input_symbols_dict = {} 
+    input_symbols = [] 
     
     pattern_function_decl = "define [\s\S]+\(([\s\S]*)\)\n"
     match = re.match(pattern_function_decl, str(function).strip())
@@ -29,25 +34,20 @@ def find_input_variables(function):
     params_str = match.group(1)
     params_with_type = [i.strip() for i in params_str.strip(',')]
     pattern_params = "[\S\s]+ (%[p0-9]+)"
-    params = []
     for p in params_with_type:
         match = re.match(pattern_params, p)
         if match:
-            input_symbols_dict.append(match.group(1))
+            input_symbols.append(match.group(1))
 
-    others = []
     for blk in function.blocks:
         for insn in blk.instructions:
             if insn.opcode == 'call':
-                func_name, ps = parse_call(str(insn))
-                if func_name == '__isoc99_scanf':
-                    others.extend(ps[1:])
+                func_name, ps = parse_call(str(insn).strip())
+                if func_name == '__isoc99_scanf' or func_name == 'scanf':
+                    input_symbols.extend(ps[1:])
             # TODO: add more situations
 
-    for i in params + others:
-        input_symbols_dict[i] = None
-
-    return input_symbols_dict
+    return input_symbols
         
 def execution_block(block, tmp_dict, next_block):
     last_insn = None
@@ -55,8 +55,12 @@ def execution_block(block, tmp_dict, next_block):
         res = execution_instruction(instruction, tmp_dict)
         #print(instruction)
         #print(tmp_dict)
-        # if res == None:
-            # print(instruction)
+        if res == None:
+            if instruction.opcode == 'br' or instruction.opcode == 'alloca':
+                pass
+            else:
+                print(instruction.opcode)
+                print(instruction)
         last_insn = instruction
 
     curr_cond = None 
@@ -69,14 +73,29 @@ def execution_block(block, tmp_dict, next_block):
             if true_dest == next_block:
                 curr_cond = tmp_dict[cond]
             elif false_dest == next_block:
-                curr_cond = ExpTree("not", "!")
-                curr_cond.add_child(tmp_dict[cond])
+                curr_cond = copy_tree(tmp_dict[cond])
+                new_cond = None
+                if cond == ">":
+                    new_cond = '<='
+                elif cond == '>=':
+                    new_cond = '<'
+                elif cond == '==':
+                    new_cond = '!='
+                elif cond == '!=':
+                    new_cond = '=='
+                elif cond == '<':
+                    new_cond = '>='
+                elif cond == '<=':
+                    new_cond = '>'
+                curr_cond.root_data = new_cond
+                
         #if curr_cond != None:
             #curr_cond.show()
     return curr_cond
 
 def parse_call(instruction):
-    pattern = "[\s\S]*call [\s\S]*@([^(]+)\([\s\S]*\)"
+    # pattern = "[\s\S]*call [\s\S]*@([^(]+)\(([\s\S]*)\)"
+    pattern = "[\s\S]*call [\s\S]*@([^(]+).*\(([\s\S]*)\)"
     match = re.match(pattern, instruction)
     if not match:
         return None
@@ -320,31 +339,83 @@ def execution_instruction(instruction, tmp_dict):
         tmp_dict[res[0]] = res[1]
         return f"{res[0]} = {res[1]}"
     if opcode == "trunc":
-        return None
+        res = execution_trunc(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "zext":
-        return None
+        res = execution_zext(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "sext":
-        return None
+        res = execution_sext(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "fptrunc":
-        return None
+        res = execution_fptrunc(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "fpext":
-        return None
+        res = execution_fpext(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "fptoui":
-        return None
+        res = execution_fptoui(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "fptosi":
-        return None
+        res = execution_fptosi(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "uitofp":
-        return None
-    if opcode == "sitpfp":
-        return None
+        res = execution_uitofp(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
+    if opcode == "sitofp":
+        res = execution_sitofp(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "ptrtoint":
-        return None
+        res = execution_ptrtoint(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "inttoptr":
-        return None
+        res = execution_inttoptr(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "bitcast":
-        return None
+        res = execution_bitcast(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "addrspacecast":
-        return None
+        res = execution_addrspacecast(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "icmp":
         res = execution_icmp(str(instruction).strip(), tmp_dict)
         if res == None:
@@ -364,7 +435,11 @@ def execution_instruction(instruction, tmp_dict):
         tmp_dict[res[0]] = res[1]
         return f"{res[0]} = {res[1]}"
     if opcode == "select":
-        return None
+        res = execution_select(str(instruction).strip(), tmp_dict)
+        if res == None:
+            return None
+        tmp_dict[res[0]] = res[1]
+        return f"{res[0]} = {res[1]}"
     if opcode == "freeze":
         return None
     if opcode == "call":

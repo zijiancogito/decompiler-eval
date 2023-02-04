@@ -84,12 +84,13 @@ def build_cfg(function):
                 continue
     return cfg
 
-@func_set_timeout(600)
+@func_set_timeout(60)
 def path_tracer(paths, graph, start, end, cutoff):
     for path in nx.all_simple_paths(graph, start, end, cutoff):
         paths.append(path)
 
 def symbolic_execution(function):
+    # print(function.name)
     cfg = build_cfg(function)
     if cfg == None:
         return None
@@ -108,6 +109,7 @@ def symbolic_execution(function):
     for path in cfg.paths:
         tmp_dict = {}
         cond = []    
+        last_label = None
         for ver in path:
             label =  int(ver.split("-")[0])
             block = blks_dict[label]
@@ -115,18 +117,36 @@ def symbolic_execution(function):
             curr_cond = execution_block(block, tmp_dict, int(ver.split("-")[1]))
             if curr_cond != None:
                 cond.append(curr_cond)
+            last_block = int(ver.split("-")[1])
+        last_block = blks_dict[label]
+        last_cond = execution_block(last_block, tmp_dict, -1)
+        if last_cond != None:
+            cond.append(last_cond)
+
         path_cond.append(cond)
         path_exps.append(tmp_dict)
-    for cond, exp in zip(path_cond, path_exps):
+
+    # print_exps(path_cond, path_exps, cfg.paths, output_symbols)
+
+def print_exps(path_cond, path_exps, paths, output_symbols):
+    for cond, exp, path in zip(path_cond, path_exps, paths):
         print("Condition:")
         for c in cond:
             c.show()
             print()
+        last = None
+        for ver in path:
+            label = int(ver.split("-")[0])
+            print(label, end=' ')
+            last = int(ver.split("-")[1])
+        print(last, end=' ')
+        print()
         print("Expression:")
-        for var in exp:
-            print(f"{var} = ")
-            exp[var].show()
-            print("---------------------------------------------------")
+        for var in output_symbols:
+            if var in exp:
+                print(f"{var} = ")
+                exp[var].show()
+                print("---------------------------------------------------")
 
 
 def process_functions(llvm_ir):
@@ -140,11 +160,11 @@ def process_functions(llvm_ir):
             continue
         symbolic_execution(function)
 
-llvm_ir = read_ir("/root/decompiler-eval/test-manual/13.ll")
-process_functions(llvm_ir)
-# files = os.listdir('../err_lls')
-# for f in files:
-    # print(f"File: {f}")
-    # llvm_ir = read_ir(os.path.join('../err_lls',f))
-    # process_functions(llvm_ir)
+# llvm_ir = read_ir("/root/decompiler-eval/test-manual/13.ll")
+# process_functions(llvm_ir)
+files = os.listdir('../err_lls')
+for f in files:
+    #print(f"File: {f}")
+    llvm_ir = read_ir(os.path.join('../err_lls',f))
+    process_functions(llvm_ir)
     

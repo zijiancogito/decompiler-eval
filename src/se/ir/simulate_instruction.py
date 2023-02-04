@@ -2,7 +2,7 @@ import re
 import sys
 sys.path.append('.')
 sys.path.append('../../')
-from exp_tree.exp_tree import  ExpTree
+from exp_tree.exp_tree import *
 
 def execution_callbr(instruction, tmp_dict):
     pattern_non_void = "(.*) = callbr .*"
@@ -77,7 +77,7 @@ def execution_fadd(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('fadd', '+')
     if op1 in tmp_dict:
@@ -99,7 +99,7 @@ def execution_sub(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('sub', '-')
     if op1 in tmp_dict:
@@ -121,7 +121,7 @@ def execution_fsub(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('fsub', '-')
     if op1 in tmp_dict:
@@ -143,7 +143,7 @@ def execution_mul(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('mul', '*')
     if op1 in tmp_dict:
@@ -165,7 +165,7 @@ def execution_fmul(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('fmul', '*')
     if op1 in tmp_dict:
@@ -187,7 +187,7 @@ def execution_udiv(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('udiv', '/')
     if op1 in tmp_dict:
@@ -209,7 +209,7 @@ def execution_sdiv(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('sdiv', '/')
     if op1 in tmp_dict:
@@ -231,7 +231,7 @@ def execution_fdiv(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('fdiv', '/')
     if op1 in tmp_dict:
@@ -253,7 +253,7 @@ def execution_urem(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('urem', '%')
     if op1 in tmp_dict:
@@ -275,7 +275,7 @@ def execution_srem(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('srem', '%')
     if op1 in tmp_dict:
@@ -297,7 +297,7 @@ def execution_frem(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('frem', '%')
     if op1 in tmp_dict:
@@ -319,7 +319,7 @@ def execution_shl(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('shl', '<<')
     if op1 in tmp_dict:
@@ -341,7 +341,7 @@ def execution_lshr(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('lshr', '>>')
     if op1 in tmp_dict:
@@ -363,7 +363,7 @@ def execution_ashr(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('ashr', '>>')
     if op1 in tmp_dict:
@@ -385,7 +385,7 @@ def execution_and(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('and', '&')
     if op1 in tmp_dict:
@@ -407,7 +407,7 @@ def execution_or(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('or', '|')
     if op1 in tmp_dict:
@@ -429,7 +429,7 @@ def execution_xor(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('xor', '^')
     if op1 in tmp_dict:
@@ -451,7 +451,7 @@ def execution_extractelement(instruction, tmp_dict):
         return None
     result = match.group(1)
     op1 = match.group(2)
-    op2 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('extractelement', '[]')
     if op1 in tmp_dict:
@@ -474,7 +474,7 @@ def execution_insertelement(instruction, tmp_dict):
         return None
     result = match.group(1)
     tmp1 = match.group(2)
-    tmp2 = match.group(2)
+    tmp2 = match.group(3)
 
     exp = ExpTree('insertelement', '[]')
     if op1 in tmp_dict:
@@ -544,22 +544,26 @@ def execution_alloca(instruction, tmp_dict):
 
 def execution_load(instruction, tmp_dict):
     pattern = "([\S]+) = load [^,\n]+, [^,\n]+ ([^,\s]+)(,.*)*"
+    #print(instruction)
     match = re.match(pattern, instruction)
     if not match:
         return None
     result = match.group(1)
     source = match.group(2)
      
-    exp = ExpTree('load', '*')
+    exp = None
     if source in tmp_dict:
-        exp.add_child(tmp_dict[source])
+        #exp.add_child(tmp_dict[source])
+        exp = tmp_dict[source]
     else:
-        child = ExpTree('pointer', source)
-        exp.add_child(child)
+        #child = ExpTree('pointer', source)
+        exp = ExpTree('pointer', source)
+        #exp.add_child(child)
+    #exp.show()
     return result, exp
 
 def execution_store(instruction, tmp_dict):
-    pattern = "store .* ([\S]+), [^,\n]+ ([^,\s]+)(,.*)*"
+    pattern = "store [^,]* ([\S]+), [^,\n]+ ([^,\s]+)(,.*)*"
     match = re.match(pattern, instruction)
     if not match:
         return None
@@ -593,14 +597,15 @@ def execution_cmpxchg(instruction, tmp_dict):
     return result, new
 
 def execution_getelementptr(instruction, tmp_dict):
-    pattern = "([\S]+) = getelementptr [^,\n]*, (([^,\n]+)|([0-9]+ x [^,\n]+)) ([^,\n]+)(, .*)*"
+    # pattern = "([\S]+) = getelementptr [^,\n]*, (([^,\n]+)|([0-9]+ x [^,\n]+)) ([^,\n]+)(, .*)*"
+    pattern = "([\S]+) = getelementptr [^\n]*(%[^,\s]+)[,]*(.*)"
     match = re.match(pattern, instruction)
     if not match:
         return None
     result = match.group(1)
-    ptr = match.group(5)
-    range_str = match.group(6)
-    pattern_range = ', [^,\n] ([0-9]+)'
+    ptr = match.group(2)
+    range_str = match.group(3)
+    pattern_range = '[^,\n]+ ([0-9]+)'
     findall = re.findall(pattern_range, range_str)
 
     exp = ExpTree('getelementptr', '[]')
@@ -619,7 +624,8 @@ def execution_getelementptr(instruction, tmp_dict):
     return result, exp
 
 def execution_call(instruction, tmp_dict):
-    pattern = "(([\S]+) = (tail|nysttail|nottail)*)*[\s]*call .* (@[\S]+)\((.*)\)"
+    # pattern = "(([\S]+) = (tail|nysttail|nottail)*)*[\s]*call .* (@[\S]+)\((.*)\)"
+    pattern = "(([\S]+) = (tail|nysttail|nottail)*)*[\s]*call .* (@[\S]+).*\((.*)\)"
     match = re.match(pattern, instruction)
     if not match:
         return None
@@ -734,7 +740,7 @@ def execution_fcmp(instruction, tmp_dict):
         if op1 in tmp_dict:
             exp.add_child(tmp_dict[op1])
         else:
-            chidl1 = ExpTree('operator1', op1)
+            child1 = ExpTree('operator1', op1)
             exp.add_child(child1)
         if op2 in tmp_dict:
             exp.add_child(tmp_dict[op2])
@@ -751,7 +757,7 @@ def execution_phi(instruction, tmp_dict):
     result = match.group(1)
     nodes = match.group(3)
     node_pattern = "\[ ([\S]+), ([\S]+) \]"
-    find = re.findall(node_pattern, instruction)
+    find = re.findall(node_pattern, nodes)
     last_var = None
     exp = None
     tmp = None
@@ -768,7 +774,10 @@ def execution_phi(instruction, tmp_dict):
         last_var = f
     
     if tmp == None:
-        return None
+        if last_var in tmp_dict:
+            exp = tmp_dict[last_var]
+        else:
+            exp = ExpTree('phi', last_var)
     if tmp in tmp_dict:
         exp = tmp_dict[tmp]
     else:
@@ -776,16 +785,212 @@ def execution_phi(instruction, tmp_dict):
     return result, exp
 
 def execution_select(instruction, tmp_dict):
-    pattern = "([\S]+) = select (nnan|ninf|nsz|arcp|contract|afn|reassoc|fast)*[\S]+ ([\S]+), [\S]+ ([\S]+), [\S]+ ([\S]+)"
+    pattern = "([\S]+) = select (nnan|ninf|nsz|arcp|contract|afn|reassoc|fast)*[^,]* ([\S]+), [^,]* ([\S]+), [^,]* ([\S]+)"
     match = re.match(pattern, instruction)
     if not match:
         return None
     result = match.group(1)
-    cond = match.group(3)
-    op1 = match.group(4)
-    op2 = match.group(5)
-    if cond == "i1":
+    cond = match.group(2)
+    op1 = match.group(3)
+    op2 = match.group(4)
+    exp = ExpTree('select', '?')
+    if cond in tmp_dict:
+        exp.add_child(tmp_dict[cond])
+    else:
+        cond_exp = ExpTree('cond', cond)
+        exp.add_child(cond_exp)
+    val_exp = ExpTree('value', ':')
+    if op1 in tmp_dict:
+        val_exp.add_child(tmp_dict[op1])
+    else:
+        child1 = ExpTree('operator1', op1)
+        val_exp.add_child(child1)
+    if op2 in tmp_dict:
+        val_exp.add_child(tmp_dict[op2])
+    else:
+        child2 = ExpTree('operator2', op2)
+        val_exp.add_child(child2)
+    exp.add_child(val_exp)
+    return result, exp
+
+def execution_sext(instruction, tmp_dict):
+    pattern = "([\S]+) = sext .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
         return None
-    # TODO
-    return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('sext', op)
+
+    return result, exp
+
+def execution_zext(instruction, tmp_dict):
+    pattern = "([\S]+) = zext .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('zext', op)
+
+    return result, exp
+
+def execution_fpext(instruction, tmp_dict):
+    pattern = "([\S]+) = fpext .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('fpext', op)
+
+    return result, exp
+
+def execution_fptoui(instruction, tmp_dict):
+    pattern = "([\S]+) = fptoui .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('fptoui', op)
+
+    return result, exp
+
+def execution_fptosi(instruction, tmp_dict):
+    pattern = "([\S]+) = fptosi .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('fptosi', op)
+
+    return result, exp
+
+def execution_uitofp(instruction, tmp_dict):
+    pattern = "([\S]+) = uitofp .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('uitofp', op)
+
+    return result, exp
+
+def execution_sitofp(instruction, tmp_dict):
+    pattern = "([\S]+) = sitofp .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('sitofp', op)
+
+    return result, exp
+
+def execution_ptrtoint(instruction, tmp_dict):
+    pattern = "([\S]+) = ptrtoint .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('ptrtoint', op)
+
+    return result, exp
+
+def execution_bitcast(instruction, tmp_dict):
+    pattern = "([\S]+) = bitcast .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('bitcast', op)
+
+    return result, exp
+
+def execution_addrspacecast(instruction, tmp_dict):
+    pattern = "([\S]+) = addrspacecast .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('addrspacecast', op)
+
+    return result, exp
+
+def execution_fptrunc(instruction, tmp_dict):
+    pattern = "([\S]+) = fptrunc .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('fptrunc', op)
+
+    return result, exp
+
+def execution_trunc(instruction, tmp_dict):
+    pattern = "([\S]+) = trunc .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('trunc', op)
+
+    return result, exp
+
 

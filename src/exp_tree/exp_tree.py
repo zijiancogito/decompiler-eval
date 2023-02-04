@@ -5,6 +5,7 @@ class ExpTree:
         self.root_data = root_data # ex. "+"
         self.children = []
 
+
     def show(self, depth=0):
         print(self.root_data)
         if len(self.children) > 0:
@@ -15,13 +16,29 @@ class ExpTree:
             for i in range(depth):
                 print('--', end='')
             child.show(depth)
+    
+    #def show(self, depth=0):
+
 
     def add_child(self, child):
         self.children.append(child)
+    
+def copy_tree(tree):
+    if tree is None:
+        return None
+    new_tree = ExpTree(tree.root_tag, tree.root_data)
+    for child in tree.children:
+        ch = copy_tree(child)
+        new_tree.add_child(ch)
+    return new_tree
 
 def data_to_tag(data):
     # TODO
     return data
+
+def exptree_to_json(tree):
+    #TODO
+    return
 
 def json_to_exptree(json_data: dict):
     # return ExpTree
@@ -68,3 +85,5 @@ if __name__ == '__main__':
     j = json.loads(s)
     tree = load_from_json(j)
     tree.show()
+
+

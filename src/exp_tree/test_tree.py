@@ -1,7 +1,7 @@
 import sys
 sys.path.append('./')
-from exp_tree import ExpTree
-
+from exp_tree import *
+from compare import compare
 
 tree = ExpTree("add", "+")
 
@@ -25,3 +25,13 @@ tree5.add_child(tree3)
 tree5.add_child(tree)
 
 tree5.show()
+
+print(compare(tree5, tree3))
+
+print(compare(tree5, tree5))
+
+tree6 = copy_tree(tree5)
+tree6.root_data = '/'
+tree5.show()
+tree6.show()
+
