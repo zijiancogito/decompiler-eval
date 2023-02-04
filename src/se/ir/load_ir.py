@@ -164,7 +164,7 @@ def print_exps(path_cond, path_exps, paths, output_symbols):
 def dump_to_file(save_to, filename, funcname, conds, exps, inputs, outputs):
     if not os.path.exists(os.path.join(save_to, filename)):
         os.makedirs(os.path.join(save_to, filename))
-    outfile = os.path.join(save_to, filename, f'{funcname}.json')
+    outfile = os.path.join(save_to, filename, f'{funcname}-ir.json')
     js_dict = {}
     path_cnt = 0
     js_dict['expressions'] = []
