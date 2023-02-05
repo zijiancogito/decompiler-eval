@@ -1,0 +1,1 @@
+{"expressions": [{"condition": [{}, {}, {}, {}], "variables": {}}, {"condition": [{}, {}, {}], "variables": {}}, {"condition": [{}], "variables": {}}, {"condition": [{}, {}, {}], "variables": {"%22": {}, "%23": {}}}], "input_symbols": null, "output_symbols": {"%22": "printf0", "%23": "printf1"}}

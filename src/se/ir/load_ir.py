@@ -199,8 +199,8 @@ def process_functions(llvm_ir, filename, save_to):
             output_symbols = result[3]
             dump_to_file(save_to, filename, function.name, conds, exps, input_symbols, output_symbols)
 
-llvm_ir = read_ir("/root/decompiler-eval/test-manual/13.ll")
-process_functions(llvm_ir, '13', '.')
+# llvm_ir = read_ir("/root/decompiler-eval/test-manual/13.ll")
+# process_functions(llvm_ir, '13', '.')
 #files = os.listdir('../err_lls')
 #for f in files:
     ##print(f"File: {f}")
