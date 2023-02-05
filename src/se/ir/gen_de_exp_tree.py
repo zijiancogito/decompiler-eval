@@ -21,22 +21,3 @@ paths = load_from_json(json.loads(paths))
 
 print('\n')
 print(file_name)
-for i in range(len(paths)):
-    path = paths[i]
-    print('\n\nPath', i + 1)
-    print('Conditions: ')
-    for j in range(len(path['conditions'])):
-        con = path['conditions'][j]
-        print('\nconditions', j + 1, ': ')
-        con.show()
-    print('\nVariables: ')
-    for j in range(len(path['outputs'])):
-        out = path['outputs'][j]
-        print('\noutputs', j + 1, ': ')
-        out.show()
-    '''
-    for key in path['outputs'].keys():
-        print('')
-        print(key, ':')
-        path['outputs'][key].show()
-    '''

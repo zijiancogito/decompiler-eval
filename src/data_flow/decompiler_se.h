@@ -42,6 +42,8 @@ std::string self_ops[] = {
     "--",
 };
 
+std::unordered_map<int, std::string> out_name_map;
+
 void free_node_list(NodeList *node_list);
 
 void free_variable(Variable *v);
