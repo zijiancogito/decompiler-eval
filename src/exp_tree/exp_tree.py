@@ -37,8 +37,12 @@ def data_to_tag(data):
     return data
 
 def exptree_to_json(tree):
-    #TODO
-    return {}
+    dic = {}
+    dic[tree.root_data] = []
+    for child in tree.children:
+        dic[tree.root_data].append(exptree_to_json(child))
+
+    return dict
 
 def json_to_exptree(json_data: dict):
     # return ExpTree
@@ -60,6 +64,27 @@ def json_to_exptree(json_data: dict):
     return tree
 
 def load_from_json(json_data):
+    ret = {}
+    ret['input_symbols'] = json_data['inputs']
+    ret['expressions'] = []
+    ret['output_symbols'] = {}
+
+    paths = json_data['paths']
+    for i in range(len(paths)):
+        path = {}
+        path['conditions'] = []
+        path['variables'] = {}
+        for j in range(len(paths[i]['conditions'])):
+            path['conditions'].append(exptree_to_json(json_to_exptree(paths[i]['conditions'][j])))
+        for j in range(len(paths[i]['outputs'])):
+            path['variables'][paths[i]['outputs'][j]['name']] = exptree_to_json(json_to_exptree(paths[i]['outputs'][j]))
+            ret['output_symbols'][paths[i]['outputs'][j]['name']] = paths[i]['outputs'][j]['name']
+        ret['expressions'].append(path)
+        
+    return json_data
+
+"""
+def load_from_json(json_data):
     for i in range(len(json_data)):
         for j in range(len(json_data[i]['conditions'])):
             json_data[i]['conditions'][j] = json_to_exptree(json_data[i]['conditions'][j])
@@ -70,6 +95,7 @@ def load_from_json(json_data):
             json_data[i]['outputs'][k] = json_to_exptree(json_data[i]['outputs'][k])
         '''
     return json_data
+"""
 
 if __name__ == '__main__':
     s = '''{
