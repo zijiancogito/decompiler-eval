@@ -81,7 +81,7 @@ def load_from_json(json_data):
             ret['output_symbols'][paths[i]['outputs'][j]['name']] = paths[i]['outputs'][j]['name']
         ret['expressions'].append(path)
         
-    return json_data
+    return ret
 
 """
 def load_from_json(json_data):

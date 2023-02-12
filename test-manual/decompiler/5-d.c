@@ -13,11 +13,10 @@ void main(void)
   local_13a8 = 0;
   for (local_13a0 = 0; local_13a0 <= local_139c; local_13a0 = local_13a0 + 1) {
     local_13a4 = 0;
-    scanf("%c",local_1398 + (long)local_13a4 + (long)local_13a0 * 100);
-    while (local_1398[(long)local_13a4 + (long)local_13a0 * 100] != '\n') {
+    while ((scanf("%c",local_1398 + (long)local_13a4 + (long)local_13a0 * 100),
+            local_1398[(long)local_13a4 + (long)local_13a0 * 100] != '\n')) {
       aiStack_1548[local_13a8] = local_13a4 + 1;
       local_13a4 = local_13a4 + 1;
-      scanf("%c",local_1398 + (long)local_13a4 + (long)local_13a0 * 100);
     }
     local_13a8 = local_13a8 + 1;
   }

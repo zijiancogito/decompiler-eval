@@ -119,10 +119,15 @@ char *read_source(const char * filename) {
 	fseek(fp, 0, SEEK_SET);
 	char * source_buf = (char*)malloc(len+1);
 	fread(source_buf, 1, len+1, fp);
-  // for (int i = 0; i < strlen(source_buf); i++) {
-	    // if(source_buf[i]=='\n')
-        // source_buf[i] = ' ';
-	// }
+  for (int i = 0; i < sizeof(cast)/sizeof(const char*); i ++ ) {
+    char *cast_position = strstr(source_buf, cast[i]);
+    int sub_len = strlen(cast[i]);
+    while (cast_position != NULL) {
+      for (int j = 0; j < len - (cast_position - source_buf); j ++ )
+        *(cast_position + j) = *(cast_position + j + sub_len);
+      cast_position = strstr(source_buf, cast[i]);
+    }
+  }
 	fclose(fp);
 	return source_buf;
 }

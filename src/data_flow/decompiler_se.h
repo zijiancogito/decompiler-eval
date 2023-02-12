@@ -60,13 +60,13 @@ void find_input_variables(TSTree *tree, const char *source, std::unordered_map<s
 
 std::string opposite_relation(std::string relational_op);
 
-bool in_node_list(NodeList *all_nodes, TSNode node);
+bool in_node_list(NodeList *all_nodes, TSNode node, const char* source);
 
-Json::Value parse_expression(TSNode expression_node, const char* source, std::unordered_map<std::string, Variable*> &var_map);
+Json::Value parse_expression(TSNode expression_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars);
 
 void parse_assignment_expression(TSNode assign_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars);
 
-Json::Value parse_branch_condition(TSNode con_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars, bool condition);
+Json::Value parse_branch_condition(TSNode con_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &brach_changed_vars, std::unordered_map<std::string, Variable*> &changed_vars, bool condition);
 
 void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, bool> &visit, const char *source, NodeList *analyze_nodes, std::unordered_map<std::string, Variable*> &var_map, Json::Value &paths, Json::Value &conditions, Json::Value &outputs);
 
