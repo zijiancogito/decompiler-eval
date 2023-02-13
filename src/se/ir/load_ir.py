@@ -161,19 +161,26 @@ def print_exps(path_cond, path_exps, paths, output_symbols):
                 exp[var].show()
                 print("---------------------------------------------------")
 
-def dump_to_file(save_to, filename, funcname, conds, exps, inputs, outputs):
+def dump_to_file(save_to, filename, funcname, conds, exps, paths, inputs, outputs):
     if not os.path.exists(os.path.join(save_to, filename)):
         os.makedirs(os.path.join(save_to, filename))
     outfile = os.path.join(save_to, filename, f'{funcname}-ir.json')
     js_dict = {}
     path_cnt = 0
     js_dict['expressions'] = []
-    for cond, exp in zip(conds, exps):
+    for cond, exp, path in zip(conds, exps, paths):
         expression = {}
         expression['condition'] = []
         expression['variables'] = {}
+        expression['path'] = []
         for c in cond:
             expression['condition'].append(exptree_to_json(c))
+        last = None
+        for p in path:
+            label = int(p.split("-")[0])
+            expression['path'].append(label)
+            last = int(p.split("-")[1])
+        expression['path'].append(last)
         for v in exp:
             expression['variables'][v] = exptree_to_json(exp[v])
         js_dict['expressions'].append(expression)
@@ -185,25 +192,30 @@ def dump_to_file(save_to, filename, funcname, conds, exps, inputs, outputs):
 def process_functions(llvm_ir, filename, save_to):
     mod = llvm.parse_assembly(llvm_ir)
     mod.verify()
-
+    all_names = []
     for function in mod.functions:
         if function.name in utils.compiler_generated_funcs:
             continue
         if function.name in utils.syscall_funcs:
             continue
-        result = symbolic_execution(function)
-        if result != None:
-            conds = result[0]
-            exps = result[1]
-            input_symbols = result[2]
-            output_symbols = result[3]
-            dump_to_file(save_to, filename, function.name, conds, exps, input_symbols, output_symbols)
+        all_names.append(function.name)
+        print(function.name)
+        # result = symbolic_execution(function)
+        # if result != None:
+            # conds = result[0]
+            # exps = result[1]
+            # input_symbols = result[2]
+            # output_symbols = result[3]
+            # dump_to_file(save_to, filename, function.name, conds, exps, input_symbols, output_symbols)
+    return all_names
 
 # llvm_ir = read_ir("/root/decompiler-eval/test-manual/13.ll")
 # process_functions(llvm_ir, '13', '.')
-#files = os.listdir('../err_lls')
-#for f in files:
-    ##print(f"File: {f}")
-    #llvm_ir = read_ir(os.path.join('../err_lls',f))
-    #process_functions(llvm_ir)
-    
+files = os.listdir('/home/caoy/cy_proj/eval/data/POJ/ir')
+all_names = list()
+for f in files:
+    #print(f"File: {f}")
+    llvm_ir = read_ir(os.path.join('/home/caoy/cy_proj/eval/data/POJ/ir',f))
+    names = process_functions(llvm_ir, f, '.')
+    all_names.extend(list(set(names)))
+    all_names = list(set(all_names))

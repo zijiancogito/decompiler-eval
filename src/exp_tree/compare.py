@@ -41,3 +41,23 @@ def compare(tree_a, tree_b, st_a, st_b):
         return False
     return False
         
+def compare_path(cond_a, cond_b, st_a, st_b):
+    if len(cond_a) != len(cond_b):
+        return None
+    cond_b_flag = len(cond_b) * [False]
+    for c_a in cond_a:
+        for index, c_b in enumerate(cond_b):
+            if cond_b_flag[index] == True:
+                break
+            if compare(c_a, c_b, st_a, st_b) == True:
+                cond_b_flag[index] = True
+                break
+    result = True
+    for f in cond_b_flag:
+        result = result and f
+    return result
+
+def compare_variable(var_a, var_b, st_a, st_b):
+    return compare(var_a, var_b, st_a, st_b)
+
+

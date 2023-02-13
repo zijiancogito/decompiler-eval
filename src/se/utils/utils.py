@@ -14,7 +14,9 @@ compiler_generated_funcs = [
         '__libc_start_main',
         'UnresolvableJumpTarget',
         'UnresolvableCallTarget',
-        '__printf_chk'
+        '__printf_chk',
+        '__cxx_global_var_init-ir',
+
 ]
 
 syscall_funcs = [

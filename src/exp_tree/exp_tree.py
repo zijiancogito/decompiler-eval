@@ -38,11 +38,14 @@ def data_to_tag(data):
 
 def exptree_to_json(tree):
     dic = {}
-    dic[tree.root_data] = []
+    # dic[tree.root_data] = []
+    dic["data"] = tree.root_data
+    dic["tag"] = tree.root_tag
+    dic["children"] = []
     for child in tree.children:
-        dic[tree.root_data].append(exptree_to_json(child))
+        dic["children"].append(exptree_to_json(child))
 
-    return dict
+    return dic
 
 def json_to_exptree(json_data: dict):
     # return ExpTree
@@ -62,6 +65,13 @@ def json_to_exptree(json_data: dict):
         tree.add_child(json_to_exptree(json_data['value']))
 
     return tree
+
+def irjson_to_exptree(json_data):
+    tree = ExpTree(json_data["tag"], json_data["data"])
+    for child in json_data["children"]:
+        tree.add_child(irjson_to_exptree(child))
+    return tree
+    
 
 def load_from_json(json_data):
     ret = {}
@@ -96,6 +106,7 @@ def load_from_json(json_data):
         '''
     return json_data
 """
+
 
 if __name__ == '__main__':
     s = '''{

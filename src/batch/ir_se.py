@@ -11,5 +11,5 @@ def batch_ir_execution(ir_dir, save_to):
         llvm_ir = read_ir(ir_file)
         process_functions(llvm_ir, filename.split('.')[0], save_to)
 
-batch_ir_execution('../se/err_lls', 'err_lls_se')
+batch_ir_execution('/home/caoy/cy_proj/eval/data/POJ/ir', '/home/caoy/cy_proj/eval/data/POJ/se')
 
