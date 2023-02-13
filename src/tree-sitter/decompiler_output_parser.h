@@ -27,6 +27,13 @@ typedef struct NodeList {
   int listLen;
 }NodeList;
 
+const char *cast[] = {
+    "(int)",
+    "(uint)",
+    "(long)",
+    "(ulong)",
+};
+
 void init_node_list(NodeList * node_list);
 
 void append_node(NodeList *all_nodes, TSNode data);

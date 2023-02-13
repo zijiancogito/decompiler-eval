@@ -97,8 +97,7 @@ void get_variables(TSTree *tree, std::unordered_map<std::string, Variable*> &var
     NodeList all_nodes;
     parse_decompiler_output(tree, &all_nodes, node_filter);
     Node *tmp = all_nodes.head;
-    for (int i = 0; i < all_nodes.listLen; i++)
-    {
+    for (int i = 0; i < all_nodes.listLen; i++) {
         tmp = tmp->next;
         create_var_map(var_map, tmp->data, source, is_input);
     }
@@ -115,24 +114,33 @@ void find_input_variables(TSTree *tree, const char *source, std::unordered_map<s
         char *content = NULL;
         content = get_content(func_node, source);
 
-        if (strstr(content, "scanf") != NULL)
-        {
-            TSNode argument_node = ts_node_child(tmp->data, 1);
-            TSTreeCursor cursor = ts_tree_cursor_new(argument_node);
-            NodeList pnodes;
-            init_node_list(&pnodes);
-            make_move(&cursor, DOWN, &pnodes, "identifier");
-            Node *tmp = pnodes.head;
-            for (int j = 0; j < pnodes.listLen; j ++ )
-            {
-                tmp = tmp->next;
-                char *name = get_content(tmp->data, source);
-                Variable *v = NULL;
-                if (var_map.find(name) != var_map.end())
-                {
-                    v = var_map.at(name);
-                    // printf("%s\n", v->name);
-                    v->is_input = true;
+        if (strstr(content, "scanf") != NULL) {
+            TSNode arguments_node = ts_node_child_by_field_name(tmp->data, "arguments", strlen("arguments"));
+            int argument_num = ts_node_child_count(arguments_node);
+            for (int i = 0; i < argument_num; i ++ ) {
+                // parse arguments one by one
+                TSNode argument_node = ts_node_child(arguments_node, i);
+                std::string argument_type = ts_node_type(argument_node);
+                if (argument_type == "binary_expression") {
+                    argument_node = ts_node_child_by_field_name(argument_node, "left", strlen("left"));
+                }
+                else if (argument_type != "pointer_expression") {
+                    continue;
+                }
+                TSTreeCursor cursor = ts_tree_cursor_new(argument_node);
+                NodeList pnodes;
+                init_node_list(&pnodes);
+                make_move(&cursor, DOWN, &pnodes, "identifier");
+                Node *tmp = pnodes.head;
+                for (int j = 0; j < pnodes.listLen; j ++ ) {
+                    tmp = tmp->next;
+                    char *name = get_content(tmp->data, source);
+                    Variable *v = NULL;
+                    if (var_map.find(name) != var_map.end()) {
+                        v = var_map.at(name);
+                        // printf("%s\n", v->name);
+                        v->is_input = true;
+                    }
                 }
             }
         }
@@ -153,7 +161,7 @@ std::string opposite_relation(std::string relational_op)
     return res;
 }
 
-bool in_node_list(NodeList *all_nodes, TSNode node)
+bool in_node_list(NodeList *all_nodes, TSNode node, const char* source)
 {
     Node *tmp = all_nodes->head;
     for (int i = 0; i < all_nodes->listLen; i ++) {
@@ -165,11 +173,13 @@ bool in_node_list(NodeList *all_nodes, TSNode node)
     return false;
 }
 
-Json::Value parse_expression(TSNode expression_node, const char* source, std::unordered_map<std::string, Variable*> &var_map)
+Json::Value parse_expression(TSNode expression_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars)
 {
     std::string node_type = ts_node_type(expression_node);
     Json::Value ret;
-    if (node_type == "identifier") {
+    if (node_type == "assignment_expression" || node_type == "update_expression") {
+        parse_assignment_expression(expression_node, source, var_map, changed_vars);
+    } else if (node_type == "identifier") {
         char *id_name = get_content(expression_node, source);
         Variable *v = NULL;
         // Use variable name to find the variable struct, if
@@ -192,6 +202,20 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             ret["type"] = node_type;
             ret["value"] = v->name;
         }
+    } else if (node_type == "subscript_expression") {
+        TSNode arg_node = ts_node_child_by_field_name(expression_node, "argument", strlen("argument"));
+        TSNode idx_node = ts_node_child_by_field_name(expression_node, "index", strlen("index"));
+        ret["type"] = "pointer_expression";
+        ret["op"] = "*";
+        ret["value"]["type"] = "binary_expression";
+        ret["value"]["left"] = parse_expression(arg_node, source, var_map, changed_vars);
+        ret["value"]["op"] = "+";
+        ret["value"]["right"] = parse_expression(idx_node, source, var_map, changed_vars);
+    } else if (node_type == "comma_expression") {
+        TSNode left_node = ts_node_child_by_field_name(expression_node, "left", strlen("left"));
+        TSNode right_node = ts_node_child_by_field_name(expression_node, "right", strlen("right"));
+        parse_expression(left_node, source, var_map, changed_vars);
+        ret = parse_expression(right_node, source, var_map, changed_vars);
     } else if (node_type.find("_literal") != std::string::npos && 
              node_type.find("literal_") == std::string::npos) {
         // Get the value of the literal directly
@@ -200,11 +224,11 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
     } else if (node_type == "cast_expression") {
         // Get the variable node from a cast node and parse it
         TSNode cnt_node = ts_node_child(expression_node, 3);
-        ret = parse_expression(cnt_node, source, var_map);
+        ret = parse_expression(cnt_node, source, var_map, changed_vars);
     } else if (node_type == "parenthesized_expression") {
         // parse the node in parentheses
         TSNode cnt_node = ts_node_child(expression_node, 1);
-        ret = parse_expression(cnt_node, source, var_map);
+        ret = parse_expression(cnt_node, source, var_map, changed_vars);
     } else if (node_type == "pointer_expression") {
         TSNode pointer_node = ts_node_child(expression_node, 0);
         TSNode cnt_node = ts_node_next_sibling(pointer_node);
@@ -215,17 +239,17 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             // if reference, return the source content directly
             ret["value"]["type"] = "identifier";
             ret["value"]["value"] = get_content(cnt_node, source);
-        } else {
+        } else {  // i.e. op == "*"
             // if dereference, parse the variable node
-            ret["value"] = parse_expression(cnt_node, source, var_map);
+            ret["value"] = parse_expression(cnt_node, source, var_map, changed_vars);
         }
     }
     else if (node_type == "binary_expression") {
         TSNode left_node = ts_node_child(expression_node, 0);
         TSNode right_node = ts_node_child(expression_node, 2);
-        Json::Value cnt1 = parse_expression(left_node, source, var_map);
+        Json::Value cnt1 = parse_expression(left_node, source, var_map, changed_vars);
         Json::Value op = ts_node_type(ts_node_child(expression_node, 1));
-        Json::Value cnt3 = parse_expression(right_node, source, var_map);
+        Json::Value cnt3 = parse_expression(right_node, source, var_map, changed_vars);
         ret["type"] = node_type;
         ret["left"] = cnt1;
         ret["op"] = op;
@@ -237,11 +261,11 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
         TSNode second_node = ts_node_child(expression_node, 1);
         if (strcmp(ts_node_type(second_node), "++") == 0 || strcmp(ts_node_type(second_node), "--") == 0) {
             // postfix operation, return the variable itself
-            ret = parse_expression(first_node, source, var_map);
+            ret = parse_expression(first_node, source, var_map, changed_vars);
         } else {
             // prefix operation, the variable incremented/decremented by one
             const char *op = ts_node_type(first_node);
-            Json::Value cnt = parse_expression(second_node, source, var_map);
+            Json::Value cnt = parse_expression(second_node, source, var_map, changed_vars);
             char *single_op = (char*)malloc(strlen(op) + 1);
             strcpy(single_op, op);
             single_op[strlen(op) - 1] = '\0';
@@ -256,14 +280,14 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
         Json::Value func_name = get_content(ts_node_child(expression_node, 0), source);
         // get argument_list node
         Json::Value arguments;
-        TSNode argument_list = ts_node_child(expression_node, 1);
+        TSNode argument_list = ts_node_child_by_field_name(expression_node, "arguments", strlen("arguments"));
         int argument_num = ts_node_child_count(argument_list);
         for (int i = 0; i < argument_num; i ++ ) {
             // parse arguments one by one
             TSNode argument = ts_node_child(argument_list, i);
             std::string argument_type = ts_node_type(argument);
             if (argument_type != "(" && argument_type != "," && argument_type != ")")
-                arguments.append(parse_expression(argument, source, var_map));
+                arguments.append(parse_expression(argument, source, var_map, changed_vars));
         }
         ret["type"] = node_type;
         ret["func"] = func_name;
@@ -271,7 +295,7 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
     }
     else if (node_type == "return_statement") {
         TSNode return_node = ts_node_child(expression_node, 1);
-        Json::Value return_cnt = parse_expression(return_node, source, var_map);
+        Json::Value return_cnt = parse_expression(return_node, source, var_map, changed_vars);
         if (!return_cnt.empty()) {
             ret["type"] = node_type;
             ret["value"] = return_cnt;
@@ -300,7 +324,7 @@ void parse_assignment_expression(TSNode assign_node, const char* source, std::un
         }
 
         // set the expression
-        Json::Value cnt = parse_expression(var_node, source, var_map);
+        Json::Value cnt = parse_expression(var_node, source, var_map, changed_vars);
         const char *op = ts_node_type(op_node);
         char *single_op = (char*)malloc(strlen(op) + 1);
         strcpy(single_op, op);
@@ -347,7 +371,7 @@ void parse_assignment_expression(TSNode assign_node, const char* source, std::un
             char *single_op = (char*)malloc(strlen(op) + 1);
             strcpy(single_op, op);
             single_op[strlen(op) - 1] = '\0';
-            Json::Value right = parse_expression(right_node, source, var_map);
+            Json::Value right = parse_expression(right_node, source, var_map, changed_vars);
             if (v->expression.empty()) {
                 expression["left"]["type"] = "identifier";
                 expression["left"]["value"] = v->name;
@@ -359,14 +383,14 @@ void parse_assignment_expression(TSNode assign_node, const char* source, std::un
             expression["type"] = "binary_expression";
             free(single_op);
         } else {
-            expression = parse_expression(right_node, source, var_map);
+            expression = parse_expression(right_node, source, var_map, changed_vars);
         }
     }
 
     v->expression = expression;
 }
 
-Json::Value parse_branch_condition(TSNode con_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars, bool condition)
+Json::Value parse_branch_condition(TSNode con_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &brach_changed_vars, std::unordered_map<std::string, Variable*> &changed_vars, bool condition)
 {
     std::string node_type = ts_node_type(con_node);
     Json::Value ret;
@@ -378,8 +402,8 @@ Json::Value parse_branch_condition(TSNode con_node, const char* source, std::uno
         TSNode right_node = ts_node_child(con_node, 2);
         std::string op_type = ts_node_type(op_node);
         if (std::find(begin(relational_ops), end(relational_ops), op_type) != end(relational_ops)) {
-            Json::Value left_cnt = parse_expression(left_node, source, var_map);
-            Json::Value right_cnt = parse_expression(right_node, source, var_map);
+            Json::Value left_cnt = parse_expression(left_node, source, var_map, changed_vars);
+            Json::Value right_cnt = parse_expression(right_node, source, var_map, changed_vars);
 
             if (condition == false) {
                 op_type = opposite_relation(op_type);
@@ -404,14 +428,19 @@ Json::Value parse_branch_condition(TSNode con_node, const char* source, std::uno
                 }
             }
         }
+    } else if (node_type == "comma_expression") {
+        TSNode left_node = ts_node_child_by_field_name(con_node, "left", strlen("left"));
+        TSNode right_node = ts_node_child_by_field_name(con_node, "right", strlen("right"));
+        parse_expression(left_node, source, var_map, changed_vars);
+        ret = parse_branch_condition(right_node, source, var_map, brach_changed_vars, changed_vars, condition);
     } else if (node_type == "parenthesized_expression") {
         TSNode child = ts_node_child(con_node, 1);
-        ret = parse_branch_condition(child, source, var_map, changed_vars, condition);
+        ret = parse_branch_condition(child, source, var_map, brach_changed_vars, changed_vars, condition);
     } else if (node_type == "unary_expression") {
         TSNode unary_node = ts_node_child_by_field_name(con_node, "operator", strlen("operator"));
         if (strcmp(ts_node_type(unary_node), "!") == 0) {
             TSNode expression_node = ts_node_child_by_field_name(con_node, "argument", strlen("argument"));
-            Json::Value expression_cnt = parse_expression(expression_node, source, var_map);
+            Json::Value expression_cnt = parse_expression(expression_node, source, var_map, changed_vars);
             std::string op;
 
             if (condition == true) {
@@ -436,7 +465,7 @@ Json::Value parse_branch_condition(TSNode con_node, const char* source, std::uno
             }
         }
     } else {
-        Json::Value expression_cnt = parse_expression(con_node, source, var_map);
+        Json::Value expression_cnt = parse_expression(con_node, source, var_map, changed_vars);
         std::string op;
 
         if (condition == true) {
@@ -493,7 +522,7 @@ Json::Value parse_branch_condition(TSNode con_node, const char* source, std::uno
         for (int i = 0; i < var_list.size(); i ++ ) {
             Variable *var = var_list[i];
             Variable *changed_v = variable_copy(var);
-            changed_vars.emplace(changed_v->name, changed_v);
+            brach_changed_vars.emplace(changed_v->name, changed_v);
             var->expression = expression;
         }
     }
@@ -549,13 +578,15 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
     // parse statements in basic block
     for (int i = 0; i < nodes.size(); i ++ ) {
         TSNode node = nodes.at(i);
-        const char *node_type = ts_node_type(node);
-        if (strcmp(node_type, "assignment_expression") == 0 || strcmp(node_type, "update_expression") == 0) {
+        std::string node_type = ts_node_type(node);
+        if (node_type == "assignment_expression" || node_type == "update_expression") {
             // Parse assignment statements and update variable values
             parse_assignment_expression(node, source, var_map, changed_vars);
+        } else if (node_type == "comma_expression") {
+            parse_expression(node, source, var_map, changed_vars);
         }
         // match the nodes to analyze and perform the analysis
-        if (strcmp(node_type, "switch_statement") == 0 || strcmp(node_type, "case_statement") == 0)
+        if (node_type == "switch_statement" || node_type == "case_statement")
             continue;
         NodeList sub_nodes;
         TSTreeCursor cursor = ts_tree_cursor_new(node);
@@ -564,8 +595,8 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
         Node *tmp = sub_nodes.head;
         for (int j = 0; j < sub_nodes.listLen; j ++) {
             tmp = tmp->next;
-            if (in_node_list(analyze_nodes, tmp->data)) {
-                Json::Value out_put = parse_expression(tmp->data, source, var_map);
+            if (in_node_list(analyze_nodes, tmp->data, source)) {
+                Json::Value out_put = parse_expression(tmp->data, source, var_map, changed_vars);
                 if (out_put["type"] == "return_statement") {
                     out_put = out_put["value"];
                     out_put["name"] = out_name_map[ts_node_start_byte(tmp->data)];
@@ -591,7 +622,7 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
     if (is_switch) {
         TSNode con_node = ts_node_child_by_field_name(n, "condition", strlen("condition"));
         TSNode cnt_node = ts_node_child(con_node, 1);
-        switch_condition = parse_expression(cnt_node, source, var_map);
+        switch_condition = parse_expression(cnt_node, source, var_map, changed_vars);
     }
 
     // DFS
@@ -601,13 +632,13 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
         // Parse jump conditions
         int con_num = 0;
         if (out_edge->get_condition() == TRUE) {
-            Json::Value con = parse_branch_condition(nodes.back(), source, var_map, branch_changed_vars, true);
+            Json::Value con = parse_branch_condition(nodes.back(), source, var_map, branch_changed_vars, changed_vars, true);
             if (!con.empty()) {
                 con_num ++ ;
                 conditions.append(con);
             }
         } else if (out_edge->get_condition() == FALSE) {
-            Json::Value con = parse_branch_condition(nodes.back(), source, var_map, branch_changed_vars, false);
+            Json::Value con = parse_branch_condition(nodes.back(), source, var_map, branch_changed_vars, changed_vars, false);
             if (!con.empty()) {
                 con_num ++ ;
                 conditions.append(con);
@@ -619,7 +650,7 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
             if (strcmp(ts_node_type(type_node), "case") == 0) {
                 Json::Value con;
                 TSNode value_node = ts_node_child_by_field_name(case_node, "value", strlen("value"));
-                Json::Value value = parse_expression(value_node, source, var_map);
+                Json::Value value = parse_expression(value_node, source, var_map, changed_vars);
                 con["left"] = switch_condition;
                 con["op"] = "==";
                 con["right"] = value;
@@ -636,7 +667,7 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
                         if (strcmp(ts_node_type(type_node), "case") == 0) {
                             Json::Value con;
                             TSNode value_node = ts_node_child_by_field_name(case_node, "value", strlen("value"));
-                            Json::Value value = parse_expression(value_node, source, var_map);
+                            Json::Value value = parse_expression(value_node, source, var_map, changed_vars);
                             con["left"] = switch_condition;
                             con["op"] = "!=";
                             con["right"] = value;
@@ -703,6 +734,7 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
     Json::Value conditions = Json::arrayValue;
     Json::Value outputs = Json::arrayValue;
     Json::Value paths;
+    // cfg->print_cfg();
     symbolic_execution(cfg, entry_edge, visit, source, analyze_nodes, var_map, paths, conditions, outputs);
 
     se_res["paths"] = paths;
@@ -742,6 +774,7 @@ extern "C" const char *process(const char* filename)
             out_name_map.emplace(ts_node_start_byte(tmp->data), name);
         } else {
             tmp2->next = tmp->next;
+            analyze_nodes.listLen -- ;
             tmp = tmp2;
         }
     }  // when run out while loop, tmp->next point to analyze_nodes.tail
@@ -755,6 +788,7 @@ extern "C" const char *process(const char* filename)
         Node *tmp3 = tmp2->next;
         tmp->next = tmp2;
         tmp2->next = analyze_nodes.tail;
+        analyze_nodes.listLen ++ ;
         tmp2 = tmp3;
     }
     const char *ret = run_se(tree, source, &analyze_nodes);
@@ -768,6 +802,6 @@ extern "C" const char *process(const char* filename)
 
 int main()
 {
-    process("s_test.c");
+    process("/home/kali/oliver/decompiler-eval/test-manual/decompiler/5-d.c");
     return 0;
 }
