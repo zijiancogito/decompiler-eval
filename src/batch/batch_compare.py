@@ -5,7 +5,7 @@ import json
 from exp_tree import *
 from compare import *
 
-def compare(ir_json_file, c_json_file):
+def compare_file(ir_json_file, c_json_file):
     ir_json = None
     with open(ir_json, 'r') as f:
         ir_json = json.load(f)
@@ -29,7 +29,6 @@ def compare(ir_json_file, c_json_file):
                             c_exp["condition"], 
                             ir_json["input_symbols"], 
                             c_json["input_symbols"]):
-
                 for ir_v in ir_exp["variables"]:
                     ir_v_pos = ir_json["output_symbols"][ir_v]
                     c_v = None
@@ -43,7 +42,25 @@ def compare(ir_json_file, c_json_file):
                                                                ir_json["input_symbols"], 
                                                                c_json["input_symbols"])))
                     else:
-                        ir_matched.append(
+                        ir_matched.append((v, False))
                 break
+        matched.append((ir_exp["path"], ir_matched))
+    return matched
 
+def batch_compare(ir_json_dir, c_json_dir):
+    ir_files = os.listdir(ir_json_dir)
+    res = 0
+    cnt = 0
+    for ir_file in ir_files:
+        ir_json_file = os.path.join(ir_json_dir, ir_file)
+        c_json_file = os.path.join(c_json_dir, f"{ir_file.split('.')[0]}-c.json")
+        
+        matched = compare_file(ir_json_file, c_json_file)
+        for , match in matched:
+            for , m_v in match:
+                if m_v == True:
+                    res = res + 1
+                cnt = cnt + 1
+
+    print(f"{res} / {cnt}")
 

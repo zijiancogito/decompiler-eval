@@ -132,7 +132,7 @@ def symbolic_execution(function):
         path_exps.append(key_var_exps)
 
     # print_exps(path_cond, path_exps, cfg.paths, output_symbols)
-    return path_cond, path_exps, input_symbols, output_symbols
+    return path_cond, path_exps, cfg.paths, input_symbols, output_symbols
 
 def key_variable_expression(all_vars, output_symbols):
     key_vars = {}
@@ -199,23 +199,23 @@ def process_functions(llvm_ir, filename, save_to):
         if function.name in utils.syscall_funcs:
             continue
         all_names.append(function.name)
-        print(function.name)
-        # result = symbolic_execution(function)
-        # if result != None:
-            # conds = result[0]
-            # exps = result[1]
-            # input_symbols = result[2]
-            # output_symbols = result[3]
-            # dump_to_file(save_to, filename, function.name, conds, exps, input_symbols, output_symbols)
+        result = symbolic_execution(function)
+        if result != None:
+            conds = result[0]
+            exps = result[1]
+            path = result[2]
+            input_symbols = result[3]
+            output_symbols = result[4]
+            dump_to_file(save_to, filename, function.name, conds, exps, path, input_symbols, output_symbols)
     return all_names
 
 # llvm_ir = read_ir("/root/decompiler-eval/test-manual/13.ll")
 # process_functions(llvm_ir, '13', '.')
-files = os.listdir('/home/caoy/cy_proj/eval/data/POJ/ir')
-all_names = list()
-for f in files:
-    #print(f"File: {f}")
-    llvm_ir = read_ir(os.path.join('/home/caoy/cy_proj/eval/data/POJ/ir',f))
-    names = process_functions(llvm_ir, f, '.')
-    all_names.extend(list(set(names)))
-    all_names = list(set(all_names))
+# files = os.listdir('/home/caoy/cy_proj/eval/data/POJ/ir')
+# all_names = list()
+# for f in files:
+    # #print(f"File: {f}")
+    # llvm_ir = read_ir(os.path.join('/home/caoy/cy_proj/eval/data/POJ/ir',f))
+    # names = process_functions(llvm_ir, f, '.')
+    # all_names.extend(list(set(names)))
+    # all_names = list(set(all_names))
