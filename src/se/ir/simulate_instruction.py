@@ -933,6 +933,21 @@ def execution_ptrtoint(instruction, tmp_dict):
 
     return result, exp
 
+def execution_inttoptr(instruction, tmp_dict):
+    pattern = "([\S]+) = inttoptr .* ([\S]+) to .*"
+    match = re.match(pattern, instruction)
+    if not match:
+        return None
+    result = match.group(1)
+    op = match.group(2)
+    exp = None
+    if op in tmp_dict:
+        exp = tmp_dict[op]
+    else:
+        exp = ExpTree('inttoptr', op)
+
+    return result, exp
+
 def execution_bitcast(instruction, tmp_dict):
     pattern = "([\S]+) = bitcast .* ([\S]+) to .*"
     match = re.match(pattern, instruction)

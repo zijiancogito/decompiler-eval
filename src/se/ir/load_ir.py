@@ -81,18 +81,34 @@ def build_cfg(function):
                 cfg.cfg.add_edge(label, addr)
 
     cfg.build_edge_cfg()
+
+    traced_nodes = []
     for s in cfg.edge_cfg_entry:
         for e in cfg.edge_cfg_exit:
             try:
-                path_tracer(cfg.paths, cfg.edge_cfg, s, e, cutoff=len(cfg.edge_cfg.nodes))
+                path_tracer(cfg.paths, cfg.edge_cfg, s, e, len(cfg.edge_cfg.nodes), traced_nodes)
+                if len(traced_nodes) == len(cfg.edge_cfg.nodes):
+                    break
             except:
                 continue
+        if len(traced_nodes) == len(cfg.edge_cfg.nodes):
+            break
     return cfg
 
-@func_set_timeout(60)
-def path_tracer(paths, graph, start, end, cutoff):
+@func_set_timeout(30)
+def path_tracer(paths, graph, start, end, cutoff, traced_nodes):
     for path in nx.all_simple_paths(graph, start, end, cutoff):
+        for p in path:
+            node_s = p.split('-')[0]
+            node_e = p.split('-')[1]
+        traced_nodes.append(node_s)
+        traced_nodes.append(node_e)
+        traced_nodes = list(set(traced_nodes))
+
         paths.append(path)
+        if len(traced_nodes) == cutoff:
+            break
+        
 
 def symbolic_execution(function):
     cfg = build_cfg(function)
@@ -106,8 +122,7 @@ def symbolic_execution(function):
     
     input_symbols = find_input_variables(function)
     output_symbols = find_output_variables(function)
-    # print(input_symbols)
-    # print(output_symbols)
+
     path_exps = []
     path_cond = []
     for path in cfg.paths:

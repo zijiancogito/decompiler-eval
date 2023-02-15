@@ -7,7 +7,10 @@ import pdb
 
 def batch_ir_execution(ir_dir, save_to):
     ll_files = os.listdir(ir_dir)
+    finished = os.listdir(save_to)
     for filename in ll_files:
+        if filename.split('.')[0] in finished:
+            continue
         print(filename)
         ir_file = os.path.join(ir_dir, filename)
         llvm_ir = read_ir(ir_file)

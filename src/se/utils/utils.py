@@ -16,12 +16,23 @@ compiler_generated_funcs = [
         'UnresolvableCallTarget',
         '__printf_chk',
         '__cxx_global_var_init-ir',
+        '__cxx_global_var_init',
+        '__cxa_atexit',
+        'llvm.memset.p0i8.i64',
+        '_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_',
 
 ]
 
 syscall_funcs = [
         'printf',
-        '__isoc99_scanf'
+        '__isoc99_scanf',
+        'strlen',
+        'gets',
+        'puts',
+        'strstr',
+        'malloc',
+        'sqrt',
+
 ]
 
 x86_call = [

@@ -52,6 +52,7 @@ def batch_compare(ir_json_dir, c_json_dir):
     res = 0
     cnt = 0
     for ir_file in ir_files:
+        ir_dir = os.path.
         ir_json_file = os.path.join(ir_json_dir, ir_file)
         c_json_file = os.path.join(c_json_dir, f"{ir_file.split('.')[0]}-c.json")
         
