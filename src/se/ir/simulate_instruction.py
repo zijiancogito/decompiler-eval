@@ -631,6 +631,8 @@ def execution_call(instruction, tmp_dict):
         return None
     result = match.group(2)
     func_name = match.group(4)
+    if re.match('@llvm\.lifetime.*', func_name):
+        return None
     params_str = match.group(5)
     pattern_params = "([^,]+\([^\)]+\))|([^,]+)"
     params_find = re.findall(pattern_params, params_str)
@@ -758,26 +760,21 @@ def execution_phi(instruction, tmp_dict):
     nodes = match.group(3)
     node_pattern = "\[ ([\S]+), ([\S]+) \]"
     find = re.findall(node_pattern, nodes)
-    last_var = None
     exp = None
     tmp = None
     for f in find:
         var = f[0]
         label = f[1]
-        if result not in tmp_dict:
+        if var in tmp_dict:
             tmp = var
             break
         else:
-            if tmp_dict[result] == last_var:
-                tmp = var
+            try:
+                tmp = int(var)
                 break
-        last_var = f
+            except:
+                pass
     
-    if tmp == None:
-        if last_var in tmp_dict:
-            exp = tmp_dict[last_var]
-        else:
-            exp = ExpTree('phi', last_var)
     if tmp in tmp_dict:
         exp = tmp_dict[tmp]
     else:

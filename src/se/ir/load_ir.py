@@ -179,7 +179,7 @@ def print_exps(path_cond, path_exps, paths, output_symbols):
 def dump_to_file(save_to, filename, funcname, conds, exps, paths, inputs, outputs):
     if not os.path.exists(os.path.join(save_to, filename)):
         os.makedirs(os.path.join(save_to, filename))
-    outfile = os.path.join(save_to, filename, f'{funcname}-ir.json')
+    outfile = os.path.join(save_to, filename, f'{funcname}.json')
     js_dict = {}
     path_cnt = 0
     js_dict['expressions'] = []
@@ -224,8 +224,8 @@ def process_functions(llvm_ir, filename, save_to):
             dump_to_file(save_to, filename, function.name, conds, exps, path, input_symbols, output_symbols)
     return all_names
 
-# llvm_ir = read_ir("/root/decompiler-eval/test-manual/13.ll")
-# process_functions(llvm_ir, '13', '.')
+llvm_ir = read_ir("/home/data/cy/eval/POJ/test/ir/10-1119-1119.ll")
+process_functions(llvm_ir, '13', '.')
 # files = os.listdir('/home/caoy/cy_proj/eval/data/POJ/ir')
 # all_names = list()
 # for f in files:

@@ -5,7 +5,6 @@ sys.path.append('../../')
 from exp_tree.exp_tree import *
 from simulate_instruction import *
 
-
 def find_output_variables(function):
     #TODO
     output_symbols = {}
@@ -24,30 +23,28 @@ def find_output_variables(function):
             if opc == 'call':
                 func_name, ps = parse_call(str(insn).strip())
                 if func_name == "printf":
-                    for var in ps[1:]:
+                    for var in ps:
                         output_symbols[var] = f'printf{printf_cnt}'
-                    # output_symbols.extend((ps[1:], f'printf{printf_cnt}'))
                         printf_cnt += 1
 
     return output_symbols
                 
 def find_input_variables(function):
-    input_symbols = [] 
+    input_symbols = {}
     
-    pattern_function_decl = "define [\s\S]+\(([\s\S]*)\)\n"
+    pattern_function_decl = "define [^\n]+\(([^\n]*)\)"
     match = re.match(pattern_function_decl, str(function).strip())
     if not match:
         return None
     params_str = match.group(1)
-    params_with_type = [i.strip() for i in params_str.strip(',')]
+    params_with_type = [i.strip() for i in params_str.split(',')]
     pattern_params = "[\S\s]+ (%[p0-9]+)"
 
     params_cnt = 0
     for p in params_with_type:
-        match = re.match(pattern_params, p)
+        match = re.match(pattern_params, p.strip())
         if match:
             input_symbols[match.group(1)] = f'param{params_cnt}'
-            # input_symbols.append((match.group(1), f'param{params_cnt}'))
             params_cnt += 1
 
     scanf_cnt = 0
@@ -56,9 +53,9 @@ def find_input_variables(function):
             if insn.opcode == 'call':
                 func_name, ps = parse_call(str(insn).strip())
                 if func_name == '__isoc99_scanf' or func_name == 'scanf':
-                    for var in ps[1:]:
+                    for var in ps:
+                        print(var)
                         input_symbols[var] = f'scanf{scanf_cnt}'
-                    # input_symbols.extend((ps[1:], f'scanf{scanf_cnt}'))
                         scanf_cnt += 1
             # TODO: add more situations
 
@@ -89,28 +86,25 @@ def execution_block(block, tmp_dict, next_block):
                 curr_cond = tmp_dict[cond]
             elif false_dest == next_block:
                 curr_cond = copy_tree(tmp_dict[cond])
-                new_cond = None
                 if cond == ">":
-                    new_cond = '<='
+                    curr_cond.root_data = '<='
                 elif cond == '>=':
-                    new_cond = '<'
+                    curr_cond.root_data = '<'
                 elif cond == '==':
-                    new_cond = '!='
+                    curr_cond.root_data = '!='
                 elif cond == '!=':
-                    new_cond = '=='
+                    curr_cond.root_data = '=='
                 elif cond == '<':
-                    new_cond = '>='
+                    curr_cond.root_data = '>='
                 elif cond == '<=':
-                    new_cond = '>'
-                curr_cond.root_data = new_cond
-                
+                    curr_cond.root_data = '>'
+                # curr_cond.show()
         #if curr_cond != None:
             #curr_cond.show()
     return curr_cond
 
 def parse_call(instruction):
-    # pattern = "[\s\S]*call [\s\S]*@([^(]+)\(([\s\S]*)\)"
-    pattern = "[\s\S]*call [\s\S]*@([^(]+).*\(([\s\S]*)\)"
+    pattern = "[\s\S]*call [\s\S]*@([^(]+)[^\(]*\(([\s\S]*)\)"
     match = re.match(pattern, instruction)
     if not match:
         return None
@@ -124,17 +118,18 @@ def parse_call(instruction):
     params = []
     for p in params_find:
         if len(p[0]) > 0:
-            pat = "@[\S]+"
+            pat = "@[^\s,]+"
             pat_find = re.findall(pat, p[0])
             if len(pat_find) > 0:
                 params.append(pat_find[0])
         elif len(p[1]) > 0:
-            pat = "%[\S]+"
+            pat = "%[^\s,]+"
             pat_find = re.findall(pat, p[1])
             if len(pat_find) > 0:
                 params.append(pat_find[0])
         else:
             continue
+    print(params)
     
     return func_name, params
 
@@ -157,13 +152,16 @@ def parse_ret(instruction):
         return None
 
 def parse_br(instruction):
-    pattern1 = "br i1 (%[\S]+), label %([\S]+), label %([\S]+)"
+    # print(instruction)
+    pattern1 = "br i1 (%[\S]+), label %([\S]+), label %([^\s,]+)"
+    # pattern1 = "br i1 (%[\S]+), label %([\S]+), label %([\S]+)(,.*)*"
     pattern2 = "br label %([\S]+)"
     match1 = re.match(pattern1, instruction)
     if match1:
         cond = match1.group(1)
         true_dest = match1.group(2)
         false_dest = match1.group(3)
+        # print(false_dest)
         return "jc", [cond, true_dest, false_dest]
     
     match2 = re.match(pattern2, instruction)

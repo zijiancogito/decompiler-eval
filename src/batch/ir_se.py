@@ -17,5 +17,6 @@ def batch_ir_execution(ir_dir, save_to):
         process_functions(llvm_ir, filename.split('.')[0], save_to)
 
 if __name__ == "__main__":
-    batch_ir_execution('/home/data/cy/eval/POJ/process/ir', '/home/data/cy/eval/POJ/process/se/ir')
+    # batch_ir_execution('/home/data/cy/eval/POJ/process/ir', '/home/data/cy/eval/POJ/process/se/ir')
+    batch_ir_execution(sys.argv[1], sys.argv[2])
 
