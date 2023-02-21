@@ -58,9 +58,10 @@ def json_to_exptree(json_data: dict):
         tree = ExpTree(data_to_tag(json_data['value']), json_data['value'])
     elif json_data['type'] == 'call_expression':
         tree = ExpTree(data_to_tag(json_data['func']), json_data['func'])
-        for arg in json_data['args']:
-            tree.add_child(json_to_exptree(arg))
-    elif json_data['type'] == 'pointer_expression':
+        if json_data['args'] != None:
+            for arg in json_data['args']:
+                tree.add_child(json_to_exptree(arg))
+    elif json_data['type'] in ['pointer_expression', 'unary_expression']:
         tree = ExpTree(data_to_tag(json_data['op']), json_data['op'])
         tree.add_child(json_to_exptree(json_data['value']))
 
@@ -87,8 +88,8 @@ def load_from_json(json_data):
         for j in range(len(paths[i]['conditions'])):
             path['conditions'].append(exptree_to_json(json_to_exptree(paths[i]['conditions'][j])))
         for j in range(len(paths[i]['outputs'])):
+            ret['output_symbols'][paths[i]['outputs'][j]['name']] = paths[i]['outputs'][j]['id']
             path['variables'][paths[i]['outputs'][j]['name']] = exptree_to_json(json_to_exptree(paths[i]['outputs'][j]))
-            ret['output_symbols'][paths[i]['outputs'][j]['name']] = paths[i]['outputs'][j]['name']
         ret['expressions'].append(path)
         
     return ret

@@ -46,32 +46,29 @@ class DecompilerSpider(object):
 				break
 		return res
 
-	def parse_html(self):
+	def parse_html(self, save_to):
 		binary_name = os.path.basename(self.binary_path)
-		decomps_dir = self.binary_path + '-decompile'
+		decomps_dir = os.path.join(save_to, binary_name)
 		decomps_url = self.html['decompilations_url']
-		for i in range(3):
-			try:
-				decomps_html = self.get_html(decomps_url)
-			except Exception as e:
-				self.logger.waring(decomps_dir + ' get wrong\n' + 'url:' + decomps_url + '\n' + str(e) + '\n')
-				return
-			decomps_html = decomps_html.json()
-			decomps_list = decomps_html['results']
-			print(binary_name + ': ', len(decomps_list), 'decompile results')
-			if len(decomps_list) == 10:
-				break
+		try:
+			decomps_html = self.get_html(decomps_url)
+		except Exception as e:
+			self.logger.waring(decomps_dir + ' get wrong\n' + 'url:' + decomps_url + '\n' + str(e) + '\n')
+			return
+		decomps_html = decomps_html.json()
+		decomps_list = decomps_html['results']
 
 		if not os.path.exists(decomps_dir):
 			os.makedirs(decomps_dir, 0o775)
 
 		for i in range(decomps_html['count']):
 			decomp = decomps_list[i]
-			decomp_dir = binary_name + '-' + decomp['decompiler']['name'] + '-' + decomp['decompiler']['version']
-			decomp_file = decomp_dir + '.txt'
-			decomp_dir = os.path.join(decomps_dir, decomp_dir)
-			if not os.path.exists(decomp_dir):
-				os.makedirs(decomp_dir, 0o775)
+			if 'Hex-Rays' not in decomp['decompiler']['name']:
+				continue
+			# decomp_dir = binary_name + '-' + decomp['decompiler']['name'] + '-' + decomp['decompiler']['version']
+			decomp_file = binary_name + '.txt'
+			# decomp_dir = os.path.join(decomps_dir, decomp_dir)
+			decomp_dir = decomps_dir
 			decomp_path = os.path.join(decomp_dir, decomp_file)
 			download_url = decomp['download_url']
 			try:
@@ -83,9 +80,9 @@ class DecompilerSpider(object):
 				f.write(decomp_res.content.decode('utf-8'))
 			
 
-	def run(self, binary_path):
+	def run(self, binary_path, save_to):
 		self.upload_binary(binary_path)
-		self.parse_html()
+		self.parse_html(save_to)
 
 if __name__ == '__main__':
 	start = time.time()

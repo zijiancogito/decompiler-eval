@@ -1,0 +1,68 @@
+2023-02-10 12:35:14,888 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/10/1065/10-1065-1065-decompile/10-1065-1065-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/cf82b66e-e3ff-4dcd-ba71-31d4b297daea/decompilations/30f17f91-91ef-420e-b0df-46cdd5c519de/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/cf82b66e-e3ff-4dcd-ba71-31d4b297daea/decompilations/30f17f91-91ef-420e-b0df-46cdd5c519de/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f0ce172e3a0>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-10 19:30:31,431 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/15/1696/15-1696-1696-decompile/15-1696-1696-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/8875f79c-0ad9-457a-971b-6d29b72e7462/decompilations/e471e694-9aa3-4d71-a673-9416d98775eb/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/8875f79c-0ad9-457a-971b-6d29b72e7462/decompilations/e471e694-9aa3-4d71-a673-9416d98775eb/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f9d6d89d430>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-10 21:36:45,355 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/17/1433/17-1433-1433-decompile/17-1433-1433-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/fc8091eb-254e-4747-8f3f-90a141e9d23e/decompilations/13db415c-00ae-4852-9ce9-fe367b294ca5/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/fc8091eb-254e-4747-8f3f-90a141e9d23e/decompilations/13db415c-00ae-4852-9ce9-fe367b294ca5/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fb7a6f6b3a0>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-11 16:53:19,873 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/58/658/58-658-658-decompile/58-658-658-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/3db3b89b-0afe-4965-b899-39343af3933d/decompilations/51a163cc-6afd-468b-845a-d7d030b96fb1/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/3db3b89b-0afe-4965-b899-39343af3933d/decompilations/51a163cc-6afd-468b-845a-d7d030b96fb1/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7ff12b2e9fa0>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-11 17:32:29,129 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/6/3118/6-3118-3118-decompile/6-3118-3118-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/b367325d-0c7b-4c87-b749-7446125c7d14/decompilations/17827bd3-407a-4459-9484-a3b9e6b762ac/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/b367325d-0c7b-4c87-b749-7446125c7d14/decompilations/17827bd3-407a-4459-9484-a3b9e6b762ac/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f6d388b3430>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-11 20:26:10,110 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/64/350/64-350-350-decompile/64-350-350-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/cf38ce28-2e3c-4af8-b7f5-4119cef2bda1/decompilations/081d4631-d288-492d-9905-7105c5a33a1b/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/cf38ce28-2e3c-4af8-b7f5-4119cef2bda1/decompilations/081d4631-d288-492d-9905-7105c5a33a1b/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f711c030490>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-11 23:24:35,424 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/69/630/69-630-630-decompile/69-630-630-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/4ae2cf04-d578-44fe-becc-0bd2778df87c/decompilations/42b5e35b-7164-40fa-bc77-de76de3abc5f/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/4ae2cf04-d578-44fe-becc-0bd2778df87c/decompilations/42b5e35b-7164-40fa-bc77-de76de3abc5f/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f3462719fa0>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-12 15:50:32,429 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/10/253/10-253-253-decompile/10-253-253-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/a1b67677-8586-4c66-b948-e051917dee8a/decompilations/076a4730-274b-4126-bbaa-4832b7150ca3/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/a1b67677-8586-4c66-b948-e051917dee8a/decompilations/076a4730-274b-4126-bbaa-4832b7150ca3/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f8cb5357b80>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-13 16:25:04,484 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/79/5718/79-5718-5718-decompile/79-5718-5718-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/936eedf3-b8aa-4d39-8725-42cdae1b9904/decompilations/c1ed1e5f-9f8e-4bb2-b104-6793206b3f6a/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/936eedf3-b8aa-4d39-8725-42cdae1b9904/decompilations/c1ed1e5f-9f8e-4bb2-b104-6793206b3f6a/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f9d3507bb80>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-13 19:03:24,261 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/8/569/8-569-569-decompile/8-569-569-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/bcd0fcef-5e42-4e1d-8f8e-6544dd6f77a0/decompilations/5839aee0-6068-4243-a45b-13c118bcc050/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/bcd0fcef-5e42-4e1d-8f8e-6544dd6f77a0/decompilations/5839aee0-6068-4243-a45b-13c118bcc050/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fd8b8915b80>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-13 19:48:27,638 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/81/1184/81-1184-1184-decompile/81-1184-1184-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/4f677608-7ac7-4a56-a027-ed9dd91f522b/decompilations/263e188d-8631-444d-9328-a71df7a68932/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/4f677608-7ac7-4a56-a027-ed9dd91f522b/decompilations/263e188d-8631-444d-9328-a71df7a68932/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fbf17f77b80>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-13 19:57:05,905 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/81/1439/81-1439-1439-decompile/81-1439-1439-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/3abf5cc1-586d-4ddf-8e47-e5dab91a7e6f/decompilations/dfa7bc87-c185-4106-adce-d804ca5d2657/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/3abf5cc1-586d-4ddf-8e47-e5dab91a7e6f/decompilations/dfa7bc87-c185-4106-adce-d804ca5d2657/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f1754cf1b80>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-13 20:18:39,618 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/81/2074/81-2074-2074-decompile/81-2074-2074-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/4f1815ce-77da-48c9-8bc8-662406efe2f0/decompilations/0b9d1efa-4fb7-4eac-8e5c-feafc8eb6617/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/4f1815ce-77da-48c9-8bc8-662406efe2f0/decompilations/0b9d1efa-4fb7-4eac-8e5c-feafc8eb6617/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fdca2d48b80>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-13 20:40:42,119 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/81/801/81-801-801-decompile/81-801-801-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/81396b3b-8ba5-4508-9c59-46db48b8c904/decompilations/542d3701-3627-444f-b193-1d709a47ff01/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/81396b3b-8ba5-4508-9c59-46db48b8c904/decompilations/542d3701-3627-444f-b193-1d709a47ff01/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f501e7beaf0>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-13 21:00:29,838 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/82/1457/82-1457-1457-decompile/82-1457-1457-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/1a03da13-1f3c-4cb4-a69f-83e6f497cc95/decompilations/c715fd8a-9050-4843-ba47-48e3df469e40/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/1a03da13-1f3c-4cb4-a69f-83e6f497cc95/decompilations/c715fd8a-9050-4843-ba47-48e3df469e40/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f6c83758d60>: Failed to establish a new connection: [Errno 1] Unknown error'))
+
+2023-02-13 21:13:25,303 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/82/1715/82-1715-1715-decompile/82-1715-1715-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/674519ad-bfbb-46dc-8a3b-e66b2f0e2d13/decompilations/aaeaebd1-0b5a-4239-a2de-eb38e901dde2/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/674519ad-bfbb-46dc-8a3b-e66b2f0e2d13/decompilations/aaeaebd1-0b5a-4239-a2de-eb38e901dde2/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f47262d4b80>: Failed to establish a new connection: [Errno 111] Connection refused'))
+
+2023-02-13 21:43:05,322 - decompilerSpider - WARNING - /home/zrz/POJ/ds1/82/279/82-279-279-decompile/82-279-279-Hex-Rays-8.2.0.221215 get wrong
+url:https://dogbolt.org/api/binaries/82d76185-5979-4bdc-a6a5-94690290a342/decompilations/23d2a18f-c253-4565-9444-fa18d1591262/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/82d76185-5979-4bdc-a6a5-94690290a342/decompilations/23d2a18f-c253-4565-9444-fa18d1591262/download/ (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f0f768dfb80>: Failed to establish a new connection: [Errno 1] Unknown error'))
+

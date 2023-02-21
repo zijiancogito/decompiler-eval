@@ -29,9 +29,29 @@ typedef struct NodeList {
 
 const char *cast[] = {
     "(int)",
+    "(int *)",
     "(uint)",
+    "(uint *)",
     "(long)",
+    "(long *)",
     "(ulong)",
+    "(ulong *)",
+    "(char)",
+    "(char *)",
+    "(double)",
+    "(double *)",
+    "(float)",
+    "(float *)",
+    "(unsigned int)",
+    "(unsigned int *)",
+    "(unsigned long)",
+    "(unsigned long *)",
+    "(_DWORD)",
+    "(_DWORD *)",
+    "(_WORD)",
+    "(_WORD *)",
+    "(_BYTE)",
+    "(_BYTE *)",
 };
 
 void init_node_list(NodeList * node_list);

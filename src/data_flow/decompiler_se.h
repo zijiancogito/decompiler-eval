@@ -13,9 +13,11 @@ typedef struct {
     std::string type;
     std::string name;
     Json::Value expression;
+    // std::unordered_map<Json::Value, Json::Value> *arr_expressions;
     bool is_input;
     bool is_output;
     bool is_global;
+    // bool is_array;
 } Variable;
 
 std::string relational_ops[] = {
@@ -42,7 +44,8 @@ std::string self_ops[] = {
     "--",
 };
 
-std::unordered_map<int, std::string> out_name_map;
+std::unordered_map<int, std::string> var_id_map;
+std::vector<std::string> params;
 
 void free_node_list(NodeList *node_list);
 
@@ -54,17 +57,18 @@ void print_input(std::unordered_map<std::string, Variable*> &var_map);
 
 void create_var_map(std::unordered_map<std::string, Variable*> &var_map, TSNode var_node, const char *source, bool is_input);
 
-void get_variables(TSTree *tree, std::unordered_map<std::string, Variable*> &var_map, const char *source, const char *node_filter, bool is_input);
+void get_variables(TSTreeCursor *cursor, std::unordered_map<std::string, Variable*> &var_map, const char *source, const char *node_filter, bool is_input);
 
-void find_input_variables(TSTree *tree, const char *source, std::unordered_map<std::string, Variable*> &var_map);
+Json::Value find_input_variables(TSTree *tree, const char *source, std::unordered_map<std::string, Variable*> &var_map);
 
 std::string opposite_relation(std::string relational_op);
 
-bool in_node_list(NodeList *all_nodes, TSNode node, const char* source);
+// bool in_node_list(NodeList *all_nodes, TSNode node);
+bool in_node_list(NodeList *all_nodes, TSNode node, const char *source);
 
 Json::Value parse_expression(TSNode expression_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars);
 
-void parse_assignment_expression(TSNode assign_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars);
+Json::Value parse_assignment_expression(TSNode assign_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars);
 
 Json::Value parse_branch_condition(TSNode con_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &brach_changed_vars, std::unordered_map<std::string, Variable*> &changed_vars, bool condition);
 

@@ -1,5 +1,32 @@
 import os
 
+compiler_generated_funcs = [
+	'_init',
+	'__cxa_finalize',
+	'__stack_chk_fail',
+	'__isoc99_scanf',
+	'_start',
+	'deregister_tm_clones',
+	'register_tm_clones',
+	'__do_global_dtors_aux',
+	'_do_global_dtors_aux',
+	'frame_dummy',
+	'_fini',
+	'__libc_start_main',
+	'UnresolvableJumpTarget',
+	'UnresolvableCallTarget',
+	'__printf_chk',
+	'__cxx_global_var_init-ir',
+	'__cxx_global_var_init',
+	'__cxa_atexit',
+	'llvm.memset.p0i8.i64',
+	'_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_',
+	'(**init_proc())',
+	'term_proc',
+	'_libc_csu_init',
+	'_libc_csu_fini',
+]
+
 class ExtractFuncs(object):
 	def __init__(self):
 		pass
@@ -21,7 +48,14 @@ class ExtractFuncs(object):
 				s = self.file[lr]
 				s = s[:idx]
 				s = s.split()
-				self.funcsname.append(s[-1])
+				func_name = s[-1]
+				while func_name[0] == '*':
+					func_name = func_name[1:]
+				if func_name in compiler_generated_funcs:
+					self.funcs.remove(func)
+					continue
+
+				self.funcsname.append(func_name)
 				if len(s) == 1:
 					lr -= 1
 				'''
@@ -39,18 +73,20 @@ class ExtractFuncs(object):
 		# after findFuncs
 		# self._getFuncName()
 		funcsrows = []
-		filename = os.path.splitext(self.path)[0]
+		filepath = os.path.dirname(self.path)
 		for i in range(len(self.funcs)):
 			func = self.funcs[i]
 			funcname = self.funcsname[i]
 			funcsrows += [i for i in range(func[0], func[1]+1)]
-			with open(filename+'-'+funcname+'.txt', 'w') as f:
+			with open(os.path.join(filepath, funcname+'.txt'), 'w') as f:
 				f.writelines([i + '\n' for i in self.file[func[0]:func[1]+1]])
-		with open(filename+'-'+'others.txt', 'w') as f:
+		'''
+		with open(os.path.join(filepath, 'others.txt'), 'w') as f:
 			for i in range(len(self.file)):
 				if i in funcsrows:
 					continue
 				f.write(self.file[i] + '\n')
+		'''
 
 
 	def _readfile(self, path):
