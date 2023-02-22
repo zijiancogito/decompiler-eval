@@ -251,16 +251,21 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
         TSNode op_node = ts_node_child_by_field_name(expression_node, "operator", strlen("operator"));
         TSNode arg_node = ts_node_child_by_field_name(expression_node, "argument", strlen("argument"));
         std::string op = ts_node_type(op_node);
-        ret["type"] = "pointer_expression";
-        ret["op"] = op;
+        std::string arg_type = ts_node_type(arg_node);
         if (op == "&") {
             // if reference, return the source content directly
-            ret["value"]["type"] = "identifier";
-            ret["value"]["value"] = get_content(arg_node, source);
+            if (arg_type == "subscript_expression") {
+                Json::Value subscript_node = parse_expression(arg_node, source, var_map, changed_vars);
+                ret = subscript_node["value"];
+            } else {
+                ret["type"] = "pointer_expression";
+                ret["op"] = op;
+                ret["value"]["type"] = "identifier";
+                ret["value"]["value"] = get_content(arg_node, source);
+            }
         } else {  // i.e. op == "*"
             // if dereference, parse the variable node
             bool is_arg_ref = false;
-            std::string arg_type = ts_node_type(arg_node);
             if (arg_type == "pointer_expression") {
                 std::string arg_op = ts_node_type(ts_node_child_by_field_name(arg_node, "operator", strlen("operator")));
                 if (arg_op == "&") {
@@ -269,8 +274,11 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
                     ret = parse_expression(arg_arg_node, source, var_map, changed_vars);
                 }    
             }
-            if (!is_arg_ref)
+            if (!is_arg_ref) {
+                ret["type"] = "pointer_expression";
+                ret["op"] = op;
                 ret["value"] = parse_expression(arg_node, source, var_map, changed_vars);
+            }
         }
     }
     else if (node_type == "binary_expression") {
@@ -796,7 +804,6 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
     get_variables(&cursor, var_map, source, "parameter_declaration", true);
     // get input from scanf function
     Json::Value inputs = find_input_variables(tree, source, var_map);
-    // print_input(var_map);
 
     Json::Value se_res;
     se_res["inputs"] = inputs;
@@ -809,19 +816,35 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
     // cfg->print_cfg();
     symbolic_execution(cfg, entry_edge, visit, source, analyze_nodes, var_map, paths, conditions, outputs);
 
+    int global_num = 0;
+    for (auto it = var_map.begin(); it != var_map.end(); it ++ ) {
+        if ((*it).second->is_global)
+            se_res["inputs"][(*it).first] = "global" + std::to_string(global_num ++ );
+    }
+
     se_res["paths"] = paths;
     char *ret = new char[strlen(se_res.toStyledString().c_str()) + 1];
     strcpy(ret, se_res.toStyledString().c_str());
-    // std::cout << se_res.toStyledString() << std::endl;
+    // std::cout << se_res["inputs"].toStyledString() << std::endl;
+    std::cout << se_res.toStyledString() << std::endl;
     return ret;
 }
 
-extern "C" const char *process(const char* filename)
+extern "C" const char *process(const char *str, MODE mode)
 {
     var_id_map.clear();
     params.clear();
 
-    char * source = read_source(filename);
+    char *source = NULL;
+    if (mode == FILE_NAME) {
+        source = read_source(str);
+    } else if (mode == FUNC_CNT) {
+        int len = strlen(str);
+        source = (char*)malloc(len + 1);
+        strcpy(source, str);
+        siplify_source(source);
+    }
+    
     assert(source);
 
     // Create a parser
@@ -896,6 +919,6 @@ extern "C" const char *process(const char* filename)
 
 int main()
 {
-    process("/home/eval/POJ/test/c/10-11-11/main.txt");
+    process("./s_test.c", FILE_NAME);
     return 0;
 }

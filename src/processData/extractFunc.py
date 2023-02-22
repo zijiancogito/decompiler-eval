@@ -69,6 +69,17 @@ class ExtractFuncs(object):
 				if self.funcs.count(func):
 					self.funcs[self.funcs.index(func)][0] = lr
 
+	def getFuncs(self, path):
+		self.findFuncs(path)
+		funcs = []
+		for funcrow in self.funcs:
+			func = ""
+			for i in self.file[funcrow[0]: funcrow[1] + 1]:
+				func += i + '\n'
+			funcs.append(func)
+
+		return funcs, self.funcsname
+
 	def writeFuncs(self):
 		# after findFuncs
 		# self._getFuncName()

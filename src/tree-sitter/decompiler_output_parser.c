@@ -108,6 +108,20 @@ void parse_decompiler_output(TSTree * tree, NodeList * all_nodes, const char *no
   make_move(&cursor, DOWN, all_nodes, node_filter);
 }
 
+void siplify_source(char *source)
+{
+  int len = strlen(source);
+  for (int i = 0; i < sizeof(cast)/sizeof(const char*); i ++ ) {
+    char *cast_position = strstr(source, cast[i]);
+    int sub_len = strlen(cast[i]);
+    while (cast_position != NULL) {
+      for (int j = 0; j < len - (cast_position - source); j ++ )
+        *(cast_position + j) = *(cast_position + j + sub_len);
+      cast_position = strstr(source, cast[i]);
+    }
+  }
+}
+
 char *read_source(const char * filename) {
 	FILE *fp = fopen(filename, "rb");
   if (fp == NULL) {
@@ -117,17 +131,9 @@ char *read_source(const char * filename) {
 	fseek(fp, 0, SEEK_END);
 	int len = ftell(fp);
 	fseek(fp, 0, SEEK_SET);
-	char * source_buf = (char*)malloc(len+1);
+	char *source_buf = (char*)malloc(len+1);
 	fread(source_buf, 1, len+1, fp);
-  for (int i = 0; i < sizeof(cast)/sizeof(const char*); i ++ ) {
-    char *cast_position = strstr(source_buf, cast[i]);
-    int sub_len = strlen(cast[i]);
-    while (cast_position != NULL) {
-      for (int j = 0; j < len - (cast_position - source_buf); j ++ )
-        *(cast_position + j) = *(cast_position + j + sub_len);
-      cast_position = strstr(source_buf, cast[i]);
-    }
-  }
+  siplify_source(source_buf);
 	fclose(fp);
 	return source_buf;
 }

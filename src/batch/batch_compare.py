@@ -9,12 +9,12 @@ def compare_file(ir_json_file, c_json_file):
     ir_json = None
     with open(ir_json_file, 'r') as f:
         ir_json = json.load(f)
-    if ir_json == None:
-        return None
+    assert ir_json, "Load ir json failed."
 
     c_json = None
     with open(c_json_file, 'r') as f:
         c_json = json.load(f)
+    assert c_json, "Load c json failed."
     
     flags = [False]*len(c_json["expressions"])
     matched = []
@@ -23,7 +23,7 @@ def compare_file(ir_json_file, c_json_file):
         for c_idx, c_exp in enumerate(c_json["expressions"]):
             if flags[c_idx] == True:
                 continue
-            if compare_path(ir_exp["condition"], 
+            if compare_path(ir_exp["conditions"], 
                             c_exp["conditions"], 
                             ir_json["input_symbols"], 
                             c_json["input_symbols"]):
@@ -35,9 +35,10 @@ def compare_file(ir_json_file, c_json_file):
                     for v in c_json["output_symbols"]:
                         if c_json["output_symbols"][v] == ir_v_pos:
                             c_v = v
+                            print("variable matched.")
                             break
                     if c_v != None and c_v in c_exp["variables"]:
-                        ir_matched.append((v, compare_variable(ir_exp["variable"][ir_v], 
+                        ir_matched.append((v, compare_variable(ir_exp["variables"][ir_v], 
                                                                c_exp["variables"][c_v], 
                                                                ir_json["input_symbols"], 
                                                                c_json["input_symbols"])))
@@ -53,6 +54,7 @@ def batch_compare(ir_json_dir, c_json_dir):
     ir_dirs = os.listdir(ir_json_dir)
     res = 0
     cnt = 0
+
     for ir_dir in ir_dirs:
         ir_files = os.listdir(os.path.join(ir_json_dir, ir_dir))
         for ir_file in ir_files:
@@ -61,12 +63,12 @@ def batch_compare(ir_json_dir, c_json_dir):
             print(ir_json_file)
             print(c_json_file)
         
-        matched = compare_file(ir_json_file, c_json_file)
-        for _, match in matched:
-            for _, m_v in match:
-                if m_v == True:
-                    res = res + 1
-                cnt = cnt + 1
+            matched = compare_file(ir_json_file, c_json_file)
+            for _, match in matched:
+                for _, m_v in match:
+                    if m_v == True:
+                        res = res + 1
+                    cnt = cnt + 1
 
     print(f"{res} / {cnt}")
 

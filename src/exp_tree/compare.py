@@ -1,7 +1,7 @@
 import sys
 sys.path.append('.')
 
-from exp_tree import ExpTree
+from exp_tree import *
 
 def compare_old(tree_a, tree_b):
     if tree_a == tree_b:
@@ -21,7 +21,7 @@ def compare_old(tree_a, tree_b):
     return False
 
 
-def compare(tree_a, tree_b, st_a, st_b):
+def compare_simple(tree_a, tree_b, st_a, st_b):
     """
     st_a is the symbols table of tree a (input symbols and output symbols)
     """
@@ -40,6 +40,31 @@ def compare(tree_a, tree_b, st_a, st_b):
     except:
         return False
     return False
+
+
+def compare(tree_a, tree_b, st_a, st_b):
+    a_leaf = leaf_num(tree_a)
+    b_leaf = leaf_num(tree_b)
+    if a_leaf != b_leaf:
+        return False
+
+    a_op = op_num(tree_a)
+    b_op = op_num(tree_b)
+    if a_op != b_op:
+        return False
+
+    a_tp = {}
+    op_type(tree_a, a_tp)
+    b_tp = {}
+    op_type(tree_b, b_tp)
+    for a in a_tp:
+        if a not in b_tp:
+            return False
+        if a_tp[a] != b_tp[a]:
+            return False
+    return True
+
+
         
 def compare_path(cond_a, cond_b, st_a, st_b):
     if len(cond_a) != len(cond_b):
@@ -49,7 +74,9 @@ def compare_path(cond_a, cond_b, st_a, st_b):
         for index, c_b in enumerate(cond_b):
             if cond_b_flag[index] == True:
                 break
-            if compare(c_a, c_b, st_a, st_b) == True:
+            tree_a = sejson_to_exptree(c_a)
+            tree_b = sejson_to_exptree(c_b)
+            if compare(tree_a, tree_b, st_a, st_b) == True:
                 cond_b_flag[index] = True
                 break
     result = True
@@ -58,6 +85,8 @@ def compare_path(cond_a, cond_b, st_a, st_b):
     return result
 
 def compare_variable(var_a, var_b, st_a, st_b):
-    return compare(var_a, var_b, st_a, st_b)
+    tree_a = sejson_to_exptree(var_a)
+    tree_b = sejson_to_exptree(var_b)
+    return compare(tree_a, tree_b, st_a, st_b)
 
 

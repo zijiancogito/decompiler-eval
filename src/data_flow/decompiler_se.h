@@ -20,6 +20,11 @@ typedef struct {
     // bool is_array;
 } Variable;
 
+enum MODE {
+  FILE_NAME,
+  FUNC_CNT
+};
+
 std::string relational_ops[] = {
     ">=",
     "<=",
@@ -76,6 +81,6 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
 
 const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes);
 
-extern "C" const char *process(const char* filename);
+extern "C" const char *process(const char* str, MODE mode);
 
 #endif

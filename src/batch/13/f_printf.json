@@ -1,0 +1,1 @@
+{"expressions": [{"conditions": [], "variables": {"%3": {"data": "%0", "tag": "store", "children": []}}, "path": [0, 0]}], "input_symbols": null, "output_symbols": {"@.str": "printf0", "%3": "printf1"}}

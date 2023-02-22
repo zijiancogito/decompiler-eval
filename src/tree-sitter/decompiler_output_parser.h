@@ -68,6 +68,8 @@ void parse_decompiler_output(TSTree *tree, NodeList *all_nodes, const char *node
 
 char *read_source(const char *filename);
 
+void siplify_source(char *source);
+
 char *get_content_in_source(int start, int end, const char *source);
 
 char *get_content(TSNode node, const char *source);

@@ -19,6 +19,13 @@ class IRCFG():
         self.exit = exit
 
     def build_edge_cfg(self):
+        if len(self.cfg.nodes) == 1:
+            for node in self.cfg.nodes:
+                self.edge_cfg.add_node(f"{node}-{node}")
+            for node in self.edge_cfg.nodes:
+                self.edge_cfg_entry.append(node)
+                self.edge_cfg_exit.append(node)
+            return
         for node in self.cfg.nodes:
             for succ in self.cfg.successors(node):
                 self.edge_cfg.add_node(f"{node}-{succ}")
@@ -40,3 +47,4 @@ class IRCFG():
             if e == self.exit:
                 self.edge_cfg_exit.append(edge)
                 
+        return

@@ -24,16 +24,21 @@ tree5 = ExpTree('mul', '*')
 tree5.add_child(tree3)
 tree5.add_child(tree)
 
-tree5.show()
 
 
 tree6 = copy_tree(tree5)
 tree6.root_data = '/'
-tree5.show()
-tree6.show()
 
 dic = exptree_to_json(tree6)
-print(dic)
 
 tree6 = irjson_to_exptree(dic)
 tree6.show()
+
+print(leaf_num(tree6))
+
+print(op_num(tree6))
+print(op_num(tree3))
+
+ops = {}
+op_type(tree6, ops)
+print(ops)

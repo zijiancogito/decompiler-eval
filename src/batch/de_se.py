@@ -1,17 +1,15 @@
 import sys
-sys.path.append('../se/ir')
-sys.path.append('../se/utils')
 sys.path.append('../')
 import os
-os.chdir('../data_flow')
 import csv
 from exp_tree.exp_tree import *
 import json
 from ctypes import *
+from processData.extractFunc import *
 
-dese = cdll.LoadLibrary("/home/zrz/decompiler-eval/src/data_flow/libse.so")
+dese = cdll.LoadLibrary("/home/eval/decompiler-eval/src/data_flow/libse.so")
 run_se = dese.process
-run_se.argtypes = [POINTER(c_char)]
+run_se.argtypes = [POINTER(c_char), c_int]
 run_se.restype = c_char_p
 
 def log_err(err_path, err_msg):
@@ -20,6 +18,7 @@ def log_err(err_path, err_msg):
         r = [err_msg]
         writer.writerow(r)
 
+'''
 def batch_de_execution(des_dir, save_to):
     de_dirs = os.listdir(des_dir)
     for de_dir_name in de_dirs:
@@ -41,6 +40,7 @@ def batch_de_execution(des_dir, save_to):
             funcname = os.path.splitext(de_file_name)[0]
             with open(os.path.join(save_path, funcname + '.json'), 'w') as f:
                 json.dump(paths, f)
+'''
 
 def batch_de_execution_from_csv(csv_path, save_to):
     with open(csv_path, 'r') as f:
@@ -70,7 +70,7 @@ def batch_de_execution_from_csv(csv_path, save_to):
             # try:
             STR = (c_char * (len(de_file) + 1))(*bytes(de_file,'utf-8'))
             cast(STR, POINTER(c_char))
-            paths = run_se(STR).decode()
+            paths = run_se(STR, 0).decode()
             paths = load_from_json(json.loads(paths))
             fns = os.path.splitext(filename)[0].split('-')
             funcname = fns[-1]
@@ -88,13 +88,32 @@ def batch_de_execution_from_csv(csv_path, save_to):
             # except Exception as e:
             #     log_err('/home/zrz/decompiler-eval/src/batch/err_py.csv', de_file)
                     
+def batch_de_execution(des_dir, save_to):
+    de_files = os.listdir(des_dir)
+    for de_file in de_files:
+        de_file_path = os.path.join(des_dir, de_file)
+        extract_funcs = ExtractFuncs()
+        funcs, funcs_name = extract_funcs.getFuncs(de_file_path)
+        print(de_file_path)
+        for i in range(len(funcs)):
+            func = funcs[i]
+            func_name = funcs_name[i]
+            STR = (c_char * (len(func) + 1))(*bytes(func,'utf-8'))
+            cast(STR, POINTER(c_char))
+            paths = run_se(STR, 1).decode()
+            paths = load_from_json(json.loads(paths))
 
+            save_path = os.path.join(save_to, os.path.splitext(de_file)[0])
+            if not os.path.exists(save_path):
+                os.makedirs(save_path)
+            with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
+                json.dump(paths, f)
 
-batch_de_execution("/home/eval/POJ/test/c", "/home/eval/POJ/test/se/ida")
+batch_de_execution("/home/eval/test/dec", "/home/eval/test/se/ida")
 # de_file = "/home/eval/POJ/test/c/10-11-11/main.txt"
 # STR = (c_char * (len(de_file) + 1))(*bytes(de_file,'utf-8'))
 # cast(STR, POINTER(c_char))
-# paths = run_se(STR).decode()
+# paths = run_se(STR, 0).decode()
 # paths = load_from_json(json.loads(paths))
 # with open('./out.json', 'w') as f:
 #     json.dump(paths, f)

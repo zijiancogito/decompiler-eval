@@ -32,6 +32,7 @@ syscall_funcs = [
         'strstr',
         'malloc',
         'sqrt',
+        'rand',
 
 ]
 

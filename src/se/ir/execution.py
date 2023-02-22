@@ -129,7 +129,6 @@ def parse_call(instruction):
                 params.append(pat_find[0])
         else:
             continue
-    print(params)
     
     return func_name, params
 

@@ -16,12 +16,42 @@ class ExpTree:
             for i in range(depth):
                 print('--', end='')
             child.show(depth)
-    
+
     #def show(self, depth=0):
 
 
     def add_child(self, child):
         self.children.append(child)
+
+def leaf_num(tree):
+    if len(tree.children) == 0:
+        return 1
+    ln = 0
+    for child in tree.children:
+        ln += leaf_num(child)
+    return ln
+
+def op_num(tree):
+    ln = 0
+    if len(tree.children) != 0:
+        ln += 1
+    else:
+        return 0
+    for child in tree.children:
+        ln += op_num(child)
+    return ln
+
+def op_type(tree, op_dict):
+    if len(tree.children) != 0:
+        if tree.root_data in op_dict:
+            op_dict[tree.root_data] += 1
+        else:
+            op_dict[tree.root_data] = 1
+    else:
+        return
+    for child in tree.children:
+        op_type(child, op_dict)
+    return
     
 def copy_tree(tree):
     if tree is None:
@@ -67,10 +97,10 @@ def json_to_exptree(json_data: dict):
 
     return tree
 
-def irjson_to_exptree(json_data):
+def sejson_to_exptree(json_data):
     tree = ExpTree(json_data["tag"], json_data["data"])
     for child in json_data["children"]:
-        tree.add_child(irjson_to_exptree(child))
+        tree.add_child(sejson_to_exptree(child))
     return tree
     
 
@@ -108,6 +138,14 @@ def load_from_json(json_data):
     return json_data
 """
 
+def replace_data_in_tree(tree, st):
+    # TODO
+    print(tree.root_data)
+    print(st)
+    if tree.root_data in st:
+        tree.root_data = st[tree.root_data]
+    for child in tree.children:
+        replace_data_in_tree(child)
 
 if __name__ == '__main__':
     s = '''{
