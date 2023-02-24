@@ -1,1 +1,1 @@
-{"expressions": [{"condition": [], "variables": {"%3": {"data": "%1", "tag": "pointer", "children": []}}, "path": [0, 0]}], "input_symbols": null, "output_symbols": {"%3": "return0"}}
+{"expressions": [{"conditions": [], "variables": {"return0": {"data": "scanf0", "tag": "symbol", "children": []}, "return1": {"data": "scanf1", "tag": "symbol", "children": []}}, "path": [0, 0]}]}

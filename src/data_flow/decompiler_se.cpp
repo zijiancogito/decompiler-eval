@@ -41,6 +41,119 @@ Variable *variable_copy(Variable *v)
     return new_v;
 }
 
+bool calculate(int left, std::string op, int right, int &res)
+{
+    bool valid_calculate = true;
+    if (op == "%") {
+        res = left % right;
+    } else if (op == "&") {
+        res = left & right;
+    } else if (op == "*") {
+        res = left * right;
+    } else if (op == "/") {
+        if (right == 0)
+            valid_calculate = false;
+        else
+            res = left / right;
+    } else if (op == "+") {
+        res = left + right;
+    } else if (op == "-") {
+        res = left - right;
+    } else if (op == "<<") {
+        res = left << right;
+    } else if (op == ">>") {
+        res = left >> right;
+    } else if (op == "^") {
+        res = left ^ right;
+    } else if (op == "|") {
+        res = left | right;
+    } else {
+        valid_calculate = false;
+    }
+    return valid_calculate;
+}
+
+bool simplification(Json::Value &expression)
+{
+    Json::Value copy = expression;
+    std::stack<Json::Value *> exp_list;
+    exp_list.push(&expression);
+    while (!exp_list.empty()) {
+        Json::Value *exp = exp_list.top();
+        exp_list.pop();
+        if ((*exp)["type"] == "binary_expression") {
+            if ((*exp)["left"]["type"] == "number_literal" && (*exp)["right"]["type"] == "number_literal") {
+                int res;
+                if (calculate(std::stoi((*exp)["left"]["value"].asString()), (*exp)["op"].asString(), std::stoi((*exp)["right"]["value"].asString()), res)) {
+                    (*exp).clear();
+                    (*exp)["type"] = "number_literal";
+                    (*exp)["value"] = std::to_string(res);
+                }
+            } else {
+                bool check = false;
+
+                if ((*exp)["right"]["type"] == "number_literal" &&
+                    (*exp)["left"]["type"] == "binary_expression" &&
+                    (*exp)["right"]["value"] == "0" && 
+                    std::find(begin(relational_ops), end(relational_ops), (*exp)["left"]["op"].asString()) != end(relational_ops)) {
+                    if ((*exp)["op"] == "==") {
+                        (*exp) = (*exp)["left"];
+                        (*exp)["op"] = opposite_relation((*exp)["op"].asString());
+                    } else if ((*exp)["op"] == "!=") {
+                        (*exp) = (*exp)["left"];
+                    }
+                }
+
+                if ((*exp)["left"]["type"] == "number_literal") {
+                    if (((*exp)["left"]["value"] == "0" && (*exp)["op"] == "+") || 
+                        ((*exp)["left"]["value"] == "1" && (*exp)["op"] == "*") ||
+                        ((*exp)["left"]["value"] == "0xffffffff" && (*exp)["op"] == "&")) {
+                        (*exp) = (*exp)["right"];
+                        check = true;
+                    } else if ((*exp)["left"]["value"] == "0" && (*exp)["op"] == "*") {
+                        (*exp) = (*exp)["left"];
+                        check = true;
+                    }
+                }
+
+                if (!check && (*exp)["right"]["type"] == "number_literal") {
+                    if (((*exp)["right"]["value"] == "0" && ((*exp)["op"] == "+" || (*exp)["op"] == "-")) || 
+                        ((*exp)["right"]["value"] == "1" && ((*exp)["op"] == "*" || (*exp)["op"] == "/")) ||
+                        ((*exp)["right"]["value"] == "0xffffffff" && (*exp)["op"] == "&")) {
+                        (*exp) = (*exp)["left"];
+                        check = true;
+                    } else if ((*exp)["right"]["value"] == "0" && (*exp)["op"] == "*") {
+                        (*exp) = (*exp)["right"];
+                        check = true;
+                    }
+                }
+
+                if (check) {
+                    if ((*exp)["type"] == "binary_expression" || (*exp)["type"] == "call_expression")
+                        exp_list.push(exp);
+                } else {
+                    if ((*exp)["left"]["type"] == "binary_expression" || (*exp)["left"]["type"] == "call_expression")
+                        exp_list.push(&(*exp)["left"]);
+                    if ((*exp)["right"]["type"] == "binary_expression" || (*exp)["left"]["type"] == "call_expression")
+                        exp_list.push(&(*exp)["right"]);
+                }
+            }
+        } else if ((*exp)["type"] == "call_expression") {
+            Json::Value *args = &(*exp)["args"];
+            for (int i = 0; i < args->size(); i ++ ) {
+                if ((*args)[i]["type"] == "binary_expression" || (*args)[i]["type"] == "call_expression")
+                    exp_list.push(&(*args)[i]);
+            }
+        } else if ((*exp)["type"] == "pointer_expression") {
+            Json::Value *val = &(*exp)["value"];
+            exp_list.push(val);
+        }
+        
+    }
+
+    return copy != expression;
+}
+
 void print_input(std::unordered_map<std::string, Variable*> &var_map)
 {
     printf("input:  ");
@@ -77,9 +190,40 @@ void create_var_map(std::unordered_map<std::string, Variable*> &var_map, TSNode 
         v->is_input = is_input;
         v->is_global = false;
         var_map.emplace(name, v);
-        if (is_input) 
-            params.push_back(name);
+        if (is_input) {
+            v->expression["type"] = "input_symbol";
+            v->expression["value"] = "param" + std::to_string(params_num ++);
+        }
     }
+}
+
+std::string json_to_string(Json::Value json)
+{
+    std::string ret;
+    if (json.empty())
+        return ret;
+    if (json["type"] == "binary_expression") {
+        std::string left = json_to_string(json["left"]);
+        std::string right = json_to_string(json["right"]);
+        std::string op = json["op"].asString();
+        ret = left + op + right;
+    } else if (strstr(json["type"].asCString(), "literal") != NULL || json["type"] == "identifier" || json["type"] == "input_symbol") {
+        ret = json["value"].asString();
+    } else if (json["type"] == "call_expression") {
+        std::string func = json["func"].asString();
+        std::string args = "";
+        if (!json["args"].empty()) {
+            for (auto arg: json["args"])
+                args += json_to_string(arg) + ",";
+            args.pop_back();
+        }
+        ret = func + "(" + args + ")";
+    } else if (json["type"] == "pointer_expression" || json["type"] == "unary_expression") {
+        std::string op = json["op"].asString();
+        std::string val = json_to_string(json["value"]);
+        ret = op + val;
+    }
+    return ret;
 }
 
 void get_variables(TSTreeCursor *cursor, std::unordered_map<std::string, Variable*> &var_map, const char *source, const char *node_filter, bool is_input)
@@ -110,10 +254,22 @@ Json::Value find_input_variables(TSTree *tree, const char *source, std::unordere
         if (strstr(content, "scanf") != NULL) {
             TSNode arguments_node = ts_node_child_by_field_name(tmp->data, "arguments", strlen("arguments"));
             int argument_num = ts_node_child_count(arguments_node);
+            bool is_first_arg = true;
             for (int i = 0; i < argument_num; i ++ ) {
-                // parse arguments one by one
                 TSNode argument_node = ts_node_child(arguments_node, i);
                 std::string argument_type = ts_node_type(argument_node);
+                if (argument_type == "(" || argument_type == "," || argument_type == ")")
+                    continue;
+                if (is_first_arg) {
+                    is_first_arg = false;
+                    continue;
+                } else if (argument_type == "identifier") {
+                    std::string arg_name = get_content(argument_node, source);
+                    std::string name = "*" + arg_name;
+                    ret[name] = "scanf" + std::to_string(scanf_idx ++ );
+                } else if (argument_type == "pointer_expression") {
+                    // TODO
+                }
                 if (argument_type == "binary_expression") {
                     argument_node = ts_node_child_by_field_name(argument_node, "left", strlen("left"));
                 }
@@ -182,7 +338,8 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             Variable *new_v;
             new_v = new Variable;
             new_v->name = id_name;
-            new_v->expression = Json::nullValue;
+            new_v->expression["type"] = "input_symbol";
+            new_v->expression["value"] = "global" + std::to_string(global_num ++);
             new_v->is_input = false;
             new_v->is_output = false;
             new_v->is_global = true;  // set the global field to ture
@@ -323,23 +480,40 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             // parse arguments one by one
             TSNode argument = ts_node_child(argument_list, i);
             std::string argument_type = ts_node_type(argument);
-            if (argument_type != "(" && argument_type != "," && argument_type != ")")
+            if (argument_type != "(" && argument_type != "," && argument_type != ")") {
                 arguments.append(parse_expression(argument, source, var_map, changed_vars));
-        }
-        if (strstr(func_name, "scanf") != NULL) {
-            TSTreeCursor cursor = ts_tree_cursor_new(expression_node);
-            NodeList pnodes;
-            init_node_list(&pnodes);
-            make_move(&cursor, DOWN, &pnodes, "identifier");
-            Node *tmp = pnodes.head;
-            for (int i = 0; i < pnodes.listLen; i ++ ) {
-                tmp = tmp->next;
-                std::string name = get_content(tmp->data, source);
-                if (var_map.find(name) != var_map.end() && var_map.at(name)->is_input) {
-                    Variable *v = var_map.at(name);
-                    Variable *changed_v = variable_copy(v);
-                    changed_vars.emplace(changed_v->name, changed_v);
-                    v->expression = Json::nullValue;
+                if (strstr(func_name, "scanf") != NULL && var_id_map.find(ts_node_start_byte(argument)) != var_id_map.end()) {
+                    std::string var_name;
+                    if (argument_type == "identifier" || argument_type == "binary_expression") {
+                        std::string arg_name = json_to_string(parse_expression(argument, source, var_map, changed_vars));
+                        var_name = "*" + arg_name;
+                    } else if (argument_type == "pointer_expression") {
+                        TSNode op_node = ts_node_child_by_field_name(argument, "operator", strlen("operator"));
+                        TSNode arg_node = ts_node_child_by_field_name(argument, "argument", strlen("argument"));
+                        std::string arg_type = ts_node_type(arg_node);
+                        if (arg_type == "identifier")
+                            var_name = get_content(argument, source);
+                        else if (arg_type == "subscript_expression")
+                            var_name = json_to_string(parse_expression(arg_node, source, var_map, changed_vars));
+                    } 
+                    if (var_name.empty())
+                        continue;
+                    if (var_map.find(var_name) == var_map.end()) {
+                        Variable *new_v = new Variable;
+                        new_v->name = var_name;
+                        new_v->is_input = true;
+                        new_v->is_output = false;
+                        new_v->is_global = false;
+                        new_v->expression["type"] = "input_symbol";
+                        new_v->expression["value"] = var_id_map.at(ts_node_start_byte(argument));
+                    }
+                    else {
+                        Variable *v = var_map.at(var_name);
+                        Variable *changed_v = variable_copy(v);
+                        changed_vars.emplace(changed_v->name, changed_v);
+                        v->expression["type"] = "input_symbol";
+                        v->expression["value"] = var_id_map.at(ts_node_start_byte(argument));
+                    }
                 }
             }
         }
@@ -356,6 +530,11 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
         }
     }
 
+    std::string str = json_to_string(ret);
+    if (var_map.find(str) != var_map.end())
+        ret = var_map.at(str)->expression;
+
+    while(simplification(ret));
     return ret;
 }
 
@@ -397,12 +576,13 @@ Json::Value parse_assignment_expression(TSNode assign_node, const char* source, 
     }
     std::string var_name = get_content(var_node, source);
     Variable *v = NULL;
-    if (var_map.find(var_name) == var_map.end())  // If not found, the variable is considered global
-    {
+    if (var_map.find(var_name) == var_map.end()) {
+        // If not found, the variable is considered global
         Variable *new_v;
         new_v = new Variable;
         new_v->name = var_name;
-        new_v->expression = Json::nullValue;
+        new_v->expression["type"] = "input_symbol";
+        new_v->expression["value"] = "global" + std::to_string(global_num ++);
         new_v->is_input = false;
         new_v->is_output = false;
         new_v->is_global = true;  // set the global field to ture
@@ -418,8 +598,8 @@ Json::Value parse_assignment_expression(TSNode assign_node, const char* source, 
     if (expression.empty()) {
         // not the update_expression
         // set the expression
-        TSNode right_node = ts_node_child(assign_node, 2);
-        TSNode op_node = ts_node_child(assign_node, 1);
+        TSNode right_node = ts_node_child_by_field_name(assign_node, "right", strlen("right"));
+        TSNode op_node = ts_node_child_by_field_name(assign_node, "operator", strlen("operator"));
         const char *op = ts_node_type(op_node);
         if (std::find(begin(self_ops), end(self_ops), op) != end(self_ops)) {
             // "+=", "-=", "*=", etc.
@@ -443,6 +623,8 @@ Json::Value parse_assignment_expression(TSNode assign_node, const char* source, 
         ret = expression;
     }
 
+    while(simplification(expression));
+    while(simplification(ret));
     v->expression = expression;
     return ret;
 }
@@ -557,7 +739,8 @@ Json::Value parse_branch_condition(TSNode con_node, const char* source, std::uno
             Variable *new_v;
             new_v = new Variable;
             new_v->name = var_name;
-            new_v->expression = Json::nullValue;
+            new_v->expression["type"] = "input_symbol";
+            new_v->expression["value"] = "global" + std::to_string(global_num ++);
             new_v->is_input = false;
             new_v->is_output = false;
             new_v->is_global = true;  // set the global field to ture
@@ -593,6 +776,12 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
     BasicBlock *bb = edge->get_destination();
     if (bb == cfg->get_exit()) {
         Json::Value path;
+        for (int i = 0; i < conditions.size(); i ++ ) {
+            while (simplification(conditions[i]));
+        }
+        for (int i = 0; i < outputs.size(); i ++ ) {
+            while (simplification(outputs[i]));
+        }
         path["conditions"] = conditions;
         path["outputs"] = outputs;
         paths.append(path);
@@ -624,12 +813,7 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
         TSNode node = nodes.at(i);
         std::string node_type = ts_node_type(node);
         // std::cout << get_content(node, source) << std::endl;
-        if (node_type == "assignment_expression" || node_type == "update_expression") {
-            // Parse assignment statements and update variable values
-            parse_assignment_expression(node, source, var_map, changed_vars);
-        } else {
-            parse_expression(node, source, var_map, changed_vars);
-        }
+        parse_expression(node, source, var_map, changed_vars);
         // match the nodes to analyze and perform the analysis
         if (node_type == "switch_statement" || node_type == "case_statement")
             continue;
@@ -803,24 +987,15 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
     // get parameters
     get_variables(&cursor, var_map, source, "parameter_declaration", true);
     // get input from scanf function
-    Json::Value inputs = find_input_variables(tree, source, var_map);
+    // Json::Value inputs = find_input_variables(tree, source, var_map);
 
     Json::Value se_res;
-    se_res["inputs"] = inputs;
-    for (int i = 0; i < params.size(); i ++ ) 
-        se_res["inputs"][params[i]] = "param" + std::to_string(i);
 
     Json::Value conditions = Json::arrayValue;
     Json::Value outputs = Json::arrayValue;
     Json::Value paths;
     // cfg->print_cfg();
     symbolic_execution(cfg, entry_edge, visit, source, analyze_nodes, var_map, paths, conditions, outputs);
-
-    int global_num = 0;
-    for (auto it = var_map.begin(); it != var_map.end(); it ++ ) {
-        if ((*it).second->is_global)
-            se_res["inputs"][(*it).first] = "global" + std::to_string(global_num ++ );
-    }
 
     se_res["paths"] = paths;
     char *ret = new char[strlen(se_res.toStyledString().c_str()) + 1];
@@ -832,8 +1007,9 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
 
 extern "C" const char *process(const char *str, MODE mode)
 {
+    params_num = 0;
+    global_num = 0;
     var_id_map.clear();
-    params.clear();
 
     char *source = NULL;
     if (mode == FILE_NAME) {
@@ -863,7 +1039,8 @@ extern "C" const char *process(const char *str, MODE mode)
     NodeList analyze_nodes;
     parse_decompiler_output(tree, &analyze_nodes, "call_expression");
     Node *tmp = analyze_nodes.head;
-    int idx = 0;
+    int scanf_num = 0;
+    int printf_num = 0;
     while (tmp->next != analyze_nodes.tail) {
         Node *tmp2 = tmp;
         tmp = tmp->next;
@@ -878,17 +1055,30 @@ extern "C" const char *process(const char *str, MODE mode)
                 if (arg_type != "(" && arg_type != "," && arg_type != ")") {
                     if (is_first_arg) {
                         is_first_arg = false;
-                        if (arg_type != "string_literal") {
-                            std::string name = "printf" + std::to_string(idx ++ );
-                            var_id_map.emplace(ts_node_start_byte(arg), name);
+                        continue;
+                    }
+                    std::string name = "printf" + std::to_string(printf_num ++ );
+                    var_id_map.emplace(ts_node_start_byte(arg), name);
+                }
+            }
+        } else {
+            if (strstr(get_content(func_node, source), "scanf") != NULL) {
+                TSNode arg_list = ts_node_child_by_field_name(tmp->data, "arguments", strlen("arguments"));
+                int arg_num = ts_node_child_count(arg_list);
+                bool is_first_arg = true;
+                for (int i = 0; i < arg_num; i ++ ) {
+                    TSNode arg = ts_node_child(arg_list, i);
+                    std::string arg_type = ts_node_type(arg);
+                    if (arg_type != "(" && arg_type != "," && arg_type != ")") {
+                        if (is_first_arg) {
+                            is_first_arg = false;
+                            continue;
                         }
-                    } else {
-                        std::string name = "printf" + std::to_string(idx ++ );
+                        std::string name = "scanf" + std::to_string(scanf_num ++ );
                         var_id_map.emplace(ts_node_start_byte(arg), name);
                     }
                 }
             }
-        } else {
             tmp2->next = tmp->next;
             analyze_nodes.listLen -- ;
             tmp = tmp2;
@@ -897,9 +1087,9 @@ extern "C" const char *process(const char *str, MODE mode)
     NodeList return_nodes;
     parse_decompiler_output(tree, &return_nodes, "return_statement");
     Node *tmp2 = return_nodes.head->next;
-    idx = 0;
+    int return_num = 0;
     while (tmp2 != return_nodes.tail) {
-        std::string name = "return" + std::to_string(idx ++ );
+        std::string name = "return" + std::to_string(return_num ++ );
         var_id_map.emplace(ts_node_start_byte(tmp2->data), name);
         Node *tmp3 = tmp2->next;
         tmp2->next = tmp->next;

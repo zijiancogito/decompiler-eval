@@ -49,14 +49,19 @@ std::string self_ops[] = {
     "--",
 };
 
+int params_num;
+int global_num;
 std::unordered_map<int, std::string> var_id_map;
-std::vector<std::string> params;
 
 void free_node_list(NodeList *node_list);
 
 void free_variable(Variable *v);
 
 Variable *variable_copy(Variable *v);
+
+bool calculate(int left, std::string op, int right, int &res);
+
+bool simplification(Json::Value &expression);
 
 void print_input(std::unordered_map<std::string, Variable*> &var_map);
 

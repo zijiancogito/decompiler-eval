@@ -42,7 +42,7 @@ def compare_simple(tree_a, tree_b, st_a, st_b):
     return False
 
 
-def compare(tree_a, tree_b, st_a, st_b):
+def compare(tree_a, tree_b):
     a_leaf = leaf_num(tree_a)
     b_leaf = leaf_num(tree_b)
     if a_leaf != b_leaf:
@@ -66,7 +66,7 @@ def compare(tree_a, tree_b, st_a, st_b):
 
 
         
-def compare_path(cond_a, cond_b, st_a, st_b):
+def compare_path(cond_a, cond_b):
     if len(cond_a) != len(cond_b):
         return None
     cond_b_flag = len(cond_b) * [False]
@@ -76,7 +76,7 @@ def compare_path(cond_a, cond_b, st_a, st_b):
                 break
             tree_a = sejson_to_exptree(c_a)
             tree_b = sejson_to_exptree(c_b)
-            if compare(tree_a, tree_b, st_a, st_b) == True:
+            if compare(tree_a, tree_b) == True:
                 cond_b_flag[index] = True
                 break
     result = True
@@ -84,9 +84,8 @@ def compare_path(cond_a, cond_b, st_a, st_b):
         result = result and f
     return result
 
-def compare_variable(var_a, var_b, st_a, st_b):
+def compare_variable(var_a, var_b):
     tree_a = sejson_to_exptree(var_a)
     tree_b = sejson_to_exptree(var_b)
-    return compare(tree_a, tree_b, st_a, st_b)
-
+    return compare(tree_a, tree_b)
 

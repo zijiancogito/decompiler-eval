@@ -453,25 +453,17 @@ def execution_extractelement(instruction, tmp_dict):
     op1 = match.group(2)
     op2 = match.group(3)
 
-    exp = ExpTree('extractelement', '*')
-    add = ExpTree('address', '+')
+    exp = ExpTree('extractelement', '[]')
     if op1 in tmp_dict:
-        base = tmp_dict[op1]
+        exp.add_child(tmp_dict[op1])
     else:
-        base = ExpTree('pointer', op1)
+        child1 = ExpTree('pointer', op1)
+        exp.add_child(child1)
     if op2 in tmp_dict:
-        index = tmp_dict[op2]
+        exp.add_child(tmp_dict[op2])
     else:
-        if op2 == '0':
-            index = int(op2)
-        else:
-            index = ExpTree('index', op2)
-    if index == 0:
-        exp.add_child(add)
-    else:
-        add.add_child(base)
-        add.add_child(index)
-        exp.add_child(add)
+        child2 = ExpTree('index', op2)
+        exp.add_child(child2)
     return result, exp
 
 def execution_insertelement(instruction, tmp_dict):
@@ -605,7 +597,9 @@ def execution_cmpxchg(instruction, tmp_dict):
     return result, new
 
 def execution_getelementptr(instruction, tmp_dict):
+    # pattern = "([\S]+) = getelementptr [^,\n]*, (([^,\n]+)|([0-9]+ x [^,\n]+)) ([^,\n]+)(, .*)*"
     pattern = "([\S]+) = getelementptr (inbounds )*[^,]+, (.*)"
+    # pattern = "([\S]+) = getelementptr [^\n]*(%[^,\s]+)[,]*(.*)"
     match = re.match(pattern, instruction)
     if not match:
         return None
@@ -614,7 +608,7 @@ def execution_getelementptr(instruction, tmp_dict):
     pattern_op = "[^,\n]+ ([^,\s]+)"
     findall = re.findall(pattern_op, operands)
 
-    exp = ExpTree('getelementptr', '&')
+    exp = ExpTree('getelementptr', '*')
     add = ExpTree('address', '+')
     base = findall[0]
     base_tree = None
@@ -771,28 +765,34 @@ def execution_fcmp(instruction, tmp_dict):
             exp.add_child(child2)
     return result, exp
 
-def execution_phi(instruction, tmp_dict, pre_block):
+def execution_phi(instruction, tmp_dict):
     pattern = "([\S]+) = phi (nnan|ninf|nsz|arcp|contract|afn|reassoc|fast)*[\s]*[\S]+ (.*)"
     match = re.match(pattern, instruction)
     if not match:
         return None
     result = match.group(1)
     nodes = match.group(3)
-    node_pattern = "\[ %([\S]+), ([\S]+) \]"
+    node_pattern = "\[ ([\S]+), ([\S]+) \]"
     find = re.findall(node_pattern, nodes)
     exp = None
     tmp = None
     for f in find:
         var = f[0]
         label = f[1]
-        if int(label) == int(pre_block):
+        if var in tmp_dict:
             tmp = var
             break
+        else:
+            try:
+                tmp = int(var)
+                break
+            except:
+                pass
     
     if tmp in tmp_dict:
         exp = tmp_dict[tmp]
     else:
-        return None
+        exp = ExpTree('phi', tmp)
     return result, exp
 
 def execution_select(instruction, tmp_dict):

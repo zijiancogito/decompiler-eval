@@ -23,6 +23,15 @@ class ExpTree:
     def add_child(self, child):
         self.children.append(child)
 
+    def delete_child(self, child):
+        tmp = []
+        for ch in self.children:
+            if child.root_data == ch.root_data and child.root_tag == ch.root_tag:
+                continue
+            tmp.append(ch)
+        self.children = tmp
+                
+
 def leaf_num(tree):
     if len(tree.children) == 0:
         return 1
@@ -84,7 +93,7 @@ def json_to_exptree(json_data: dict):
         tree = ExpTree(data_to_tag(json_data['op']), json_data['op'])
         tree.add_child(json_to_exptree(json_data['left']))
         tree.add_child(json_to_exptree(json_data['right']))
-    elif 'literal' in json_data['type'] or json_data['type'] == 'identifier':
+    elif 'literal' in json_data['type'] or json_data['type'] in ['identifier', 'input_symbol']:
         tree = ExpTree(data_to_tag(json_data['value']), json_data['value'])
     elif json_data['type'] == 'call_expression':
         tree = ExpTree(data_to_tag(json_data['func']), json_data['func'])
@@ -106,9 +115,7 @@ def sejson_to_exptree(json_data):
 
 def load_from_json(json_data):
     ret = {}
-    ret['input_symbols'] = json_data['inputs']
     ret['expressions'] = []
-    ret['output_symbols'] = {}
 
     paths = json_data['paths']
     for i in range(len(paths)):
@@ -146,6 +153,7 @@ def replace_data_in_tree(tree, st):
         tree.root_data = st[tree.root_data]
     for child in tree.children:
         replace_data_in_tree(child)
+
 
 if __name__ == '__main__':
     s = '''{

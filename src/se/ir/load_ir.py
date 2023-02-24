@@ -12,7 +12,6 @@ import re
 from ircfg import *
 import networkx as nx
 
-from execution import find_input_variables, find_output_variables
 from execution import execution_block
 
 from exp_tree.exp_tree import *
@@ -110,7 +109,6 @@ def path_tracer(paths, graph, start, end, cutoff, traced_nodes):
         if len(traced_nodes) == cutoff:
             break
         
-
 def symbolic_execution(function):
     cfg = build_cfg(function)
     if cfg == None:
@@ -121,45 +119,35 @@ def symbolic_execution(function):
         label = get_label_of_block(blk)
         blks_dict[label] = blk
     
-    input_symbols = find_input_variables(function)
-    output_symbols = find_output_variables(function)
-
     path_exps = []
     path_cond = []
-    # if len(cfg.paths) == 0:
-        # tmp_dict = {}
-        # for ver in cfg.edge_cfg.nodes:
-            # label = int(ver.split("-")[0])
-            # block = blks_dict[label]
-            # execution_block(block, tmp_dict, int(ver.split("-")[1]))
-        # key_var_exps = key_variable_expression(tmp_dict, output_symbols)
-        # path_exps.append(key_var_exps)
-        # path_cond.append([])
-        # return path_cond, path_exps, [], input_symbols, output_symbols
     for path in cfg.paths:
         tmp_dict = {}
         cond = []    
+        iidx_table = {}
+        oidx_table = {}
+        output_symbols = {}
         last_label = None
+        pre_label = None
         for ver in path:
             label =  int(ver.split("-")[0])
             block = blks_dict[label]
             # TODO
-            curr_cond = execution_block(block, tmp_dict, int(ver.split("-")[1]))
+            curr_cond = execution_block(block, tmp_dict, iidx_table, oidx_table, output_symbols, int(ver.split("-")[1]), pre_label)
             if curr_cond != None:
                 cond.append(curr_cond)
             last_label = int(ver.split("-")[1])
+            pre_label = label
         last_block = blks_dict[last_label]
-        last_cond = execution_block(last_block, tmp_dict, -1)
+        last_cond = execution_block(last_block, tmp_dict, iidx_table, oidx_table, output_symbols, -1, pre_label)
         if last_cond != None:
             cond.append(last_cond)
 
         path_cond.append(cond)
-        key_var_exps = key_variable_expression(tmp_dict, output_symbols)
-        path_exps.append(key_var_exps)
+        path_exps.append(output_symbols)
 
-    # print(path_exps)
-    # print_exps(path_cond, path_exps, cfg.paths, output_symbols)
-    return path_cond, path_exps, cfg.paths, input_symbols, output_symbols
+    #print_exps(path_cond, path_exps, cfg.paths)
+    return path_cond, path_exps, cfg.paths
 
 def key_variable_expression(all_vars, output_symbols):
     key_vars = {}
@@ -168,7 +156,7 @@ def key_variable_expression(all_vars, output_symbols):
             key_vars[var] = copy_tree(all_vars[var])
     return key_vars
 
-def print_exps(path_cond, path_exps, paths, output_symbols):
+def print_exps(path_cond, path_exps, paths):
     for cond, exp, path in zip(path_cond, path_exps, paths):
         print("Condition:")
         for c in cond:
@@ -182,13 +170,11 @@ def print_exps(path_cond, path_exps, paths, output_symbols):
         print(last, end=' ')
         print()
         print("Expression:")
-        for var in output_symbols:
-            if var in exp:
-                print(f"{var} = ")
-                exp[var].show()
-                print("---------------------------------------------------")
+        for var in exp:
+            print(var, ' = ')
+            exp[var].show()
 
-def dump_to_file(save_to, filename, funcname, conds, exps, paths, inputs, outputs):
+def dump_to_file(save_to, filename, funcname, conds, exps, paths):
     if not os.path.exists(os.path.join(save_to, filename)):
         os.makedirs(os.path.join(save_to, filename))
     outfile = os.path.join(save_to, filename, f'{funcname}.json')
@@ -201,8 +187,6 @@ def dump_to_file(save_to, filename, funcname, conds, exps, paths, inputs, output
         expression['variables'] = {}
         expression['path'] = []
         for c in cond:
-            if inputs != None:
-                replace_data_in_tree(c, inputs)
             expression['conditions'].append(exptree_to_json(c))
         last = None
         for p in path:
@@ -211,12 +195,8 @@ def dump_to_file(save_to, filename, funcname, conds, exps, paths, inputs, output
             last = int(p.split("-")[1])
         expression['path'].append(last)
         for v in exp:
-            if inputs != None:
-                replace_data_in_tree(exp[v], inputs)
             expression['variables'][v] = exptree_to_json(exp[v])
         js_dict['expressions'].append(expression)
-    js_dict['input_symbols'] = inputs
-    js_dict['output_symbols'] = outputs
     with open(outfile, 'w') as out:
         json.dump(js_dict, out)
 
@@ -235,13 +215,12 @@ def process_functions(llvm_ir, filename, save_to):
             conds = result[0]
             exps = result[1]
             path = result[2]
-            input_symbols = result[3]
-            output_symbols = result[4]
-            dump_to_file(save_to, filename, function.name, conds, exps, path, input_symbols, output_symbols)
+            dump_to_file(save_to, filename, function.name, conds, exps, path)
     return all_names
 
-llvm_ir = read_ir("/home/eval/test/ir/case1003.ll")
-process_functions(llvm_ir, '13', '.')
+if __name__ == '__main__':
+    llvm_ir = read_ir("/home/eval/test/ir/case1003.ll")
+    process_functions(llvm_ir, '13', '.')
 # files = os.listdir('/home/caoy/cy_proj/eval/data/POJ/ir')
 # all_names = list()
 # for f in files:
