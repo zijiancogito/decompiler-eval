@@ -75,6 +75,8 @@ bool calculate(int left, std::string op, int right, int &res)
 
 bool simplification(Json::Value &expression)
 {
+    if (expression.empty())
+        return false;
     Json::Value copy = expression;
     std::stack<Json::Value *> exp_list;
     exp_list.push(&expression);
@@ -166,6 +168,19 @@ void print_input(std::unordered_map<std::string, Variable*> &var_map)
     printf("\n");
 }
 
+
+void get_variables(TSTreeCursor *cursor, std::unordered_map<std::string, Variable*> &var_map, const char *source, const char *node_filter, bool is_input)
+{
+    NodeList all_nodes;
+    init_node_list(&all_nodes);
+    make_move(cursor, DOWN, &all_nodes, node_filter);
+    Node *tmp = all_nodes.head;
+    for (int i = 0; i < all_nodes.listLen; i++) {
+        tmp = tmp->next;
+        create_var_map(var_map, tmp->data, source, is_input);
+    }
+}
+
 void create_var_map(std::unordered_map<std::string, Variable*> &var_map, TSNode var_node, const char *source, bool is_input)
 {
     NodeList all_nodes;
@@ -200,6 +215,7 @@ void create_var_map(std::unordered_map<std::string, Variable*> &var_map, TSNode 
 std::string json_to_string(Json::Value json)
 {
     std::string ret;
+    // std::cout << json.toStyledString() << std::endl;
     if (json.empty())
         return ret;
     if (json["type"] == "binary_expression") {
@@ -224,18 +240,6 @@ std::string json_to_string(Json::Value json)
         ret = op + val;
     }
     return ret;
-}
-
-void get_variables(TSTreeCursor *cursor, std::unordered_map<std::string, Variable*> &var_map, const char *source, const char *node_filter, bool is_input)
-{
-    NodeList all_nodes;
-    init_node_list(&all_nodes);
-    make_move(cursor, DOWN, &all_nodes, node_filter);
-    Node *tmp = all_nodes.head;
-    for (int i = 0; i < all_nodes.listLen; i++) {
-        tmp = tmp->next;
-        create_var_map(var_map, tmp->data, source, is_input);
-    }
 }
 
 Json::Value find_input_variables(TSTree *tree, const char *source, std::unordered_map<std::string, Variable*> &var_map)
@@ -365,19 +369,19 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
         TSNode idx_node = ts_node_child_by_field_name(expression_node, "index", strlen("index"));
         Json::Value arg_expression = parse_expression(arg_node, source, var_map, changed_vars);
         Json::Value idx_expression = parse_expression(idx_node, source, var_map, changed_vars);
-        if (!idx_expression.empty() && idx_expression["type"] == "number_literal") {
-            int idx = atoi(idx_expression["value"].asCString());
-            if (idx == 0)
-                ret = arg_expression;
-        }
-        if (ret.empty()) {
+        // if (!idx_expression.empty() && idx_expression["type"] == "number_literal") {
+        //     int idx = atoi(idx_expression["value"].asCString());
+        //     if (idx == 0)
+        //         ret = arg_expression;
+        // }
+        // if (ret.empty()) {
             ret["type"] = "pointer_expression";
             ret["op"] = "*";
             ret["value"]["type"] = "binary_expression";
             ret["value"]["left"] = arg_expression;
             ret["value"]["op"] = "+";
             ret["value"]["right"] = idx_expression;
-        }
+        // }
     } else if (node_type == "comma_expression") {
         TSNode left_node = ts_node_child_by_field_name(expression_node, "left", strlen("left"));
         TSNode right_node = ts_node_child_by_field_name(expression_node, "right", strlen("right"));
@@ -506,6 +510,7 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
                         new_v->is_global = false;
                         new_v->expression["type"] = "input_symbol";
                         new_v->expression["value"] = var_id_map.at(ts_node_start_byte(argument));
+                        var_map.emplace(var_name, new_v);
                     }
                     else {
                         Variable *v = var_map.at(var_name);
@@ -530,11 +535,11 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
         }
     }
 
+    while(simplification(ret));
     std::string str = json_to_string(ret);
-    if (var_map.find(str) != var_map.end())
+    if (var_map.find(str) != var_map.end() && !var_map.at(str)->expression.empty())
         ret = var_map.at(str)->expression;
 
-    while(simplification(ret));
     return ret;
 }
 
@@ -1000,7 +1005,6 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes)
     se_res["paths"] = paths;
     char *ret = new char[strlen(se_res.toStyledString().c_str()) + 1];
     strcpy(ret, se_res.toStyledString().c_str());
-    // std::cout << se_res["inputs"].toStyledString() << std::endl;
     std::cout << se_res.toStyledString() << std::endl;
     return ret;
 }
@@ -1053,12 +1057,15 @@ extern "C" const char *process(const char *str, MODE mode)
                 TSNode arg = ts_node_child(arg_list, i);
                 std::string arg_type = ts_node_type(arg);
                 if (arg_type != "(" && arg_type != "," && arg_type != ")") {
+                    bool is_var_arg = true;
                     if (is_first_arg) {
                         is_first_arg = false;
-                        continue;
+                        if (arg_type == "string_literal") is_var_arg = false;
                     }
-                    std::string name = "printf" + std::to_string(printf_num ++ );
-                    var_id_map.emplace(ts_node_start_byte(arg), name);
+                    if (is_var_arg) {
+                        std::string name = "printf" + std::to_string(printf_num ++ );
+                        var_id_map.emplace(ts_node_start_byte(arg), name);
+                    }
                 }
             }
         } else {
@@ -1098,6 +1105,7 @@ extern "C" const char *process(const char *str, MODE mode)
         tmp2 = tmp3;
         analyze_nodes.listLen ++ ;
     }
+
     const char *ret = run_se(tree, source, &analyze_nodes);
 
     ts_tree_delete(tree);
@@ -1109,6 +1117,6 @@ extern "C" const char *process(const char *str, MODE mode)
 
 int main()
 {
-    process("./s_test.c", FILE_NAME);
+    process("/home/eval/POJ/test/c/10-1457-1457/main.txt", FILE_NAME);
     return 0;
 }

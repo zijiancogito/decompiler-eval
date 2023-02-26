@@ -18,8 +18,7 @@ def log_err(err_path, err_msg):
         r = [err_msg]
         writer.writerow(r)
 
-'''
-def batch_de_execution(des_dir, save_to):
+def batch_de_execution_from_file(des_dir, save_to):
     de_dirs = os.listdir(des_dir)
     for de_dir_name in de_dirs:
         de_dir = os.path.join(des_dir, de_dir_name)
@@ -31,7 +30,7 @@ def batch_de_execution(des_dir, save_to):
             print(de_file)
             STR = (c_char * (len(de_file) + 1))(*bytes(de_file,'utf-8'))
             cast(STR, POINTER(c_char))
-            paths = run_se(STR).decode()
+            paths = run_se(STR, 0).decode()
             paths = load_from_json(json.loads(paths))
             
             save_path = os.path.join(save_to, de_dir_name)
@@ -40,7 +39,6 @@ def batch_de_execution(des_dir, save_to):
             funcname = os.path.splitext(de_file_name)[0]
             with open(os.path.join(save_path, funcname + '.json'), 'w') as f:
                 json.dump(paths, f)
-'''
 
 def batch_de_execution_from_csv(csv_path, save_to):
     with open(csv_path, 'r') as f:
@@ -88,7 +86,7 @@ def batch_de_execution_from_csv(csv_path, save_to):
             # except Exception as e:
             #     log_err('/home/zrz/decompiler-eval/src/batch/err_py.csv', de_file)
                     
-def batch_de_execution(des_dir, save_to):
+def batch_de_execution_from_str(des_dir, save_to):
     de_files = os.listdir(des_dir)
     for de_file in de_files:
         de_file_path = os.path.join(des_dir, de_file)
@@ -109,7 +107,7 @@ def batch_de_execution(des_dir, save_to):
             with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
                 json.dump(paths, f)
 
-batch_de_execution("/home/eval/test/dec", "/home/eval/test/se/ida")
+batch_de_execution_from_file("/home/eval/POJ/test/c", "/home/eval/POJ/test/se/ida")
 # de_file = "/home/eval/POJ/test/c/10-11-11/main.txt"
 # STR = (c_char * (len(de_file) + 1))(*bytes(de_file,'utf-8'))
 # cast(STR, POINTER(c_char))

@@ -125,8 +125,7 @@ def load_from_json(json_data):
         for j in range(len(paths[i]['conditions'])):
             path['conditions'].append(exptree_to_json(json_to_exptree(paths[i]['conditions'][j])))
         for j in range(len(paths[i]['outputs'])):
-            ret['output_symbols'][paths[i]['outputs'][j]['name']] = paths[i]['outputs'][j]['id']
-            path['variables'][paths[i]['outputs'][j]['name']] = exptree_to_json(json_to_exptree(paths[i]['outputs'][j]))
+            path['variables'][paths[i]['outputs'][j]['id']] = exptree_to_json(json_to_exptree(paths[i]['outputs'][j]))
         ret['expressions'].append(path)
         
     return ret

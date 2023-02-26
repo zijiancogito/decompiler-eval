@@ -2,40 +2,4162 @@
 	"paths" : 
 	[
 		{
-			"conditions" : [],
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
 			"outputs" : 
 			[
 				{
 					"id" : "printf0",
 					"left" : 
 					{
-						"type" : "input_symbol",
-						"value" : "global0"
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
 					},
-					"name" : "v7",
+					"name" : "v4",
 					"op" : "+",
 					"right" : 
 					{
 						"type" : "number_literal",
-						"value" : "3"
+						"value" : "1"
 					},
 					"type" : "binary_expression"
 				},
 				{
-					"id" : "printf1",
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
 					"left" : 
 					{
 						"type" : "input_symbol",
-						"value" : "global1"
+						"value" : "scanf0"
 					},
-					"name" : "v8",
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "0"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "1"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "0"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "1"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "0"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "1"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "0"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "0"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"name" : "v4",
 					"op" : "+",
 					"right" : 
 					{
 						"type" : "number_literal",
-						"value" : "3"
+						"value" : "1"
 					},
 					"type" : "binary_expression"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "0"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "1"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "0"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "1"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"op" : "*",
+						"type" : "pointer_expression",
+						"value" : 
+						{
+							"left" : 
+							{
+								"args" : 
+								[
+									{
+										"left" : 
+										{
+											"type" : "number_literal",
+											"value" : "4"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									}
+								],
+								"func" : "malloc",
+								"type" : "call_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"type" : "number_literal",
+									"value" : "1"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						}
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "0"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "1"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : ">=",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"op" : "<",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "number_literal",
+								"value" : "1"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"type" : "number_literal",
+							"value" : "1"
+						},
+						"type" : "binary_expression"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "1"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "0"
+				},
+				{
+					"id" : "return0",
+					"name" : "return0",
+					"type" : "number_literal",
+					"value" : "0"
+				}
+			]
+		},
+		{
+			"conditions" : 
+			[
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"op" : "<=",
+					"right" : 
+					{
+						"type" : "number_literal",
+						"value" : "0"
+					},
+					"type" : "binary_expression"
+				}
+			],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"name" : "v4",
+					"type" : "number_literal",
+					"value" : "0"
 				},
 				{
 					"id" : "return0",
