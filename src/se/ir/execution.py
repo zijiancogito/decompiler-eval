@@ -53,39 +53,32 @@ def find_ret_symbols(op, tmp_dict, output_index_table, output_symbols):
 def execution_block(block, tmp_dict, input_index_table, output_index_table, output_symbols, next_block, pre_block):
     last_insn = None
     for instruction in block.instructions:
-        res = None
+        last_insn = instruction
         if instruction.opcode == 'call':
             func_name, ps = parse_call(str(instruction).strip())
             if func_name == '__isoc99_scanf' or func_name == 'scanf':
                 find_input_symbols(ps, tmp_dict, input_index_table)
-                continue
             elif func_name == 'printf':
                 find_printf_symbols(ps, tmp_dict, output_index_table, output_symbols)
-                continue
-            elif func_name == 'phi':
-                # TODO
-                result = execution_phi(str(instruction).strip(), tmp_dict, pre_block)
-                if result == None:
-                    return None
-                tmp_dict[res[0]] = res[1]
+            elif func_name.startswith('llvm.lifetime'):
+                pass
             else:
-                res = execution_instruction(instruction, tmp_dict)
+                execution_instruction(instruction, tmp_dict)
+        elif instruction.opcode == 'phi':
+            result = execution_phi(str(instruction).strip(), tmp_dict, pre_block)
+            if result == None:
+                print("phi parse Failed.")
+                print(instruction)
+                return None
+            tmp_dict[result[0]] = result[1]
         elif instruction.opcode == 'ret':
             op_ret = parse_ret(str(instruction).strip())
             find_ret_symbols(op_ret, tmp_dict, output_index_table, output_symbols)
-            continue
         else:
-            res = execution_instruction(instruction, tmp_dict)
+            execution_instruction(instruction, tmp_dict)
         
-        if res == None:
-            if instruction.opcode == 'br' or instruction.opcode == 'alloca':
-                pass
-            else:
-                print(instruction.opcode)
-                print(instruction)
-        last_insn = instruction
-    
     curr_cond = None
+    # print(last_insn)
     if last_insn.opcode == "br":
         jump_kind, res = parse_br(str(last_insn).strip())
         if jump_kind == "jc":
@@ -96,19 +89,21 @@ def execution_block(block, tmp_dict, input_index_table, output_index_table, outp
                 curr_cond = copy_tree(tmp_dict[cond])
             elif false_dest == next_block:
                 curr_cond = copy_tree(tmp_dict[cond])
-                if cond == ">":
+                cmp = tmp_dict[cond].root_data
+                if cmp == ">":
                     curr_cond.root_data = '<='
-                elif cond == '>=':
+                elif cmp == '>=':
                     curr_cond.root_data = '<'
-                elif cond == '==':
+                elif cmp == '==':
                     curr_cond.root_data = '!='
-                elif cond == '!=':
+                elif cmp == '!=':
                     curr_cond.root_data = '=='
-                elif cond == '<':
+                elif cmp == '<':
                     curr_cond.root_data = '>='
-                elif cond == '<=':
+                elif cmp == '<=':
                     curr_cond.root_data = '>'
 
+    # print(curr_cond)
     return curr_cond
 
 def parse_call(instruction):

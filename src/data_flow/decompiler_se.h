@@ -5,6 +5,8 @@
 #include <tree_sitter/api.h>
 #include "decompiler_output_parser.h"
 
+#define GET_SELF 1
+
 extern "C" {
 TSLanguage *tree_sitter_c();
 }
@@ -76,7 +78,9 @@ std::string opposite_relation(std::string relational_op);
 // bool in_node_list(NodeList *all_nodes, TSNode node);
 bool in_node_list(NodeList *all_nodes, TSNode node, const char *source);
 
-Json::Value parse_expression(TSNode expression_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars);
+bool is_valid_condition(Json::Value conditions, int con_num);
+
+Json::Value parse_expression(TSNode expression_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars, int get_self = 0);
 
 Json::Value parse_assignment_expression(TSNode assign_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars);
 

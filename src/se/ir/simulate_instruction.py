@@ -778,13 +778,13 @@ def execution_phi(instruction, tmp_dict, pre_block):
         return None
     result = match.group(1)
     nodes = match.group(3)
-    node_pattern = "\[ %([\S]+), ([\S]+) \]"
+    node_pattern = "\[ ([\S]+), %([\S]+) \]"
     find = re.findall(node_pattern, nodes)
     exp = None
     tmp = None
     for f in find:
         var = f[0]
-        label = f[1]
+        label = f[1].strip('%')
         if int(label) == int(pre_block):
             tmp = var
             break
@@ -792,7 +792,11 @@ def execution_phi(instruction, tmp_dict, pre_block):
     if tmp in tmp_dict:
         exp = tmp_dict[tmp]
     else:
-        return None
+        try:
+            tmp = int(tmp)
+            exp = ExpTree('value', tmp)
+        except:
+            return None
     return result, exp
 
 def execution_select(instruction, tmp_dict):

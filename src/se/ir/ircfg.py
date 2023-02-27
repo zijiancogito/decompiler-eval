@@ -28,6 +28,8 @@ class IRCFG():
             return
         for node in self.cfg.nodes:
             for succ in self.cfg.successors(node):
+                if succ == node:
+                    continue
                 self.edge_cfg.add_node(f"{node}-{succ}")
         for edge1 in self.edge_cfg.nodes:
             edge1_s = int(edge1.split('-')[0])

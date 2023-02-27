@@ -20,6 +20,7 @@ compiler_generated_funcs = [
         '__cxa_atexit',
         'llvm.memset.p0i8.i64',
         '_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_',
+        'llvm.lifetime',
 
 ]
 

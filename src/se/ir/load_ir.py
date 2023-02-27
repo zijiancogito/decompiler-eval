@@ -45,7 +45,7 @@ def parse_jump_instruction(instruction):
     return findi
 
 def build_cfg(function):
-    # print(f"Function: {function.name}")
+    print(f"Function: {function.name}")
     cfg = IRCFG()
     last_block = None
     first_block = None
@@ -55,7 +55,7 @@ def build_cfg(function):
         label = get_label_of_block(block)
         if cnt == 0:
             first_block = label
-        # print(f"Label: {label}")
+        print(f"Label: {label}")
         cfg.cfg.add_node(label)
         cnt += 1
         last_block = label
@@ -95,7 +95,7 @@ def build_cfg(function):
             break
     return cfg
 
-@func_set_timeout(30)
+@func_set_timeout(90)
 def path_tracer(paths, graph, start, end, cutoff, traced_nodes):
     for path in nx.all_simple_paths(graph, start, end, cutoff):
         for p in path:
@@ -134,6 +134,7 @@ def symbolic_execution(function):
             block = blks_dict[label]
             # TODO
             curr_cond = execution_block(block, tmp_dict, iidx_table, oidx_table, output_symbols, int(ver.split("-")[1]), pre_label)
+            # print(curr_cond)
             if curr_cond != None:
                 cond.append(curr_cond)
             last_label = int(ver.split("-")[1])
@@ -142,6 +143,7 @@ def symbolic_execution(function):
         last_cond = execution_block(last_block, tmp_dict, iidx_table, oidx_table, output_symbols, -1, pre_label)
         if last_cond != None:
             cond.append(last_cond)
+        # print(len(cond))
 
         path_cond.append(cond)
         path_exps.append(output_symbols)
@@ -209,6 +211,8 @@ def process_functions(llvm_ir, filename, save_to):
             continue
         if function.name in utils.syscall_funcs:
             continue
+        if function.name.startswith('llvm.lifetime'):
+            continue
         all_names.append(function.name)
         result = symbolic_execution(function)
         if result != None:
@@ -219,7 +223,7 @@ def process_functions(llvm_ir, filename, save_to):
     return all_names
 
 if __name__ == '__main__':
-    llvm_ir = read_ir("/home/eval/test/ir/case1003.ll")
+    llvm_ir = read_ir("/home/eval/POJ/test/ir/10-11-11.ll")
     process_functions(llvm_ir, '13', '.')
 # files = os.listdir('/home/caoy/cy_proj/eval/data/POJ/ir')
 # all_names = list()

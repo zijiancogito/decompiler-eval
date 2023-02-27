@@ -1,7 +1,7 @@
 CC       = clang
 CXX      = clang++
 CFLAGS   = -Wall -O -fPIC
-CXXFLAGS = -ljsoncpp
+CXXFLAGS = -g -ljsoncpp
 INCLUDE  = -I ./ -I ../tree-sitter/ -I ../tree-sitter/tree-sitter/lib/include/ -I ../cfg/
 # TARGET   = libse.so
 TARGET   = se

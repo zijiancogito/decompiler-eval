@@ -1,1 +1,2 @@
-先获取ret，再对比var_map
+assignment_expression左侧为数组还未解决
+memset问题先不处理
