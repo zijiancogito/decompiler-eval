@@ -68,7 +68,7 @@ def execution_var(block, tmp_dict, input_index_table, output_index_table, output
                 find_printf_symbols(ps, tmp_dict, output_index_table, output_symbols)
             else:
                 execution_instruction(instruction, tmp_dict)
-                input_index_table[func_name] = 0
+                input_index_table[func_name] = 1
         elif instruction.opcode == 'ret':
             op_ret = parse_ret(str(instruction).strip())
             find_ret_symbols(op_ret, tmp_dict, output_index_table, output_symbols)

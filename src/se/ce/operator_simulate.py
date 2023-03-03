@@ -13,7 +13,7 @@ def div(op1, op2):
         return None
     return int(int(op1) / int(op2))
 
-def neg(op1):
+def neg(op):
     return -int(op)
 
 def and2(op1, op2):

@@ -23,14 +23,14 @@ def compare_file(ir_json_file, c_json_file):
     for var in ir_json["expressions"]:
         if var not in c_json["expressions"][0]:
             not_matched_var += 1
-            print(f"NotFound\t{ir_json_file}:\t{var}")
+            print(f"NotFound\t{ir_json_file}\t{c_json_file}\t{var}")
             continue
         ir_exp = ir_json["expressions"][var]
         c_exp = c_json["expressions"][0][var]
         if compare_variable(ir_exp, c_exp):
             matched_var += 1
         else:
-            print(f"NotMatch\t{ir_json_file}:\t{var}")
+            print(f"NotMatch\t{ir_json_file}\t{c_json_file}\t{var}")
     all_ir_vars = len(ir_json["expressions"].keys())
     all_c_vars = len(c_json["expressions"][0].keys())
 

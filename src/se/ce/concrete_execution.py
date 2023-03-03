@@ -1,7 +1,6 @@
 import sys
 sys.path.append('.')
-sys.path.append('../../exp_tree/')
-
+sys.path.append('../../exp_tree')
 from exp_tree import sejson_to_exptree
 from operator_simulate import *
 
@@ -16,24 +15,55 @@ def execution(tree, st):
         else:
             return int(tree.root_data)
     if tree.root_data == '+':
-        return add(execution(tree.children[0], st), execution(tree.children[1], st))
+        op1 = execution(tree.children[0], st)
+        op2 = execution(tree.children[1], st)
+        if op1 == None or op2 == None:
+            return None
+        return add(op1, op2)
     elif tree.root_data == '-':
         if len(tree.children) == 1:
-            return neg(execution(tree.children[0], st))
+            op1 = execution(tree.children[0], st)
+            if op1 == None:
+                return None
+            return neg(op1)
         else:
-            return sub(execution(tree.children[0], st), execution(tree.children[1], st))
+            op1 = execution(tree.children[0], st)
+            op2 = execution(tree.children[1], st)
+            if op1 == None or op2 == None:
+                return None
+            return sub(op1, op2)
     elif tree.root_data == '*':
         if len(tree.children) == 2:
-            return mul(execution(tree.children[0], st), execution(tree.children[1], st))
+            op1 = execution(tree.children[0], st)
+            op2 = execution(tree.children[1], st)
+            if op1 == None or op2 == None:
+                return None
+            return mul(op1, op2)
     elif tree.root_data == '/':
-        return div(execution(tree.children[0], st), execution(tree.children[1], st))
+        op1 = execution(tree.children[0], st)
+        op2 = execution(tree.children[1], st)
+        if op1 == None or op2 == None:
+            return None
+        return div(op1, op2)
     elif tree.root_data == '&':
         if len(tree.children) == 2:
-            return and2(execution(tree.children[0], st), execution(tree.children[1], st))
+            op1 = execution(tree.children[0], st)
+            op2 = execution(tree.children[1], st)
+            if op1 == None or op2 == None:
+                return None
+            return and2(op1, op2)
     elif tree.root_data == '|':
-        return  or2(execution(tree.children[0], st), execution(tree.children[1], st))
+        op1 = execution(tree.children[0], st)
+        op2 = execution(tree.children[1], st)
+        if op1 == None or op2 == None:
+            return None
+        return  or2(op1, op2)
     elif tree.root_data == '^':
-        return xor(execution(tree.children[0], st), execution(tree.children[1], st))
+        op1 = execution(tree.children[0], st)
+        op2 = execution(tree.children[1], st)
+        if op1 == None or op2 == None:
+            return None
+        return xor(op1, op2)
 
 def sample(ir_exp, c_exp, symbols):
     correct = 0
@@ -46,9 +76,9 @@ def sample(ir_exp, c_exp, symbols):
         c_ce = execution(c_exp, st)
         if c_ce == ir_ce:
             correct += 1
-    return correct
+    return correct / 100.0
 
-def test(ir_json_file, c_json_file):
+def test(ir_json_file, c_json_file, var_list):
     ir_json = None
     with open(ir_json_file, 'r') as f:
         ir_json = json.load(f)
@@ -59,9 +89,6 @@ def test(ir_json_file, c_json_file):
         c_json = json.load(f)
     assert c_json, "Load c json failed."
 
-    if len(ir_json["symbols"]) != len(c_json["symbols"]):
-        return None
-
     symbols = []
     for sym in ir_json["symbols"]:
         if sym not in c_json["symbols"]:
@@ -69,19 +96,17 @@ def test(ir_json_file, c_json_file):
         symbols.append(sym)
 
     matched = 0
-    all_vars = 0
-    for var in ir_json["expressions"]:
-        print(var)
-        all_vars += 1
-        if var not in c_json["expressions"][0]:
-            continue
+    for var in var_list:
         ir_exp = sejson_to_exptree(ir_json["expressions"][var])
         c_exp = sejson_to_exptree(c_json["expressions"][0][var])
         correct_rate = sample(ir_exp, c_exp, symbols)
         if correct_rate > 0.9:
             matched += 1
+        else:
+            print(f"{ir_json_file}:\t{var}")
 
-    print(f"{matched} / {all_vars}")
+    return matched
 
 if __name__ == '__main__':
-    test(sys.argv[1], sys.argv[2])
+    matched, all_vars = test(sys.argv[1], sys.argv[2])
+    print(f"{matched} / {all_vars}")
