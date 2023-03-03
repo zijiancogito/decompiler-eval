@@ -2,7 +2,8 @@ import sys
 sys.path.append('../se/ir')
 sys.path.append('../se/utils')
 sys.path.append('../')
-from load_ir import *
+# from load_ir import *
+from df import *
 import pdb
 
 def batch_ir_execution(ir_dir, save_to):
@@ -13,8 +14,13 @@ def batch_ir_execution(ir_dir, save_to):
             continue
         print(filename)
         ir_file = os.path.join(ir_dir, filename)
-        llvm_ir = read_ir(ir_file)
-        process_functions(llvm_ir, filename.split('.')[0], save_to)
+        # llvm_ir = read_ir(ir_file)
+        # process_functions(llvm_ir, filename.split('.')[0], save_to)
+        try:
+            llvm_ir = read_ir(ir_file)
+            process_functions(llvm_ir, filename.split('.')[0], save_to)
+        except:
+            pass
 
 if __name__ == "__main__":
     # batch_ir_execution('/home/data/cy/eval/POJ/process/ir', '/home/data/cy/eval/POJ/process/se/ir')

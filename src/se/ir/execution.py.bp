@@ -5,77 +5,80 @@ sys.path.append('../../')
 from exp_tree.exp_tree import *
 from simulate_instruction import *
 
-def find_output_variables(function):
-    #TODO
-    output_symbols = {}
-    ret_cnt = 0
-    printf_cnt = 0
-    for blk in  function.blocks:
-        for insn in blk.instructions:
-            opc = insn.opcode
-            if opc == 'ret':
-                opd = parse_ret(str(insn).strip())
-                if opd != None:
-                    output_symbols[opd] = f'return{ret_cnt}'
-                    # output_symbols.append((opd, f'return{ret_cnt}')) 
-                    ret_cnt += 1
-            # TODO : add other output type instructions
-            if opc == 'call':
-                func_name, ps = parse_call(str(insn).strip())
-                if func_name == "printf":
-                    for var in ps:
-                        output_symbols[var] = f'printf{printf_cnt}'
-                        printf_cnt += 1
-
-    return output_symbols
-                
-def find_input_variables(function):
-    input_symbols = {}
-    
-    pattern_function_decl = "define [^\n]+\(([^\n]*)\)"
-    match = re.match(pattern_function_decl, str(function).strip())
+def find_parameters(function):
+    pattern = "define [^\n]+\(([^\n]*)\)"
+    match = re.match(pattern, str(function).strip())
     if not match:
         return None
     params_str = match.group(1)
-    params_with_type = [i.strip() for i in params_str.split(',')]
-    pattern_params = "[\S\s]+ (%[p0-9]+)"
+    pattern_params = "[^,] ([\S]+)"
+    find = re.findall(pattern_params, params_str)
 
-    params_cnt = 0
-    for p in params_with_type:
-        match = re.match(pattern_params, p.strip())
-        if match:
-            input_symbols[match.group(1)] = f'param{params_cnt}'
-            params_cnt += 1
+    params = {}
+    for idx, f in enumerate(find):
+        params[f] = f"param{idx}"
+    return params
 
-    scanf_cnt = 0
-    for blk in function.blocks:
-        for insn in blk.instructions:
-            if insn.opcode == 'call':
-                func_name, ps = parse_call(str(insn).strip())
-                if func_name == '__isoc99_scanf' or func_name == 'scanf':
-                    for var in ps:
-                        print(var)
-                        input_symbols[var] = f'scanf{scanf_cnt}'
-                        scanf_cnt += 1
-            # TODO: add more situations
 
-    return input_symbols
-        
-def execution_block(block, tmp_dict, next_block):
+def find_input_symbols(plist, tmp_dict, input_index_table):
+    for var in plist[1:]:
+        if "scanf" in input_index_table:
+            t = ExpTree("symbol", f"scanf{input_index_table['scanf']}")
+            tmp_dict[var] = t
+            input_index_table["scanf"] += 1
+        else:
+            t = ExpTree("symbol", "scanf0")
+            tmp_dict[var] = t
+            input_index_table["scanf"] = 1
+
+def find_printf_symbols(plist, tmp_dict, output_index_table, output_symbols):
+    for var in plist[1:]:
+        if "printf" in output_index_table:
+            output_symbols[f"printf{output_index_table['printf']}"] = copy_tree(tmp_dict[var])
+            output_index_table["printf"] += 1
+        else:
+            output_symbols["printf0"] = copy_tree(tmp_dict[var])
+            output_index_table["printf"] = 1
+
+def find_ret_symbols(op, tmp_dict, output_index_table, output_symbols):
+    if op != None:
+        if 'return' in output_index_table:
+            output_symbols[f"return{output_index_table['return']}"] = tmp_dict[op]
+            output_index_table["return"] += 1
+        else:
+            output_symbols["return0"] = tmp_dict[op]
+            output_index_table['return'] = 1
+
+
+def execution_block(block, tmp_dict, input_index_table, output_index_table, output_symbols, next_block, pre_block):
     last_insn = None
     for instruction in block.instructions:
-        res = execution_instruction(instruction, tmp_dict)
-        #print(instruction)
-        #print(tmp_dict)
-        if res == None:
-            if instruction.opcode == 'br' or instruction.opcode == 'alloca':
-                pass
-            #else:
-                #print(instruction.opcode)
-                #print(instruction)
         last_insn = instruction
-
-    curr_cond = None 
+        if instruction.opcode == 'call':
+            func_name, ps = parse_call(str(instruction).strip())
+            if func_name == '__isoc99_scanf' or func_name == 'scanf':
+                find_input_symbols(ps, tmp_dict, input_index_table)
+            elif func_name == 'printf':
+                find_printf_symbols(ps, tmp_dict, output_index_table, output_symbols)
+            elif func_name.startswith('llvm.lifetime'):
+                pass
+            else:
+                execution_instruction(instruction, tmp_dict)
+        elif instruction.opcode == 'phi':
+            result = execution_phi(str(instruction).strip(), tmp_dict, pre_block)
+            if result == None:
+                print("phi parse Failed.")
+                print(instruction)
+                return None
+            tmp_dict[result[0]] = result[1]
+        elif instruction.opcode == 'ret':
+            op_ret = parse_ret(str(instruction).strip())
+            find_ret_symbols(op_ret, tmp_dict, output_index_table, output_symbols)
+        else:
+            execution_instruction(instruction, tmp_dict)
+        
+    curr_cond = None
+    # print(last_insn)
     if last_insn.opcode == "br":
         jump_kind, res = parse_br(str(last_insn).strip())
         if jump_kind == "jc":
@@ -83,24 +86,24 @@ def execution_block(block, tmp_dict, next_block):
             true_dest = int(res[1])
             false_dest = int(res[2])
             if true_dest == next_block:
-                curr_cond = tmp_dict[cond]
+                curr_cond = copy_tree(tmp_dict[cond])
             elif false_dest == next_block:
                 curr_cond = copy_tree(tmp_dict[cond])
-                if cond == ">":
+                cmp = tmp_dict[cond].root_data
+                if cmp == ">":
                     curr_cond.root_data = '<='
-                elif cond == '>=':
+                elif cmp == '>=':
                     curr_cond.root_data = '<'
-                elif cond == '==':
+                elif cmp == '==':
                     curr_cond.root_data = '!='
-                elif cond == '!=':
+                elif cmp == '!=':
                     curr_cond.root_data = '=='
-                elif cond == '<':
+                elif cmp == '<':
                     curr_cond.root_data = '>='
-                elif cond == '<=':
+                elif cmp == '<=':
                     curr_cond.root_data = '>'
-                # curr_cond.show()
-        #if curr_cond != None:
-            #curr_cond.show()
+
+    # print(curr_cond)
     return curr_cond
 
 def parse_call(instruction):
@@ -436,12 +439,6 @@ def execution_instruction(instruction, tmp_dict):
         return f"{res[0]} = {res[1]}"
     if opcode == "fcmp":
         res = execution_fcmp(str(instruction).strip(), tmp_dict)
-        if res == None:
-            return None
-        tmp_dict[res[0]] = res[1]
-        return f"{res[0]} = {res[1]}"
-    if opcode == "phi":
-        res = execution_phi(str(instruction).strip(), tmp_dict)
         if res == None:
             return None
         tmp_dict[res[0]] = res[1]

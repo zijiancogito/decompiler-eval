@@ -35,16 +35,17 @@ def batch_de_execution_from_file(des_dir, save_to):
             run_se.restype = c_char_p
             STR = (c_char * (len(de_file) + 2))(*bytes(de_file,'utf-8'))
             cast(STR, POINTER(c_char))
-            paths = run_se(STR, 0).decode()
+            paths = run_se(STR, 0)
             dlclose_func(dese._handle)
 
-            paths = load_from_json(json.loads(paths))
-            save_path = os.path.join(save_to, de_dir_name)
-            if not os.path.exists(save_path):
-                os.makedirs(save_path)
-            funcname = os.path.splitext(de_file_name)[0]
-            with open(os.path.join(save_path, funcname + '.json'), 'w') as f:
-                json.dump(paths, f)
+            if paths is not None:
+                paths = load_from_json(json.loads(paths.decode()), 0)
+                save_path = os.path.join(save_to, de_dir_name)
+                if not os.path.exists(save_path):
+                    os.makedirs(save_path)
+                funcname = os.path.splitext(de_file_name)[0]
+                with open(os.path.join(save_path, funcname + '.json'), 'w') as f:
+                    json.dump(paths, f)
 
 def batch_de_execution_from_csv(csv_path, save_to):
     with open(csv_path, 'r') as f:
@@ -79,12 +80,13 @@ def batch_de_execution_from_csv(csv_path, save_to):
             run_se.restype = c_char_p
             STR = (c_char * (len(de_file) + 1))(*bytes(de_file,'utf-8'))
             cast(STR, POINTER(c_char))
-            paths = run_se(STR, 0).decode()
+            paths = run_se(STR, 0)
             dlclose_func(dese._handle)
 
-            paths = load_from_json(json.loads(paths))
-            fns = os.path.splitext(filename)[0].split('-')
-            funcname = fns[-1]
+            if paths is not None:
+                paths = load_from_json(json.loads(paths.decode()))
+                fns = os.path.splitext(filename)[0].split('-')
+                funcname = fns[-1]
             
             # remove function name and decompiler name
             while len(fns) > 3:
@@ -103,12 +105,15 @@ def batch_de_execution_from_str(des_dir, save_to):
     de_files = os.listdir(des_dir)
     for de_file in de_files:
         de_file_path = os.path.join(des_dir, de_file)
+        if os.path.isdir(de_file_path):
+            continue
         extract_funcs = ExtractFuncs()
         funcs, funcs_name = extract_funcs.getFuncs(de_file_path)
         print(de_file_path)
         for i in range(len(funcs)):
             func = funcs[i]
             func_name = funcs_name[i]
+            print(func_name)
             # run cpp
             dese = cdll.LoadLibrary("/home/eval/decompiler-eval/src/data_flow/libse.so")
             run_se = dese.process
@@ -116,17 +121,19 @@ def batch_de_execution_from_str(des_dir, save_to):
             run_se.restype = c_char_p
             STR = (c_char * (len(func) + 1))(*bytes(func,'utf-8'))
             cast(STR, POINTER(c_char))
-            paths = run_se(STR, 1).decode()
+            paths = run_se(STR, 1)
             dlclose_func(dese._handle)
+            
+            if paths is not None:
+                paths = load_from_json(json.loads(paths.decode()), 0)
+                save_path = os.path.join(save_to, os.path.splitext(de_file)[0])
+                if not os.path.exists(save_path):
+                    os.makedirs(save_path)
+                with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
+                    json.dump(paths, f)
 
-            paths = load_from_json(json.loads(paths))
-            save_path = os.path.join(save_to, os.path.splitext(de_file)[0])
-            if not os.path.exists(save_path):
-                os.makedirs(save_path)
-            with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
-                json.dump(paths, f)
-
-batch_de_execution_from_file("/home/eval/POJ/test/c", "/home/eval/POJ/test/se/ida")
+batch_de_execution_from_str("/home/eval/DF/de/gcc/ida/o1", "/home/eval/DF/se/gcc/ida/o1")
+# batch_de_execution_from_str("./test", "./test")
 # de_file = "/home/eval/POJ/test/c/10-11-11/main.txt"
 # de_file = "/home/eval/POJ/test/c/10-1944-1944/main.txt"
 # dese = cdll.LoadLibrary("/home/eval/decompiler-eval/src/data_flow/libse.so")

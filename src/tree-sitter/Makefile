@@ -5,7 +5,7 @@ INCLUDE  = -I ./ -I tree-sitter/lib/include
 TARGET   = libparser.so
 
 OBJS     = decompiler_output_parser.o
-SRCS     = decompiler_output_parser.c
+SRCS     = decompiler_output_parser.c decompiler_output_parser.h
 
 $(OBJS):$(SRCS)
 	$(CC) $(CFLAGS) $(INCLUDE) tree-sitter-c/src/parser.c -c $^ 

@@ -48,12 +48,13 @@ class DecompilerSpider(object):
 
 	def parse_html(self, save_to):
 		binary_name = os.path.basename(self.binary_path)
-		decomps_dir = os.path.join(save_to, binary_name)
+		# decomps_dir = os.path.join(save_to, binary_name)
+		decomps_dir = save_to
 		decomps_url = self.html['decompilations_url']
 		try:
 			decomps_html = self.get_html(decomps_url)
 		except Exception as e:
-			self.logger.waring(decomps_dir + ' get wrong\n' + 'url:' + decomps_url + '\n' + str(e) + '\n')
+			self.logger.warning(binary_name + ' get wrong\n' + 'url:' + decomps_url + '\n' + str(e) + '\n')
 			return
 		decomps_html = decomps_html.json()
 		decomps_list = decomps_html['results']

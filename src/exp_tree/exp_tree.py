@@ -30,7 +30,7 @@ class ExpTree:
                 continue
             tmp.append(ch)
         self.children = tmp
-                
+
 
 def leaf_num(tree):
     if len(tree.children) == 0:
@@ -39,6 +39,7 @@ def leaf_num(tree):
     for child in tree.children:
         ln += leaf_num(child)
     return ln
+
 
 def op_num(tree):
     ln = 0
@@ -94,7 +95,10 @@ def json_to_exptree(json_data: dict):
         tree.add_child(json_to_exptree(json_data['left']))
         tree.add_child(json_to_exptree(json_data['right']))
     elif 'literal' in json_data['type'] or json_data['type'] in ['identifier', 'input_symbol']:
-        tree = ExpTree(data_to_tag(json_data['value']), json_data['value'])
+        if 'tag' in json_data.keys():
+            tree = ExpTree(json_data['tag'], json_data['value'])
+        else:
+            tree = ExpTree(json_data['value'], json_data['value'])
     elif json_data['type'] == 'call_expression':
         tree = ExpTree(data_to_tag(json_data['func']), json_data['func'])
         if json_data['args'] != None:
@@ -111,38 +115,56 @@ def sejson_to_exptree(json_data):
     for child in json_data["children"]:
         tree.add_child(sejson_to_exptree(child))
     return tree
-    
 
-def load_from_json(json_data):
+'''
+def load_from_json(json_data, mode):
     ret = {}
     ret['expressions'] = []
-
     paths = json_data['paths']
-    for i in range(len(paths)):
-        path = {}
-        path['conditions'] = []
-        path['variables'] = {}
-        for j in range(len(paths[i]['conditions'])):
-            path['conditions'].append(exptree_to_json(json_to_exptree(paths[i]['conditions'][j])))
-        for j in range(len(paths[i]['outputs'])):
-            path['variables'][paths[i]['outputs'][j]['id']] = exptree_to_json(json_to_exptree(paths[i]['outputs'][j]))
-        ret['expressions'].append(path)
+    if mode == 1:
+        for i in range(len(paths)):
+            path = {}
+            path['conditions'] = []
+            path['variables'] = {}
+            for j in range(len(paths[i]['conditions'])):
+                path['conditions'].append(exptree_to_json(json_to_exptree(paths[i]['conditions'][j])))
+            for j in range(len(paths[i]['outputs'])):
+                path['variables'][paths[i]['outputs'][j]['id']] = exptree_to_json(json_to_exptree(paths[i]['outputs'][j]))
+            ret['expressions'].append(path)
+    else:
+        pass
         
     return ret
+'''
 
-"""
-def load_from_json(json_data):
-    for i in range(len(json_data)):
-        for j in range(len(json_data[i]['conditions'])):
-            json_data[i]['conditions'][j] = json_to_exptree(json_data[i]['conditions'][j])
-        for j in range(len(json_data[i]['outputs'])):
-            json_data[i]['outputs'][j] = json_to_exptree(json_data[i]['outputs'][j])
-        '''
-        for k in json_data[i]['outputs'].keys():
-            json_data[i]['outputs'][k] = json_to_exptree(json_data[i]['outputs'][k])
-        '''
-    return json_data
-"""
+def load_from_json(json_data, mode):
+    ret = {}
+    ret['symbols'] = []
+    ret['expressions'] = []
+    scanf_num = json_data['scanf_num']
+    params_num = json_data['params_num']
+    global_num = json_data['global_num']
+    for i in range(scanf_num):
+        ret['symbols'].append('scanf' + str(i))
+    for i in range(params_num):
+        ret['symbols'].append('param' + str(i))
+    for i in range(global_num):
+        ret['symbols'].append('global' + str(i))
+    paths = json_data['paths']
+    if mode == 0:
+        for i in range(len(paths)):
+            path = {}
+            for j in range(len(paths[i]['outputs'])):
+                path[paths[i]['outputs'][j]['id']] = exptree_to_json(json_to_exptree(paths[i]['outputs'][j]))
+            ret['expressions'].append(path)
+    else:
+        for i in range(len(paths)):
+            path = []
+            for j in range(len(paths[i]['conditions'])):
+                path.append(exptree_to_json(json_to_exptree(paths[i]['conditions'][j])))
+            ret['expressions'].append(path)
+
+    return ret
 
 def replace_data_in_tree(tree, st):
     # TODO

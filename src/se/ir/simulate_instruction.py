@@ -57,6 +57,34 @@ def execution_add(instruction, tmp_dict):
     op1 = match.group(2)
     op2 = match.group(3)
 
+    try:
+        op1 = int(op1)
+        if op1 < 0:
+            exp = ExpTree('sub', '-')
+            if op2 in tmp_dict:
+                exp.add_child(tmp_dict[op2])
+            else:
+                child1 = ExpTree('operator1', op2)
+                exp.add_child(child1)
+            child2 = ExpTree('operator2', -op1)
+            exp.add_child(child2)
+            return result, exp
+    except:
+        try:
+            op2 = int(op2)
+            if op2 < 0:
+                exp = ExpTree('sub', '-')
+                if op1 in tmp_dict:
+                    exp.add_child(tmp_dict[op1])
+                else:
+                    child1 = ExpTree('operator1', op1)
+                    exp.add_child(child1)
+                child2 = ExpTree('operator2', -op2)
+                exp.add_child(child2)
+                return result, exp
+        except:
+            pass
+
     exp = ExpTree('add', '+')
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
@@ -78,6 +106,32 @@ def execution_fadd(instruction, tmp_dict):
     result = match.group(1)
     op1 = match.group(2)
     op2 = match.group(3)
+    try:
+        op1 = float(op1)
+        if op1 < 0:
+            exp = ExpTree('fsub', '-')
+            if op2 in tmp_dict:
+                exp.add_child(tmp_dict[op2])
+            else:
+                child1 = ExpTree('operator1', op2)
+                exp.add_child(child1)
+            child2 = ExpTree('operator2', -op1)
+            exp.add_child(child2)
+            return result, exp
+    except:
+        try:
+            op2 = float(op2)
+            if op2 < 0:
+                exp = ExpTree('fsub', '-')
+                if op1 in tmp_dict:
+                    exp.add_child(tmp_dict[op1])
+                else:
+                    child1 = ExpTree('operator1', op1)
+                    exp.add_child(child1)
+                child2 = ExpTree('operator2', -op2)
+                return result, exp
+        except:
+            pass
 
     exp = ExpTree('fadd', '+')
     if op1 in tmp_dict:
@@ -387,7 +441,7 @@ def execution_and(instruction, tmp_dict):
     op1 = match.group(2)
     op2 = match.group(3)
 
-    exp = ExpTree('and', '&')
+    exp = ExpTree('and', '*')
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
@@ -645,13 +699,13 @@ def execution_getelementptr(instruction, tmp_dict):
 
 def execution_call(instruction, tmp_dict):
     # pattern = "(([\S]+) = (tail|nysttail|nottail)*)*[\s]*call .* (@[\S]+)\((.*)\)"
-    pattern = "(([\S]+) = (tail|nysttail|nottail)*)*[\s]*call .* (@[\S]+).*\((.*)\)"
+    pattern = "(([\S]+) = (tail|nysttail|nottail)*)*[\s]*call .* @([\S]+).*\((.*)\)"
     match = re.match(pattern, instruction)
     if not match:
         return None
     result = match.group(2)
     func_name = match.group(4)
-    if re.match('@llvm\.lifetime.*', func_name):
+    if re.match('llvm\.lifetime.*', func_name):
         return None
     params_str = match.group(5)
     pattern_params = "([^,]+\([^\)]+\))|([^,]+)"
@@ -662,7 +716,7 @@ def execution_call(instruction, tmp_dict):
     for p in params_find:
         tmp = ""
         if len(p[0]) > 0:
-            pat = "@[\S]+"
+            pat = "@([\S]+)"
             pat_find = re.findall(pat, p[0])
             if len(pat_find) > 0:
                 tmp = pat_find[0]

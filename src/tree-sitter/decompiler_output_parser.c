@@ -111,13 +111,13 @@ void parse_decompiler_output(TSTree * tree, NodeList * all_nodes, const char *no
 void siplify_source(char *source)
 {
   int len = strlen(source);
-  for (int i = 0; i < sizeof(cast)/sizeof(const char*); i ++ ) {
-    char *cast_position = strstr(source, cast[i]);
-    int sub_len = strlen(cast[i]);
-    while (cast_position != NULL) {
-      for (int j = 0; j < len - (cast_position - source); j ++ )
-        *(cast_position + j) = *(cast_position + j + sub_len);
-      cast_position = strstr(source, cast[i]);
+  for (int i = 0; i < sizeof(unnecessary)/sizeof(const char*); i ++ ) {
+    char *unnecessary_position = strstr(source, unnecessary[i]);
+    int sub_len = strlen(unnecessary[i]);
+    while (unnecessary_position != NULL) {
+      for (int j = 0; j < len - (unnecessary_position - source); j ++ )
+        *(unnecessary_position + j) = *(unnecessary_position + j + sub_len);
+      unnecessary_position = strstr(source, unnecessary[i]);
     }
   }
 }

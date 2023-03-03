@@ -25,6 +25,9 @@ compiler_generated_funcs = [
 	'term_proc',
 	'_libc_csu_init',
 	'_libc_csu_fini',
+	'_gmon_start__',
+	'start',
+	'sub_1020',
 ]
 
 class ExtractFuncs(object):

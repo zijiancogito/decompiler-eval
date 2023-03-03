@@ -1,28 +1,24 @@
 {
+    "version": "2.0.0",
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "C/C++: g++ 生成活动文件",
-            "command": "/usr/bin/g++",
-            "args": [
-                "-fdiagnostics-color=always",
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "调试器生成的任务。"
+            "label": "clean", // 任务名称
+            "command": "make", // 命令
+            "args": ["clean"], // 相当于make clean
+            "type": "shell"
+        },
+        {
+            "label": "build-debug",
+            "command": "make",
+            "args": ["debug"],
+            "type": "shell"
+        },
+        {  // 依次调试多个任务，若不配置此，则每次launch只会启动一个任务。
+            "label": "build-all", 
+            "dependsOn": [
+            "clean",
+            "build-debug"
+            ]
         }
-    ],
-    "version": "2.0.0"
+    ]
 }

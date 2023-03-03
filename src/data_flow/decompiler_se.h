@@ -51,6 +51,7 @@ std::string self_ops[] = {
     "--",
 };
 
+int scanf_num;
 int params_num;
 int global_num;
 std::unordered_map<int, std::string> var_id_map;
@@ -84,11 +85,9 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
 
 Json::Value parse_assignment_expression(TSNode assign_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &changed_vars);
 
-Json::Value parse_branch_condition(TSNode con_node, const char* source, std::unordered_map<std::string, Variable*> &var_map, std::unordered_map<std::string, Variable*> &brach_changed_vars, std::unordered_map<std::string, Variable*> &changed_vars, bool condition);
-
 void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, bool> &visit, const char *source, NodeList *analyze_nodes, std::unordered_map<std::string, Variable*> &var_map, Json::Value &paths, Json::Value &conditions, Json::Value &outputs);
 
-const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes);
+const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes, Json::Value &callees);
 
 extern "C" const char *process(const char* str, MODE mode);
 

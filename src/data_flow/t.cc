@@ -2,13 +2,16 @@
 
 int main()
 {
-    std::string literal = "0LL";
-    for (int i = 0; i < literal.size(); i ++ ) {
-        if (!((literal[i] >= '0' && literal[i] <= '9') || literal[i] == '.')) {
-            std::cout << literal[i] << std::endl;
-            literal.erase(i -- , 1);
-        }
-    }
-    std::cout << literal << std::endl;
+    std::string literal = "0xFFFFFFFFuLL";
+    std::string sss = "4294967287LL";
+    char aaa[100];
+
+    sprintf(aaa, "%llx", std::stoll(sss));
+    std::cout << aaa << std::endl;
+
+    int i;
+    sscanf(literal.c_str(), "%x", &i);
+
+    std::cout << i << std::endl;
     return 0;
 }

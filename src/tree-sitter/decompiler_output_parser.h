@@ -27,7 +27,7 @@ typedef struct NodeList {
   int listLen;
 }NodeList;
 
-const char *cast[] = {
+const char *unnecessary[] = {
     "(int)",
     "(int *)",
     "(uint)",
@@ -46,12 +46,25 @@ const char *cast[] = {
     "(unsigned int *)",
     "(unsigned long)",
     "(unsigned long *)",
+    "(unsigned __int8)",
+    "(unsigned __int16)",
+    "(unsigned __int34)",
+    "(unsigned __int64)",
+    "(unsigned __int128)",
     "(_DWORD)",
     "(_DWORD *)",
     "(_WORD)",
     "(_WORD *)",
     "(_BYTE)",
     "(_BYTE *)",
+    "LODWORD",
+    "HIDWORD",
+    "& 0xffffffff",
+    "__stdcall",
+    "__fastcall",
+    "__cdecl",
+    "__thiscall",
+    "__spoils<rdx,rcx,r8,r9,r10,r11,xmm4,xmm5>",
 };
 
 void init_node_list(NodeList * node_list);

@@ -5,23 +5,28 @@ sys.path.append('../../')
 from exp_tree.exp_tree import *
 from simulate_instruction import *
 
-def find_parameters(function):
+def find_parameters(function, tmp_dict, input_index_table):
     pattern = "define [^\n]+\(([^\n]*)\)"
     match = re.match(pattern, str(function).strip())
     if not match:
         return None
     params_str = match.group(1)
-    pattern_params = "[^,] ([\S]+)"
+    pattern_params = "[^,]+ ([^,\s]+)"
     find = re.findall(pattern_params, params_str)
 
-    params = {}
-    for idx, f in enumerate(find):
-        params[f] = f"param{idx}"
-    return params
+    for var in find:
+        if "param" in input_index_table:
+            t = ExpTree("symbol", f"param{input_index_table['param']}")
+            tmp_dict[var] = t
+            input_index_table['param'] += 1
+        else:
+            t = ExpTree("symbol", "param0")
+            tmp_dict[var] = t
+            input_index_table["param"] = 1
 
 
 def find_input_symbols(plist, tmp_dict, input_index_table):
-    for var in plist[1:]:
+    for var in plist:
         if "scanf" in input_index_table:
             t = ExpTree("symbol", f"scanf{input_index_table['scanf']}")
             tmp_dict[var] = t
@@ -32,7 +37,7 @@ def find_input_symbols(plist, tmp_dict, input_index_table):
             input_index_table["scanf"] = 1
 
 def find_printf_symbols(plist, tmp_dict, output_index_table, output_symbols):
-    for var in plist[1:]:
+    for var in plist:
         if "printf" in output_index_table:
             output_symbols[f"printf{output_index_table['printf']}"] = copy_tree(tmp_dict[var])
             output_index_table["printf"] += 1
@@ -49,70 +54,59 @@ def find_ret_symbols(op, tmp_dict, output_index_table, output_symbols):
             output_symbols["return0"] = tmp_dict[op]
             output_index_table['return'] = 1
 
-
-def execution_block(block, tmp_dict, input_index_table, output_index_table, output_symbols, next_block, pre_block):
-    last_insn = None
+def execution_var(block, tmp_dict, input_index_table, output_index_table, output_symbols):
     for instruction in block.instructions:
-        last_insn = instruction
         if instruction.opcode == 'call':
-            func_name, ps = parse_call(str(instruction).strip())
+            func_name, ps, ret = parse_call(str(instruction).strip())
             if func_name == '__isoc99_scanf' or func_name == 'scanf':
-                find_input_symbols(ps, tmp_dict, input_index_table)
+                find_input_symbols(ps[1:], tmp_dict, input_index_table)
+            elif func_name == 'f_scanf_nop':
+                find_input_symbols([ret], tmp_dict, input_index_table)
             elif func_name == 'printf':
+                find_printf_symbols(ps[1:], tmp_dict, output_index_table, output_symbols)
+            elif func_name == 'f_printf':
                 find_printf_symbols(ps, tmp_dict, output_index_table, output_symbols)
-            elif func_name.startswith('llvm.lifetime'):
-                pass
             else:
                 execution_instruction(instruction, tmp_dict)
-        elif instruction.opcode == 'phi':
-            result = execution_phi(str(instruction).strip(), tmp_dict, pre_block)
-            if result == None:
-                print("phi parse Failed.")
-                print(instruction)
-                return None
-            tmp_dict[result[0]] = result[1]
+                input_index_table[func_name] = 0
         elif instruction.opcode == 'ret':
             op_ret = parse_ret(str(instruction).strip())
             find_ret_symbols(op_ret, tmp_dict, output_index_table, output_symbols)
         else:
             execution_instruction(instruction, tmp_dict)
-        
-    curr_cond = None
-    # print(last_insn)
-    if last_insn.opcode == "br":
-        jump_kind, res = parse_br(str(last_insn).strip())
-        if jump_kind == "jc":
-            cond = res[0]
-            true_dest = int(res[1])
-            false_dest = int(res[2])
-            if true_dest == next_block:
-                curr_cond = copy_tree(tmp_dict[cond])
-            elif false_dest == next_block:
-                curr_cond = copy_tree(tmp_dict[cond])
-                cmp = tmp_dict[cond].root_data
-                if cmp == ">":
-                    curr_cond.root_data = '<='
-                elif cmp == '>=':
-                    curr_cond.root_data = '<'
-                elif cmp == '==':
-                    curr_cond.root_data = '!='
-                elif cmp == '!=':
-                    curr_cond.root_data = '=='
-                elif cmp == '<':
-                    curr_cond.root_data = '>='
-                elif cmp == '<=':
-                    curr_cond.root_data = '>'
 
-    # print(curr_cond)
-    return curr_cond
+def execution_cond(block, tmp_dict, input_index_table, output_index_table, output_symbols, next_block, pre_block):
+    last_insn = None
+    for instruction in block.instructions:
+        last_insn = instruction
+        if instruction.opcode == 'call':
+            func_name, ps, ret = parse_call(str(instruction).strip())
+            if func_name == '__isoc99_scanf' or func_name == 'scanf':
+                find_input_symbols(ps[1:], tmp_dict, input_index_table)
+            elif func_name == 'f_scanf_nop':
+                find_input_symbols([ret], tmp_dict, input_index_table)
+            elif func_name == 'printf' or func_name == 'f_printf':
+                pass
+            else:
+                execution_instruction(instruction, tmp_dict)
+        elif instruction.opcode == 'ret':
+            pass
+        else:
+            execution_instruction(instruction, tmp_dict)
+
+    curr_cond = None
+    if last_insn.opcode == 'br':
+        jump_kind, res = parse_br(str(last_insn).strip())
+
 
 def parse_call(instruction):
-    pattern = "[\s\S]*call [\s\S]*@([^(]+)[^\(]*\(([\s\S]*)\)"
+    pattern = "([\S]+)*( = )*[\s\S]*call [\s\S]*@([^(]+)[^\(]*\(([\s\S]*)\)"
     match = re.match(pattern, instruction)
     if not match:
         return None
-    func_name = match.group(1)
-    params_str = match.group(2)
+    ret = match.group(1)
+    func_name = match.group(3)
+    params_str = match.group(4)
 
     # group1 is a const string
     # group2 is a % value
@@ -121,7 +115,7 @@ def parse_call(instruction):
     params = []
     for p in params_find:
         if len(p[0]) > 0:
-            pat = "@[^\s,]+"
+            pat = "@([^\s,]+)"
             pat_find = re.findall(pat, p[0])
             if len(pat_find) > 0:
                 params.append(pat_find[0])
@@ -133,7 +127,7 @@ def parse_call(instruction):
         else:
             continue
     
-    return func_name, params
+    return func_name, params, ret
 
 def parse_ret(instruction):
     pattern_non_void = 'ret [\S]+ ([\S]+)'

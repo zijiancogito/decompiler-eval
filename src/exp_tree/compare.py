@@ -3,11 +3,22 @@ sys.path.append('.')
 
 from exp_tree import *
 
+def compare_data(a, b):
+    try:
+        a = int(a)
+        b = int(b)
+        if a == b:
+            return True
+    except:
+        if a == b:
+            return True
+    return False
+
 def compare_old(tree_a, tree_b):
     if tree_a == tree_b:
         return True
     try:
-        if tree_a.data == tree_b.data:
+        if compare_data(tree_a.root_data, tree_b.root_data):
             results = []
             for child_a, child_b in zip(tree_a.children, tree_b.children):
                 res = compare(child_a, child_b)
@@ -42,7 +53,8 @@ def compare_simple(tree_a, tree_b, st_a, st_b):
     return False
 
 
-def compare(tree_a, tree_b):
+
+def compare_feature(tree_a, tree_b):
     a_leaf = leaf_num(tree_a)
     b_leaf = leaf_num(tree_b)
     if a_leaf != b_leaf:
@@ -57,13 +69,20 @@ def compare(tree_a, tree_b):
     op_type(tree_a, a_tp)
     b_tp = {}
     op_type(tree_b, b_tp)
-    for a in a_tp:
-        if a not in b_tp:
-            return False
-        if a_tp[a] != b_tp[a]:
-            return False
+    # for a in a_tp:
+        # if a not in b_tp:
+            # try:
+                # a = -int(a)
+                # if a not in b_tp:
+                    # return False
+            # except:
+                # return False
+        # if a_tp[a] != b_tp[a]:
+            # return False
     return True
 
+def compare(tree_a, tree_b):
+    return compare_feature(tree_a, tree_b)
 
         
 def compare_path(cond_a, cond_b):
