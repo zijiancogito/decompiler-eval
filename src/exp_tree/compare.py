@@ -82,7 +82,7 @@ def compare_feature(tree_a, tree_b):
     return True
 
 def compare(tree_a, tree_b):
-    return compare_feature(tree_a, tree_b)
+    return compare_old(tree_a, tree_b)
 
         
 def compare_path(cond_a, cond_b):

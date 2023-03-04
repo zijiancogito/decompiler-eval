@@ -20,8 +20,10 @@ def batch_ce(log):
                     vars[ir_file].append(var)
                 else:
                     vars[ir_file] = [var]
-                c_files.append(c_file)
-                ir_files.append(ir_file)
+                if c_file not in c_files:
+                    c_files.append(c_file)
+                if ir_file not in ir_files:
+                    ir_files.append(ir_file)
 
     all_vars = 0
     all_matched = 0

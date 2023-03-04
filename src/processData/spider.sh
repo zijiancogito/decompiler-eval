@@ -1,6 +1,6 @@
 #!/bin/bash
-datas_path="/home/eval/DF/bin/gcc/o1"
-save_to="/home/eval/DF/de/gcc/ida/o1"
+datas_path="/home/eval/DF/bin/gcc/o2"
+save_to="/home/eval/DF/de/gcc/ida/o2"
 
 while :
 do

@@ -132,7 +132,7 @@ def batch_de_execution_from_str(des_dir, save_to):
                 with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
                     json.dump(paths, f)
 
-batch_de_execution_from_str("/home/eval/DF/de/gcc/ida/o1", "/home/eval/DF/se/gcc/ida/o1")
+batch_de_execution_from_str("/home/eval/DF/de/gcc/ida/o0", "/home/eval/DF/se/gcc/ida/o0")
 # batch_de_execution_from_str("./test", "./test")
 # de_file = "/home/eval/POJ/test/c/10-11-11/main.txt"
 # de_file = "/home/eval/POJ/test/c/10-1944-1944/main.txt"

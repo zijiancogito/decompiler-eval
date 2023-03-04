@@ -150,3 +150,43 @@ HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url
 url:https://dogbolt.org/api/binaries/df2b5263-00b2-4eb8-a4c5-98d4386526b2/decompilations/
 HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/df2b5263-00b2-4eb8-a4c5-98d4386526b2/decompilations/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7fa6a633fc70>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
 
+2023-03-04 00:44:59,700 - decompilerSpider - WARNING - 244 get wrong
+url:https://dogbolt.org/api/binaries/bdf7bf91-ae0b-4a38-a113-b171b4cea9b1/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/bdf7bf91-ae0b-4a38-a113-b171b4cea9b1/decompilations/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f6b7b83bc70>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
+
+2023-03-04 02:44:10,436 - decompilerSpider - WARNING - 469 get wrong
+url:https://dogbolt.org/api/binaries/d4b5f376-cf8b-4f49-93ed-d41f9d0843fc/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/d4b5f376-cf8b-4f49-93ed-d41f9d0843fc/decompilations/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f5fef84bc70>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
+
+2023-03-04 03:44:22,104 - decompilerSpider - WARNING - 963 get wrong
+url:https://dogbolt.org/api/binaries/7f4789fd-210f-4396-a704-07b1ce83c01c/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/7f4789fd-210f-4396-a704-07b1ce83c01c/decompilations/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7fa5dcfcbc70>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
+
+2023-03-04 04:59:18,751 - decompilerSpider - WARNING - 672 get wrong
+url:https://dogbolt.org/api/binaries/af7836d0-eaa6-44a0-8693-9e7d16c1abf3/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/af7836d0-eaa6-44a0-8693-9e7d16c1abf3/decompilations/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7ffa1d24bc70>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
+
+2023-03-04 07:29:03,595 - decompilerSpider - WARNING - 698 get wrong
+url:https://dogbolt.org/api/binaries/c9e43b30-797a-4faa-b07a-0ccefdd77ccc/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/c9e43b30-797a-4faa-b07a-0ccefdd77ccc/decompilations/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7fe0c69cfc70>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
+
+2023-03-04 10:37:48,598 - decompilerSpider - WARNING - 180 get wrong
+url:https://dogbolt.org/api/binaries/c94d1ab4-feba-43bf-a128-6ccb78c4f6c8/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/c94d1ab4-feba-43bf-a128-6ccb78c4f6c8/decompilations/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f1a7b9cbc70>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
+
+2023-03-04 11:30:49,151 - decompilerSpider - WARNING - 837 get wrong
+url:https://dogbolt.org/api/binaries/84334b16-9a35-4050-9760-9e2983030c5b/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/84334b16-9a35-4050-9760-9e2983030c5b/decompilations/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f82f3d43c70>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
+
+2023-03-04 14:46:31,847 - decompilerSpider - WARNING - 734 get wrong
+url:https://dogbolt.org/api/binaries/dc3dcbbd-e5b8-4edd-b962-3e5d16505007/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/dc3dcbbd-e5b8-4edd-b962-3e5d16505007/decompilations/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f2ca92d3c70>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
+
+2023-03-04 16:51:56,399 - decompilerSpider - WARNING - /home/eval/DF/de/gcc/ida/o2 get wrong
+url:https://dogbolt.org/api/binaries/40213820-37b1-47d4-867a-aae8e79568fc/decompilations/9e76a1f1-6d21-46f8-aa29-b5dd657f3e0e/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/40213820-37b1-47d4-867a-aae8e79568fc/decompilations/9e76a1f1-6d21-46f8-aa29-b5dd657f3e0e/download/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f7d110d3ee0>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
+
+2023-03-04 16:57:53,207 - decompilerSpider - WARNING - /home/eval/DF/de/gcc/ida/o2 get wrong
+url:https://dogbolt.org/api/binaries/212593f2-57e6-4b88-afce-dd9294a04376/decompilations/15599c98-c931-4c24-84a7-a2685aa132df/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/212593f2-57e6-4b88-afce-dd9294a04376/decompilations/15599c98-c931-4c24-84a7-a2685aa132df/download/ (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f50743cfee0>, 'Connection to dogbolt.org timed out. (connect timeout=10)'))
+
