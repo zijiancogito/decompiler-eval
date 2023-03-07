@@ -1,0 +1,45 @@
+--no-argc
+--no-arrays
+--no-bitfields
+--no-comma-operators
+--no-compound-assignment
+--concise
+--consts
+--divs
+--embedded-assigns
+--no-pre-incr-operator
+--no-pre-decr-operator
+--no-post-incr-operator
+--no-post-decr-operator
+--unary-plus-operator
+--jumps
+--no-longlong
+--no-int8
+--no-uint8
+--float
+--main
+--no-math64
+--no-inline-function
+--max-block-depth 5
+--max-block-size 5
+--max-expr-complexity 2
+--max-funcs 10
+--max-pointer-depth 1
+--max-struct-fields 0
+--max-union-fields 0
+--muls
+--no-safe-math
+--no-packed-struct
+--no-paranoid
+--no-pointers
+--quiet
+--no-structs
+--no-unions
+--no-volatiles
+--no-volatile-pointers
+--no-const-pointers
+--no-global-variables
+--no-builtins
+--no-int128
+--no-uint128
+--no-binary-constant

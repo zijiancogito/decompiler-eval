@@ -140,7 +140,6 @@ def load_from_json(json_data, mode):
 def load_from_json(json_data, mode):
     ret = {}
     ret['symbols'] = []
-    ret['expressions'] = []
     scanf_num = json_data['scanf_num']
     params_num = json_data['params_num']
     global_num = json_data['global_num']
@@ -152,17 +151,19 @@ def load_from_json(json_data, mode):
         ret['symbols'].append('global' + str(i))
     paths = json_data['paths']
     if mode == 0:
+        ret['expressions'] = []
         for i in range(len(paths)):
             path = {}
             for j in range(len(paths[i]['outputs'])):
                 path[paths[i]['outputs'][j]['id']] = exptree_to_json(json_to_exptree(paths[i]['outputs'][j]))
             ret['expressions'].append(path)
     else:
+        ret['conditions'] = []
         for i in range(len(paths)):
             path = []
             for j in range(len(paths[i]['conditions'])):
                 path.append(exptree_to_json(json_to_exptree(paths[i]['conditions'][j])))
-            ret['expressions'].append(path)
+            ret['conditions'].append(path)
 
     return ret
 

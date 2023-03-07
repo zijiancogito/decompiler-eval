@@ -1,4 +1,5 @@
 import networkx as nx
+from func_timeout import func_set_timeout
 
 class IRCFG():
     def __init__(self):
@@ -50,3 +51,17 @@ class IRCFG():
                 self.edge_cfg_exit.append(edge)
                 
         return
+
+    def find_path(self):
+        for s in self.edge_cfg_entry:
+            for e in self.edge_cfg_exit:
+                if nx.has_path(self.edge_cfg, s, e):
+                    path_tracer(self.paths, self.edge_cfg, s, e, len(self.edge_cfg.nodes))
+
+def path_tracer(paths, graph, start, end, cutoff):
+    cnt = 10
+    for path in nx.shortest_simple_paths(graph, start, end, cutoff):
+        if cnt < 0:
+            break
+        cnt = cnt - 1
+        paths.append(path)

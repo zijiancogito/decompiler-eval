@@ -44,7 +44,7 @@ private:
     BasicBlock *parse_loops(BasicBlock *cur_bb, TSNode loop_node);
     BasicBlock *parse_branches(BasicBlock *cur_bb, TSNode branch_node);
     BasicBlock *parse_jump(BasicBlock *cur_bb, TSNode jump_node);
-    BasicBlock *parse_condition(BasicBlock *cur_bb, TSNode contidion_node, std::set<BasicBlock*> &record_bbs);
+    BasicBlock *parse_condition(BasicBlock *cur_bb, TSNode contidion_node, std::vector<BasicBlock*> &record_bbs);
 public:
     // construct function
     CFG(TSTree *tree, const char *source);

@@ -45,8 +45,27 @@ class DecompilerSpider(object):
 				time.sleep(0.3)
 				break
 		return res
+	
+	def lower_version(self, v1, v2):
+		v1_list = v1.split('.')
+		v2_list = v2.split('.')
+		v1_len = len(v1_list)
+		v2_len = len(v2_list)
+		for i in range(v1_len):
+			v1_list[i] = int(v1_list[i])
+		for i in range(v2_len):
+			v2_list[i] = int(v2_list[i])
 
-	def parse_html(self, save_to):
+		for i in range(min(v1_len, v2_len)):
+			if v1_list[i] != v2_list[i]:
+				return v1_list[i] < v2_list[i]
+
+		if v1_len != v2_len:
+			return v1_len < v2_len
+
+		return False
+
+	def parse_html(self, save_to, compile_opti_version):
 		binary_name = os.path.basename(self.binary_path)
 		# decomps_dir = os.path.join(save_to, binary_name)
 		decomps_dir = save_to
@@ -62,15 +81,24 @@ class DecompilerSpider(object):
 		if not os.path.exists(decomps_dir):
 			os.makedirs(decomps_dir, 0o775)
 
+		decomped_name = []
+		decomped_version = {}
 		for i in range(decomps_html['count']):
 			decomp = decomps_list[i]
-			if 'Hex-Rays' not in decomp['decompiler']['name']:
+			if 'Hex-Rays' in decomp['decompiler']['name']:
 				continue
 			# decomp_dir = binary_name + '-' + decomp['decompiler']['name'] + '-' + decomp['decompiler']['version']
 			decomp_file = binary_name + '.txt'
-			# decomp_dir = os.path.join(decomps_dir, decomp_dir)
-			decomp_dir = decomps_dir
+			decomp_dir = os.path.join(os.path.join(decomps_dir, decomp['decompiler']['name']), compile_opti_version)
 			decomp_path = os.path.join(decomp_dir, decomp_file)
+			if os.path.exists(decomp_path):
+				if decomp['decompiler']['name'] in decomped_name:
+					if self.lower_version(decomp['decompiler']['version'], decomped_version[decomp['decompiler']['name']]):
+						continue
+				else:
+					continue
+			decomped_name.append(decomp['decompiler']['name'])
+			decomped_version[decomp['decompiler']['name']] = decomp['decompiler']['version']
 			download_url = decomp['download_url']
 			try:
 				decomp_res = self.get_html(download_url)
@@ -81,9 +109,9 @@ class DecompilerSpider(object):
 				f.write(decomp_res.content.decode('utf-8'))
 			
 
-	def run(self, binary_path, save_to):
+	def run(self, binary_path, save_to, compile_opti_version):
 		self.upload_binary(binary_path)
-		self.parse_html(save_to)
+		self.parse_html(save_to, compile_opti_version)
 
 if __name__ == '__main__':
 	start = time.time()

@@ -5,7 +5,8 @@ from process_data import ProcessData
 p = ProcessData()
 path = sys.argv[1]
 save_to = sys.argv[2]
-p.process_binary(path, save_to)
+compile_opti_version = sys.argv[3]
+p.process_binary(path, save_to, compile_opti_version)
 '''
 try:
     p.process_binary(path, save_to)

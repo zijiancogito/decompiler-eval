@@ -6,6 +6,7 @@
 #include "decompiler_output_parser.h"
 
 #define GET_SELF 1
+#define PARAM true
 
 extern "C" {
 TSLanguage *tree_sitter_c();
@@ -68,9 +69,9 @@ bool simplification(Json::Value &expression);
 
 void print_input(std::unordered_map<std::string, Variable*> &var_map);
 
-void create_var_map(std::unordered_map<std::string, Variable*> &var_map, TSNode var_node, const char *source, bool is_input);
+void add_declarator_to_var_map(std::unordered_map<std::string, Variable*> &var_map, TSNode var_node, const char *source, bool is_param = false);
 
-void get_variables(TSTreeCursor *cursor, std::unordered_map<std::string, Variable*> &var_map, const char *source, const char *node_filter, bool is_input);
+void get_parameters(TSTreeCursor *cursor, std::unordered_map<std::string, Variable*> &var_map, const char *source);
 
 Json::Value find_input_variables(TSTree *tree, const char *source, std::unordered_map<std::string, Variable*> &var_map);
 

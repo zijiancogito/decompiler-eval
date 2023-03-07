@@ -125,15 +125,15 @@ def batch_de_execution_from_str(des_dir, save_to):
             dlclose_func(dese._handle)
             
             if paths is not None:
-                paths = load_from_json(json.loads(paths.decode()), 0)
+                paths = load_from_json(json.loads(paths.decode()), 1)
                 save_path = os.path.join(save_to, os.path.splitext(de_file)[0])
                 if not os.path.exists(save_path):
                     os.makedirs(save_path)
                 with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
                     json.dump(paths, f)
 
-batch_de_execution_from_str("/home/eval/DF/de/gcc/ida/o0", "/home/eval/DF/se/gcc/ida/o0")
-# batch_de_execution_from_str("./test", "./test")
+# batch_de_execution_from_str("/home/eval/DF/de/gcc/ida/os", "/home/eval/DF/se/gcc/ida/os")
+batch_de_execution_from_str("./test", "./test")
 # de_file = "/home/eval/POJ/test/c/10-11-11/main.txt"
 # de_file = "/home/eval/POJ/test/c/10-1944-1944/main.txt"
 # dese = cdll.LoadLibrary("/home/eval/decompiler-eval/src/data_flow/libse.so")

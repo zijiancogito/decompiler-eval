@@ -22,8 +22,8 @@ class ProcessData(object):
 			for b in [binary, strip_binary]:
 				self.process_binary(b)
 
-	def process_binary(self, binary, save_to):
-		self.d.run(binary, save_to)
+	def process_binary(self, binary, save_to, compile_opti_version):
+		self.d.run(binary, save_to, compile_opti_version)
 		# binary_name = os.path.basename(binary)
 		# decomps_dir = os.path.join(save_to, binary_name)
 		# decomp_list = os.listdir(decomps_dir)

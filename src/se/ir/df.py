@@ -38,6 +38,10 @@ def symbolic_execution(function):
 
     input_symbols = []
     for sym in iidx_table:
+        if sym not in ['scanf', 'param']:
+            input_symbols.append(sym)
+            continue
+
         for i in range(iidx_table[sym]):
             input_symbols.append(f"{sym}{i}")
 

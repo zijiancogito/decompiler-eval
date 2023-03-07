@@ -6,8 +6,9 @@ from exp_tree.exp_tree import *
 from simulate_instruction import *
 
 def find_parameters(function, tmp_dict, input_index_table):
-    pattern = "define [^\n]+\(([^\n]*)\)"
-    match = re.match(pattern, str(function).strip())
+    pattern = "[\s\S]*define [^\n]+\(([^\n]*)\)"
+    head = str(function).strip() # .split('\n')[1]
+    match = re.match(pattern, head)
     if not match:
         return None
     params_str = match.group(1)
@@ -23,7 +24,6 @@ def find_parameters(function, tmp_dict, input_index_table):
             t = ExpTree("symbol", "param0")
             tmp_dict[var] = t
             input_index_table["param"] = 1
-
 
 def find_input_symbols(plist, tmp_dict, input_index_table):
     for var in plist:
@@ -75,7 +75,7 @@ def execution_var(block, tmp_dict, input_index_table, output_index_table, output
         else:
             execution_instruction(instruction, tmp_dict)
 
-def execution_cond(block, tmp_dict, input_index_table, output_index_table, output_symbols, next_block, pre_block):
+def execution_cond(block, tmp_dict, input_index_table, next_block, pre_block):
     last_insn = None
     for instruction in block.instructions:
         last_insn = instruction
@@ -89,6 +89,11 @@ def execution_cond(block, tmp_dict, input_index_table, output_index_table, outpu
                 pass
             else:
                 execution_instruction(instruction, tmp_dict)
+        elif instruction.opcode == 'phi':
+            result = execution_phi(str(instruction).strip(), tmp_dict, pre_block)
+            if result == None:
+                return None
+            tmp_dict[result[0]] = result[1]
         elif instruction.opcode == 'ret':
             pass
         else:
@@ -97,7 +102,29 @@ def execution_cond(block, tmp_dict, input_index_table, output_index_table, outpu
     curr_cond = None
     if last_insn.opcode == 'br':
         jump_kind, res = parse_br(str(last_insn).strip())
-
+        if jump_kind == "jc":
+            cond = res[0]
+            true_dest = int(res[1])
+            false_dest = int(res[2])
+            if true_dest == next_block:
+                curr_cond = copy_tree(tmp_dict[cond])
+            elif false_dest == next_block:
+                curr_cond = copy_tree(tmp_dict[cond])
+                cmp = tmp_dict[cond].root_data
+                if cmp == '>':
+                    curr_cond.root_data = '<='
+                elif cmp == '>=':
+                    curr_cond.root_data = '<'
+                elif cmp == '==':
+                    curr_cond.root_data = '!='
+                elif cmp == '!=':
+                    curr_cond.root_data = '=='
+                elif cmp == '<':
+                    curr_cond.root_data = '>='
+                elif cmp == '<=':
+                    curr_cond.root_data = '>'
+    
+    return curr_cond
 
 def parse_call(instruction):
     pattern = "([\S]+)*( = )*[\s\S]*call [\s\S]*@([^(]+)[^\(]*\(([\s\S]*)\)"

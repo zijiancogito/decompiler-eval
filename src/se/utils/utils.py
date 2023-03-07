@@ -21,6 +21,9 @@ compiler_generated_funcs = [
         'llvm.memset.p0i8.i64',
         '_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_',
         'llvm.lifetime',
+        'crc32_gentab',
+        'platform_main_begin',
+        'platform_main_end'
 
 ]
 
