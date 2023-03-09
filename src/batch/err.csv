@@ -1,0 +1,28 @@
+/home/eval/DF/se/clang/ida/o1/873/func8.json  - undefined use
+/home/eval/DF/se/clang/ida/o1/124/func6.json  - 数组识别错误 -> 单拎文件夹
+/home/eval/DF/se/clang/ida/o1/130/func2.json  - undefined use
+/home/eval/DF/se/clang/ida/o1/890/func2.json  - undefined use
+/home/eval/DF/se/clang/ida/o1/432/func7.json  - undefined use
+/home/eval/DF/se/clang/ida/o1/862/func7.json  - undefined use
+/home/eval/DF/se/clang/ida/o1/15/func2.json   - undefined use
+/home/eval/DF/se/clang/ida/o1/512/func3.json  - 多余接收scanf返回值并使用 -> 单拎文件夹
+/home/eval/DF/se/clang/ida/o1/702/func2.json  - undefined use
+/home/eval/DF/se/clang/ida/o1/123/func0.json  - undefined use
+/home/eval/DF/se/clang/ida/o2/124/func6.json  - 数组识别错误 -> 单拎文件夹
+/home/eval/DF/se/clang/ida/o2/581/func8.json  - undefined use
+/home/eval/DF/se/clang/ida/o2/362/func3.json  - printf输出地址
+/home/eval/DF/se/clang/ida/o2/432/func7.json  - undefined use
+/home/eval/DF/se/clang/ida/o2/512/func3.json  - 多余接收scanf返回值并使用 -> 单拎文件夹
+/home/eval/DF/se/clang/ida/o2/702/func2.json  - undefined use
+/home/eval/DF/se/clang/ida/os/124/func6.json  - 数组识别错误 -> 单拎文件夹
+/home/eval/DF/se/clang/ida/os/901/func0.json  - undefined use
+/home/eval/DF/se/clang/ida/os/581/func8.json  - undefined use
+/home/eval/DF/se/clang/ida/os/362/func3.json  - printf输出地址 / undefined use
+/home/eval/DF/se/clang/ida/os/15/func2.json   - undefined use
+/home/eval/DF/se/clang/ida/os/123/func0.json  - undefined use
+/home/eval/DF/se/clang/ida/o3/124/func6.json  - 数组识别错误 -> 单拎文件夹
+/home/eval/DF/se/clang/ida/o3/581/func8.json  - undefined use
+/home/eval/DF/se/clang/ida/o3/362/func3.json  - printf输出地址
+/home/eval/DF/se/clang/ida/o3/432/func7.json  - undefined use
+/home/eval/DF/se/clang/ida/o3/512/func3.json  - 多余接收scanf返回值并使用 -> 单拎文件夹
+/home/eval/DF/se/clang/ida/o3/702/func2.json  - undefined use

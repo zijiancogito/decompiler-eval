@@ -1,5 +1,5 @@
 #!/bin/bash
-datas_path="/home/eval/DF/bin/clang/o3"
+datas_path="/home/eval/DF/bin/clang/os"
 save_to="/home/eval/DF/de/clang"
 
 while :
@@ -7,18 +7,18 @@ do
     let num=0
     for file in `ls $datas_path`
     do
-        if [ ! -e $save_to/angr/o3/$file.txt ] ||
-           [ ! -e $save_to/BinaryNinja/o3/$file.txt ] ||
-           [ ! -e $save_to/Boomerang/o3/$file.txt ] ||
-           [ ! -e $save_to/dewolf/o3/$file.txt ] ||
-           [ ! -e $save_to/Ghidra/o3/$file.txt ] ||
-           [ ! -e $save_to/RecStudio/o3/$file.txt ] ||
-           [ ! -e $save_to/Reko/o3/$file.txt ] ||
-           [ ! -e $save_to/Relyze/o3/$file.txt ] ||
-           [ ! -e $save_to/RetDec/o3/$file.txt ] ||
-           [ ! -e $save_to/Snowman/o3/$file.txt ] ; then
+        if [ ! -e $save_to/angr/os/$file.txt ] ||
+           [ ! -e $save_to/BinaryNinja/os/$file.txt ] ||
+           [ ! -e $save_to/Boomerang/os/$file.txt ] ||
+           [ ! -e $save_to/dewolf/os/$file.txt ] ||
+           [ ! -e $save_to/Ghidra/os/$file.txt ] ||
+           [ ! -e $save_to/RecStudio/os/$file.txt ] ||
+           [ ! -e $save_to/Reko/os/$file.txt ] ||
+           [ ! -e $save_to/Relyze/os/$file.txt ] ||
+           [ ! -e $save_to/RetDec/os/$file.txt ] ||
+           [ ! -e $save_to/Snowman/os/$file.txt ] ; then
             data_path=$datas_path/$file
-            python3 run_spider.py $data_path $save_to o3 >/dev/null
+            python3 run_spider.py $data_path $save_to os >/dev/null
             echo Over: $data_path
             let num+=1
         fi

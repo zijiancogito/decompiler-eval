@@ -612,18 +612,16 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
                     }
                 }
             }
-            ret["type"] = node_type;
-            ret["func"] = func_name;
-            ret["args"] = arguments;
+            ret["type"] = "input_symbol";
+            ret["value"] = func_name;
         }
     } else if (node_type == "sizeof_expression") {
         // TSNode type_node = ts_node_child_by_field_name(expression_node, "type", strlen("type"));
-        TSNode value_node = ts_node_child_by_field_name(expression_node, "value", strlen("value"));
-        Json::Value arguments = Json::arrayValue;
-        arguments.append(parse_expression(value_node, source, var_map, changed_vars));
-        ret["type"] = "call_expression";
-        ret["func"] = "sizeof";
-        ret["args"] = arguments;
+        // TSNode value_node = ts_node_child_by_field_name(expression_node, "value", strlen("value"));
+        // Json::Value arguments = Json::arrayValue;
+        // arguments.append(parse_expression(value_node, source, var_map, changed_vars));
+        ret["type"] = "input_symbol";
+        ret["value"] = "sizeof";
     } else if (node_type == "return_statement") {
         TSNode return_node = ts_node_child(expression_node, 1);
         Json::Value return_cnt = parse_expression(return_node, source, var_map, changed_vars);
@@ -1229,6 +1227,11 @@ extern "C" const char *process(const char *str, MODE mode)
         tmp2 = tmp3;
         analyze_nodes.listLen ++ ;
     }
+
+    NodeList sizeof_nodes;
+    parse_decompiler_output(tree, &sizeof_nodes, "sizeof_expression");
+    if (sizeof_nodes.listLen > 0)
+        callees.append("sizeof");
 
     // tmp = analyze_nodes.head;
     // while (tmp->next != analyze_nodes.tail) {

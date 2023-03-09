@@ -78,7 +78,7 @@ def process_functions(llvm_ir, filename, save_to):
             dump_to_file(save_to, filename, function.name, output_s, input_s)
 
 if __name__ == '__main__':
-    llvm_ir = read_ir("/home/eval/DF/ir_test/8.ll")
+    llvm_ir = read_ir("/home/eval/DF/ir/o1/440.ll")
     process_functions(llvm_ir, '13', '.')
 
 

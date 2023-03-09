@@ -705,7 +705,7 @@ def execution_call(instruction, tmp_dict):
         return None
     result = match.group(2)
     func_name = match.group(4)
-    if re.match('llvm\.lifetime.*', func_name):
+    if func_name.startswith('llvm'):
         return None
     params_str = match.group(5)
     pattern_params = "([^,]+\([^\)]+\))|([^,]+)"

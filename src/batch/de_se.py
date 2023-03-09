@@ -17,7 +17,7 @@ def log_err(err_path, err_msg):
         r = [err_msg]
         writer.writerow(r)
 
-def batch_de_execution_from_file(des_dir, save_to):
+def batch_de_execution_from_file(des_dir, save_to, mode):
     de_dirs = os.listdir(des_dir)
     for de_dir_name in de_dirs:
         de_dir = os.path.join(des_dir, de_dir_name)
@@ -39,7 +39,7 @@ def batch_de_execution_from_file(des_dir, save_to):
             dlclose_func(dese._handle)
 
             if paths is not None:
-                paths = load_from_json(json.loads(paths.decode()), 0)
+                paths = load_from_json(json.loads(paths.decode()), mode)
                 save_path = os.path.join(save_to, de_dir_name)
                 if not os.path.exists(save_path):
                     os.makedirs(save_path)
@@ -47,7 +47,7 @@ def batch_de_execution_from_file(des_dir, save_to):
                 with open(os.path.join(save_path, funcname + '.json'), 'w') as f:
                     json.dump(paths, f)
 
-def batch_de_execution_from_csv(csv_path, save_to):
+def batch_de_execution_from_csv(csv_path, save_to, mode):
     with open(csv_path, 'r') as f:
         reader = csv.reader(f)
         rows = [row for row in reader]
@@ -84,7 +84,7 @@ def batch_de_execution_from_csv(csv_path, save_to):
             dlclose_func(dese._handle)
 
             if paths is not None:
-                paths = load_from_json(json.loads(paths.decode()))
+                paths = load_from_json(json.loads(paths.decode()), mode)
                 fns = os.path.splitext(filename)[0].split('-')
                 funcname = fns[-1]
             
@@ -101,7 +101,7 @@ def batch_de_execution_from_csv(csv_path, save_to):
             # except Exception as e:
             #     log_err('/home/zrz/decompiler-eval/src/batch/err_py.csv', de_file)
                     
-def batch_de_execution_from_str(des_dir, save_to):
+def batch_de_execution_from_str(des_dir, save_to, mode):
     de_files = os.listdir(des_dir)
     for de_file in de_files:
         de_file_path = os.path.join(des_dir, de_file)
@@ -125,15 +125,15 @@ def batch_de_execution_from_str(des_dir, save_to):
             dlclose_func(dese._handle)
             
             if paths is not None:
-                paths = load_from_json(json.loads(paths.decode()), 1)
+                paths = load_from_json(json.loads(paths.decode()), mode)
                 save_path = os.path.join(save_to, os.path.splitext(de_file)[0])
                 if not os.path.exists(save_path):
                     os.makedirs(save_path)
                 with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
                     json.dump(paths, f)
 
-# batch_de_execution_from_str("/home/eval/DF/de/gcc/ida/os", "/home/eval/DF/se/gcc/ida/os")
-batch_de_execution_from_str("./test", "./test")
+batch_de_execution_from_str("/home/eval/DF/de/clang/ida/os", "/home/eval/DF/se/clang/ida/os", 0)
+# batch_de_execution_from_str("./test", "./test", 1)
 # de_file = "/home/eval/POJ/test/c/10-11-11/main.txt"
 # de_file = "/home/eval/POJ/test/c/10-1944-1944/main.txt"
 # dese = cdll.LoadLibrary("/home/eval/decompiler-eval/src/data_flow/libse.so")

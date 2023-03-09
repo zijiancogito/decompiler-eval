@@ -67,8 +67,9 @@ def execution_var(block, tmp_dict, input_index_table, output_index_table, output
             elif func_name == 'f_printf':
                 find_printf_symbols(ps, tmp_dict, output_index_table, output_symbols)
             else:
-                execution_instruction(instruction, tmp_dict)
-                input_index_table[func_name] = 1
+                ret = execution_instruction(instruction, tmp_dict)
+                if ret != None:
+                    input_index_table[func_name] = 1
         elif instruction.opcode == 'ret':
             op_ret = parse_ret(str(instruction).strip())
             find_ret_symbols(op_ret, tmp_dict, output_index_table, output_symbols)
@@ -88,7 +89,9 @@ def execution_cond(block, tmp_dict, input_index_table, next_block, pre_block):
             elif func_name == 'printf' or func_name == 'f_printf':
                 pass
             else:
-                execution_instruction(instruction, tmp_dict)
+                ret = execution_instruction(instruction, tmp_dict)
+                if ret != None:
+                    input_index_table[func_name] = 1
         elif instruction.opcode == 'phi':
             result = execution_phi(str(instruction).strip(), tmp_dict, pre_block)
             if result == None:
