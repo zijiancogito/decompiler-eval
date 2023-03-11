@@ -25,3 +25,6 @@
 [submodule "src/call/uthash"]
 	path = src/call/uthash
 	url = https://github.com/troydhanson/uthash.git
+[submodule "src/readability/var/vendor/tree-sitter-c"]
+	path = src/readability/var/vendor/tree-sitter-c
+	url = https://github.com/tree-sitter/tree-sitter-c.git
