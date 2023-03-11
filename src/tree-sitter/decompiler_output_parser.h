@@ -64,6 +64,7 @@ const char *unnecessary[] = {
     "(_WORD *)",
     "(_BYTE)",
     "(_BYTE *)",
+    "(__m128)",
     "(word32)",
     "(word64)",
     "LOBYTE",
