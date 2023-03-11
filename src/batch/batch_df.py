@@ -71,5 +71,14 @@ def batch_compare(ir_json_dir, c_json_dir):
     print(f"Matched: {total_match} / C_Var: {total_c} / IR_Var: {total_ir} / Average: {average} / Matched Functions: {functions}")
 
 if __name__ == '__main__':
-    batch_compare(sys.argv[1], sys.argv[2])
+    root = '/home/eval/DF/se/'
+    compiler = sys.argv[1]
+    decompiler = sys.argv[2]
+
+    dir = os.path.join(root, compiler, decompiler)
+    for opt in ['o0', 'o1', 'o2', 'o3', 'os']:
+        dec_dir = os.path.join(dir, opt)
+        ir_dir = os.path.join(root, 'ir', opt)
+        print(f"Compare {compiler} {decompiler}")
+        batch_compare(ir_dir, dec_dir)
 
