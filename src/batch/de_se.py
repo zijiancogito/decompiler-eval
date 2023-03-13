@@ -132,8 +132,14 @@ def batch_de_execution_from_str(des_dir, save_to, mode):
                     os.makedirs(save_path)
                 with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
                     json.dump(paths, f)
-
-batch_de_execution_from_str("/home/eval/DF/de/gcc/ida/o0", "/home/eval/DF/se/gcc/ida/o0", 0)
+'''
+for compiler in ['clang', 'gcc']:
+    for opti in ['o0', 'o1', 'o2', 'o3', 'os']:
+        f_p = "/home/eval/DF/de/" + compiler + "/ida/" + opti
+        s_p = "/home/eval/DF/se/" + compiler + "/ida/" + opti
+        batch_de_execution_from_str(f_p, s_p, 0)
+'''
+batch_de_execution_from_str("/home/eval/DF/de/clang/ida/o3", "/home/eval/DF/se/clang/ida/o3", 0)
 # batch_de_execution_from_str("./test", "./test", 1)
 # de_file = "/home/eval/POJ/test/c/10-11-11/main.txt"
 # de_file = "/home/eval/POJ/test/c/10-1944-1944/main.txt"

@@ -18,10 +18,7 @@ def ce_test(ir_exp, c_exp, symbols):
             st[sym] = random.randint(1, 10)
 
         ir_ce = execution(ir_exp, st)
-        print(ir_ce)
         c_ce = execution(c_exp, st)
-        print(c_ce)
-        print()
         if c_ce == ir_ce:
             correct += 1
     return correct / 100.0
@@ -46,7 +43,6 @@ def compare_file(ir_json_file, c_json_file):
     ir_var = 0
     c_var = 0
     for var in ir_json["expressions"]:
-        print(var)
         if var not in c_json["expressions"][0]:
             c_var += 1
             continue
@@ -77,7 +73,6 @@ def batch_compare(ir_json_dir, c_json_dir):
             c_json = os.path.join(c_json_dir, ir_dir, ir)
             if not os.path.exists(c_json):
                 continue
-            print(ir_json)
 
             n, m, ir_vars, c_vars = compare_file(ir_json, c_json)
             total_c += c_vars

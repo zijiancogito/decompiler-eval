@@ -437,7 +437,7 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
         }
         v = var_map.at(id_name);
         // check whether the variable is assigned
-        if (!v->expression.empty()) {
+        if (!v->expression.empty() && !get_self) {
             ret = v->expression;
         } else {
             ret["type"] = node_type;
@@ -465,7 +465,7 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
         TSNode left_node = ts_node_child_by_field_name(expression_node, "left", strlen("left"));
         TSNode right_node = ts_node_child_by_field_name(expression_node, "right", strlen("right"));
         parse_expression(left_node, source, var_map, changed_vars);
-        ret = parse_expression(right_node, source, var_map, changed_vars);
+        ret = parse_expression(right_node, source, var_map, changed_vars, get_self);
     } else if (node_type.find("_literal") != std::string::npos && 
              node_type.find("literal_") == std::string::npos) {
         // Get the value of the literal directly
@@ -489,11 +489,11 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
     } else if (node_type == "cast_expression") {
         // Get the variable node from a cast node and parse it
         TSNode cnt_node = ts_node_child(expression_node, 3);
-        ret = parse_expression(cnt_node, source, var_map, changed_vars);
+        ret = parse_expression(cnt_node, source, var_map, changed_vars, get_self);
     } else if (node_type == "parenthesized_expression") {
         // parse the node in parentheses
         TSNode cnt_node = ts_node_child(expression_node, 1);
-        ret = parse_expression(cnt_node, source, var_map, changed_vars);
+        ret = parse_expression(cnt_node, source, var_map, changed_vars, get_self);
     } else if (node_type == "pointer_expression") {
         TSNode op_node = ts_node_child_by_field_name(expression_node, "operator", strlen("operator"));
         TSNode arg_node = ts_node_child_by_field_name(expression_node, "argument", strlen("argument"));
@@ -1100,7 +1100,7 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes, J
     se_res["callees"] = callees;
     char *ret = new char[strlen(se_res.toStyledString().c_str()) + 1];
     strcpy(ret, se_res.toStyledString().c_str());
-    // std::cout << se_res.toStyledString() << std::endl;
+    std::cout << se_res.toStyledString() << std::endl;
     return ret;
 }
 

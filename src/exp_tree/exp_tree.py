@@ -149,6 +149,9 @@ def load_from_json(json_data, mode):
         ret['symbols'].append('param' + str(i))
     for i in range(global_num):
         ret['symbols'].append('global' + str(i))
+    for i in json_data['callees']:
+        if i != 'f_scanf_nop' and i != 'f_printf':
+            ret['symbols'].append(i)
     paths = json_data['paths']
     if mode == 0:
         ret['expressions'] = []

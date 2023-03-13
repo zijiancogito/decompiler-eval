@@ -81,9 +81,13 @@ def compare_feature(tree_a, tree_b):
             # return False
     return True
 
-def compare(tree_a, tree_b):
-    return compare_old(tree_a, tree_b)
-
+def compare(tree_a, tree_b, option):
+    if option == 'fullmatch':
+        return compare_old(tree_a, tree_b)
+    elif option == 'feature':
+        return compare_feature(tree_a, tree_b)
+    else:
+        return
         
 def compare_path(cond_a, cond_b):
     if len(cond_a) != len(cond_b):
@@ -103,8 +107,8 @@ def compare_path(cond_a, cond_b):
         result = result and f
     return result
 
-def compare_variable(var_a, var_b):
+def compare_variable(var_a, var_b, option):
     tree_a = sejson_to_exptree(var_a)
     tree_b = sejson_to_exptree(var_b)
-    return compare(tree_a, tree_b)
+    return compare(tree_a, tree_b, option)
 
