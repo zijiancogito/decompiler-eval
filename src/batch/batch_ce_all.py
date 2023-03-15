@@ -65,6 +65,8 @@ def batch_compare(ir_json_dir, c_json_dir):
     total_ir = 0
     total_match = 0
     total_not_match = 0
+    total_match_funcs = 0
+    total_funcs = 0
 
     for ir_dir in ir_dirs:
         ir_files = os.listdir(os.path.join(ir_json_dir, ir_dir))
@@ -79,8 +81,14 @@ def batch_compare(ir_json_dir, c_json_dir):
             total_ir += ir_vars
             total_match += m
             total_not_match += n
+            if n == 0:
+                total_match_funcs += 1
+            total_funcs += 1
 
-    print(f"Matched: {total_match} / C_Var: {total_c} / IR_Var: {total_ir}")
+    average = total_match / total_ir
+    matched_functions = total_match_funcs / total_funcs
+
+    print(f"Matched: {total_match} / C_Var: {total_c} / IR_Var: {total_ir} / Average: {'{:.2f}'.format(average)} / Matched Functions: {'{:.2f}'.format(matched_functions)}")
 
 if __name__ == '__main__':
     batch_compare(sys.argv[1], sys.argv[2])

@@ -1168,7 +1168,7 @@ extern "C" const char *process(const char *str, MODE mode)
                 std::string arg_type = ts_node_type(arg);
                 if (arg_type != "(" && arg_type != "," && arg_type != ")") {
                     bool is_var_arg = false;
-                    if (func_name == "__printf_chk") {
+                    if (func_name == "__printf_chk" || func_name == "_printf_chk") {
                         if (is_first_arg) is_first_arg = false;
                         else if (is_second_arg) is_second_arg = false;
                         else is_var_arg = true;

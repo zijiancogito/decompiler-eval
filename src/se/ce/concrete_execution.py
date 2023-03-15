@@ -102,8 +102,6 @@ def test(ir_json_file, c_json_file, var_list):
         correct_rate = sample(ir_exp, c_exp, symbols)
         if correct_rate > 0.9:
             matched += 1
-        else:
-            print(f"{ir_json_file}:\t{var}")
 
     return matched
 

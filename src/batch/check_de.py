@@ -26,5 +26,5 @@ def check(path):
                 writer.writerow([path])
 
 if __name__ == "__main__":
-    dir_name = "/home/eval/DF/se/clang/ida"
+    dir_name = "/home/eval/DF/se/gcc/ida"
     check(dir_name)

@@ -139,7 +139,7 @@ for compiler in ['clang', 'gcc']:
         s_p = "/home/eval/DF/se/" + compiler + "/ida/" + opti
         batch_de_execution_from_str(f_p, s_p, 0)
 '''
-batch_de_execution_from_str("/home/eval/DF/de/clang/ida/o3", "/home/eval/DF/se/clang/ida/o3", 0)
+batch_de_execution_from_str("/home/eval/DF/de/gcc/ida/os", "/home/eval/DF/se/gcc/ida/os", 0)
 # batch_de_execution_from_str("./test", "./test", 1)
 # de_file = "/home/eval/POJ/test/c/10-11-11/main.txt"
 # de_file = "/home/eval/POJ/test/c/10-1944-1944/main.txt"
