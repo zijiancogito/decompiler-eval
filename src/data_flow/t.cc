@@ -1,4 +1,5 @@
 #include <iostream>
+#include <regex>
 
 int main()
 {
@@ -11,8 +12,12 @@ int main()
 
     // int i;
     // sscanf(literal.c_str(), "%x", &i);
-    float a = 1.2, b = 2.4;
-    
-    std::cout << (a + b) << std::endl;
+    std::string pattern("(([^\\.]+\\.[^\\.]+)|([[:alnum:]]*->[[:alnum:]]*))");
+    std::smatch results;
+    std::regex r(pattern);
+    std::string a("a.g");
+    if (regex_search(a, results, r)) {
+	    std::cout << true << std::endl;
+    }
     return 0;
 }

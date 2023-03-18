@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <regex>
 #include <unordered_map>
 #include <algorithm>
 #include <assert.h>
@@ -434,6 +435,8 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             new_v->is_output = false;
             new_v->is_global = true;  // set the global field to ture
             var_map.emplace(id_name, new_v);
+            // std::cout << id_name << std::endl;
+            // std::cout << 111 << std::endl;
         }
         v = var_map.at(id_name);
         // check whether the variable is assigned
@@ -691,6 +694,8 @@ Json::Value parse_assignment_expression(TSNode assign_node, const char* source, 
         new_v->is_output = false;
         new_v->is_global = true;  // set the global field to ture
         var_map.emplace(var_name, new_v);
+        // std::cout << var_name << std::endl;
+        // std::cout << 222 << std::endl;
     }
     v = var_map.at(var_name);
 
@@ -849,6 +854,8 @@ Json::Value parse_branch_condition(TSNode con_node, const char* source, std::uno
             new_v->is_output = false;
             new_v->is_global = true;  // set the global field to ture
             var_map.emplace(var_name, new_v);
+            // std::cout << var_name << std::endl;
+            // std::cout << 333 << std::endl;
         }
         v = var_map.at(var_name);
 
@@ -1100,7 +1107,7 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes, J
     se_res["callees"] = callees;
     char *ret = new char[strlen(se_res.toStyledString().c_str()) + 1];
     strcpy(ret, se_res.toStyledString().c_str());
-    std::cout << se_res.toStyledString() << std::endl;
+    // std::cout << se_res.toStyledString() << std::endl;
     return ret;
 }
 
@@ -1126,6 +1133,16 @@ extern "C" const char *process(const char *str, MODE mode)
     assert(source);
     if (strstr(source, "?") != NULL)
         return NULL;
+
+    std::string s(source);
+    std::string pattern("(([^\\.]+\\.[^\\.]+)|([[:alnum:]]+->[[:alnum:]]+))");
+    std::smatch results;
+    std::regex r(pattern);
+    if (regex_search(s, results, r)) {
+        return NULL;
+        // std::cout << "May be contain field_expression" << std::endl;
+        // exit(0);
+    }
 
     // Create a parser
     TSParser * parser = ts_parser_new();

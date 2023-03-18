@@ -490,10 +490,11 @@ BasicBlock *CFG::parse_loops(BasicBlock *cur_bb, TSNode loop_node)
         BasicBlock *bb_true = cur_bb;
         TSNode do_node = ts_node_child(loop_node, 0);
         bb_true->add_nodes(do_node);
-        CFGEdges *edge = new CFGEdges(bb_true, con_bb, JMP);
+        BasicBlock *jump_to = jump_out_map.at(ts_node_start_byte(loop_node));
+        CFGEdges *edge = new CFGEdges(bb_true, jump_to, JMP);
         if (bb_true->add_out_edges(edge))
-            con_bb->add_in_edges(edge);
-        
+            jump_to->add_in_edges(edge);
+
         TSNode body_node = ts_node_child_by_field_name(loop_node, "body", strlen("body"));
         body_node = find_node_in_all_nodes(body_node);
         bb = parse_node(bb_true, body_node);
@@ -927,9 +928,9 @@ void CFG::cfg_build()
     this->basic_blocks.push_back(cur_bb);
 
     for (int i = 0; i < this->all_nodes.size(); i ++ ) {
+        // std::cout << get_content(this->all_nodes.at(i), source) << std::endl;
         cur_bb = parse_node(cur_bb, this->all_nodes.at(i));
     }
-
     // link goto and label
     for (std::unordered_map<BasicBlock*, std::string>::iterator it = goto_map.begin(); it != goto_map.end(); it ++ ) {
         BasicBlock *goto_bb = (*it).first;
