@@ -12,6 +12,11 @@ C = Language('build/my-language.so', 'c')
 c_parser = Parser()
 c_parser.set_language(C)
 
+def var_filter(node):
+    if node.type == "declaration":
+        return True
+    return False
+            
 def make_move(cursor, move):
     if move == 'down':
         print(cursor.node.type)
@@ -35,8 +40,6 @@ def make_move(cursor, move):
             make_move(cursor, 'right')
         elif cursor.goto_parent():
             make_move(cursor, 'up')
-
-
 
 def test(code):
     tree = c_parser.parse(bytes(code, "utf8"))
