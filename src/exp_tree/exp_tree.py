@@ -78,19 +78,22 @@ def data_to_tag(data):
 
 def exptree_to_json(tree):
     dic = {}
-    # dic[tree.root_data] = []
-    dic["data"] = tree.root_data
-    dic["tag"] = tree.root_tag
-    dic["children"] = []
-    for child in tree.children:
-        dic["children"].append(exptree_to_json(child))
+    if tree is not None:
+        # dic[tree.root_data] = []
+        dic["data"] = tree.root_data
+        dic["tag"] = tree.root_tag
+        dic["children"] = []
+        for child in tree.children:
+            dic["children"].append(exptree_to_json(child))
 
     return dic
 
 def json_to_exptree(json_data: dict):
     # return ExpTree
     tree = None
-    if json_data['type'] == 'binary_expression':
+    if json_data['type'] is None:
+        pass
+    elif json_data['type'] == 'binary_expression':
         tree = ExpTree(data_to_tag(json_data['op']), json_data['op'])
         tree.add_child(json_to_exptree(json_data['left']))
         tree.add_child(json_to_exptree(json_data['right']))
@@ -149,9 +152,10 @@ def load_from_json(json_data, mode):
         ret['symbols'].append('param' + str(i))
     for i in range(global_num):
         ret['symbols'].append('global' + str(i))
-    for i in json_data['callees']:
-        if i != 'f_scanf_nop' and i != 'f_printf':
-            ret['symbols'].append(i)
+    if json_data['callees'] is not None:
+        for i in json_data['callees']:
+            if i != 'f_scanf_nop' and i != 'f_printf':
+                ret['symbols'].append(i)
     paths = json_data['paths']
     if mode == 0:
         ret['expressions'] = []

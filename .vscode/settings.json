@@ -55,6 +55,7 @@
         "typeinfo": "cpp",
         "ctime": "cpp",
         "chrono": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "regex": "cpp"
     }
 }

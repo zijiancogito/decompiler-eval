@@ -3,6 +3,7 @@
 #include <regex>
 #include <unordered_map>
 #include <algorithm>
+#include <exception>
 #include <assert.h>
 #include "cfg_generator.h"
 #include "decompiler_se.h"
@@ -203,14 +204,18 @@ void print_input(std::unordered_map<std::string, Variable*> &var_map)
 
 void get_parameters(TSTreeCursor *cursor, std::unordered_map<std::string, Variable*> &var_map, const char *source)
 {
-    NodeList all_nodes;
-    init_node_list(&all_nodes);
-    make_move(cursor, DOWN, &all_nodes, "parameter_declaration");
-    Node *tmp = all_nodes.head;
-    for (int i = 0; i < all_nodes.listLen; i++) {
-        tmp = tmp->next;
-        add_declarator_to_var_map(var_map, tmp->data, source, PARAM);
-    }
+    try {
+        NodeList all_nodes;
+        init_node_list(&all_nodes);
+        make_move(cursor, DOWN, &all_nodes, "parameter_declaration");
+        Node *tmp = all_nodes.head;
+        for (int i = 0; i < all_nodes.listLen; i++) {
+            tmp = tmp->next;
+            add_declarator_to_var_map(var_map, tmp->data, source, PARAM);
+        }
+    } catch (std::exception e) {
+        throw e;
+    }   
 }
 
 void add_declarator_to_var_map(std::unordered_map<std::string, Variable*> &var_map, TSNode var_node, const char *source, bool is_param)
@@ -1062,207 +1067,215 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
 
 const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes, Json::Value &callees)
 {
-    //get_variables(tree, source);
-    CFG *cfg = new CFG(tree, source);
-    cfg->cfg_build();
-    // cfg->print_cfg();
-    BasicBlock *entry = cfg->get_entry();
-    CFGEdges *entry_edge = entry->get_out_edges().at(0);
-    std::vector<BasicBlock*> bbs = cfg->get_bbs();
+    try {
+        //get_variables(tree, source);
+        CFG *cfg = new CFG(tree, source);
+        cfg->cfg_build();
+        // cfg->print_cfg();
+        BasicBlock *entry = cfg->get_entry();
+        CFGEdges *entry_edge = entry->get_out_edges().at(0);
+        std::vector<BasicBlock*> bbs = cfg->get_bbs();
 
-    std::unordered_map<CFGEdges*, bool> visit;
-    visit.emplace(entry_edge, false);
-    for (int i = 0; i < bbs.size(); i ++ ){ 
-        std::vector<CFGEdges*> out_edges = bbs.at(i)->get_out_edges();
-        for (int j = 0; j < out_edges.size(); j ++ ) {
-            visit.emplace(out_edges.at(j), false);
+        std::unordered_map<CFGEdges*, bool> visit;
+        visit.emplace(entry_edge, false);
+        for (int i = 0; i < bbs.size(); i ++ ){ 
+            std::vector<CFGEdges*> out_edges = bbs.at(i)->get_out_edges();
+            for (int j = 0; j < out_edges.size(); j ++ ) {
+                visit.emplace(out_edges.at(j), false);
+            }
         }
+
+        std::unordered_map<std::string, Variable*> var_map;
+        std::unordered_map<std::string, Variable*> changed_vars;
+
+        NodeList func_node_list;
+        parse_decompiler_output(tree, &func_node_list, "function_definition");
+        TSNode func_node = func_node_list.head->next->data;
+        TSTreeCursor cursor = ts_tree_cursor_new(func_node);
+
+        // get parametersx
+        get_parameters(&cursor, var_map, source);
+        // get input from scanf function
+        // Json::Value inputs = find_input_variables(tree, source, var_map);
+
+        Json::Value se_res;
+
+        Json::Value conditions = Json::arrayValue;
+        Json::Value outputs = Json::arrayValue;
+        Json::Value paths;
+        // cfg->print_cfg();
+        symbolic_execution(cfg, entry_edge, visit, source, analyze_nodes, var_map, paths, conditions, outputs);
+
+        se_res["paths"] = paths;
+        se_res["scanf_num"] = scanf_num;
+        se_res["params_num"] = params_num;
+        se_res["global_num"] = global_num;
+        se_res["callees"] = callees;
+        char *ret = new char[strlen(se_res.toStyledString().c_str()) + 1];
+        strcpy(ret, se_res.toStyledString().c_str());
+        // std::cout << se_res.toStyledString() << std::endl;
+        return ret;
+    } catch(std::exception e) {
+        throw e;
     }
-
-    std::unordered_map<std::string, Variable*> var_map;
-    std::unordered_map<std::string, Variable*> changed_vars;
-
-    NodeList func_node_list;
-    parse_decompiler_output(tree, &func_node_list, "function_definition");
-    TSNode func_node = func_node_list.head->next->data;
-    TSTreeCursor cursor = ts_tree_cursor_new(func_node);
-
-    // get parameters
-    get_parameters(&cursor, var_map, source);
-    // get input from scanf function
-    // Json::Value inputs = find_input_variables(tree, source, var_map);
-
-    Json::Value se_res;
-
-    Json::Value conditions = Json::arrayValue;
-    Json::Value outputs = Json::arrayValue;
-    Json::Value paths;
-    // cfg->print_cfg();
-    symbolic_execution(cfg, entry_edge, visit, source, analyze_nodes, var_map, paths, conditions, outputs);
-
-    se_res["paths"] = paths;
-    se_res["scanf_num"] = scanf_num;
-    se_res["params_num"] = params_num;
-    se_res["global_num"] = global_num;
-    se_res["callees"] = callees;
-    char *ret = new char[strlen(se_res.toStyledString().c_str()) + 1];
-    strcpy(ret, se_res.toStyledString().c_str());
-    // std::cout << se_res.toStyledString() << std::endl;
-    return ret;
 }
 
 extern "C" const char *process(const char *str, MODE mode)
 {
-    scanf_num = 0;
-    params_num = 0;
-    global_num = 0;
-    var_id_map.clear();
+    try{
+        scanf_num = 0;
+        params_num = 0;
+        global_num = 0;
+        var_id_map.clear();
 
-    char *source = NULL;
-    if (mode == FILE_NAME) {
-        std::cout << "Load from file" << std::endl;
-        source = read_source(str);
-    } else if (mode == FUNC_CNT) {
-        std::cout << "Load from string" << std::endl;
-        int len = strlen(str);
-        source = (char*)malloc(len + 1);
-        strcpy(source, str);
-        siplify_source(source);
-    }
-    
-    assert(source);
-    if (strstr(source, "?") != NULL)
-        return NULL;
-
-    std::string s(source);
-    std::string pattern("(([^\\.]+\\.[^\\.]+)|([[:alnum:]]+->[[:alnum:]]+))");
-    std::smatch results;
-    std::regex r(pattern);
-    if (regex_search(s, results, r)) {
-        return NULL;
-        // std::cout << "May be contain field_expression" << std::endl;
-        // exit(0);
-    }
-
-    // Create a parser
-    TSParser * parser = ts_parser_new();
-    // Set the parser's language
-    ts_parser_set_language(parser, tree_sitter_c());
-    TSTree *tree = ts_parser_parse_string(
-        parser,
-        NULL,
-        source,
-        strlen(source)
-    );
-
-    // find printf and return statement
-    // name the output variable
-    NodeList analyze_nodes;
-    parse_decompiler_output(tree, &analyze_nodes, "call_expression");
-    Node *tmp = analyze_nodes.head;
-    int printf_num = 0;
-    Json::Value callees;
-    while (tmp->next != analyze_nodes.tail) {
-        Node *tmp2 = tmp;
-        tmp = tmp->next;
-        TSNode func_node = ts_node_child_by_field_name(tmp->data, "function", strlen("function"));
-        std::string func_name = get_content(func_node, source);
-        bool visited = false;
-        for (auto callee: callees) {
-            if (callee.asString() == func_name) {
-                visited = true;
-                break;
-            }
+        char *source = NULL;
+        if (mode == FILE_NAME) {
+            std::cout << "Load from file" << std::endl;
+            source = read_source(str);
+        } else if (mode == FUNC_CNT) {
+            std::cout << "Load from string" << std::endl;
+            int len = strlen(str);
+            source = (char*)malloc(len + 1);
+            strcpy(source, str);
+            siplify_source(source);
         }
-        if (!visited) callees.append(func_name);
-        if (func_name.find("printf") != std::string::npos) {
-            TSNode arg_list = ts_node_child_by_field_name(tmp->data, "arguments", strlen("arguments"));
-            int arg_num = ts_node_child_count(arg_list);
-            bool is_first_arg = true;
-            bool is_second_arg = true;
-            for (int i = 0; i < arg_num; i ++ ) {
-                TSNode arg = ts_node_child(arg_list, i);
-                std::string arg_type = ts_node_type(arg);
-                if (arg_type != "(" && arg_type != "," && arg_type != ")") {
-                    bool is_var_arg = false;
-                    if (func_name == "__printf_chk" || func_name == "_printf_chk") {
-                        if (is_first_arg) is_first_arg = false;
-                        else if (is_second_arg) is_second_arg = false;
-                        else is_var_arg = true;
-                    } else if (func_name == "printf") {
-                        if (is_first_arg) is_first_arg = false;
-                        else is_var_arg = true;
-                    } else if (func_name == "f_printf")
-                        is_var_arg = true;
-                    if (is_first_arg) {
-                        is_first_arg = false;
-                        if (arg_type == "string_literal") is_var_arg = false;
-                    }
-                    if (is_var_arg) {
-                        std::string name = "printf" + std::to_string(printf_num ++ );
-                        var_id_map.emplace(ts_node_start_byte(arg), name);
-                    }
+        
+        assert(source);
+        // if (strstr(source, "?") != NULL)
+        //     return NULL;
+
+        // std::string s(source);
+        // std::string pattern("(([^\\.]+\\.[^\\.]+)|([[:alnum:]]+->[[:alnum:]]+))");
+        // std::smatch results;
+        // std::regex r(pattern);
+        // if (regex_search(s, results, r)) {
+        //     return NULL;
+        //     // std::cout << "May be contain field_expression" << std::endl;
+        //     // exit(0);
+        // }
+
+        // Create a parser
+        TSParser * parser = ts_parser_new();
+        // Set the parser's language
+        ts_parser_set_language(parser, tree_sitter_c());
+        TSTree *tree = ts_parser_parse_string(
+            parser,
+            NULL,
+            source,
+            strlen(source)
+        );
+
+        // find printf and return statement
+        // name the output variable
+        NodeList analyze_nodes;
+        parse_decompiler_output(tree, &analyze_nodes, "call_expression");
+        Node *tmp = analyze_nodes.head;
+        int printf_num = 0;
+        Json::Value callees;
+        while (tmp->next != analyze_nodes.tail) {
+            Node *tmp2 = tmp;
+            tmp = tmp->next;
+            TSNode func_node = ts_node_child_by_field_name(tmp->data, "function", strlen("function"));
+            std::string func_name = get_content(func_node, source);
+            bool visited = false;
+            for (auto callee: callees) {
+                if (callee.asString() == func_name) {
+                    visited = true;
+                    break;
                 }
             }
-        } else {
-            if (func_name == "scanf" || func_name == "__isoc99_scanf") {
+            if (!visited) callees.append(func_name);
+            if (func_name.find("printf") != std::string::npos) {
                 TSNode arg_list = ts_node_child_by_field_name(tmp->data, "arguments", strlen("arguments"));
                 int arg_num = ts_node_child_count(arg_list);
                 bool is_first_arg = true;
+                bool is_second_arg = true;
                 for (int i = 0; i < arg_num; i ++ ) {
                     TSNode arg = ts_node_child(arg_list, i);
                     std::string arg_type = ts_node_type(arg);
                     if (arg_type != "(" && arg_type != "," && arg_type != ")") {
+                        bool is_var_arg = false;
+                        if (func_name == "__printf_chk" || func_name == "_printf_chk") {
+                            if (is_first_arg) is_first_arg = false;
+                            else if (is_second_arg) is_second_arg = false;
+                            else is_var_arg = true;
+                        } else if (func_name == "printf") {
+                            if (is_first_arg) is_first_arg = false;
+                            else is_var_arg = true;
+                        } else if (func_name == "f_printf")
+                            is_var_arg = true;
                         if (is_first_arg) {
                             is_first_arg = false;
-                            continue;
+                            if (arg_type == "string_literal") is_var_arg = false;
                         }
-                        std::string name = "scanf" + std::to_string(scanf_num ++ );
-                        var_id_map.emplace(ts_node_start_byte(arg), name);
+                        if (is_var_arg) {
+                            std::string name = "printf" + std::to_string(printf_num ++ );
+                            var_id_map.emplace(ts_node_start_byte(arg), name);
+                        }
                     }
                 }
-            } else if (func_name == "f_scanf_nop") {
-                std::string name = "scanf" + std::to_string(scanf_num ++ );
-                var_id_map.emplace(ts_node_start_byte(tmp->data), name);
+            } else {
+                if (func_name == "scanf" || func_name == "__isoc99_scanf") {
+                    TSNode arg_list = ts_node_child_by_field_name(tmp->data, "arguments", strlen("arguments"));
+                    int arg_num = ts_node_child_count(arg_list);
+                    bool is_first_arg = true;
+                    for (int i = 0; i < arg_num; i ++ ) {
+                        TSNode arg = ts_node_child(arg_list, i);
+                        std::string arg_type = ts_node_type(arg);
+                        if (arg_type != "(" && arg_type != "," && arg_type != ")") {
+                            if (is_first_arg) {
+                                is_first_arg = false;
+                                continue;
+                            }
+                            std::string name = "scanf" + std::to_string(scanf_num ++ );
+                            var_id_map.emplace(ts_node_start_byte(arg), name);
+                        }
+                    }
+                } else if (func_name == "f_scanf_nop") {
+                    std::string name = "scanf" + std::to_string(scanf_num ++ );
+                    var_id_map.emplace(ts_node_start_byte(tmp->data), name);
+                }
+                tmp2->next = tmp->next;
+                analyze_nodes.listLen -- ;
+                tmp = tmp2;
             }
+        }  // when run out while loop, tmp->next point to analyze_nodes.tail
+        NodeList return_nodes;
+        parse_decompiler_output(tree, &return_nodes, "return_statement");
+        Node *tmp2 = return_nodes.head->next;
+        int return_num = 0;
+        while (tmp2 != return_nodes.tail) {
+            std::string name = "return" + std::to_string(return_num ++ );
+            var_id_map.emplace(ts_node_start_byte(tmp2->data), name);
+            Node *tmp3 = tmp2->next;
             tmp2->next = tmp->next;
-            analyze_nodes.listLen -- ;
+            tmp->next = tmp2;
             tmp = tmp2;
+            tmp2 = tmp3;
+            analyze_nodes.listLen ++ ;
         }
-    }  // when run out while loop, tmp->next point to analyze_nodes.tail
-    NodeList return_nodes;
-    parse_decompiler_output(tree, &return_nodes, "return_statement");
-    Node *tmp2 = return_nodes.head->next;
-    int return_num = 0;
-    while (tmp2 != return_nodes.tail) {
-        std::string name = "return" + std::to_string(return_num ++ );
-        var_id_map.emplace(ts_node_start_byte(tmp2->data), name);
-        Node *tmp3 = tmp2->next;
-        tmp2->next = tmp->next;
-        tmp->next = tmp2;
-        tmp = tmp2;
-        tmp2 = tmp3;
-        analyze_nodes.listLen ++ ;
+
+        NodeList sizeof_nodes;
+        parse_decompiler_output(tree, &sizeof_nodes, "sizeof_expression");
+        if (sizeof_nodes.listLen > 0)
+            callees.append("sizeof");
+
+        // tmp = analyze_nodes.head;
+        // while (tmp->next != analyze_nodes.tail) {
+        //     tmp = tmp->next;
+        //     std::cout << ts_node_type(tmp->data) << ":  " << get_content(tmp->data, source) << std::endl;
+        // }
+        const char *ret = run_se(tree, source, &analyze_nodes, callees);
+
+        ts_tree_delete(tree);
+        ts_parser_delete(parser);
+        free(source);
+
+        return ret;
+    } catch(std::exception e) {
+        std::cout << "Wrong!!!" << std::endl;
+        return NULL;
     }
-
-    NodeList sizeof_nodes;
-    parse_decompiler_output(tree, &sizeof_nodes, "sizeof_expression");
-    if (sizeof_nodes.listLen > 0)
-        callees.append("sizeof");
-
-    // tmp = analyze_nodes.head;
-    // while (tmp->next != analyze_nodes.tail) {
-    //     tmp = tmp->next;
-    //     std::cout << ts_node_type(tmp->data) << ":  " << get_content(tmp->data, source) << std::endl;
-    // }
-
-    const char *ret = run_se(tree, source, &analyze_nodes, callees);
-
-    ts_tree_delete(tree);
-    ts_parser_delete(parser);
-    free(source);
-
-    return ret;
 }
 
 int main()
