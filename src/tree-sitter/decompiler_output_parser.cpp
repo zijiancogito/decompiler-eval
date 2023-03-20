@@ -1,6 +1,5 @@
+#include <iostream>
 #include <string.h>
-#include <stdio.h>
-#include <stdbool.h>
 #include "decompiler_output_parser.h"
 
 char *get_content_in_source(int start, int end, const char *source)
@@ -56,6 +55,9 @@ void append_node(NodeList *all_nodes, TSNode data) {
 void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const char *node_filter)
 {
   TSNode currentNode = ts_tree_cursor_current_node(cursor);
+  if (ts_node_is_null(currentNode)) {
+    return ;
+  }
   const char *nodeType = ts_node_type(currentNode);
   if (move == DOWN) {
     if (strcmp(node_filter, "") == 0 || strcmp(node_filter, nodeType) == 0){

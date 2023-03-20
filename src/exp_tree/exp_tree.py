@@ -91,7 +91,9 @@ def exptree_to_json(tree):
 def json_to_exptree(json_data: dict):
     # return ExpTree
     tree = None
-    if json_data['type'] is None:
+    if json_data is None:
+        pass
+    elif json_data['type'] is None:
         pass
     elif json_data['type'] == 'binary_expression':
         tree = ExpTree(data_to_tag(json_data['op']), json_data['op'])
