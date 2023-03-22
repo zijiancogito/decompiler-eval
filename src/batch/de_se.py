@@ -55,11 +55,11 @@ def batch_de_execution_from_csv(csv_path, save_to, mode):
     for row in rows:
         path = row[0] + '-decompile'
         if not os.path.isdir(path):
-            log_err('/home/zrz/decompiler-eval/src/batch/err.csv', row[0])
+            log_err('/home/eval/decompiler-eval/src/batch/err.csv', row[0])
             continue
         hex_ray_name = os.listdir(path)
         if len(hex_ray_name) == 0:
-            log_err('/home/zrz/decompiler-eval/src/batch/err.csv', row[0])
+            log_err('/home/eval/decompiler-eval/src/batch/err.csv', row[0])
             continue
         hex_ray_path = os.path.join(path, hex_ray_name[0])
         files = os.listdir(hex_ray_path)
@@ -68,7 +68,7 @@ def batch_de_execution_from_csv(csv_path, save_to, mode):
             if f.count('-') != 6 or f.split('-')[-1] == 'others.txt':
                 files.remove(f)
         if len(files) == 0:
-            log_err('/home/zrz/decompiler-eval/src/batch/err_de.csv', row[0])
+            log_err('/home/eval/decompiler-eval/src/batch/err_de.csv', row[0])
             continue
         for filename in files:
             de_file = os.path.join(hex_ray_path, filename)
@@ -135,7 +135,7 @@ def batch_de_execution_from_str(des_dir, save_to, mode):
                 with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
                     json.dump(paths, f)
             else:
-                log_err("err_Relyze.csv", de_file_path + '-' + func_name)
+                log_err("err_Snowman.csv", de_file_path + '-' + func_name)
 
 '''
 for compiler in ['clang', 'gcc']:
@@ -144,7 +144,7 @@ for compiler in ['clang', 'gcc']:
         s_p = "/home/eval/DF/se/" + compiler + "/ida/" + opti
         batch_de_execution_from_str(f_p, s_p, 0)
 '''
-batch_de_execution_from_str("/home/eval/DF/de/clang/Relyze/o0", "/home/eval/DF/se/clang/Relyze/o0", 0)
+batch_de_execution_from_str("/home/eval/DF/de/clang/Snowman/o0", "/home/eval/DF/se/clang/Snowman/o0", 0)
 # batch_de_execution_from_str("./test", "./test", 1)
 # de_file = "/home/eval/POJ/test/c/10-11-11/main.txt"
 # de_file = "/home/eval/POJ/test/c/10-1944-1944/main.txt"
