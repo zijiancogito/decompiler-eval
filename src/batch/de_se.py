@@ -135,7 +135,7 @@ def batch_de_execution_from_str(des_dir, save_to, mode):
                 with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
                     json.dump(paths, f)
             else:
-                log_err("err_Snowman.csv", de_file_path + '-' + func_name)
+                log_err("err_RecStudio.csv", de_file_path + '-' + func_name)
 
 '''
 for compiler in ['clang', 'gcc']:
@@ -144,7 +144,7 @@ for compiler in ['clang', 'gcc']:
         s_p = "/home/eval/DF/se/" + compiler + "/ida/" + opti
         batch_de_execution_from_str(f_p, s_p, 0)
 '''
-batch_de_execution_from_str("/home/eval/DF/de/clang/Snowman/o0", "/home/eval/DF/se/clang/Snowman/o0", 0)
+batch_de_execution_from_str("/home/eval/DF/de/clang/RecStudio/o0", "/home/eval/DF/se/clang/RecStudio/o0", 0)
 # batch_de_execution_from_str("./test", "./test", 1)
 # de_file = "/home/eval/POJ/test/c/10-11-11/main.txt"
 # de_file = "/home/eval/POJ/test/c/10-1944-1944/main.txt"
