@@ -30,7 +30,7 @@ def get_vars_from_file(file_path):
     for func, func_name in zip(funcs, funcs_name):
         code = preprocess_code(func.strip())
         vars = get_all_vars(code)
-        funcs_vars[func_name] = vars
+        funcs_vars[func_name] = len(vars)
     return funcs_vars
 
 def count_vars_for_one_source(src, debug):
@@ -51,11 +51,6 @@ def count_vars_for_one_source(src, debug):
     return src_vars, de_vars
 
 def write_var_information_to_csv(src_vars, de_vars, out_csv):
-    title = ["function", "source"]
-    for compiler in compilers:
-        for decompiler in decompilers:
-            for option in options:
-                title.append(f"{compiler}-{decompiler}-{option}")
     with open(out_csv, 'w') as f:
         w = csv.writer(f, delimiter=' ')
         for func in src_vars:
@@ -65,13 +60,17 @@ def write_var_information_to_csv(src_vars, de_vars, out_csv):
                 continue
             if func in syscall_funcs:
                 continue
-            src_var_count = len(src_vars[func])
+            src_var_count = src_vars[func]
             de_var_count = [] 
             for compiler in compilers:
                 for decompiler in decompilers:
                     for option in options:
                         if func in de_vars[compiler][decompiler][option]:
-                            de_var_count.append(len(de_vars[compiler][decompiler][option][func]))
+                            de_var_count.append(de_vars[compiler][decompiler][option][func])
+                        else:
+                            de_var_count.append(0)
+            if len(de_var_count) != len(compilers) * len(decompilers) * len(options):
+                print(len(de_var_count))
             w.writerow([func, src_var_count] + de_var_count)
 
 def count_all(debug):

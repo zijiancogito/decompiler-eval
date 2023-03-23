@@ -29,7 +29,8 @@ compiler_generated_funcs = [
 generated_funcs = [
         'f_scanf_nop',
         'f_printf',
-        'f_rand'
+        'f_rand',
+        'main'
 ]
 
 syscall_funcs = [
