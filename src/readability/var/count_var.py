@@ -27,9 +27,11 @@ def get_funcs_from_file(file_path):
 def get_vars_from_file(file_path):
     funcs, funcs_name = get_funcs_from_file(file_path)
     funcs_vars = {}
+    # print(file_path)
     for func, func_name in zip(funcs, funcs_name):
         code = preprocess_code(func.strip())
         vars = get_all_vars(code)
+        # print(vars)
         funcs_vars[func_name] = len(vars)
     return funcs_vars
 
