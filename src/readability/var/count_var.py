@@ -29,6 +29,8 @@ def get_vars_from_file(file_path):
     funcs_vars = {}
     # print(file_path)
     for func, func_name in zip(funcs, funcs_name):
+        if not re.match('func[0-9]', func_name):
+            continue
         code = preprocess_code(func.strip())
         vars = get_all_vars(code)
         # print(vars)
