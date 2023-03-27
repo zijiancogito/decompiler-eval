@@ -59,6 +59,8 @@ void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const 
     return ;
   }
   const char *nodeType = ts_node_type(currentNode);
+  // if(move != UP)
+    // printf("%s\n", nodeType);
   if (move == DOWN) {
     if (strcmp(node_filter, "") == 0 || strcmp(node_filter, nodeType) == 0){
       append_node(all_nodes, currentNode);
@@ -97,6 +99,45 @@ void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const 
   }
 }
 
+void make_move_iter(TSTreeCursor *cursor, NodeList *all_nodes, const char *node_filter)
+{
+  TSNode currentNode = ts_tree_cursor_current_node(cursor);
+  TSTreeCursor *tmp = cursor;
+  int up_flag = 0;
+  while(tmp != NULL){
+    TSNode currentNode = ts_tree_cursor_current_node(tmp);
+    if(up_flag == 0){
+      append_node(all_nodes, currentNode);
+      const char *nodeType = ts_node_type(currentNode);
+    }
+    if(up_flag == 0){
+      if(ts_tree_cursor_goto_first_child(tmp)){
+        up_flag = 0;
+      }
+      else if(ts_tree_cursor_goto_next_sibling(tmp)){
+        up_flag = 0;
+      }
+      else if(ts_tree_cursor_goto_parent(tmp)){
+        up_flag = 1;
+      }
+      else{
+        tmp = NULL;
+      }
+    }
+    else{
+      if(ts_tree_cursor_goto_next_sibling(tmp)){
+        up_flag = 0;
+      }
+      else if(ts_tree_cursor_goto_parent(tmp)){
+        up_flag = 1;
+      }
+      else{
+        tmp = NULL;
+      }
+    }
+  }
+}
+
 void parse_decompiler_output(TSTree * tree, NodeList * all_nodes, const char *node_filter) {
   // Get the root node of the syntax tree.
   TSNode root_node = ts_tree_root_node(tree);
@@ -107,7 +148,9 @@ void parse_decompiler_output(TSTree * tree, NodeList * all_nodes, const char *no
   init_node_list(all_nodes);
   
   // Walk the syntax tree and get filtered nodes.
-  make_move(&cursor, DOWN, all_nodes, node_filter);
+  // make_move(&cursor, DOWN, all_nodes, node_filter);
+  // printf("-------------------------------\n");
+  make_move_iter(&cursor, all_nodes, node_filter);
 }
 
 void siplify_source(char *source)
@@ -140,10 +183,22 @@ char *read_source(const char * filename) {
 	return source_buf;
 }
 
-//int main(){
-  //const char *src = "int a = func(b);";
-  //const char *node_filter = "";
-  //parse_decompiler_output(src, node_filter);
-  //return 0;
-//}
-
+// TSLanguage *tree_sitter_c();
+// int main(){
+  // const char *src = "int a = func(b);";
+  // const char *node_filter = "";
+  // Create a parser.
+  // TSParser *parser = ts_parser_new();
+    //     // Set the parser's language (JSON in this case).
+  // ts_parser_set_language(parser, tree_sitter_c());
+  // TSTree *tree = ts_parser_parse_string(
+		      // parser,
+		      // NULL,
+		      // src,
+		      // strlen(src)
+  // );
+  // NodeList all_nodes;
+  // parse_decompiler_output(tree, &all_nodes, node_filter);
+// 
+  // return 0;
+// }

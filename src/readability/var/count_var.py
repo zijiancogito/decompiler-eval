@@ -27,12 +27,12 @@ def get_funcs_from_file(file_path):
 def get_vars_from_file(file_path):
     funcs, funcs_name = get_funcs_from_file(file_path)
     funcs_vars = {}
-    # print(file_path)
     for func, func_name in zip(funcs, funcs_name):
         if not re.match('func[0-9]', func_name):
             continue
         code = preprocess_code(func.strip())
         vars = get_all_vars(code)
+        # print(func_name, end='\t')
         # print(vars)
         funcs_vars[func_name] = len(vars)
     return funcs_vars
@@ -91,6 +91,17 @@ def count_all(debug):
         
         out_csv = os.path.join(root, f"{src.split('.')[0]}.csv")
         write_var_information_to_csv(src_vars, de_vars, out_csv)
+
+def test():
+    dec = "/home/eval/DF/de/clang/ida/o0/147.txt"
+    src = "/home/eval/DF/data/147.c"
+    src_vars = get_vars_from_file(src)
+    dec_vars = get_vars_from_file(dec)
+    print(src_vars)
+    print(dec_vars)
+    
     
 if __name__ == '__main__':
     count_all(False)
+    # test()
+

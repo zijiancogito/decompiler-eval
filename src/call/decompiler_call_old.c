@@ -162,8 +162,8 @@ void process(enum Decompiler decompiler, const char * filename) {
     
     // Save filtered nodes in all_nodes
     NodeList all_call_nodes, all_var_nodes;
-    parse_decompiler_output(tree, source, "call_expression", &all_call_nodes);
-    parse_decompiler_output(tree, source, "declaration", &all_var_nodes);
+    parse_decompiler_output(tree, &all_call_nodes, "call_expression");
+    parse_decompiler_output(tree, &all_var_nodes, "declaration");
     
     // Build map of variables and its type
     VarMap *var_map = NULL;
