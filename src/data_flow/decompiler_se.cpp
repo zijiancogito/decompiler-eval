@@ -207,7 +207,7 @@ void get_parameters(TSTreeCursor *cursor, std::unordered_map<std::string, Variab
     try {
         NodeList all_nodes;
         init_node_list(&all_nodes);
-        make_move(cursor, DOWN, &all_nodes, "parameter_declaration");
+        make_move_iter(cursor, &all_nodes, "parameter_declaration");
         Node *tmp = all_nodes.head;
         for (int i = 0; i < all_nodes.listLen; i++) {
             tmp = tmp->next;
@@ -223,7 +223,7 @@ void add_declarator_to_var_map(std::unordered_map<std::string, Variable*> &var_m
     NodeList all_nodes;
     TSTreeCursor cursor = ts_tree_cursor_new(var_node);
     init_node_list(&all_nodes);
-    make_move(&cursor, DOWN, &all_nodes, "identifier");
+    make_move_iter(&cursor, &all_nodes, "identifier");
     if (all_nodes.listLen == 0)
         return ;
 
@@ -320,7 +320,7 @@ Json::Value find_input_variables(TSTree *tree, const char *source, std::unordere
                 TSTreeCursor cursor = ts_tree_cursor_new(argument_node);
                 NodeList pnodes;
                 init_node_list(&pnodes);
-                make_move(&cursor, DOWN, &pnodes, "identifier");
+                make_move_iter(&cursor, &pnodes, "identifier");
                 Node *tmp = pnodes.head;
                 for (int j = 0; j < pnodes.listLen; j ++ ) {
                     tmp = tmp->next;
@@ -407,7 +407,7 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             NodeList all_id_nodes;
             TSTreeCursor cursor = ts_tree_cursor_new(dec_node);
             init_node_list(&all_id_nodes);
-            make_move(&cursor, DOWN, &all_id_nodes, "identifier");
+            make_move_iter(&cursor, &all_id_nodes, "identifier");
             Node *tmp = all_id_nodes.head;
             for (int i = 0; i < all_id_nodes.listLen; i ++ ) {
                 tmp = tmp->next;
@@ -936,7 +936,7 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
         NodeList sub_nodes;
         TSTreeCursor cursor = ts_tree_cursor_new(node);
         init_node_list(&sub_nodes);
-        make_move(&cursor, DOWN, &sub_nodes, "");
+        make_move_iter(&cursor, &sub_nodes, "");
         Node *tmp = sub_nodes.head;
         for (int j = 0; j < sub_nodes.listLen; j ++) {
             tmp = tmp->next;

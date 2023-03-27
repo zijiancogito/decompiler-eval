@@ -111,6 +111,7 @@ void free_node_list(NodeList *list);
 
 // node_filter can filter specific type of nodes.
 void make_move(TSTreeCursor *cursor, enum MOVE move, NodeList *all_nodes, const char *node_filter);
+void make_move_iter(TSTreeCursor *cursor, NodeList *all_nodes, const char *node_filter);
 
 // void parse_decompiler_output(TSTree *tree, const char *source, const char *node_filter, NodeList *all_nodes);
 void parse_decompiler_output(TSTree *tree, NodeList *all_nodes, const char *node_filter);

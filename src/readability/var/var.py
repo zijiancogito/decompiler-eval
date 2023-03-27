@@ -52,9 +52,9 @@ def make_move_iter(cursor):
         curr_node = cursor.node
         pointer = stack[-1]
         if up_flag == False:
-            print(pointer.type)
-            print(parent_type)
-            print()
+            # print(pointer.type)
+            # print(parent_type)
+            # print()
             if pointer.type == 'identifier':
                 pat.append(parent_type)
         if var_filter(pointer, parent_type) and up_flag == False:
@@ -135,6 +135,17 @@ def read_code_from_file(code_file):
         code = f.read()
     code = preprocess_code(code)
     return code
+
+def get_vars_from_file(f):
+    extract_funcs = ExtractFuncs()
+    funcs, funcs_name = extract_funcs.getFuncs(f)
+    pats = []
+    for code , func_name in zip(funcs, funcs_name):
+        code = preprocess_code(code.strip())
+        _, pat = get_all_vars(code)
+        pats = pats + pat
+    pats = list(set(pats))
+    return pats
 
 def test():
     f = "/home/eval/DF/de/clang/angr/o0/39.txt"
