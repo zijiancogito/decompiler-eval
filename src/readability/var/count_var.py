@@ -25,14 +25,15 @@ def get_funcs_from_file(file_path):
     return funcs, funcs_name
 
 def get_vars_from_file(file_path):
+    # print(file_path)
     funcs, funcs_name = get_funcs_from_file(file_path)
     funcs_vars = {}
     for func, func_name in zip(funcs, funcs_name):
+        # print(func_name, end='\t')
         if not re.match('func[0-9]', func_name):
             continue
         code = preprocess_code(func.strip())
         vars = get_all_vars(code)
-        # print(func_name, end='\t')
         # print(vars)
         funcs_vars[func_name] = len(vars)
     return funcs_vars
@@ -93,15 +94,34 @@ def count_all(debug):
         write_var_information_to_csv(src_vars, de_vars, out_csv)
 
 def test():
-    dec = "/home/eval/DF/de/clang/ida/o0/147.txt"
-    src = "/home/eval/DF/data/147.c"
+    dec = "/home/eval/DF/de/clang/angr/o0/39.txt"
+    src = "/home/eval/DF/data/39.c"
     src_vars = get_vars_from_file(src)
     dec_vars = get_vars_from_file(dec)
     print(src_vars)
     print(dec_vars)
     
+def test2():
+    src = "147.c"
+    basename = src.split('.')[0]
+    src_path = os.path.join(src_root, src)
+    src_vars = get_vars_from_file(src_path) 
+    de_vars = {}
+    for compiler in compilers:
+        de_vars[compiler] = {}
+        for decompiler in decompilers:
+            de_vars[compiler][decompiler] = {}
+            for option in options:
+                root = dec_root 
+                de_path = os.path.join(root, compiler, decompiler, option, f"{basename}.txt")
+                print(de_path)
+                vars = get_vars_from_file(de_path)
+                print(vars)
+                de_vars[compiler][decompiler][option] = vars
+
+    return src_vars, de_vars
     
 if __name__ == '__main__':
-    count_all(False)
-    # test()
-
+    # count_all(False)
+    test()
+    # test2()
