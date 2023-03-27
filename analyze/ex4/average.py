@@ -12,22 +12,27 @@ options = ['o0', 'o1', 'o2', 'o3', 'os']
 
 def analyze(csv_file):
     res = []
+    var_count = []
     for i in range(len(compilers) * len(decompilers) * len(options)):
         res.append([])
+        var_count.append([])
+    var_count.append([])
     with open(csv_file, 'r') as f:
         reader = csv.reader(f, delimiter=' ')
         cnt = 0
         for row in reader:
             cnt += 1
             src = int(row[1])
+            var_count[0].append(src)
             if src == 0:
                 continue
             for idx, i in enumerate(row[2:]):
+                var_count[idx+1].append(int(i))
                 if int(i) == 0:
                     continue
                 else:
                     res[idx].append(round(abs(src - int(i)) / src, 2))
-    return res
+    return res, var_count
 
 def analyze_neg(csv_file):
     res = []
@@ -75,10 +80,14 @@ def analyze_all():
     all_res = []
     for i in range(len(compilers) * len(decompilers) * len(options)):
         all_res.append([])
+    all_var_count = [0] * (len(compilers) * len(decompilers) * len(options) + 1)
     for csv_file in csvs:
-        res = analyze(os.path.join(root, csv_file))
+        res, var_count = analyze(os.path.join(root, csv_file))
         for idx, i in enumerate(res):
             all_res[idx] = all_res[idx] + i
+        for idx, i in enumerate(var_count):
+            all_var_count[idx] += np.sum(i)
+
 
     avg_res = []
     for res in all_res:
@@ -116,20 +125,37 @@ def analyze_all():
             avg_pos_res.append(0)
         else:
             avg_pos_res.append(round(np.mean(res), 2))
-    
+
+    print("Variables Count")
+    print_var_count(all_var_count)
     print("Average")
     pretty_print(avg_res)
-    print("Negative average (src > dec)")
-    pretty_print(avg_neg_res)
-    print("Postive average (src < dec)")
-    pretty_print(avg_pos_res)
+    # print("Negative average (src > dec)")
+    # pretty_print(avg_neg_res)
+    # print("Postive average (src < dec)")
+    # pretty_print(avg_pos_res)
+
+def print_var_count(var_count):
+    cnt = 1
+    for compiler in compilers:
+        print(f"---------------------------{compiler}-------------------------------")
+        print("Decompiler\tSource\tO0\tO1\tO2\tO3\tOs")
+        for decompiler in decompilers:
+            print("{0:15}".format(decompiler), end='\t')
+            print(var_count[0], end='\t')
+            for option in options:
+                print(var_count[cnt], end='\t')
+                cnt += 1
+            print()
+        print()
 
 def pretty_print(res):
     cnt = 0
     for compiler in compilers:
-        print(compiler)
+        print(f"---------------------------{compiler}-------------------------------")
+        print("Decompiler\tO0\tO1\tO2\tO3\tOs")
         for decompiler in decompilers:
-            print(decompiler, end='\t')
+            print("{0:15}".format(decompiler), end='\t')
             for option in options:
                 print(f"{res[cnt]}", end='\t')
                 cnt += 1
