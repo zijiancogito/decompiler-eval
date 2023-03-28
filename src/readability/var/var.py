@@ -18,13 +18,29 @@ C = Language('build/my-language.so', 'c')
 c_parser = Parser()
 c_parser.set_language(C)
 
+ptypes = [
+        'declaration',
+        'init_declarator',
+        'parameter_declaration',
+        'pointer_declarator',
+        'variadic_parameter',
+        'parenthesized_declarator',
+        'abstract_pointer_declarator',
+        'sized_type_specifier',
+        'parameter_declaration',
+        'char_literal',
+        'type_descriptor',
+        'argument_list',
+        'macro_type_specifier',
+        'array_declarator',
+        'abstract_array_declarator',
+        'string_literal'
+]
+
 def var_filter(node, parent_type):
-    if node.type == "identifier" and parent_type == "declaration":
-        return True
-    if node.type == "identifier" and parent_type == "init_declarator":
-        return True
-    if node.type == "identifier" and parent_type == "parameter_declaration":
-        return True
+    if node.type == "identifier":
+        if parent_type in ptypes:
+            return True
     return False
 
 def copy_content(start, end, code):
@@ -43,7 +59,7 @@ def make_move_iter(cursor):
     nodes = []
 
     stack = []
-    pat = []
+    # pat = []
     if cursor.node:
         stack.append(cursor.node)
     up_flag = False
@@ -51,12 +67,12 @@ def make_move_iter(cursor):
     while len(stack) != 0:
         curr_node = cursor.node
         pointer = stack[-1]
-        if up_flag == False:
+        # if up_flag == False:
             # print(pointer.type)
             # print(parent_type)
             # print()
-            if pointer.type == 'identifier':
-                pat.append(parent_type)
+            # if pointer.type == 'identifier':
+                # pat.append(parent_type)
         if var_filter(pointer, parent_type) and up_flag == False:
             nodes.append(pointer)
         if up_flag == False:
@@ -81,13 +97,12 @@ def make_move_iter(cursor):
                 stack.pop()
             else:
                 stack.pop()
-    return nodes, pat
+    return nodes
 
-            
 def make_move(cursor, move, parent_type):
     current_node = cursor.node
     if current_node == None:
-        return []
+        return 
     nodes = []
     # print(cursor.node.type)
     # print(parent_type)
@@ -124,10 +139,11 @@ def get_all_vars(code):
     tree = c_parser.parse(bytes(code, "utf8"))
     cursor = tree.walk()
     # all_nodes = make_move(cursor, 'down', 'root')
-    all_nodes, pats = make_move_iter(cursor)
-    vars = [get_content(code, n) for n in all_nodes]
+    all_nodes= make_move_iter(cursor)
+    vars = [get_content(code, n).strip() for n in all_nodes]
+    vars = list(set(vars))
     # print(vars)
-    return vars, pats
+    return vars
 
 def read_code_from_file(code_file):
     code = None
@@ -170,8 +186,12 @@ def test():
                 continue
         if not all_nodes:
             continue
+        vars = []
         for node in all_nodes:
-            print(get_content(code, node))
+            vars = [get_content(code, n).strip() for n in all_nodes]
+        vars = list(set(vars))
+        for var in vars:
+            print(var)
 
         print("====================================================")
 
