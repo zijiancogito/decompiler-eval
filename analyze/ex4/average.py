@@ -17,6 +17,7 @@ def analyze(csv_file):
         res.append([])
         var_count.append([])
     var_count.append([])
+    func_var = {'pos': 0, 'neg': 0, 'eq': 0}
     with open(csv_file, 'r') as f:
         reader = csv.reader(f, delimiter=' ')
         cnt = 0
@@ -32,7 +33,13 @@ def analyze(csv_file):
                     continue
                 else:
                     res[idx].append(round(abs(src - int(i)) / src, 2))
-    return res, var_count
+                    if src < int(i):
+                        func_var['pos'] = func_var['pos'] + 1
+                    elif src > int(i):
+                        func_var['neg'] = func_var['neg'] + 1
+                    else:
+                        func_var['eq'] = func_var['eq'] + 1
+    return res, var_count, func_var
 
 def analyze_neg(csv_file):
     res = []
@@ -81,8 +88,12 @@ def analyze_all():
     for i in range(len(compilers) * len(decompilers) * len(options)):
         all_res.append([])
     all_var_count = [0] * (len(compilers) * len(decompilers) * len(options) + 1)
+    func_vars = {'pos': 0, 'neg': 0, 'eq': 0}
     for csv_file in csvs:
-        res, var_count = analyze(os.path.join(root, csv_file))
+        res, var_count, func_var = analyze(os.path.join(root, csv_file))
+        func_vars['pos'] = func_vars['pos'] + func_var['pos']
+        func_vars['neg'] = func_vars['neg'] + func_var['neg']
+        func_vars['eq'] = func_vars['eq'] + func_var['eq']
         for idx, i in enumerate(res):
             all_res[idx] = all_res[idx] + i
         for idx, i in enumerate(var_count):
@@ -130,10 +141,13 @@ def analyze_all():
     print_var_count(all_var_count)
     print("Average")
     pretty_print(avg_res)
-    # print("Negative average (src > dec)")
-    # pretty_print(avg_neg_res)
-    # print("Postive average (src < dec)")
-    # pretty_print(avg_pos_res)
+    print("Negative average (src > dec)")
+    pretty_print(avg_neg_res)
+    print("Postive average (src < dec)")
+    pretty_print(avg_pos_res)
+
+    total = func_vars['pos'] + func_vars['neg'] + func_vars['eq']
+    print(f"Pos(dec > src): {round(func_vars['pos'] / total, 2)}\nNeg(src > dec): {round(func_vars['neg'] / total, 2)}\nEQ: {round(func_vars['eq'] / total, 2)}")
 
 def print_var_count(var_count):
     cnt = 1

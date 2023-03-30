@@ -122,6 +122,6 @@ def test2():
     return src_vars, de_vars
     
 if __name__ == '__main__':
-    # count_all(False)
-    test()
+    count_all(False)
+    # test()
     # test2()
