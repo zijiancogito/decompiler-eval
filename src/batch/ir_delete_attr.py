@@ -30,6 +30,8 @@ def batch_delete(ir_dir):
     for ir in irs:
         delete_attr(os.path.join(ir_dir, ir))
 
+
+
 if __name__ == "__main__":
     if sys.argv[1] == 'bat':
         batch_delete(sys.argv[2])
