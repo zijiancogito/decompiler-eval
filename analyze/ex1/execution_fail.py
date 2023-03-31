@@ -30,7 +30,7 @@ def analyze(compiler, decompiler):
         else:
             print(f"{compiler} {decompiler} {option}: {se_count} {round(se_count/ (de_count*10), 2)}")
         total += se_count
-        total_de += (1000 - de_count) * 10
+        total_de += de_count * 10
     if total_de == 0:
         print(f"Total {compiler} {decompiler}: 0 0")
     else:
