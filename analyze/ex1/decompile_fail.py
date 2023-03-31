@@ -12,8 +12,12 @@ def analyze(compiler, decompiler):
         csv_path = os.path.join(root, compiler, decompiler, option, 'err.csv')
         with open(csv_path) as f:
             lines = f.readlines()
-            print(f"{compiler} {decompiler} {option}: {len(lines)} {len(lines)/1000}")
-            total += len(lines)
+            s = 0
+            for l in lines:
+                if l.strip() != '':
+                    s += 1
+            print(f"{compiler} {decompiler} {option}: {1000-s} {(1000-s)/1000}")
+            total += 1000 - s 
     print(f"Total {compiler} {decompiler}: {total} {total/5000}")
     print("=========================================================")
 

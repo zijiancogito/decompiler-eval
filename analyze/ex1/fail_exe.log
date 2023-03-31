@@ -1,0 +1,154 @@
+clang angr o0: 3930 1.0
+clang angr o1: 2990 0.69
+clang angr o2: 2594 0.69
+clang angr o3: 2594 0.69
+clang angr os: 3402 0.7
+Total clang angr: 15510 0.53
+=========================================================
+clang BinaryNinja o0: 5330 1.0
+clang BinaryNinja o1: 5180 1.0
+clang BinaryNinja o2: 4980 1.0
+clang BinaryNinja o3: 4980 1.0
+clang BinaryNinja os: 4850 1.0
+Total clang BinaryNinja: 25320 1.03
+=========================================================
+clang Boomerang o0: 0 0
+clang Boomerang o1: 0 0
+clang Boomerang o2: 0 0
+clang Boomerang o3: 0 0
+clang Boomerang os: 0 0
+Total clang Boomerang: 0 0.0
+=========================================================
+clang dewolf o0: 0 0
+clang dewolf o1: 0 0
+clang dewolf o2: 0 0
+clang dewolf o3: 0 0
+clang dewolf os: 0 0
+Total clang dewolf: 0 0.0
+=========================================================
+clang Ghidra o0: 10000 1.0
+clang Ghidra o1: 9950 0.99
+clang Ghidra o2: 9951 1.0
+clang Ghidra o3: 9951 1.0
+clang Ghidra os: 9957 1.0
+Total clang Ghidra: 49809 2490.45
+=========================================================
+clang ida o0: 4860 1.0
+clang ida o1: 4940 1.0
+clang ida o2: 4430 1.0
+clang ida o3: 4430 1.0
+clang ida os: 4700 1.0
+Total clang ida: 23360 0.88
+=========================================================
+clang RecStudio o0: 4251 1.0
+clang RecStudio o1: 3748 0.8
+clang RecStudio o2: 3255 0.81
+clang RecStudio o3: 3268 0.81
+clang RecStudio os: 3599 0.81
+Total clang RecStudio: 18121 0.63
+=========================================================
+clang Reko o0: 11 0.0
+clang Reko o1: 655 0.13
+clang Reko o2: 522 0.13
+clang Reko o3: 522 0.13
+clang Reko os: 1000 0.22
+Total clang Reko: 2710 0.1
+=========================================================
+clang Relyze o0: 3523 0.85
+clang Relyze o1: 3486 0.78
+clang Relyze o2: 3173 0.78
+clang Relyze o3: 3173 0.78
+clang Relyze os: 3027 0.79
+Total clang Relyze: 16382 0.56
+=========================================================
+clang RetDec o0: 5041 0.98
+clang RetDec o1: 4422 0.86
+clang RetDec o2: 4236 0.86
+clang RetDec o3: 4236 0.86
+clang RetDec os: 4132 0.85
+Total clang RetDec: 22067 0.88
+=========================================================
+clang Snowman o0: 2056 0.4
+clang Snowman o1: 2156 0.4
+clang Snowman o2: 1964 0.4
+clang Snowman o3: 1964 0.4
+clang Snowman os: 2040 0.4
+Total clang Snowman: 10180 0.41
+=========================================================
+gcc angr o0: 3520 1.0
+gcc angr o1: 2486 0.74
+gcc angr o2: 3007 0.96
+gcc angr o3: 3007 0.96
+gcc angr os: 3790 0.76
+Total gcc angr: 15810 0.5
+=========================================================
+gcc BinaryNinja o0: 5170 1.0
+gcc BinaryNinja o1: 4820 1.0
+gcc BinaryNinja o2: 5340 1.0
+gcc BinaryNinja o3: 5340 1.0
+gcc BinaryNinja os: 5680 1.0
+Total gcc BinaryNinja: 26350 1.11
+=========================================================
+gcc Boomerang o0: 0 0
+gcc Boomerang o1: 0 0
+gcc Boomerang o2: 0 0
+gcc Boomerang o3: 0 0
+gcc Boomerang os: 0 0
+Total gcc Boomerang: 0 0.0
+=========================================================
+gcc dewolf o0: 0 0
+gcc dewolf o1: 0 0
+gcc dewolf o2: 0 0
+gcc dewolf o3: 0 0
+gcc dewolf os: 0 0
+Total gcc dewolf: 0 0.0
+=========================================================
+gcc Ghidra o0: 10000 1.0
+gcc Ghidra o1: 10000 1.0
+gcc Ghidra o2: 10000 1.0
+gcc Ghidra o3: 10000 1.0
+gcc Ghidra os: 10000 1.0
+Total gcc Ghidra: 0 0
+=========================================================
+gcc ida o0: 4590 1.0
+gcc ida o1: 4510 1.0
+gcc ida o2: 4100 1.0
+gcc ida o3: 4100 1.0
+gcc ida os: 4940 1.0
+Total gcc ida: 22240 0.8
+=========================================================
+gcc RecStudio o0: 4313 0.97
+gcc RecStudio o1: 2926 0.79
+gcc RecStudio o2: 1962 0.47
+gcc RecStudio o3: 1963 0.47
+gcc RecStudio os: 4247 0.91
+Total gcc RecStudio: 15411 0.54
+=========================================================
+gcc Reko o0: 4180 1.0
+gcc Reko o1: 4078 1.0
+gcc Reko o2: 66 0.02
+gcc Reko o3: 66 0.02
+gcc Reko os: 4690 1.0
+Total gcc Reko: 13080 0.45
+=========================================================
+gcc Relyze o0: 3470 0.85
+gcc Relyze o1: 3050 0.87
+gcc Relyze o2: 3253 0.85
+gcc Relyze o3: 3253 0.85
+gcc Relyze os: 3468 0.85
+Total gcc Relyze: 16494 0.54
+=========================================================
+gcc RetDec o0: 4873 0.98
+gcc RetDec o1: 4260 0.89
+gcc RetDec o2: 4271 0.87
+gcc RetDec o3: 4271 0.87
+gcc RetDec os: 5121 0.98
+Total gcc RetDec: 22796 0.9
+=========================================================
+gcc Snowman o0: 1632 0.3
+gcc Snowman o1: 1449 0.3
+gcc Snowman o2: 549 0.1
+gcc Snowman o3: 549 0.1
+gcc Snowman os: 1138 0.2
+Total gcc Snowman: 5317 0.23
+=========================================================
