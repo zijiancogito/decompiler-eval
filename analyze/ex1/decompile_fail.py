@@ -16,9 +16,9 @@ def analyze(compiler, decompiler):
             for l in lines:
                 if l.strip() != '':
                     s += 1
-            print(f"{compiler} {decompiler} {option}: {1000-s} {(1000-s)/1000}")
+            print(f"{compiler} {decompiler} {option}: {1000-s} {round((1000-s)/1000, 2)}")
             total += 1000 - s 
-    print(f"Total {compiler} {decompiler}: {total} {total/5000}")
+    print(f"Total {compiler} {decompiler}: {total} {round(total/5000, 2)}")
     print("=========================================================")
 
 def analyze_all():
