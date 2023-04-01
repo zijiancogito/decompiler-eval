@@ -123,7 +123,7 @@ if __name__ == "__main__":
         for option in ["o0", "o1", "o2", "o3", "os"]:
             dir = os.path.join(df_ir, option)
             fails = check_df_ir_dir(dir)
-            print(f"{len(fails)} failed.")
+            print(f"{len(fails)} failed on {option}.")
             save_to = os.path.join(df_ir, 'fail_check', f'err_{option}.csv')
             write_fails(save_to, fails)
             move_to = os.path.join(df_ir, 'fail_check', option)

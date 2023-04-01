@@ -7,6 +7,12 @@ from compare import *
 
 import batch_ce_all as ce
 
+root = '/home/eval/DF/se/'
+compilers = ['clang', 'gcc']
+decompilers = ['angr', 'BinaryNinja', 'Boomerang', 'dewolf', 'Ghidra', 'ida', 'RecStudio', 'Reko', 'Relyze', 'RetDec', 'Snowman']
+options = ['o0', 'o1', 'o2', 'o3', 'os']
+match_algos = ['fullmatch', 'feature', 'concrete']
+
 def compare_file(ir_json_file, c_json_file, option):
     ir_json = None
     with open(ir_json_file, 'r') as f:
@@ -40,6 +46,8 @@ def compare_file(ir_json_file, c_json_file, option):
 
 def batch_compare(ir_json_dir, c_json_dir, option):
     ir_dirs = os.listdir(ir_json_dir)
+    # TODO: return failed files
+    fails = []
 
     total_c = 0
     total_ir = 0
@@ -75,20 +83,37 @@ def batch_compare(ir_json_dir, c_json_dir, option):
 
     print(f"Matched: {total_match} / C_Var: {total_c} / IR_Var: {total_ir} / Average: {'{:.2f}'.format(average)} / Matched Functions: {'{:.2f}'.format(functions)}")
 
-if __name__ == '__main__':
-    root = '/home/eval/DF/se/'
-    compiler = sys.argv[1]
-    decompiler = sys.argv[2]
-    match_algo = sys.argv[3]
-
+def batch_one(compiler, decompiler):
     dir = os.path.join(root, compiler, decompiler)
-    for opt in ['o0', 'o2', 'o2', 'o3', 'os']:
+    for opt in options:
         dec_dir = os.path.join(dir, opt)
         ir_dir = os.path.join(root, 'ir', opt)
-        print(f"Compare {compiler} {decompiler} {opt}")
-        if match_algo == 'fullmatch' or match_algo == 'feature':
-            batch_compare(ir_dir, dec_dir, match_algo)
-        elif match_algo == 'concrete':
-            print("concrete")
-            ce.batch_compare(ir_dir, dec_dir)
+        for algo in match_algos:
+            if algo == 'fullmatch' or algo == 'feature':
+                batch_compare(ir_dir, dec_dir, match_algo)
+            elif algo == 'concrete':
+                ce.batch_compare(ir_dir, dec_dir)
+
+def batch_all():
+    for compiler in compilers:
+        for decompiler in decompilers:
+            batch_one(compiler, decompiler)
+
+
+if __name__ == '__main__':
+    batch_all()
+    # root = '/home/eval/DF/se/'
+    # compiler = sys.argv[1]
+    # decompiler = sys.argv[2]
+    # match_algo = sys.argv[3]
+    # dir = os.path.join(root, compiler, decompiler)
+    # for opt in ['o0', 'o2', 'o2', 'o3', 'os']:
+        # dec_dir = os.path.join(dir, opt)
+        # ir_dir = os.path.join(root, 'ir', opt)
+        # print(f"Compare {compiler} {decompiler} {opt}")
+        # if match_algo == 'fullmatch' or match_algo == 'feature':
+            # batch_compare(ir_dir, dec_dir, match_algo)
+        # elif match_algo == 'concrete':
+            # print("concrete")
+            # ce.batch_compare(ir_dir, dec_dir)
 
