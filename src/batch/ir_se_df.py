@@ -26,7 +26,7 @@ def batch_ir_execution(ir_dir, save_to):
             llvm_ir = read_ir(ir_file)
             process_functions(llvm_ir, filename.split('.')[0], save_to)
         except:
-            failed.append(file_name)
+            failed.append(filename)
     return failed
 
 if __name__ == "__main__":
