@@ -19,7 +19,7 @@ def check_exp(exp):
 
 def check_df_ir(json_file):
     js = None
-    print(f"check {json_file}")
+    # print(f"check {json_file}")
     with open(json_file, 'r') as f:
         js = json.load(f)
     assert js, "Json loading failed."
@@ -29,11 +29,13 @@ def check_df_ir(json_file):
     for sym in symbols:
         check_res = check_symbol(sym)
         if check_res == False:
+            print(f"Check failed: {json_file} {sym}")
             return False
 
     for exp in exps:
         check_res = check_exp(exps[exp])
         if check_res == False:
+            print(f"Check failed: {json_file} {exp}")
             return False
     return True
 
@@ -112,7 +114,7 @@ def move_file(fails, to):
         subdir = fail.split('/')[-2]
         move_to_dir = os.path.join(to, subdir)
         if not os.path.exists(move_to_dir):
-            os.mkdirs(move_to_dir)
+            os.mkdir(move_to_dir)
         shutil.move(fail, move_to_dir)
 
 if __name__ == "__main__":
@@ -121,10 +123,11 @@ if __name__ == "__main__":
         for option in ["o0", "o1", "o2", "o3", "os"]:
             dir = os.path.join(df_ir, option)
             fails = check_df_ir_dir(dir)
+            print(f"{len(fails)} failed.")
             save_to = os.path.join(df_ir, 'fail_check', f'err_{option}.csv')
             write_fails(save_to, fails)
             move_to = os.path.join(df_ir, 'fail_check', option)
-            move_file(fails, to)
+            move_file(fails, move_to)
 
     elif sys.argv[1] == 'cfir':
         cf_ir = "/home/eval/CSMITH/se/ir/"
@@ -132,5 +135,3 @@ if __name__ == "__main__":
             dir = os.path.join(df_ir, option)
             check_cf_ir_dir(dir)
 
-        
-    
