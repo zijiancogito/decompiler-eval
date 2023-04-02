@@ -42,6 +42,7 @@ def compare_file(ir_json_file, c_json_file):
     not_matched = 0
     ir_var = 0
     c_var = 0
+    fails = []
     for var in ir_json["expressions"]:
         if var not in c_json["expressions"][0]:
             c_var += 1
@@ -53,10 +54,11 @@ def compare_file(ir_json_file, c_json_file):
             matched += 1
         else:
             not_matched += 1
+            fails.append(var)
         ir_var += 1
         c_var += 1
 
-    return not_matched, matched, ir_var, c_var
+    return not_matched, matched, ir_var, c_var, fails
 
 def batch_compare(ir_json_dir, c_json_dir):
     ir_dirs = os.listdir(ir_json_dir)
@@ -68,6 +70,7 @@ def batch_compare(ir_json_dir, c_json_dir):
     total_match_funcs = 0
     total_funcs = 0
 
+    fails = {}
     for ir_dir in ir_dirs:
         ir_files = os.listdir(os.path.join(ir_json_dir, ir_dir))
         for ir in ir_files:
@@ -75,20 +78,24 @@ def batch_compare(ir_json_dir, c_json_dir):
             c_json = os.path.join(c_json_dir, ir_dir, ir)
             if not os.path.exists(c_json):
                 continue
-
-            n, m, ir_vars, c_vars = compare_file(ir_json, c_json)
+            fails[ir_json] = []
+            sys.stderr.write(f"{ir_json}\n{c_json}\n")
+            n, m, ir_vars, c_vars, fail = compare_file(ir_json, c_json)
             total_c += c_vars
             total_ir += ir_vars
             total_match += m
             total_not_match += n
             if n == 0:
                 total_match_funcs += 1
+            fails[ir_json] = fail
             total_funcs += 1
 
     average = total_match / total_ir
     matched_functions = total_match_funcs / total_funcs
 
-    print(f"Matched: {total_match} / C_Var: {total_c} / IR_Var: {total_ir} / Average: {'{:.2f}'.format(average)} / Matched Functions: {'{:.2f}'.format(matched_functions)}")
+    # print(f"Matched: {total_match} / C_Var: {total_c} / IR_Var: {total_ir} / Average: {'{:.2f}'.format(average)} / Matched Functions: {'{:.2f}'.format(matched_functions)}")
+    print(f"{total_match}\t{total_c}\t{total_ir}\t{round(average, 2)}\t{round(functions, 2)}")
+    return fails
 
 if __name__ == '__main__':
     batch_compare(sys.argv[1], sys.argv[2])

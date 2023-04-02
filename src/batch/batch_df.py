@@ -118,9 +118,9 @@ def batch_one(compiler, decompiler):
         print(f"{compiler} {decompiler} {opt}")
         dec_dir = os.path.join(dir, opt)
         ir_dir = os.path.join(root, 'ir', opt)
-        print(f"{0:13}.format(Algorithm)}\tMatch\tCVars\tIRVars\tAverage\tFunctions")
+        print(f"{'{0:10}'.format('Algorithm')}\tMatch\tCVars\tIRVars\tAverage\tFunctions")
         for algo in match_algos:
-            print(f"{{0:13}.format(algo)}", end='\t')
+            print("{0:10}".format(algo), end='\t')
             algo_dir = os.path.join(save_dir, opt, compiler, decompiler, algo)
             if not os.path.exists(algo_dir):
                 os.makedirs(algo_dir)
