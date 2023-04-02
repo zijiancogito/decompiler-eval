@@ -67,7 +67,7 @@ def batch_compare(ir_json_dir, c_json_dir, option):
             c_json = os.path.join(c_json_dir, ir_dir, ir)
             if not os.path.exists(c_json):
                 continue
-            files[ir_json] = []
+            fails[ir_json] = []
 
             n, m, ir_vars, c_vars, fail = compare_file(ir_json, c_json, option)
             fails[ir_json] = fail
@@ -115,18 +115,18 @@ save_dir = '/home/eval/DF/err_cmp'
 def batch_one(compiler, decompiler):
     dir = os.path.join(root, compiler, decompiler)
     for opt in options:
-        print(f"{compiler} {decompiler} {option}")
+        print(f"{compiler} {decompiler} {opt}")
         dec_dir = os.path.join(dir, opt)
         ir_dir = os.path.join(root, 'ir', opt)
-        print(f"Algorithm\tMatch\tCVars\tIRVars\tAverage\tFunctions")
+        print(f"{0:13}.format(Algorithm)}\tMatch\tCVars\tIRVars\tAverage\tFunctions")
         for algo in match_algos:
-            print(f"{algo}", end='\t')
+            print(f"{{0:13}.format(algo)}", end='\t')
             algo_dir = os.path.join(save_dir, opt, compiler, decompiler, algo)
             if not os.path.exists(algo_dir):
                 os.makedirs(algo_dir)
-            save_to = os.path.join(algo, f'err.csv')
+            save_to = os.path.join(algo_dir, f'err.csv')
             if algo == 'fullmatch' or algo == 'feature':
-                fails = batch_compare(ir_dir, dec_dir, match_algo)
+                fails = batch_compare(ir_dir, dec_dir, algo)
                 write_fails(save_to, fails)
             elif algo == 'concrete':
                 fails = ce.batch_compare(ir_dir, dec_dir)
