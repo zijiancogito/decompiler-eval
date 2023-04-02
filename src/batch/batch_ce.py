@@ -7,6 +7,7 @@ def batch_ce(log):
     vars = {} 
     c_files = []
     ir_files = []
+    fails = {}
     with open(log, 'r') as f:
         logs = f.readlines()[:-1]
         for line in logs:
@@ -29,12 +30,14 @@ def batch_ce(log):
     all_matched = 0
     for ir_file, c_file in zip(ir_files, c_files):
         var_list = vars[ir_file]
-        matched = concrete_execution.test(ir_file, c_file, var_list)
+        matched, fail = concrete_execution.test(ir_file, c_file, var_list)
         if matched != None:
             all_matched += matched
+        fails[ir_file] = fail
         all_vars += len(var_list)
 
     print(f"Match: {all_matched} / All: {all_vars}")
+    return fails
 
 if __name__ == '__main__':
     batch_ce(sys.argv[1])

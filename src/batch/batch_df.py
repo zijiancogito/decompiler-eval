@@ -28,26 +28,30 @@ def compare_file(ir_json_file, c_json_file, option):
     matched_var = 0
     if len(c_json["expressions"]) > 1:
         return 0, 0, 0, 0
+    fails = []
     for var in ir_json["expressions"]:
         if var not in c_json["expressions"][0]:
             not_matched_var += 1
+            fails.append(var)
             # print(f"NotFound\t{ir_json_file}\t{c_json_file}\t{var}")
             continue
         ir_exp = ir_json["expressions"][var]
         c_exp = c_json["expressions"][0][var]
         if compare_variable(ir_exp, c_exp, option):
             matched_var += 1
+        else:
+            fails.append(var)
         # else:
             # print(f"NotMatch\t{ir_json_file}\t{c_json_file}\t{var}")
     all_ir_vars = len(ir_json["expressions"].keys())
     all_c_vars = len(c_json["expressions"][0].keys())
 
-    return not_matched_var, matched_var, all_ir_vars, all_c_vars
+    return not_matched_var, matched_var, all_ir_vars, all_c_vars, fails
 
 def batch_compare(ir_json_dir, c_json_dir, option):
     ir_dirs = os.listdir(ir_json_dir)
     # TODO: return failed files
-    fails = []
+    fails = {}
 
     total_c = 0
     total_ir = 0
@@ -63,8 +67,10 @@ def batch_compare(ir_json_dir, c_json_dir, option):
             c_json = os.path.join(c_json_dir, ir_dir, ir)
             if not os.path.exists(c_json):
                 continue
+            files[ir_json] = []
 
-            n, m, ir_vars, c_vars = compare_file(ir_json, c_json, option)
+            n, m, ir_vars, c_vars, fail = compare_file(ir_json, c_json, option)
+            fails[ir_json] = fail
             if ir_vars != 0:
                 r = m / ir_vars
             else:
@@ -72,27 +78,59 @@ def batch_compare(ir_json_dir, c_json_dir, option):
             if r == 1:
                 total_func_match += 1
             total_correct = total_correct + r
-
             total_c += c_vars
             total_ir += ir_vars
             total_match += m
-            
             total_funcs += 1
+
     average = total_correct / total_funcs
     functions = total_func_match / total_funcs
+    # total_match: count of matched vars in all files
+    # total_c: count of vars in all c files
+    # total_ir: count of vars in all ir files
+    # total_funcs: count of functions in all files
+    # r: ratio of matched vars in one file
+    # total_correct: sum of ratio of matched vars in all files (sum of r)
+    # average: average of ratio of matched vars in all files (average of total_correct)
+    # total_func_match: count of function full matched (all vars in file are matched)
+    # functions: ratio of full matched functions
 
-    print(f"Matched: {total_match} / C_Var: {total_c} / IR_Var: {total_ir} / Average: {'{:.2f}'.format(average)} / Matched Functions: {'{:.2f}'.format(functions)}")
+    # print(f"Matched: {total_match} / C_Var: {total_c} / IR_Var: {total_ir} / Average: {'{:.2f}'.format(average)} / Matched Functions: {'{:.2f}'.format(functions)}")
+    print(f"{total_match}\t{total_c}\t{total_ir}\t{round(average, 2)}\t{round(functions, 2)}")
+
+    return fails
+
+def write_fails(save_to, fails):
+    with open(save_to, 'w') as f:
+        for fail in fails:
+            vars = fails[fail]
+            f.write(fail)
+            for var in vars:
+                f.write(' ')
+                f.write(var)
+            f.write('\n')
+
+save_dir = '/home/eval/DF/err_cmp'
 
 def batch_one(compiler, decompiler):
     dir = os.path.join(root, compiler, decompiler)
     for opt in options:
+        print(f"{compiler} {decompiler} {option}")
         dec_dir = os.path.join(dir, opt)
         ir_dir = os.path.join(root, 'ir', opt)
+        print(f"Algorithm\tMatch\tCVars\tIRVars\tAverage\tFunctions")
         for algo in match_algos:
+            print(f"{algo}", end='\t')
+            algo_dir = os.path.join(save_dir, opt, compiler, decompiler, algo)
+            if not os.path.exists(algo_dir):
+                os.makedirs(algo_dir)
+            save_to = os.path.join(algo, f'err.csv')
             if algo == 'fullmatch' or algo == 'feature':
-                batch_compare(ir_dir, dec_dir, match_algo)
+                fails = batch_compare(ir_dir, dec_dir, match_algo)
+                write_fails(save_to, fails)
             elif algo == 'concrete':
-                ce.batch_compare(ir_dir, dec_dir)
+                fails = ce.batch_compare(ir_dir, dec_dir)
+                write_fails(save_to, fails)
 
 def batch_all():
     for compiler in compilers:
