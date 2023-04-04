@@ -10,6 +10,8 @@ def check_symbol(symbol):
     return False
 
 def check_exp(exp):
+    if "children" not in exp:
+        return False
     if len(exp["children"]) == 0:
         return check_symbol(exp["data"])
     chk = True

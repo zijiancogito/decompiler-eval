@@ -8,6 +8,8 @@ def check(path):
             new_path = os.path.join(path, f)
             check(new_path)
     else:
+        if os.path.splitext(path)[1] != '.json':
+            return
         res = check_vxx(path)
         if not res:
             with open('err_vxx.csv', 'a') as f:
@@ -26,5 +28,5 @@ def check(path):
                 writer.writerow([path])
 
 if __name__ == "__main__":
-    dir_name = "/home/eval/DF/se/gcc/ida"
+    dir_name = "/home/eval/DF/se/gcc"
     check(dir_name)

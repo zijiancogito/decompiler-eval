@@ -92,18 +92,21 @@ def test(ir_json_file, c_json_file, var_list):
     symbols = []
     for sym in ir_json["symbols"]:
         if sym not in c_json["symbols"]:
-            return None
+            return None, None
         symbols.append(sym)
 
     matched = 0
+    fails = []
     for var in var_list:
         ir_exp = sejson_to_exptree(ir_json["expressions"][var])
         c_exp = sejson_to_exptree(c_json["expressions"][0][var])
         correct_rate = sample(ir_exp, c_exp, symbols)
         if correct_rate > 0.9:
             matched += 1
+        else:
+            fails.append(var)
 
-    return matched
+    return matched, fails
 
 if __name__ == '__main__':
     matched, all_vars = test(sys.argv[1], sys.argv[2])
