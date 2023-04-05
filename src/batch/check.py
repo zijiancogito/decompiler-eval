@@ -9,6 +9,7 @@ def check_symbol(symbol):
         return True
     return False
 
+
 def check_exp(exp):
     if "children" not in exp:
         return False
@@ -136,4 +137,5 @@ if __name__ == "__main__":
         for option in ["o0", "o1", "o2", "o3", "os"]:
             dir = os.path.join(df_ir, option)
             check_cf_ir_dir(dir)
+
 
