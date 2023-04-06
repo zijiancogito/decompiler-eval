@@ -207,7 +207,7 @@ void get_parameters(TSTreeCursor *cursor, std::unordered_map<std::string, Variab
     try {
         NodeList all_nodes;
         init_node_list(&all_nodes);
-        make_move_iter(cursor, &all_nodes, "parameter_declaration");
+        make_move(cursor, DOWN, &all_nodes, "parameter_declaration");
         Node *tmp = all_nodes.head;
         for (int i = 0; i < all_nodes.listLen; i++) {
             tmp = tmp->next;
@@ -223,7 +223,7 @@ void add_declarator_to_var_map(std::unordered_map<std::string, Variable*> &var_m
     NodeList all_nodes;
     TSTreeCursor cursor = ts_tree_cursor_new(var_node);
     init_node_list(&all_nodes);
-    make_move_iter(&cursor, &all_nodes, "identifier");
+    make_move(&cursor, DOWN, &all_nodes, "identifier");
     if (all_nodes.listLen == 0)
         return ;
 
@@ -320,7 +320,7 @@ Json::Value find_input_variables(TSTree *tree, const char *source, std::unordere
                 TSTreeCursor cursor = ts_tree_cursor_new(argument_node);
                 NodeList pnodes;
                 init_node_list(&pnodes);
-                make_move_iter(&cursor, &pnodes, "identifier");
+                make_move(&cursor, DOWN, &pnodes, "identifier");
                 Node *tmp = pnodes.head;
                 for (int j = 0; j < pnodes.listLen; j ++ ) {
                     tmp = tmp->next;
@@ -407,7 +407,7 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             NodeList all_id_nodes;
             TSTreeCursor cursor = ts_tree_cursor_new(dec_node);
             init_node_list(&all_id_nodes);
-            make_move_iter(&cursor, &all_id_nodes, "identifier");
+            make_move(&cursor, DOWN, &all_id_nodes, "identifier");
             Node *tmp = all_id_nodes.head;
             for (int i = 0; i < all_id_nodes.listLen; i ++ ) {
                 tmp = tmp->next;
@@ -575,7 +575,6 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             ret["value"] = var_id_map.at(ts_node_start_byte(expression_node));
         } else {
             // get argument_list node
-            Json::Value arguments;
             TSNode argument_list = ts_node_child_by_field_name(expression_node, "arguments", strlen("arguments"));
             int argument_num = ts_node_child_count(argument_list);
             for (int i = 0; i < argument_num; i ++ ) {
@@ -583,7 +582,6 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
                 TSNode argument = ts_node_child(argument_list, i);
                 std::string argument_type = ts_node_type(argument);
                 if (argument_type != "(" && argument_type != "," && argument_type != ")") {
-                    arguments.append(parse_expression(argument, source, var_map, changed_vars));
                     if ((func_name == "scanf" || func_name == "__isoc99_scanf") && var_id_map.find(ts_node_start_byte(argument)) != var_id_map.end()) {
                         std::string var_name;
                         if (argument_type == "identifier" || argument_type == "binary_expression") {
@@ -884,7 +882,6 @@ Json::Value parse_branch_condition(TSNode con_node, const char* source, std::uno
     }
 
     return ret;
-
 }
 
 void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, bool> &visit, const char *source, NodeList *analyze_nodes, std::unordered_map<std::string, Variable*> &var_map, Json::Value &paths, Json::Value &conditions, Json::Value &outputs) 
@@ -936,7 +933,7 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
         NodeList sub_nodes;
         TSTreeCursor cursor = ts_tree_cursor_new(node);
         init_node_list(&sub_nodes);
-        make_move_iter(&cursor, &sub_nodes, "");
+        make_move(&cursor, DOWN, &sub_nodes, "");
         Node *tmp = sub_nodes.head;
         for (int j = 0; j < sub_nodes.listLen; j ++) {
             tmp = tmp->next;
@@ -1093,7 +1090,7 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes, J
         TSNode func_node = func_node_list.head->next->data;
         TSTreeCursor cursor = ts_tree_cursor_new(func_node);
 
-        // get parametersx
+        // get parameters
         get_parameters(&cursor, var_map, source);
         // get input from scanf function
         // Json::Value inputs = find_input_variables(tree, source, var_map);
@@ -1141,6 +1138,8 @@ extern "C" const char *process(const char *str, MODE mode)
         }
         
         assert(source);
+        printf("%s\n", source);
+        exit(0);
         // if (strstr(source, "?") != NULL)
         //     return NULL;
 
@@ -1278,9 +1277,67 @@ extern "C" const char *process(const char *str, MODE mode)
     }
 }
 
+void test(const char *str, MODE mode)
+{
+    char *source = NULL;
+    source = read_source(str);
+    assert(source);
+
+    // Create a parser
+    TSParser * parser = ts_parser_new();
+    // Set the parser's language
+    ts_parser_set_language(parser, tree_sitter_c());
+    TSTree *tree = ts_parser_parse_string(
+        parser,
+        NULL,
+        source,
+        strlen(source)
+    );
+
+    NodeList all_nodes;
+    parse_decompiler_output(tree, &all_nodes, "");
+
+    Node *tmp = all_nodes.head;
+    std::vector<char *> tmp_vec;
+    while (tmp->next != all_nodes.tail) {
+        tmp = tmp->next;
+        std::string cnt = get_content(tmp->data, source);
+        if (cnt == "CONCAT") {
+            int start = ts_node_start_byte(tmp->data);
+            int end = ts_node_end_byte(tmp->data);
+            TSNode parent = ts_node_parent(tmp->data);
+            while (ts_node_start_byte(parent) >= start || ts_node_end_byte(parent) <= end)
+                parent = ts_node_parent(parent);
+            printf("%s\n", get_content(parent, source));
+            end = ts_node_end_byte(parent);
+            char *concat = get_content_in_source(start, end, source);
+            tmp_vec.push_back(concat);
+        }
+    }
+
+    for (auto tmp_str: tmp_vec) {
+        int len = strlen(source);
+        char *pos = strstr(source, tmp_str);
+        int sub_len = strlen(tmp_str);
+        while (tmp_str[sub_len - 1] == ')' || tmp_str[sub_len - 1] == ';')
+            sub_len -= 1;
+        if (pos != NULL) {
+            for (int j = 0; j < len - (pos - source); j ++ )
+                *(pos + j) = *(pos + j + sub_len);
+        }
+    }
+
+    // printf("%s\n", source);
+
+    ts_tree_delete(tree);
+    ts_parser_delete(parser);
+    free(source);
+}
+
 int main()
 {
     // process("/home/eval/POJ/test/c/10-11-11/main.txt", FILE_NAME);
     process("./s_test.c", FILE_NAME);
+    // test("./s_test.c", FILE_NAME);
     return 0;
 }

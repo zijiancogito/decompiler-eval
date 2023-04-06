@@ -28,7 +28,7 @@ def analyze(compiler, decompiler):
         if de_count == 0:
             print(f"{compiler} {decompiler} {option}: 0 0")
         else:
-            print(f"{compiler} {decompiler} {option}: {se_count} {round(se_count/ (de_count*10), 2)}")
+            print(f"{compiler} {decompiler} {option}: {se_count} {de_count * 10} {round(se_count/ (de_count*10), 2)}")
         total += se_count
         total_de += de_count * 10
     if total_de == 0:

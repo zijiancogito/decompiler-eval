@@ -84,6 +84,8 @@ const char *unnecessary[] = {
     "HIBYTE",
     "LOWORD",
     "HIWORD",
+    "HIGHW",
+    "LOWW",
     "LODWORD",
     "HIDWORD",
     "LOQWORD",
@@ -101,6 +103,12 @@ const char *unnecessary[] = {
     "__thiscall",
     "__noreturn",
     "__spoils<rdx,rcx,r8,r9,r10,r11,xmm4,xmm5>",
+};
+
+const char *needchange[] = {
+    "printf_2",
+    "__isoc99_scanf_2",
+    "rand_2",
 };
 
 void init_node_list(NodeList * node_list);

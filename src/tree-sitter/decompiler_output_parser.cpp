@@ -148,21 +148,36 @@ void parse_decompiler_output(TSTree * tree, NodeList * all_nodes, const char *no
   init_node_list(all_nodes);
   
   // Walk the syntax tree and get filtered nodes.
-  // make_move(&cursor, DOWN, all_nodes, node_filter);
+  make_move(&cursor, DOWN, all_nodes, node_filter);
   // printf("-------------------------------\n");
-  make_move_iter(&cursor, all_nodes, node_filter);
+  // make_move_iter(&cursor, all_nodes, node_filter);
 }
 
 void siplify_source(char *source)
 {
-  int len = strlen(source);
   for (int i = 0; i < sizeof(unnecessary)/sizeof(const char*); i ++ ) {
+    int len = strlen(source);
     char *unnecessary_position = strstr(source, unnecessary[i]);
     int sub_len = strlen(unnecessary[i]);
     while (unnecessary_position != NULL) {
       for (int j = 0; j < len - (unnecessary_position - source); j ++ )
         *(unnecessary_position + j) = *(unnecessary_position + j + sub_len);
       unnecessary_position = strstr(source, unnecessary[i]);
+    }
+  }
+  for (int i = 0; i < sizeof(needchange)/sizeof(const char*); i ++ ) {
+    int len = strlen(source);
+    char *needchange_position = strstr(source, needchange[i]);
+    int sub_len = strlen(needchange[i]);
+    while (needchange_position != NULL) {
+      printf("%s\n\n", needchange_position);
+      printf("%d\n\n", sub_len);
+      needchange_position += sub_len - 2;
+      printf("%s\n", needchange_position);
+      exit(0);
+      for (int j = 0; j < len - (needchange_position - source); j ++ )
+        *(needchange_position + j) = *(needchange_position + j + 2);
+      needchange_position = strstr(source, needchange[i]);
     }
   }
 }

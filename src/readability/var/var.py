@@ -145,6 +145,11 @@ def get_all_vars(code):
     # print(vars)
     return vars
 
+def get_func_from_file(code_file):
+    extract_funcs = ExtractFuncs()
+    funcs, funcs_name = extract_funcs.getFuncs(code_file)
+    return funcs, funcs_name
+
 def read_code_from_file(code_file):
     code = None
     with open(code_file, 'r') as f:
