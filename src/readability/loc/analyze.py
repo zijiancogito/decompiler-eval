@@ -71,6 +71,31 @@ def relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir):
 
         all_accs.extend(accs)
 
+    return all_src_dec_locs, all_ir_dec_locs, all_accs
+
+def analyze(src_dec_locs, ir_dec_locs, accs):
+    sys.path.append('../../../analyze/tools')
+    from my_math import average_x_y, plot_with_hist, plot_with_color
+    # Average
+    x, y = average_x_y(src_dec_locs, accs)
+    plot_with_hist(x, y, "avg_hist_src_loc_acc.jpg")
+    plot_with_hist(y, x, "avg_hist_src_acc_loc.jpg")
+    plot_with_color(x, y, "avg_color_src_loc_acc.jpg")
+    
+    x, y = average_x_y(ir_dec_locs, accs)
+    plot_with_hist(x, y, "avg_hist_ir_loc_acc.jpg")
+    plot_with_hist(y, x, "avg_hist_ir_acc_loc.jpg")
+    plot_with_color(x, y, "avg_color_ir_loc_acc.jpg")
+
+    x, y = src_dec_locs, accs
+    plot_with_hist(x, y, "hist_src_loc_acc.jpg")
+    plot_with_hist(y, x, "hist_src_acc_loc.jpg")
+    plot_with_color(x, y, "color_src_loc_acc.jpg")
+
+    x, y = ir_dec_locs, accs
+    plot_with_hist(x, y, "hist_ir_loc_acc.jpg")
+    plot_with_hist(y, x, "hist_ir_acc_loc.jpg")
+    plot_with_color(x, y, "color_ir_loc_acc.jpg")
 
 
 
@@ -81,4 +106,6 @@ if __name__ == '__main__':
     dec_se_dir = '/home/eval/DF/se/clang/Ghidra/o0'
     ir_se_dir = '/home/eval/DF/se/ir/o0'
 
-    relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir)
+    src_dec, ir_dec, acc = relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir)
+
+    analyze(src_dec, ir_dec, acc)

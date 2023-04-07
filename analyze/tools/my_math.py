@@ -3,6 +3,8 @@ import sys
 import os
 import numpy as np
 
+import matplotlib.pyplot as plt
+
 
 def average_x_y(x, y):
     avg = {}
@@ -39,7 +41,7 @@ def plot_with_hist(x, y, save_to):
 
     plt.savefig(save_to)
 
-def plot_with_colot(x, y, save_to):
+def plot_with_color(x, y, save_to):
     fig, ax = plt.subplots()
     ax.scatter(x, y, c='tab:blue', label='vars accs', alpha=0.3, edgecolors='none')
     ax.legend()
