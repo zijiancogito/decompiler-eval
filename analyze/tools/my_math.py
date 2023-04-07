@@ -40,6 +40,8 @@ def plot_with_hist(x, y, save_to):
     scatter_hist(x, y, ax, ax_histx, ax_histy)
 
     plt.savefig(save_to)
+    plt.cla()
+    plt.close('all')
 
 def plot_with_color(x, y, save_to):
     fig, ax = plt.subplots()
@@ -47,9 +49,14 @@ def plot_with_color(x, y, save_to):
     ax.legend()
     ax.grid(True)
     plt.savefig(save_to)
+    plt.cla()
+    plt.close('all')
 
 def plot_base(x, y, save_to):
     plt.figure(figsize=(10, 10), dpi=100)
     plt.scatter(x, y)
     
     plt.savefig(save_to)
+    plt.cla()
+    plt.close('all')
+    

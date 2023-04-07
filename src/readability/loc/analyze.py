@@ -73,29 +73,29 @@ def relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir):
 
     return all_src_dec_locs, all_ir_dec_locs, all_accs
 
-def analyze(src_dec_locs, ir_dec_locs, accs):
+def analyze(src_dec_locs, ir_dec_locs, accs, save_to):
     sys.path.append('../../../analyze/tools')
     from my_math import average_x_y, plot_with_hist, plot_with_color
     # Average
     x, y = average_x_y(src_dec_locs, accs)
-    plot_with_hist(x, y, "res/avg_hist_src_loc_acc.jpg")
-    plot_with_hist(y, x, "res/avg_hist_src_acc_loc.jpg")
-    plot_with_color(x, y, "res/avg_color_src_loc_acc.jpg")
+    plot_with_hist(x, y, os.path.join(save_to, "avg_hist_src_loc_acc.jpg"))
+    plot_with_hist(y, x, os.path.join(save_to, "avg_hist_src_acc_loc.jpg"))
+    plot_with_color(x, y, os.path.join(save_to, "avg_color_src_loc_acc.jpg"))
     
     x, y = average_x_y(ir_dec_locs, accs)
-    plot_with_hist(x, y, "res/avg_hist_ir_loc_acc.jpg")
-    plot_with_hist(y, x, "res/avg_hist_ir_acc_loc.jpg")
-    plot_with_color(x, y, "res/avg_color_ir_loc_acc.jpg")
+    plot_with_hist(x, y, os.path.join(save_to, "avg_hist_ir_loc_acc.jpg"))
+    plot_with_hist(y, x, os.path.join(save_to, "avg_hist_ir_acc_loc.jpg"))
+    plot_with_color(x, y, os.path.join(save_to, "avg_color_ir_loc_acc.jpg"))
 
     x, y = src_dec_locs, accs
-    plot_with_hist(x, y, "res/hist_src_loc_acc.jpg")
-    plot_with_hist(y, x, "res/hist_src_acc_loc.jpg")
-    plot_with_color(x, y, "res/color_src_loc_acc.jpg")
+    plot_with_hist(x, y, os.path.join(save_to, "hist_src_loc_acc.jpg"))
+    plot_with_hist(y, x, os.path.join(save_to, "hist_src_acc_loc.jpg"))
+    plot_with_color(x, y, os.path.join(save_to, "color_src_loc_acc.jpg"))
 
     x, y = ir_dec_locs, accs
-    plot_with_hist(x, y, "res/hist_ir_loc_acc.jpg")
-    plot_with_hist(y, x, "res/hist_ir_acc_loc.jpg")
-    plot_with_color(x, y, "res/color_ir_loc_acc.jpg")
+    plot_with_hist(x, y, os.path.join(save_to, "hist_ir_loc_acc.jpg"))
+    plot_with_hist(y, x, os.path.join(save_to, "hist_ir_acc_loc.jpg"))
+    plot_with_color(x, y, os.path.join(save_to, "color_ir_loc_acc.jpg"))
 
 src_root = '/home/eval/DF/data'
 ir_root = '/home/eval/DF/ir'
@@ -107,20 +107,37 @@ decompilers = ['angr', 'BinaryNinja', 'Boomerang', 'dewolf', 'Ghidra', 'ida', 'R
 options = ['o0', 'o1', 'o2', 'o3', 'os']
 
 def analyze_all():
-    cnt = 0
+    save_to = 'res'
     for compiler in compilers:
+        level_1 = os.path.join(save_to, compiler)
+        if not os.path.exists(level_1):
+            os.mkdir(level_1)
         for decompiler in decompilers:
+            level_2 = os.path.join(level_1, decompiler)
+            if not os.path.exists(level_2):
+                os.mkdir(level_2)
             for option in options:
-                cnt += 1
+                level_3 = os.path.join(level_2, option)
+                if not os.path.exists(level_3):
+                    os.mkdir(level_3)
+                src_dir = src_root
+                ir_dir = os.path.join(ir_root, option)
+                dec_dir = os.path.join(dec_root, compiler, decompiler, option)
+                dec_se_dir = os.path.join(dec_se_root, compiler, decompiler, option)
+                ir_se_dir = os.path.join(ir_se_root, option)
+                src_dec, ir_dec, acc = relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir)
+                analyze(src_dec, ir_dec, acc, level_3)
+
 
 
 if __name__ == '__main__':
-    src_dir = '/home/eval/DF/data/'
-    ir_dir = '/home/eval/DF/ir/o0'
-    dec_dir = '/home/eval/DF/de/clang/Ghidra/o0'
-    dec_se_dir = '/home/eval/DF/se/clang/Ghidra/o0'
-    ir_se_dir = '/home/eval/DF/se/ir/o0'
+    # src_dir = '/home/eval/DF/data/'
+    # ir_dir = '/home/eval/DF/ir/o0'
+    # dec_dir = '/home/eval/DF/de/clang/Ghidra/o0'
+    # dec_se_dir = '/home/eval/DF/se/clang/Ghidra/o0'
+    # ir_se_dir = '/home/eval/DF/se/ir/o0'
 
-    src_dec, ir_dec, acc = relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir)
+    # src_dec, ir_dec, acc = relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir)
+    # analyze(src_dec, ir_dec, acc, 'res')
 
-    analyze(src_dec, ir_dec, acc)
+    analyze_all()
