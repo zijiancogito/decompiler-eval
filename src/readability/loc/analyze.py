@@ -102,6 +102,17 @@ ir_root = '/home/eval/DF/ir'
 dec_root = '/home/eval/DF/de'
 dec_se_root = '/home/eval/DF/se'
 ir_se_root = '/home/eval/DF/se/ir'
+compilers = ['clang', 'gcc']
+decompilers = ['angr', 'BinaryNinja', 'Boomerang', 'dewolf', 'Ghidra', 'ida', 'RecStudio', 'Reko', 'Relyze', 'RetDec', 'Snowman']
+options = ['o0', 'o1', 'o2', 'o3', 'os']
+
+def analyze_all():
+    cnt = 0
+    for compiler in compilers:
+        for decompiler in decompilers:
+            for option in options:
+                cnt += 1
+
 
 if __name__ == '__main__':
     src_dir = '/home/eval/DF/data/'
