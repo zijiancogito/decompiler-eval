@@ -35,3 +35,4 @@ def func_acc(ir_json_file, c_json_file):
 
     func_accu = round(matched / len(ir_json["epxressions"]), 2)
     return func_accu
+

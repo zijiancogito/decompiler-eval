@@ -6,18 +6,24 @@ import numpy as np
 import re
 
 from func_var import func_var
+from ir_var import get_functions
 from var import get_func_from_file
 
 sys.path.append('../../se/ce/')
 from concrete_execution import func_acc
 
+sys.path.append("../../exp_tree")
+from compare import feature_acc
+
 sys.path.append('../../../analyze/tools/')
 from my_math import average_x_y
 
-def relation_file(src, dec, dec_se_dir, ir_se_dir):
+def relation_file(src, ir, dec, dec_se_dir, ir_se_dir):
     src_funcs, src_funcs_name = get_func_from_file(src)
+    ir_vars = get_functions(ir)
     funcs, funcs_name = get_func_from_file(dec)
     vars = []
+    ir_ratios = []
     accus = []
 
     src_funcs_map = {}
@@ -28,6 +34,8 @@ def relation_file(src, dec, dec_se_dir, ir_se_dir):
         if not re.match('func[0-9]', fname):
             continue
         if fname not in src_funcs_name:
+            continue
+        if fname not in ir_vars:
             continue
 
         se_json = os.path.join(dec_se_dir, f"{fname}.json")
@@ -42,11 +50,13 @@ def relation_file(src, dec, dec_se_dir, ir_se_dir):
             continue
         dec_vars = func_var(fcode)
         src_dec_ratio = round(dec_vars / src_vars, 2)
-        dec_accu = func_acc(ir_json, se_json)
+        ir_dec_ratio = round(dec_vars / ir_vars[fname], 2)
+        dec_accu = feature_acc(ir_json, se_json)
         vars.append(src_dec_ratio)
+        ir_ratios.append(ir_dec_ratio)
         accus.append(dec_accu)
 
-    return vars, accus
+    return vars, ir_ratios, accus
 
 def scatter_hist(x, y, ax, ax_histx, ax_histy):
     # no labels
@@ -58,7 +68,7 @@ def scatter_hist(x, y, ax, ax_histx, ax_histy):
     ax_histx.hist(x)
     ax_histy.hist(y, orientation='horizontal')
 
-def plot(x, y):
+def plot(x, y, save_to):
     fig = plt.figure(figsize=(10, 10), dpi=100)
     gs = fig.add_gridspec(2, 2, width_ratios=(4, 1), height_ratios=(1, 4),
                             left=0.1, right=0.9, bottom=0.1, top=0.9,
@@ -70,7 +80,7 @@ def plot(x, y):
 
     scatter_hist(x, y, ax, ax_histx, ax_histy)
 
-    plt.savefig('./hist.jpg')
+    plt.savefig(save_to)
 
 def plot_color(x, y, save_to):
     fig, ax = plt.subplots()
@@ -80,10 +90,11 @@ def plot_color(x, y, save_to):
     plt.savefig(save_to)
 
     
-def relation_dir(src_dir, dec_dir, dec_se_dir, ir_se_dir):
+def relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir):
     decs = os.listdir(dec_dir)
 
     all_vars, all_accs = [], []
+    all_ir_vars = []
 
     for dec in decs:
         basename = dec.split('.')[0]
@@ -96,26 +107,33 @@ def relation_dir(src_dir, dec_dir, dec_se_dir, ir_se_dir):
         src_path = os.path.join(src_dir, f"{basename}.c")
         if not os.path.exists(src_path):
             continue
+        ir_path = os.path.join(ir_dir, f"{basename}.ll")
+        if not os.path.exists(ir_path):
+            continue
         dec_path = os.path.join(dec_dir, dec)
         if not os.path.exists(dec_path):
             continue
 
-        vars, accs = relation_file(src_path, dec_path, se_sub_dir, ir_sub_dir)
+        vars, ir_vars, accs = relation_file(src_path, ir_path, dec_path, se_sub_dir, ir_sub_dir)
         all_vars.extend(vars)
+        all_ir_vars.extend(ir_vars)
         all_accs.extend(accs)
-    x, y = average_x_y(all_vars, all_accs)
-    plot_color(x, y, 'avg1.jpg')
-    plot_color(y, x, 'avg2.jpg')
+    x, y = average_x_y(all_ir_vars, all_accs)
+    # x, y = all_ir_vars, all_accs
+    plot(x, y, 'avg1-hist-feature-ir.jpg')
+    plot(y, x, 'avg2-hist-feature-ir.jpg')
+    plot_color(x, y, 'avg-color-feature-ir.jpg')
     # plot(all_accs, all_vars)
     # plot_color(all_accs, all_vars)
 
 
 if __name__ == '__main__':
     src_dir = '/home/eval/DF/data/'
+    ir_dir = '/home/eval/DF/ir/o0'
     dec_dir = '/home/eval/DF/de/clang/Ghidra/o0'
     dec_se_dir = '/home/eval/DF/se/clang/Ghidra/o0'
     ir_se_dir = '/home/eval/DF/se/ir/o0'
 
-    relation_dir(src_dir, dec_dir, dec_se_dir, ir_se_dir)
+    relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir)
 
         
