@@ -170,11 +170,7 @@ void siplify_source(char *source)
     char *needchange_position = strstr(source, needchange[i]);
     int sub_len = strlen(needchange[i]);
     while (needchange_position != NULL) {
-      printf("%s\n\n", needchange_position);
-      printf("%d\n\n", sub_len);
       needchange_position += sub_len - 2;
-      printf("%s\n", needchange_position);
-      exit(0);
       for (int j = 0; j < len - (needchange_position - source); j ++ )
         *(needchange_position + j) = *(needchange_position + j + 2);
       needchange_position = strstr(source, needchange[i]);

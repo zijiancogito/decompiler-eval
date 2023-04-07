@@ -1138,8 +1138,6 @@ extern "C" const char *process(const char *str, MODE mode)
         }
         
         assert(source);
-        printf("%s\n", source);
-        exit(0);
         // if (strstr(source, "?") != NULL)
         //     return NULL;
 
