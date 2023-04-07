@@ -78,26 +78,30 @@ def analyze(src_dec_locs, ir_dec_locs, accs):
     from my_math import average_x_y, plot_with_hist, plot_with_color
     # Average
     x, y = average_x_y(src_dec_locs, accs)
-    plot_with_hist(x, y, "avg_hist_src_loc_acc.jpg")
-    plot_with_hist(y, x, "avg_hist_src_acc_loc.jpg")
-    plot_with_color(x, y, "avg_color_src_loc_acc.jpg")
+    plot_with_hist(x, y, "res/avg_hist_src_loc_acc.jpg")
+    plot_with_hist(y, x, "res/avg_hist_src_acc_loc.jpg")
+    plot_with_color(x, y, "res/avg_color_src_loc_acc.jpg")
     
     x, y = average_x_y(ir_dec_locs, accs)
-    plot_with_hist(x, y, "avg_hist_ir_loc_acc.jpg")
-    plot_with_hist(y, x, "avg_hist_ir_acc_loc.jpg")
-    plot_with_color(x, y, "avg_color_ir_loc_acc.jpg")
+    plot_with_hist(x, y, "res/avg_hist_ir_loc_acc.jpg")
+    plot_with_hist(y, x, "res/avg_hist_ir_acc_loc.jpg")
+    plot_with_color(x, y, "res/avg_color_ir_loc_acc.jpg")
 
     x, y = src_dec_locs, accs
-    plot_with_hist(x, y, "hist_src_loc_acc.jpg")
-    plot_with_hist(y, x, "hist_src_acc_loc.jpg")
-    plot_with_color(x, y, "color_src_loc_acc.jpg")
+    plot_with_hist(x, y, "res/hist_src_loc_acc.jpg")
+    plot_with_hist(y, x, "res/hist_src_acc_loc.jpg")
+    plot_with_color(x, y, "res/color_src_loc_acc.jpg")
 
     x, y = ir_dec_locs, accs
-    plot_with_hist(x, y, "hist_ir_loc_acc.jpg")
-    plot_with_hist(y, x, "hist_ir_acc_loc.jpg")
-    plot_with_color(x, y, "color_ir_loc_acc.jpg")
+    plot_with_hist(x, y, "res/hist_ir_loc_acc.jpg")
+    plot_with_hist(y, x, "res/hist_ir_acc_loc.jpg")
+    plot_with_color(x, y, "res/color_ir_loc_acc.jpg")
 
-
+src_root = '/home/eval/DF/data'
+ir_root = '/home/eval/DF/ir'
+dec_root = '/home/eval/DF/de'
+dec_se_root = '/home/eval/DF/se'
+ir_se_root = '/home/eval/DF/se/ir'
 
 if __name__ == '__main__':
     src_dir = '/home/eval/DF/data/'
