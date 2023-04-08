@@ -23,13 +23,12 @@ def get_var_count(function):
     last_var = None
     for insn in last_block.instructions:
         pat = '\%([\S]+) [\S\s]+'
-        mat = re.match(pat, str(insn))
+        mat = re.match(pat, str(insn).strip())
         if not mat:
             continue
         last_var = int(mat.groups(1)[0])
 
     if last_var == None:
-        print(function.name)
         return 0
     return last_var
 

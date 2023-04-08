@@ -103,11 +103,14 @@ dec_root = '/home/eval/DF/de'
 dec_se_root = '/home/eval/DF/se'
 ir_se_root = '/home/eval/DF/se/ir'
 compilers = ['clang', 'gcc']
-decompilers = ['angr', 'BinaryNinja', 'Boomerang', 'dewolf', 'Ghidra', 'ida', 'RecStudio', 'Reko', 'Relyze', 'RetDec', 'Snowman']
+decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'ida', 'RetDec']
 options = ['o0', 'o1', 'o2', 'o3', 'os']
+save_fig = '/home/eval/DF/readiability/loc'
 
 def analyze_all():
-    save_to = 'res'
+    save_to = save_fig
+    if not os.path.exists(save_to):
+        os.makedirs(save_to)
     for compiler in compilers:
         level_1 = os.path.join(save_to, compiler)
         if not os.path.exists(level_1):
