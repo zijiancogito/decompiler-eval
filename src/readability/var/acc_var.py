@@ -50,6 +50,8 @@ def relation_file(src, ir, dec, dec_se_dir, ir_se_dir):
             continue
         dec_vars = func_var(fcode)
         src_dec_ratio = round(dec_vars / src_vars, 2)
+        if ir_vars[fname] == 0:
+            print(ir)
         ir_dec_ratio = round(dec_vars / ir_vars[fname], 2)
         dec_accu = feature_acc(ir_json, se_json)
         vars.append(src_dec_ratio)
@@ -57,38 +59,6 @@ def relation_file(src, ir, dec, dec_se_dir, ir_se_dir):
         accus.append(dec_accu)
 
     return vars, ir_ratios, accus
-
-def scatter_hist(x, y, ax, ax_histx, ax_histy):
-    # no labels
-    ax_histx.tick_params(axis="x", labelbottom=False)
-    ax_histy.tick_params(axis="y", labelleft=False)
-    # the scatter plot:
-    ax.scatter(x, y)
-    # now determine nice limits by hand:
-    ax_histx.hist(x)
-    ax_histy.hist(y, orientation='horizontal')
-
-def plot(x, y, save_to):
-    fig = plt.figure(figsize=(10, 10), dpi=100)
-    gs = fig.add_gridspec(2, 2, width_ratios=(4, 1), height_ratios=(1, 4),
-                            left=0.1, right=0.9, bottom=0.1, top=0.9,
-                            wspace=0.05, hspace=0.05)
-    
-    ax = fig.add_subplot(gs[1, 0])
-    ax_histx = fig.add_subplot(gs[0, 0], sharex=ax)
-    ax_histy = fig.add_subplot(gs[1, 1], sharey=ax)
-
-    scatter_hist(x, y, ax, ax_histx, ax_histy)
-
-    plt.savefig(save_to)
-
-def plot_color(x, y, save_to):
-    fig, ax = plt.subplots()
-    ax.scatter(x, y, c='tab:blue', label='vars accs', alpha=0.3, edgecolors='none')
-    ax.legend()
-    ax.grid(True)
-    plt.savefig(save_to)
-
     
 def relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir):
     decs = os.listdir(dec_dir)
@@ -111,29 +81,81 @@ def relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir):
         if not os.path.exists(ir_path):
             continue
         dec_path = os.path.join(dec_dir, dec)
-        if not os.path.exists(dec_path):
-            continue
 
         vars, ir_vars, accs = relation_file(src_path, ir_path, dec_path, se_sub_dir, ir_sub_dir)
+
         all_vars.extend(vars)
         all_ir_vars.extend(ir_vars)
         all_accs.extend(accs)
-    x, y = average_x_y(all_ir_vars, all_accs)
-    # x, y = all_ir_vars, all_accs
-    plot(x, y, 'avg1-hist-feature-ir.jpg')
-    plot(y, x, 'avg2-hist-feature-ir.jpg')
-    plot_color(x, y, 'avg-color-feature-ir.jpg')
-    # plot(all_accs, all_vars)
-    # plot_color(all_accs, all_vars)
+    return all_vars, all_ir_vars, all_accs
+
+def analyze(src_dec_vars, ir_dec_vars, accs, save_to):
+    sys.path.append('../../../analyze/tools')
+    from my_math import average_x_y, plot_with_hist, plot_with_color
+
+    x, y = average_x_y(src_dec_vars, accs)
+    plot_with_hist(x, y, os.path.join(save_to, "avg_hist_src_loc_acc.jpg"))
+    plot_with_hist(y, x, os.path.join(save_to, "avg_hist_src_acc_loc.jpg"))
+    plot_with_color(x, y, os.path.join(save_to, "avg_color_src_loc_acc.jpg"))
+
+    x, y = average_x_y(ir_dec_vars, accs)
+    plot_with_hist(x, y, os.path.join(save_to, "avg_hist_ir_loc_acc.jpg"))
+    plot_with_hist(y, x, os.path.join(save_to, "avg_hist_ir_acc_loc.jpg"))
+    plot_with_color(x, y, os.path.join(save_to, "avg_color_ir_loc_acc.jpg"))
+
+    x, y = src_dec_vars, accs
+    plot_with_hist(x, y, os.path.join(save_to, "hist_src_loc_acc.jpg"))
+    plot_with_hist(y, x, os.path.join(save_to, "hist_src_acc_loc.jpg"))
+    plot_with_color(x, y, os.path.join(save_to, "color_src_loc_acc.jpg"))
+
+    x, y = ir_dec_vars, accs
+    plot_with_hist(x, y, os.path.join(save_to, "hist_ir_loc_acc.jpg"))
+    plot_with_hist(y, x, os.path.join(save_to, "hist_ir_acc_loc.jpg"))
+    plot_with_color(x, y, os.path.join(save_to, "color_ir_loc_acc.jpg"))
+
+src_root = '/home/eval/DF/data'
+ir_root = '/home/eval/DF/ir'
+dec_root = '/home/eval/DF/de'
+dec_se_root = '/home/eval/DF/se'
+ir_se_root = '/home/eval/DF/se/ir'
+compilers = ['clang', 'gcc']
+decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'ida', 'RetDec']
+options = ['o0', 'o1', 'o2', 'o3', 'os']
+save_fig = '/home/eval/DF/readiability/var/'
+
+def analyze_all():
+    save_to = save_fig
+    if not os.path.exists(save_to):
+        os.makedirs(save_to)
+
+    for compiler in compilers:
+        level_1 = os.path.join(save_to, compiler)
+        if not os.path.exists(level_1):
+            os.mkdir(level_1)
+        for decompiler in decompilers:
+            level_2 = os.path.join(level_1, decompiler)
+            if not os.path.exists(level_2):
+                os.mkdir(level_2)
+            for option in options:
+                level_3 = os.path.join(level_2, option)
+                if not os.path.exists(level_3):
+                    os.mkdir(level_3)
+                src_dir = src_root
+                ir_dir = os.path.join(ir_root, option)
+                dec_dir = os.path.join(dec_root, compiler, decompiler, option)
+                dec_se_dir = os.path.join(dec_se_root, compiler, decompiler, option)
+                ir_se_dir = os.path.join(ir_se_root, option)
+                src_dec, ir_dec, acc = relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir)
+                analyze(src_dec, ir_dec, acc, level_3)
 
 
 if __name__ == '__main__':
-    src_dir = '/home/eval/DF/data/'
-    ir_dir = '/home/eval/DF/ir/o0'
-    dec_dir = '/home/eval/DF/de/clang/Ghidra/o0'
-    dec_se_dir = '/home/eval/DF/se/clang/Ghidra/o0'
-    ir_se_dir = '/home/eval/DF/se/ir/o0'
+    analyze_all()
+    # src_dir = '/home/eval/DF/data/'
+    # ir_dir = '/home/eval/DF/ir/o0'
+    # dec_dir = '/home/eval/DF/de/clang/Ghidra/o0'
+    # dec_se_dir = '/home/eval/DF/se/clang/Ghidra/o0'
+    # ir_se_dir = '/home/eval/DF/se/ir/o0'
 
-    relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir)
+    # relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir)
 
-        

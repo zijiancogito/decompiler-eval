@@ -20,19 +20,18 @@ def get_var_count(function):
         last_block = block
     if last_block == None:
         return 0
-    last_insn = None
+    last_var = None
     for insn in last_block.instructions:
-        last_insn = insn
+        pat = '\%([\S]+) [\S\s]+'
+        mat = re.match(pat, str(insn))
+        if not mat:
+            continue
+        last_var = int(mat.groups(1)[0])
 
-    if last_insn == None:
+    if last_var == None:
+        print(function.name)
         return 0
-    if last_insn.opcode != 'ret':
-        return 0
-    pat = 'ret [\S]+ \%([\S]+)'
-    mat = re.match(pat, str(last_insn).strip())
-    if not mat:
-        return 0
-    return int(mat.groups(1)[0])
+    return last_var
 
 def get_functions(ir_file):
     llvm_ir = read_ir(ir_file)
