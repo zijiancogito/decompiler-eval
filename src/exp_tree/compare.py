@@ -134,3 +134,28 @@ def feature_acc(ir_json_file, c_json_file):
             matched += 1
 
     return round(matched / len(ir_json["expressions"]), 2)
+
+def tree_sta(ir_json_file, c_json_file, option):
+    ir_json = None
+    with open(ir_json_file, 'r') as f:
+        ir_json = json.load(f)
+    assert ir_json, "Load ir json failed."
+
+    c_json = None
+    with open(c_json_file, 'r') as f:
+        c_json = json.load(f)
+    assert c_json, "Load c json failed."
+
+    matched = 0
+    for var in ir_json["expressions"]:
+        if var not in c_json["expressions"][0]:
+            continue
+        ir_exp = ir_json["expressions"][var]
+        c_exp = c_json["expressions"][0][var]
+        if compare_variable(ir_exp, c_exp, option):
+            matched += 1
+
+    recall = round(matched / len(ir_json["expressions"]), 2)
+    precision = round(matched / len(c_json["expressions"]), 2)
+    return precision, recall
+
