@@ -28,10 +28,7 @@ def get_func_acc(dec_se, ir_se, option):
     return None, None
 
 def analyze(de_dir, ir_dir, option):
-    print(de_dir)
-    print(ir_dir)
     de_sub_dirs = os.listdir(de_dir)
-    print(len(de_sub_dirs))
     ps, rs = [], []
     for sub_dir in de_sub_dirs:
         ir_sub_dir = os.path.join(ir_dir, sub_dir)
