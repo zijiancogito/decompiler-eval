@@ -1,2 +1,3583 @@
 Load from file
-s
+{
+	"callees" : 
+	[
+		"rand"
+	],
+	"global_num" : 0,
+	"params_num" : 1,
+	"paths" : 
+	[
+		{
+			"conditions" : [],
+			"outputs" : 
+			[
+				{
+					"id" : "printf0",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"op" : "|",
+								"right" : 
+								{
+									"tag" : "2",
+									"type" : "number_literal",
+									"value" : "2"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "rand"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "&",
+						"right" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf1"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "printf0",
+					"op" : "*",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "rand"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf1",
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf1"
+					},
+					"name" : "local_34",
+					"op" : "-",
+					"right" : 
+					{
+						"tag" : "10",
+						"type" : "number_literal",
+						"value" : "10"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf2",
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "rand"
+					},
+					"name" : "printf2",
+					"op" : "+",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "rand"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf3",
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "rand"
+						},
+						"op" : "+",
+						"right" : 
+						{
+							"type" : "input_symbol",
+							"value" : "rand"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "printf3",
+					"op" : "-",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "rand"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf4",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"op" : "&",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "|",
+							"right" : 
+							{
+								"tag" : "2",
+								"type" : "number_literal",
+								"value" : "2"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "*",
+						"right" : 
+						{
+							"tag" : "-10",
+							"type" : "number_literal",
+							"value" : "-10"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "local_38",
+					"op" : "^",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "scanf0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf5",
+					"left" : 
+					{
+						"type" : "input_symbol",
+						"value" : "rand"
+					},
+					"name" : "printf5",
+					"op" : "|",
+					"right" : 
+					{
+						"tag" : "2",
+						"type" : "number_literal",
+						"value" : "2"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf6",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"op" : "&",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "|",
+									"right" : 
+									{
+										"tag" : "2",
+										"type" : "number_literal",
+										"value" : "2"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "*",
+								"right" : 
+								{
+									"tag" : "-10",
+									"type" : "number_literal",
+									"value" : "-10"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "^",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "^",
+						"right" : 
+						{
+							"tag" : "0xfffffff6",
+							"type" : "number_literal",
+							"value" : "-10"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "uVar2",
+					"op" : "-",
+					"right" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf1"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"tag" : "10",
+							"type" : "number_literal",
+							"value" : "10"
+						},
+						"type" : "binary_expression"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf7",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "rand"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"op" : "&",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "|",
+										"right" : 
+										{
+											"tag" : "2",
+											"type" : "number_literal",
+											"value" : "2"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "*",
+									"right" : 
+									{
+										"tag" : "-10",
+										"type" : "number_literal",
+										"value" : "-10"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "^",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "/",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"op" : "&",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "|",
+							"right" : 
+							{
+								"tag" : "2",
+								"type" : "number_literal",
+								"value" : "2"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "uVar8",
+					"op" : "*",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "param0"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf8",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "rand"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"op" : "&",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "|",
+										"right" : 
+										{
+											"tag" : "2",
+											"type" : "number_literal",
+											"value" : "2"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "*",
+									"right" : 
+									{
+										"tag" : "-10",
+										"type" : "number_literal",
+										"value" : "-10"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "^",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf0"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "%",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"op" : "&",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "|",
+							"right" : 
+							{
+								"tag" : "2",
+								"type" : "number_literal",
+								"value" : "2"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "printf8",
+					"op" : "&",
+					"right" : 
+					{
+						"tag" : "0xffffffff",
+						"type" : "number_literal",
+						"value" : "-1"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf9",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf1"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"tag" : "10",
+									"type" : "number_literal",
+									"value" : "10"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "|",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "|",
+												"right" : 
+												{
+													"tag" : "2",
+													"type" : "number_literal",
+													"value" : "2"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "param0"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "&",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "&",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"left" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"op" : "&",
+															"right" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"type" : "binary_expression"
+														},
+														"op" : "|",
+														"right" : 
+														{
+															"tag" : "2",
+															"type" : "number_literal",
+															"value" : "2"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "*",
+													"right" : 
+													{
+														"tag" : "-10",
+														"type" : "number_literal",
+														"value" : "-10"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "^",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "scanf0"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "^",
+											"right" : 
+											{
+												"tag" : "0xfffffff6",
+												"type" : "number_literal",
+												"value" : "-10"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "-",
+										"right" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "scanf1"
+											},
+											"op" : "-",
+											"right" : 
+											{
+												"tag" : "10",
+												"type" : "number_literal",
+												"value" : "10"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "/",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "param0"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "&",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"op" : "&",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "|",
+									"right" : 
+									{
+										"tag" : "2",
+										"type" : "number_literal",
+										"value" : "2"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "*",
+								"right" : 
+								{
+									"tag" : "-10",
+									"type" : "number_literal",
+									"value" : "-10"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "^",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf0"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "uVar7",
+					"op" : "-",
+					"right" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"op" : "|",
+										"right" : 
+										{
+											"tag" : "2",
+											"type" : "number_literal",
+											"value" : "2"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "|",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "param0"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "*",
+								"right" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"op" : "&",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "|",
+									"right" : 
+									{
+										"tag" : "2",
+										"type" : "number_literal",
+										"value" : "2"
+									},
+									"type" : "binary_expression"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "&",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"type" : "input_symbol",
+														"value" : "rand"
+													},
+													"op" : "&",
+													"right" : 
+													{
+														"type" : "input_symbol",
+														"value" : "rand"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "|",
+												"right" : 
+												{
+													"tag" : "2",
+													"type" : "number_literal",
+													"value" : "2"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "*",
+											"right" : 
+											{
+												"tag" : "-10",
+												"type" : "number_literal",
+												"value" : "-10"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "^",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "^",
+									"right" : 
+									{
+										"tag" : "0xfffffff6",
+										"type" : "number_literal",
+										"value" : "-10"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"left" : 
+									{
+										"type" : "input_symbol",
+										"value" : "scanf1"
+									},
+									"op" : "-",
+									"right" : 
+									{
+										"tag" : "10",
+										"type" : "number_literal",
+										"value" : "10"
+									},
+									"type" : "binary_expression"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "/",
+						"right" : 
+						{
+							"type" : "input_symbol",
+							"value" : "param0"
+						},
+						"type" : "binary_expression"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf10",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf1"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"tag" : "10",
+									"type" : "number_literal",
+									"value" : "10"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "&",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "rand"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "^",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"op" : "|",
+								"right" : 
+								{
+									"tag" : "2",
+									"type" : "number_literal",
+									"value" : "2"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "|",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "param0"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "uVar10",
+					"op" : "*",
+					"right" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"op" : "+",
+								"right" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "&",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"tag" : "-10",
+											"type" : "number_literal",
+											"value" : "-10"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "^",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "scanf0"
+									},
+									"type" : "binary_expression"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "/",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"type" : "input_symbol",
+										"value" : "rand"
+									},
+									"op" : "&",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "rand"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "|",
+								"right" : 
+								{
+									"tag" : "2",
+									"type" : "number_literal",
+									"value" : "2"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "*",
+						"right" : 
+						{
+							"type" : "input_symbol",
+							"value" : "param0"
+						},
+						"type" : "binary_expression"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf11",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "|",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "param0"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "*",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"op" : "&",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "|",
+										"right" : 
+										{
+											"tag" : "2",
+											"type" : "number_literal",
+											"value" : "2"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "&",
+								"right" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"op" : "&",
+														"right" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "|",
+													"right" : 
+													{
+														"tag" : "2",
+														"type" : "number_literal",
+														"value" : "2"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "*",
+												"right" : 
+												{
+													"tag" : "-10",
+													"type" : "number_literal",
+													"value" : "-10"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "^",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "scanf0"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "^",
+										"right" : 
+										{
+											"tag" : "0xfffffff6",
+											"type" : "number_literal",
+											"value" : "-10"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "-",
+									"right" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf1"
+										},
+										"op" : "-",
+										"right" : 
+										{
+											"tag" : "10",
+											"type" : "number_literal",
+											"value" : "10"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "/",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "param0"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "&",
+						"right" : 
+						{
+							"tag" : "0xfffffffd",
+							"type" : "number_literal",
+							"value" : "-3"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "uVar9",
+					"op" : "*",
+					"right" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"type" : "input_symbol",
+								"value" : "scanf1"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"tag" : "10",
+								"type" : "number_literal",
+								"value" : "10"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "&",
+						"right" : 
+						{
+							"type" : "input_symbol",
+							"value" : "rand"
+						},
+						"type" : "binary_expression"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf12",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"type" : "input_symbol",
+										"value" : "rand"
+									},
+									"op" : "&",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "rand"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "|",
+								"right" : 
+								{
+									"tag" : "2",
+									"type" : "number_literal",
+									"value" : "2"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "*",
+							"right" : 
+							{
+								"tag" : "-10",
+								"type" : "number_literal",
+								"value" : "-10"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "^",
+						"right" : 
+						{
+							"type" : "input_symbol",
+							"value" : "scanf0"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "printf12",
+					"op" : "&",
+					"right" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "|",
+												"right" : 
+												{
+													"tag" : "2",
+													"type" : "number_literal",
+													"value" : "2"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "param0"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "&",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "&",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"left" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"op" : "&",
+															"right" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"type" : "binary_expression"
+														},
+														"op" : "|",
+														"right" : 
+														{
+															"tag" : "2",
+															"type" : "number_literal",
+															"value" : "2"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "*",
+													"right" : 
+													{
+														"tag" : "-10",
+														"type" : "number_literal",
+														"value" : "-10"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "^",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "scanf0"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "^",
+											"right" : 
+											{
+												"tag" : "0xfffffff6",
+												"type" : "number_literal",
+												"value" : "-10"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "-",
+										"right" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "scanf1"
+											},
+											"op" : "-",
+											"right" : 
+											{
+												"tag" : "10",
+												"type" : "number_literal",
+												"value" : "10"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "/",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "param0"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "rand"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "/",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"op" : "|",
+								"right" : 
+								{
+									"tag" : "2",
+									"type" : "number_literal",
+									"value" : "2"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "|",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "param0"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf13",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "|",
+												"right" : 
+												{
+													"tag" : "2",
+													"type" : "number_literal",
+													"value" : "2"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "param0"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "&",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "&",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"left" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"op" : "&",
+															"right" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"type" : "binary_expression"
+														},
+														"op" : "|",
+														"right" : 
+														{
+															"tag" : "2",
+															"type" : "number_literal",
+															"value" : "2"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "*",
+													"right" : 
+													{
+														"tag" : "-10",
+														"type" : "number_literal",
+														"value" : "-10"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "^",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "scanf0"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "^",
+											"right" : 
+											{
+												"tag" : "0xfffffff6",
+												"type" : "number_literal",
+												"value" : "-10"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "-",
+										"right" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "scanf1"
+											},
+											"op" : "-",
+											"right" : 
+											{
+												"tag" : "10",
+												"type" : "number_literal",
+												"value" : "10"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "/",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "param0"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "rand"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "%",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"op" : "|",
+								"right" : 
+								{
+									"tag" : "2",
+									"type" : "number_literal",
+									"value" : "2"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "|",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "param0"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "printf13",
+					"op" : "&",
+					"right" : 
+					{
+						"tag" : "0xffffffff",
+						"type" : "number_literal",
+						"value" : "-1"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf14",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"type" : "input_symbol",
+														"value" : "rand"
+													},
+													"op" : "|",
+													"right" : 
+													{
+														"tag" : "2",
+														"type" : "number_literal",
+														"value" : "2"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "|",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "param0"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "*",
+											"right" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"type" : "input_symbol",
+														"value" : "rand"
+													},
+													"op" : "&",
+													"right" : 
+													{
+														"type" : "input_symbol",
+														"value" : "rand"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "|",
+												"right" : 
+												{
+													"tag" : "2",
+													"type" : "number_literal",
+													"value" : "2"
+												},
+												"type" : "binary_expression"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "&",
+										"right" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"left" : 
+															{
+																"left" : 
+																{
+																	"type" : "input_symbol",
+																	"value" : "rand"
+																},
+																"op" : "&",
+																"right" : 
+																{
+																	"type" : "input_symbol",
+																	"value" : "rand"
+																},
+																"type" : "binary_expression"
+															},
+															"op" : "|",
+															"right" : 
+															{
+																"tag" : "2",
+																"type" : "number_literal",
+																"value" : "2"
+															},
+															"type" : "binary_expression"
+														},
+														"op" : "*",
+														"right" : 
+														{
+															"tag" : "-10",
+															"type" : "number_literal",
+															"value" : "-10"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "^",
+													"right" : 
+													{
+														"type" : "input_symbol",
+														"value" : "scanf0"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "^",
+												"right" : 
+												{
+													"tag" : "0xfffffff6",
+													"type" : "number_literal",
+													"value" : "-10"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "-",
+											"right" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "scanf1"
+												},
+												"op" : "-",
+												"right" : 
+												{
+													"tag" : "10",
+													"type" : "number_literal",
+													"value" : "10"
+												},
+												"type" : "binary_expression"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "/",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "param0"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "&",
+								"right" : 
+								{
+									"tag" : "0xfffffffd",
+									"type" : "number_literal",
+									"value" : "-3"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "*",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"type" : "input_symbol",
+										"value" : "scanf1"
+									},
+									"op" : "-",
+									"right" : 
+									{
+										"tag" : "10",
+										"type" : "number_literal",
+										"value" : "10"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "&",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "*",
+						"right" : 
+						{
+							"type" : "input_symbol",
+							"value" : "rand"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "uVar2",
+					"op" : "-",
+					"right" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"type" : "input_symbol",
+									"value" : "scanf1"
+								},
+								"op" : "-",
+								"right" : 
+								{
+									"tag" : "10",
+									"type" : "number_literal",
+									"value" : "10"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "&",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "rand"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "+",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf1"
+										},
+										"op" : "-",
+										"right" : 
+										{
+											"tag" : "10",
+											"type" : "number_literal",
+											"value" : "10"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "&",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "rand"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "^",
+								"right" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"op" : "|",
+										"right" : 
+										{
+											"tag" : "2",
+											"type" : "number_literal",
+											"value" : "2"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "|",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "param0"
+									},
+									"type" : "binary_expression"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "*",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"op" : "+",
+										"right" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"op" : "&",
+														"right" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "|",
+													"right" : 
+													{
+														"tag" : "2",
+														"type" : "number_literal",
+														"value" : "2"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "*",
+												"right" : 
+												{
+													"tag" : "-10",
+													"type" : "number_literal",
+													"value" : "-10"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "^",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "scanf0"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "/",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"op" : "&",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "|",
+										"right" : 
+										{
+											"tag" : "2",
+											"type" : "number_literal",
+											"value" : "2"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "*",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "param0"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf15",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"op" : "|",
+														"right" : 
+														{
+															"tag" : "2",
+															"type" : "number_literal",
+															"value" : "2"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "|",
+													"right" : 
+													{
+														"type" : "input_symbol",
+														"value" : "param0"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "*",
+												"right" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"op" : "&",
+														"right" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "|",
+													"right" : 
+													{
+														"tag" : "2",
+														"type" : "number_literal",
+														"value" : "2"
+													},
+													"type" : "binary_expression"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "&",
+											"right" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"left" : 
+															{
+																"left" : 
+																{
+																	"left" : 
+																	{
+																		"type" : "input_symbol",
+																		"value" : "rand"
+																	},
+																	"op" : "&",
+																	"right" : 
+																	{
+																		"type" : "input_symbol",
+																		"value" : "rand"
+																	},
+																	"type" : "binary_expression"
+																},
+																"op" : "|",
+																"right" : 
+																{
+																	"tag" : "2",
+																	"type" : "number_literal",
+																	"value" : "2"
+																},
+																"type" : "binary_expression"
+															},
+															"op" : "*",
+															"right" : 
+															{
+																"tag" : "-10",
+																"type" : "number_literal",
+																"value" : "-10"
+															},
+															"type" : "binary_expression"
+														},
+														"op" : "^",
+														"right" : 
+														{
+															"type" : "input_symbol",
+															"value" : "scanf0"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "^",
+													"right" : 
+													{
+														"tag" : "0xfffffff6",
+														"type" : "number_literal",
+														"value" : "-10"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "-",
+												"right" : 
+												{
+													"left" : 
+													{
+														"type" : "input_symbol",
+														"value" : "scanf1"
+													},
+													"op" : "-",
+													"right" : 
+													{
+														"tag" : "10",
+														"type" : "number_literal",
+														"value" : "10"
+													},
+													"type" : "binary_expression"
+												},
+												"type" : "binary_expression"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "/",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "param0"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "&",
+									"right" : 
+									{
+										"tag" : "0xfffffffd",
+										"type" : "number_literal",
+										"value" : "-3"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "*",
+								"right" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf1"
+										},
+										"op" : "-",
+										"right" : 
+										{
+											"tag" : "10",
+											"type" : "number_literal",
+											"value" : "10"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "&",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "rand"
+									},
+									"type" : "binary_expression"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "*",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "rand"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "-",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"type" : "input_symbol",
+										"value" : "scanf1"
+									},
+									"op" : "-",
+									"right" : 
+									{
+										"tag" : "10",
+										"type" : "number_literal",
+										"value" : "10"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "&",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "+",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "scanf1"
+											},
+											"op" : "-",
+											"right" : 
+											{
+												"tag" : "10",
+												"type" : "number_literal",
+												"value" : "10"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "&",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "^",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "|",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "param0"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "*",
+								"right" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"op" : "+",
+											"right" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"left" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"op" : "&",
+															"right" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"type" : "binary_expression"
+														},
+														"op" : "|",
+														"right" : 
+														{
+															"tag" : "2",
+															"type" : "number_literal",
+															"value" : "2"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "*",
+													"right" : 
+													{
+														"tag" : "-10",
+														"type" : "number_literal",
+														"value" : "-10"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "^",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "scanf0"
+												},
+												"type" : "binary_expression"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "/",
+										"right" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "&",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "*",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "param0"
+									},
+									"type" : "binary_expression"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "printf15",
+					"op" : "*",
+					"right" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "param0"
+						},
+						"op" : "/",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf1"
+										},
+										"op" : "-",
+										"right" : 
+										{
+											"tag" : "10",
+											"type" : "number_literal",
+											"value" : "10"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "|",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"op" : "|",
+														"right" : 
+														{
+															"tag" : "2",
+															"type" : "number_literal",
+															"value" : "2"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "|",
+													"right" : 
+													{
+														"type" : "input_symbol",
+														"value" : "param0"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "*",
+												"right" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"op" : "&",
+														"right" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "|",
+													"right" : 
+													{
+														"tag" : "2",
+														"type" : "number_literal",
+														"value" : "2"
+													},
+													"type" : "binary_expression"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "&",
+											"right" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"left" : 
+															{
+																"left" : 
+																{
+																	"left" : 
+																	{
+																		"type" : "input_symbol",
+																		"value" : "rand"
+																	},
+																	"op" : "&",
+																	"right" : 
+																	{
+																		"type" : "input_symbol",
+																		"value" : "rand"
+																	},
+																	"type" : "binary_expression"
+																},
+																"op" : "|",
+																"right" : 
+																{
+																	"tag" : "2",
+																	"type" : "number_literal",
+																	"value" : "2"
+																},
+																"type" : "binary_expression"
+															},
+															"op" : "*",
+															"right" : 
+															{
+																"tag" : "-10",
+																"type" : "number_literal",
+																"value" : "-10"
+															},
+															"type" : "binary_expression"
+														},
+														"op" : "^",
+														"right" : 
+														{
+															"type" : "input_symbol",
+															"value" : "scanf0"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "^",
+													"right" : 
+													{
+														"tag" : "0xfffffff6",
+														"type" : "number_literal",
+														"value" : "-10"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "-",
+												"right" : 
+												{
+													"left" : 
+													{
+														"type" : "input_symbol",
+														"value" : "scanf1"
+													},
+													"op" : "-",
+													"right" : 
+													{
+														"tag" : "10",
+														"type" : "number_literal",
+														"value" : "10"
+													},
+													"type" : "binary_expression"
+												},
+												"type" : "binary_expression"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "/",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "param0"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "&",
+								"right" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "&",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"tag" : "-10",
+											"type" : "number_literal",
+											"value" : "-10"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "^",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "scanf0"
+									},
+									"type" : "binary_expression"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "|",
+												"right" : 
+												{
+													"tag" : "2",
+													"type" : "number_literal",
+													"value" : "2"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "param0"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "&",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "&",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"left" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"op" : "&",
+															"right" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"type" : "binary_expression"
+														},
+														"op" : "|",
+														"right" : 
+														{
+															"tag" : "2",
+															"type" : "number_literal",
+															"value" : "2"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "*",
+													"right" : 
+													{
+														"tag" : "-10",
+														"type" : "number_literal",
+														"value" : "-10"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "^",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "scanf0"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "^",
+											"right" : 
+											{
+												"tag" : "0xfffffff6",
+												"type" : "number_literal",
+												"value" : "-10"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "-",
+										"right" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "scanf1"
+											},
+											"op" : "-",
+											"right" : 
+											{
+												"tag" : "10",
+												"type" : "number_literal",
+												"value" : "10"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "/",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "param0"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf16",
+					"left" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "param0"
+						},
+						"op" : "%",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf1"
+										},
+										"op" : "-",
+										"right" : 
+										{
+											"tag" : "10",
+											"type" : "number_literal",
+											"value" : "10"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "|",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"op" : "|",
+														"right" : 
+														{
+															"tag" : "2",
+															"type" : "number_literal",
+															"value" : "2"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "|",
+													"right" : 
+													{
+														"type" : "input_symbol",
+														"value" : "param0"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "*",
+												"right" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"op" : "&",
+														"right" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "|",
+													"right" : 
+													{
+														"tag" : "2",
+														"type" : "number_literal",
+														"value" : "2"
+													},
+													"type" : "binary_expression"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "&",
+											"right" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"left" : 
+															{
+																"left" : 
+																{
+																	"left" : 
+																	{
+																		"type" : "input_symbol",
+																		"value" : "rand"
+																	},
+																	"op" : "&",
+																	"right" : 
+																	{
+																		"type" : "input_symbol",
+																		"value" : "rand"
+																	},
+																	"type" : "binary_expression"
+																},
+																"op" : "|",
+																"right" : 
+																{
+																	"tag" : "2",
+																	"type" : "number_literal",
+																	"value" : "2"
+																},
+																"type" : "binary_expression"
+															},
+															"op" : "*",
+															"right" : 
+															{
+																"tag" : "-10",
+																"type" : "number_literal",
+																"value" : "-10"
+															},
+															"type" : "binary_expression"
+														},
+														"op" : "^",
+														"right" : 
+														{
+															"type" : "input_symbol",
+															"value" : "scanf0"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "^",
+													"right" : 
+													{
+														"tag" : "0xfffffff6",
+														"type" : "number_literal",
+														"value" : "-10"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "-",
+												"right" : 
+												{
+													"left" : 
+													{
+														"type" : "input_symbol",
+														"value" : "scanf1"
+													},
+													"op" : "-",
+													"right" : 
+													{
+														"tag" : "10",
+														"type" : "number_literal",
+														"value" : "10"
+													},
+													"type" : "binary_expression"
+												},
+												"type" : "binary_expression"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "/",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "param0"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "&",
+								"right" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "&",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"tag" : "-10",
+											"type" : "number_literal",
+											"value" : "-10"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "^",
+									"right" : 
+									{
+										"type" : "input_symbol",
+										"value" : "scanf0"
+									},
+									"type" : "binary_expression"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "|",
+												"right" : 
+												{
+													"tag" : "2",
+													"type" : "number_literal",
+													"value" : "2"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "param0"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "*",
+										"right" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"op" : "&",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "rand"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "|",
+											"right" : 
+											{
+												"tag" : "2",
+												"type" : "number_literal",
+												"value" : "2"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "&",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"left" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"op" : "&",
+															"right" : 
+															{
+																"type" : "input_symbol",
+																"value" : "rand"
+															},
+															"type" : "binary_expression"
+														},
+														"op" : "|",
+														"right" : 
+														{
+															"tag" : "2",
+															"type" : "number_literal",
+															"value" : "2"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "*",
+													"right" : 
+													{
+														"tag" : "-10",
+														"type" : "number_literal",
+														"value" : "-10"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "^",
+												"right" : 
+												{
+													"type" : "input_symbol",
+													"value" : "scanf0"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "^",
+											"right" : 
+											{
+												"tag" : "0xfffffff6",
+												"type" : "number_literal",
+												"value" : "-10"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "-",
+										"right" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "scanf1"
+											},
+											"op" : "-",
+											"right" : 
+											{
+												"tag" : "10",
+												"type" : "number_literal",
+												"value" : "10"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "/",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "param0"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "printf16",
+					"op" : "&",
+					"right" : 
+					{
+						"tag" : "0xffffffff",
+						"type" : "number_literal",
+						"value" : "-1"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "printf17",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"type" : "input_symbol",
+										"value" : "rand"
+									},
+									"op" : "|",
+									"right" : 
+									{
+										"tag" : "2",
+										"type" : "number_literal",
+										"value" : "2"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "|",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "param0"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "-",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"op" : "+",
+										"right" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"left" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"op" : "&",
+														"right" : 
+														{
+															"type" : "input_symbol",
+															"value" : "rand"
+														},
+														"type" : "binary_expression"
+													},
+													"op" : "|",
+													"right" : 
+													{
+														"tag" : "2",
+														"type" : "number_literal",
+														"value" : "2"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "*",
+												"right" : 
+												{
+													"tag" : "-10",
+													"type" : "number_literal",
+													"value" : "-10"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "^",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "scanf0"
+											},
+											"type" : "binary_expression"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "/",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"op" : "&",
+											"right" : 
+											{
+												"type" : "input_symbol",
+												"value" : "rand"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "|",
+										"right" : 
+										{
+											"tag" : "2",
+											"type" : "number_literal",
+											"value" : "2"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "*",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "param0"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "^",
+						"right" : 
+						{
+							"type" : "input_symbol",
+							"value" : "param0"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "printf17",
+					"op" : "*",
+					"right" : 
+					{
+						"left" : 
+						{
+							"type" : "input_symbol",
+							"value" : "rand"
+						},
+						"op" : "^",
+						"right" : 
+						{
+							"type" : "input_symbol",
+							"value" : "param0"
+						},
+						"type" : "binary_expression"
+					},
+					"type" : "binary_expression"
+				},
+				{
+					"id" : "return0",
+					"left" : 
+					{
+						"left" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"type" : "input_symbol",
+										"value" : "scanf1"
+									},
+									"op" : "-",
+									"right" : 
+									{
+										"tag" : "10",
+										"type" : "number_literal",
+										"value" : "10"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "&",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "rand"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "^",
+							"right" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"type" : "input_symbol",
+										"value" : "rand"
+									},
+									"op" : "|",
+									"right" : 
+									{
+										"tag" : "2",
+										"type" : "number_literal",
+										"value" : "2"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "|",
+								"right" : 
+								{
+									"type" : "input_symbol",
+									"value" : "param0"
+								},
+								"type" : "binary_expression"
+							},
+							"type" : "binary_expression"
+						},
+						"op" : "*",
+						"right" : 
+						{
+							"left" : 
+							{
+								"left" : 
+								{
+									"left" : 
+									{
+										"type" : "input_symbol",
+										"value" : "rand"
+									},
+									"op" : "+",
+									"right" : 
+									{
+										"left" : 
+										{
+											"left" : 
+											{
+												"left" : 
+												{
+													"left" : 
+													{
+														"type" : "input_symbol",
+														"value" : "rand"
+													},
+													"op" : "&",
+													"right" : 
+													{
+														"type" : "input_symbol",
+														"value" : "rand"
+													},
+													"type" : "binary_expression"
+												},
+												"op" : "|",
+												"right" : 
+												{
+													"tag" : "2",
+													"type" : "number_literal",
+													"value" : "2"
+												},
+												"type" : "binary_expression"
+											},
+											"op" : "*",
+											"right" : 
+											{
+												"tag" : "-10",
+												"type" : "number_literal",
+												"value" : "-10"
+											},
+											"type" : "binary_expression"
+										},
+										"op" : "^",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "scanf0"
+										},
+										"type" : "binary_expression"
+									},
+									"type" : "binary_expression"
+								},
+								"op" : "/",
+								"right" : 
+								{
+									"left" : 
+									{
+										"left" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"op" : "&",
+										"right" : 
+										{
+											"type" : "input_symbol",
+											"value" : "rand"
+										},
+										"type" : "binary_expression"
+									},
+									"op" : "|",
+									"right" : 
+									{
+										"tag" : "2",
+										"type" : "number_literal",
+										"value" : "2"
+									},
+									"type" : "binary_expression"
+								},
+								"type" : "binary_expression"
+							},
+							"op" : "*",
+							"right" : 
+							{
+								"type" : "input_symbol",
+								"value" : "param0"
+							},
+							"type" : "binary_expression"
+						},
+						"type" : "binary_expression"
+					},
+					"name" : "return0",
+					"op" : "*",
+					"right" : 
+					{
+						"type" : "input_symbol",
+						"value" : "rand"
+					},
+					"type" : "binary_expression"
+				}
+			]
+		}
+	],
+	"scanf_num" : 2
+}
+

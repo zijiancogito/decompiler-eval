@@ -5,7 +5,7 @@ import json
 import shutil
 
 def check_symbol(symbol):
-    if re.match('(rand|param|scanf|printf|__isoc99_scanf|__printf_chk|f_rand|[-]*[0-9]+|0x[0-9a-fA-F]+)[0-9]*', str(symbol)):
+    if re.match('(rand|param|scanf|printf|f_rand|[-]*[0-9]+|0x[0-9a-fA-F]+)[0-9]*', str(symbol)):
         return True
     return False
 
@@ -84,9 +84,14 @@ def check_cf_ir_dir(dir):
             file_path = os.path.join(dir, sub_dir, f)
             check_cf_ir(file_path)
 
-def check_all_err(json_file):
+def check_err(json_file):
     with open(json_file, 'r') as f:
+        cnt = f.read()
+        f.seek(0, os.SEEK_SET)
         js = json.load(f)
+    l = re.findall('v[0-9]+', cnt)
+    if len(l) > 0:
+        return False
     if 'expressions' in js.keys():
         paths = js["expressions"]
         for path in paths:
@@ -94,12 +99,18 @@ def check_all_err(json_file):
             for exp in exps:
                 if not check_exp(exp):
                     return False
+    if 'symbols' in js.keys():
+        symbols = js['symbols']
+        for symbol in symbols:
+            if not check_symbol(symbol):
+                return False
+    
     return True
 
 def check_vxx(json_file):
     with open(json_file, 'r') as f:
         cnt = f.read()
-    l = re.findall('v[0-9]+|a[0-9]+', cnt)
+    l = re.findall('v[0-9]+', cnt)
     if len(l) == 0:
         return True
     return False

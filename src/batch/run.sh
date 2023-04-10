@@ -13,7 +13,7 @@ do
             for file in `ls $f_p`
             do
                 data_path=$f_p/$file
-                python3 de_se.py $data_path
+                python3 de_se.py $data_path $s_p
             done
         done
     done

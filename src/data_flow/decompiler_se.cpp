@@ -1174,14 +1174,6 @@ extern "C" const char *process(const char *str, MODE mode)
             tmp = tmp->next;
             TSNode func_node = ts_node_child_by_field_name(tmp->data, "function", strlen("function"));
             std::string func_name = get_content(func_node, source);
-            bool visited = false;
-            for (auto callee: callees) {
-                if (callee.asString() == func_name) {
-                    visited = true;
-                    break;
-                }
-            }
-            if (!visited) callees.append(func_name);
             if (func_name.find("printf") != std::string::npos) {
                 TSNode arg_list = ts_node_child_by_field_name(tmp->data, "arguments", strlen("arguments"));
                 int arg_num = ts_node_child_count(arg_list);
@@ -1231,6 +1223,15 @@ extern "C" const char *process(const char *str, MODE mode)
                 } else if (func_name == "f_scanf_nop") {
                     std::string name = "scanf" + std::to_string(scanf_num ++ );
                     var_id_map.emplace(ts_node_start_byte(tmp->data), name);
+                } else {
+                    bool visited = false;
+                    for (auto callee: callees) {
+                        if (callee.asString() == func_name) {
+                            visited = true;
+                            break;
+                        }
+                    }
+                    if (!visited) callees.append(func_name);
                 }
                 tmp2->next = tmp->next;
                 analyze_nodes.listLen -- ;

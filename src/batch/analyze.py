@@ -71,5 +71,6 @@ def analyze_all(option):
             print()
         print()
 
+
 if __name__ == '__main__':
     analyze_all('concrete')

@@ -16,15 +16,15 @@
 --no-longlong
 --no-int8
 --no-uint8
---float
+--no-float
 --main
 --no-math64
 --no-inline-function
---max-block-depth 5
+--max-block-depth 3
 --max-block-size 5
 --max-expr-complexity 2
---max-funcs 10
---max-pointer-depth 1
+--max-funcs 1
+--max-pointer-depth 0
 --max-struct-fields 0
 --max-union-fields 0
 --muls
@@ -43,3 +43,4 @@
 --no-int128
 --no-uint128
 --no-binary-constant
+--int-size 32

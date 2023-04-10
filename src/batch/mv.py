@@ -15,6 +15,8 @@ def mv(csv_path):
             shutil.move(row, os.path.join("/home/eval/DF/se/fail_de", t))
 
 if __name__ == "__main__":
-    csvs = ['/home/eval/decompiler-eval/src/batch/err_vxx.csv', '/home/eval/decompiler-eval/src/batch/err_global.csv', '/home/eval/decompiler-eval/src/batch/err_other.csv']
+    p = "/home/eval/decompiler-eval/src/batch/err"
+    csvs = os.listdir(p)
     for c in csvs:
-        mv(c)
+        c_path = os.path.join(p, c)
+        mv(c_path)

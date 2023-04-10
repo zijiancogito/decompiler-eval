@@ -1,4 +1,5 @@
 import sys
+import re
 sys.path.append('../')
 import os
 import csv
@@ -101,10 +102,17 @@ def batch_de_execution_from_csv(csv_path, save_to, mode):
                 json.dump(paths, f)
             # except Exception as e:
             #     log_err('/home/eval/decompiler-eval/src/batch/err_py.csv', de_file)
-                    
+
 def batch_de_execution_from_str(de_file_path: str, save_to, mode):
     tmp_list = de_file_path.split('/')
     dec = tmp_list[6]
+    de_file_name = tmp_list[-1]
+
+    if not os.path.exists(f'done/done_{dec}.csv'):
+        os.mknod(f'done/done_{dec}.csv')
+    if not os.path.exists(f'err/err_{dec}.csv'):
+        os.mknod(f'err/err_{dec}.csv')
+
     with open(f'done/done_{dec}.csv', 'r') as f:
         reader = csv.reader(f)
         done_rows = [r for r in reader]
@@ -123,6 +131,15 @@ def batch_de_execution_from_str(de_file_path: str, save_to, mode):
         func_name = funcs_name[i]
         # if "func" not in func_name:
         #     continue
+
+        if len(re.findall('func[0-9]+', func_name)) == 0:
+            print(f"Not parse {func_name}")
+            continue
+
+        if [f'{de_file_path}-{func_name}'] in done_rows or [f'{de_file_path}-{func_name}'] in err_rows:
+            print("Already Done:", f'{de_file_path}-{func_name}')
+            continue
+
         print(func_name)
         # run cpp
         dese = cdll.LoadLibrary("/home/eval/decompiler-eval/src/data_flow/libse.so")
@@ -136,14 +153,14 @@ def batch_de_execution_from_str(de_file_path: str, save_to, mode):
         
         if paths is not None:
             paths = load_from_json(json.loads(paths.decode()), mode)
-            save_path = os.path.join(save_to, os.path.splitext(de_file)[0])
+            save_path = os.path.join(save_to, os.path.splitext(de_file_name)[0])
             if not os.path.exists(save_path):
                 os.makedirs(save_path)
             with open(os.path.join(save_path, func_name + '.json'), 'w') as f:
                 json.dump(paths, f)
             log_err(f'done/done_{dec}.csv', f'{de_file_path}-{func_name}')
         else:
-            log_err(f'done/done_{dec}.csv', f'{de_file_path}-{func_name}')
+            log_err(f'err/err_{dec}.csv', f'{de_file_path}-{func_name}')
 
 def batch_de_execution(des_dir, mode):
     with open("done_RecStudio.csv", 'r') as f:
