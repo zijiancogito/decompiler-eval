@@ -6,11 +6,12 @@ import numpy as np
 
 
 
-dec_root = '/home/eval/DF/se'
+dec_root = '/home/eval/DF/se/de'
 ir_root = '/home/eval/DF/se/ir'
-compilers = ['clang', 'gcc']
-decompilers = ['Ghidra', 'ida', 'RetDec']
-options = ['o1', 'o2', 'o3', 'os']
+compilers = ['gcc']
+# decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'ida', 'RetDec']
+decompilers = ['RetDec']
+options = ['o0', 'o1', 'o2', 'o3', 'os']
 
 
 
@@ -60,7 +61,7 @@ def analyze(de_dir, ir_dir, option):
 def analyze_all(option):
     for compiler in compilers:
         print(f"---------------------------{compiler}-------------------------------")
-        print("Decompiler\tO0\tO1\tO2\tO3\tOs")
+        print("Decompiler\tO0       \tO1       \tO2       \tO3       \tOs       ")
         for decompiler in decompilers:
             print("{0:15}".format(decompiler), end='\t')
             for opt_level in options:

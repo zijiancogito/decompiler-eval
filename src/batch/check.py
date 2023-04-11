@@ -5,7 +5,7 @@ import json
 import shutil
 
 def check_symbol(symbol):
-    if re.match('(rand|param|scanf|printf|f_rand|[-]*[0-9]+|0x[0-9a-fA-F]+)[0-9]*', str(symbol)):
+    if re.match('(rand|param|scanf|f_rand|[-]*[0-9]+|0x[0-9a-fA-F]+)[0-9]*', str(symbol)):
         return True
     return False
 

@@ -145,6 +145,7 @@ def func_acc(ir_json_file, c_json_file):
     return func_accu
 
 def concrete_sta(ir_json_file, c_json_file):
+    # print(c_json_file)
     ir_json = None
     with open(ir_json_file, 'r') as f:
         ir_json = json.load(f)
@@ -157,11 +158,10 @@ def concrete_sta(ir_json_file, c_json_file):
 
     symbols = []
     if len(ir_json["symbols"]) != len(c_json["symbols"]):
-        print(c_json["symbols"])
+        # print(c_json["symbols"])
         return None, None
     for sym in ir_json["symbols"]:
         if sym not in c_json["symbols"]:
-            print(c_json["symbols"])
             return None, None
         symbols.append(sym)
 
