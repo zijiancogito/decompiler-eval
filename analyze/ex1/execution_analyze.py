@@ -2,7 +2,7 @@ import sys
 
 import os
  
-root = '/home/eval/DF/err_se/'
+root = '/home/eval/DF/err_se_bp/'
 compilers = ['clang', 'gcc']
 decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'ida', 'RetDec']
 options = ['o0', 'o1', 'o2', 'o3', 'os']

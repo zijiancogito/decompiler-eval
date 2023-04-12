@@ -27,11 +27,11 @@ clang ida os: 4513 0.96
 Total clang ida: 22426 0.96
 =========================================================
 clang RetDec o0: 4910 0.96
-clang RetDec o1: 4208 0.82
+clang RetDec o1: 4207 0.82
 clang RetDec o2: 4038 0.82
 clang RetDec o3: 4038 0.82
 clang RetDec os: 3919 0.81
-Total clang RetDec: 21113 0.85
+Total clang RetDec: 21112 0.85
 =========================================================
 gcc angr o0: 1677 0.48
 gcc angr o1: 1807 0.53

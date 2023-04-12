@@ -8,9 +8,9 @@ import numpy as np
 
 dec_root = '/home/eval/DF/se/de'
 ir_root = '/home/eval/DF/se/ir'
-compilers = ['gcc']
-# decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'ida', 'RetDec']
-decompilers = ['RetDec']
+compilers = ['clang', 'gcc']
+decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'ida', 'RetDec']
+# decompilers = ['Ghidra',  'ida', 'RetDec']
 options = ['o0', 'o1', 'o2', 'o3', 'os']
 
 
@@ -74,4 +74,4 @@ def analyze_all(option):
 
 
 if __name__ == '__main__':
-    analyze_all('concrete')
+    analyze_all('feature')

@@ -156,6 +156,6 @@ def tree_sta(ir_json_file, c_json_file, option):
             matched += 1
 
     recall = round(matched / len(ir_json["expressions"]), 2)
-    precision = round(matched / len(c_json["expressions"]), 2)
+    precision = round(matched / len(c_json["expressions"][0]), 2)
     return precision, recall
 
