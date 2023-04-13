@@ -19,6 +19,7 @@ def average_x_y(x, y):
     new_y = [avg[xi] for xi in new_x]
     return new_x, new_y
 
+
 def scatter_hist(x, y, ax, ax_histx, ax_histy):
     # no labels
     ax_histx.tick_params(axis="x", labelbottom=False)
@@ -59,4 +60,15 @@ def plot_base(x, y, save_to):
     plt.savefig(save_to)
     plt.cla()
     plt.close('all')
-    
+
+def plot_multi(pairs, save_to, colors, decompilers):
+    plt.figure(figsize=(10, 10), dpi=100)
+    idx = 0
+    for xi, yi in pairs:
+        plt.scatter(xi, yi, c=colors[idx], label=decompilers[idx], edgecolors='none')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig(save_to)
+    plt.cla()
+    plt.clost('all')
+

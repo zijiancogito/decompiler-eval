@@ -97,6 +97,7 @@ def analyze(src_dec_locs, ir_dec_locs, accs, save_to):
     plot_with_hist(y, x, os.path.join(save_to, "hist_ir_acc_loc.jpg"))
     plot_with_color(x, y, os.path.join(save_to, "color_ir_loc_acc.jpg"))
 
+
 src_root = '/home/eval/DF/data'
 ir_root = '/home/eval/DF/ir'
 dec_root = '/home/eval/DF/de'
@@ -104,6 +105,7 @@ dec_se_root = '/home/eval/DF/se'
 ir_se_root = '/home/eval/DF/se/ir'
 compilers = ['clang', 'gcc']
 decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'ida', 'RetDec']
+colors = ['blue', 'cyan', 'green', 'black', 'magenta']
 options = ['o0', 'o1', 'o2', 'o3', 'os']
 save_fig = '/home/eval/DF/readiability/loc'
 
@@ -115,11 +117,13 @@ def analyze_all():
         level_1 = os.path.join(save_to, compiler)
         if not os.path.exists(level_1):
             os.mkdir(level_1)
+        src_accs = [[], [], [], [], []]
+        ir_accs = [[], [], [], [], []]
         for decompiler in decompilers:
             level_2 = os.path.join(level_1, decompiler)
             if not os.path.exists(level_2):
                 os.mkdir(level_2)
-            for option in options:
+            for idx, option in enumerate(options):
                 level_3 = os.path.join(level_2, option)
                 if not os.path.exists(level_3):
                     os.mkdir(level_3)
@@ -130,8 +134,13 @@ def analyze_all():
                 ir_se_dir = os.path.join(ir_se_root, option)
                 src_dec, ir_dec, acc = relation_dir(src_dir, ir_dir, dec_dir, dec_se_dir, ir_se_dir)
                 analyze(src_dec, ir_dec, acc, level_3)
-
-
+                x1, y1 = average_x_y(src_dec, acc)
+                x2, y2 = average_x_y(ir_dec, acc)
+                src_accs[idx].append((x1, y1))
+                ir_accs[idx].append((x2, y2))
+        for idx, pairs in enumerate(src_accs):
+            save = os.path.join(level_1, f'o{idx}_src_acc.jpg')
+            plot_multi(pairs, save, colors, decompilers)
 
 if __name__ == '__main__':
     # src_dir = '/home/eval/DF/data/'
