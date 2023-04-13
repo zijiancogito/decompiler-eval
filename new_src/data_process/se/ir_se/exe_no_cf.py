@@ -8,16 +8,13 @@ import json
 
 from execution import execution_instruction
 
-from exp_tree.exp_tree import *
+sys.path.append('../../../utils/exp_tree/')
+from exp_tree import ExpTree, copy_tree, exptree_to_json
 
 llvm.initialize()
 llvm.initialize_native_target()
 llvm.initialize_native_asmprinter()
 
-if __name__ == '__main__':
-    bname = os.path.basename(sys.argv[1])
-    save_to = f"./test/{bname.split('.')[0]}.json" 
-    process_functions(ir_file, save_to)
 
 def process_functions(ir_file, save_to):
     llvm_ir = None
@@ -98,9 +95,9 @@ def execution_var(block,
         if instruction.opcode == 'call':
             func_name, plist, ret = parse_call(str(instruction).strip())
             if func_name == "__isoc_99_scanf" or func_name == "scanf":
-                find_input_symbols(plist[1:], tmp_dict, input_symbols_table)
+                find_scanf_symbols(plist[1:], tmp_dict, input_symbols_table)
             elif func_name == "f_scanf_nop":
-                find_input_symbols([ret], tmp_dict, input_symbols_table)
+                find_scanf_symbols([ret], tmp_dict, input_symbols_table)
             elif func_name == "printf" or func_name == "__isoc_99_printf":
                 find_printf_symbols(plist[1:], tmp_dict, output_symbols_table, output_expressions)
             elif func_name == "f_printf":
@@ -204,3 +201,7 @@ def find_return_symbols(op, tmp_dict, output_symbols_table, output_expressions):
         output_expressions['return0'] = copy_tree(tmp_dict[op])
         output_symbols_table['return'] = 1
 
+if __name__ == '__main__':
+    bname = os.path.basename(sys.argv[1])
+    save_to = f"./test/{bname.split('.')[0]}.json" 
+    process_functions(sys.argv[1], save_to)
