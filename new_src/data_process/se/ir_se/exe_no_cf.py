@@ -95,11 +95,11 @@ def execution_var(block,
     for instruction in block.instructions:
         if instruction.opcode == 'call':
             func_name, plist, ret = parse_call(str(instruction).strip())
-            if func_name == "__isoc_99_scanf" or func_name == "scanf":
+            if func_name == "__isoc99_scanf" or func_name == "scanf":
                 find_scanf_symbols(plist[1:], tmp_dict, input_symbols_table)
             elif func_name == "f_scanf_nop":
                 find_scanf_symbols([ret], tmp_dict, input_symbols_table)
-            elif func_name == "printf" or func_name == "__isoc_99_printf":
+            elif func_name == "printf" or func_name == "__isoc99_printf":
                 find_printf_symbols(plist[1:], tmp_dict, output_symbols_table, output_expressions)
             elif func_name == "f_printf":
                 find_printf_symbols(plist, tmp_dict, output_symbols_table, output_expressions)

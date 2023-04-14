@@ -806,3 +806,7 @@ HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url
 url: https://dogbolt.org/api/binaries/406e70f2-667d-40a3-85e0-75e22050561f/decompilations/e0431cc8-4e88-4d19-9534-61ce92f71d3d/download/
 HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/406e70f2-667d-40a3-85e0-75e22050561f/decompilations/e0431cc8-4e88-4d19-9534-61ce92f71d3d/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
 
+2023-04-15 01:16:18,155 - __main__ - WARNING - 310 get wrong
+url:https://dogbolt.org/api/binaries/777c35a1-3c69-4fd3-8855-5e651c8a69cc/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/777c35a1-3c69-4fd3-8855-5e651c8a69cc/decompilations/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
