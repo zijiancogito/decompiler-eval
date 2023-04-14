@@ -758,3 +758,51 @@ HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url
 url: https://dogbolt.org/api/binaries/89857a42-e7d0-4d92-9584-32c7357fd426/decompilations/9d776d34-da81-4fc7-bda0-c4841ccb793b/download/
 HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/89857a42-e7d0-4d92-9584-32c7357fd426/decompilations/9d776d34-da81-4fc7-bda0-c4841ccb793b/download/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
 
+2023-04-15 00:23:16,971 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/angr get wrong
+url: https://dogbolt.org/api/binaries/a03ecf1f-1025-4ad8-b862-cd86a1ac4402/decompilations/47af2363-b19d-4503-b619-816583a7c2a7/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/a03ecf1f-1025-4ad8-b862-cd86a1ac4402/decompilations/47af2363-b19d-4503-b619-816583a7c2a7/download/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
+
+2023-04-15 00:23:21,114 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/Ghidra get wrong
+url: https://dogbolt.org/api/binaries/a03ecf1f-1025-4ad8-b862-cd86a1ac4402/decompilations/de43b416-aa3f-4a3a-8adc-40857d6159d2/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/a03ecf1f-1025-4ad8-b862-cd86a1ac4402/decompilations/de43b416-aa3f-4a3a-8adc-40857d6159d2/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-15 00:33:04,364 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/angr get wrong
+url: https://dogbolt.org/api/binaries/b010b95b-6de6-4fc1-98b6-71dad388061f/decompilations/e0c14465-2864-430d-ab6c-9e6d3037ca60/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/b010b95b-6de6-4fc1-98b6-71dad388061f/decompilations/e0c14465-2864-430d-ab6c-9e6d3037ca60/download/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
+
+2023-04-15 00:33:05,317 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/Hex-Rays get wrong
+url: https://dogbolt.org/api/binaries/b010b95b-6de6-4fc1-98b6-71dad388061f/decompilations/4e3ae1b8-ebf8-41d9-a0e0-958d58ee59d1/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/b010b95b-6de6-4fc1-98b6-71dad388061f/decompilations/4e3ae1b8-ebf8-41d9-a0e0-958d58ee59d1/download/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
+
+2023-04-15 00:33:14,140 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/Ghidra get wrong
+url: https://dogbolt.org/api/binaries/b010b95b-6de6-4fc1-98b6-71dad388061f/decompilations/e65d7fbe-5567-4fca-870e-cd75d7e4d8b3/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/b010b95b-6de6-4fc1-98b6-71dad388061f/decompilations/e65d7fbe-5567-4fca-870e-cd75d7e4d8b3/download/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
+
+2023-04-15 00:33:52,329 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/Hex-Rays get wrong
+url: https://dogbolt.org/api/binaries/76640988-bbf3-412a-ae15-d6f78da2b7bd/decompilations/90e59977-698c-41aa-8ae7-0d55fb93032a/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/76640988-bbf3-412a-ae15-d6f78da2b7bd/decompilations/90e59977-698c-41aa-8ae7-0d55fb93032a/download/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
+
+2023-04-15 00:33:53,133 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/Ghidra get wrong
+url: https://dogbolt.org/api/binaries/76640988-bbf3-412a-ae15-d6f78da2b7bd/decompilations/a4fb5608-2765-442a-95fd-ffa8c98437a6/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/76640988-bbf3-412a-ae15-d6f78da2b7bd/decompilations/a4fb5608-2765-442a-95fd-ffa8c98437a6/download/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
+
+2023-04-15 00:34:10,607 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/Hex-Rays get wrong
+url: https://dogbolt.org/api/binaries/95bf25a5-339f-49dc-9011-9bd59c92fbdc/decompilations/ff1ca4e3-6323-47b9-b839-6e7d0e5f7446/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/95bf25a5-339f-49dc-9011-9bd59c92fbdc/decompilations/ff1ca4e3-6323-47b9-b839-6e7d0e5f7446/download/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
+
+2023-04-15 00:38:25,743 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/angr get wrong
+url: https://dogbolt.org/api/binaries/04c941bc-fc15-48ec-a3d7-0b7a6c8b85ae/decompilations/9400ed2c-3128-44af-9f6c-24f435531f80/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/04c941bc-fc15-48ec-a3d7-0b7a6c8b85ae/decompilations/9400ed2c-3128-44af-9f6c-24f435531f80/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-15 00:39:26,748 - __main__ - WARNING - 310 get wrong
+url:https://dogbolt.org/api/binaries/777c35a1-3c69-4fd3-8855-5e651c8a69cc/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/777c35a1-3c69-4fd3-8855-5e651c8a69cc/decompilations/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
+
+2023-04-15 00:39:50,019 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/Hex-Rays get wrong
+url: https://dogbolt.org/api/binaries/406e70f2-667d-40a3-85e0-75e22050561f/decompilations/e0cab483-7d87-4d84-80ac-ef7104cf486a/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/406e70f2-667d-40a3-85e0-75e22050561f/decompilations/e0cab483-7d87-4d84-80ac-ef7104cf486a/download/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
+
+2023-04-15 00:39:51,097 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/o2/BinaryNinja get wrong
+url: https://dogbolt.org/api/binaries/406e70f2-667d-40a3-85e0-75e22050561f/decompilations/e0431cc8-4e88-4d19-9534-61ce92f71d3d/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/406e70f2-667d-40a3-85e0-75e22050561f/decompilations/e0431cc8-4e88-4d19-9534-61ce92f71d3d/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
