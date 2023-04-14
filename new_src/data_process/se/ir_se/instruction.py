@@ -200,9 +200,10 @@ def execution_instruction(instruction, tmp_dict):
         if res != None:
             tmp_dict[res[0]] = res[1]
     if opcode == "select":
-        res = execution_select(str(instruction).strip(), tmp_dict)
-        if res != None:
-            tmp_dict[res[0]] = res[1]
+        pass
+        # res = execution_select(str(instruction).strip(), tmp_dict)
+        # if res != None:
+            # tmp_dict[res[0]] = res[1]
     if opcode == "freeze":
         pass
     if opcode == "call":

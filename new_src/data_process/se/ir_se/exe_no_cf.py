@@ -6,7 +6,7 @@ import llvmlite.binding as llvm
 import re
 import json
 
-from execution import execution_instruction
+from instruction import execution_instruction
 
 sys.path.append('../../../utils/exp_tree/')
 from exp_tree import ExpTree, copy_tree, exptree_to_json
@@ -30,6 +30,7 @@ def process_functions(ir_file, save_to):
         exps, symbols= symbolic_execution(function)
         if exps != None:
             dump_to_file(save_to, exps, symbols)
+        break
 
 def dump_to_file(save_to, exps, symbols):
     js_dict = {}

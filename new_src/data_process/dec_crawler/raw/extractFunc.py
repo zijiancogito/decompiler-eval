@@ -1,4 +1,7 @@
 import os
+import csv
+import copy
+import argparse
 
 compiler_generated_funcs = [
 	'_init',
@@ -31,20 +34,21 @@ compiler_generated_funcs = [
 ]
 
 class ExtractFuncs(object):
-	def __init__(self):
-		pass
-
-	def findFuncs(self, path):
-		self.path = path
-		self.funcs = []  # the number of rows of functions
+	def __init__(self, file_path):
+		self.file_path = file_path
+		self.file = self._readfile(file_path)
+		self.funcs = {}  # {func_name: func} the content of all functions
+		self.required_funcs = {}  # {func_name: func} the content of required functions
+		self.funcsrows = []  # the number of rows of functions
 		self.funcsname = []
-		self.file = self._readfile(path)
+
+	def findFuncs(self):
 		self._findCBs()
-		funcs = self.funcs.copy()
-		for func in funcs:
-			sr = func[0]  # the number of row of {
+		funcsrows = self.funcsrows.copy()
+		for funcrow in funcsrows:
+			sr = funcrow[0]  # the number of row of {
 			if self._preChar(sr) != ')':
-				self.funcs.remove(func)
+				self.funcsrows.remove(funcrow)
 				continue
 			lr, idx = self._findPare(sr)
 			if lr != None:
@@ -54,53 +58,48 @@ class ExtractFuncs(object):
 				func_name = s[-1]
 				while func_name[0] == '*':
 					func_name = func_name[1:]
-				if func_name in compiler_generated_funcs:
-					self.funcs.remove(func)
-					continue
 
 				self.funcsname.append(func_name)
 				if len(s) == 1:
 					lr -= 1
-				'''
-				for i in range(len(s)):
-					c = s[i]
-					if '(' in c:
-						if (c.find('(') == 0 and i < 2) or (c.find('(') != 0 and i < 1):
-							lr -= 1
-						break
-				'''
-				if self.funcs.count(func):
-					self.funcs[self.funcs.index(func)][0] = lr
+				
+				if self.funcsrows.count(funcrow):
+					self.funcsrows[self.funcsrows.index(funcrow)][0] = lr
 
 	def getFuncs(self, path):
 		self.findFuncs(path)
-		funcs = []
-		for funcrow in self.funcs:
+		for i in range(len(self.funcsrows)):
+			funcrow = self.funcsrows[i]
+			func_name = self.funcsname[i]
 			func = ""
 			for i in self.file[funcrow[0]: funcrow[1] + 1]:
 				func += i + '\n'
-			funcs.append(func)
+			self.funcs[func_name] = func
 
-		return funcs, self.funcsname
+		return self.funcs
 
-	def writeFuncs(self):
-		# after findFuncs
-		# self._getFuncName()
-		funcsrows = []
-		filepath = os.path.dirname(self.path)
-		for i in range(len(self.funcs)):
-			func = self.funcs[i]
-			funcname = self.funcsname[i]
-			funcsrows += [i for i in range(func[0], func[1]+1)]
-			with open(os.path.join(filepath, funcname+'.txt'), 'w') as f:
-				f.writelines([i + '\n' for i in self.file[func[0]:func[1]+1]])
-		'''
-		with open(os.path.join(filepath, 'others.txt'), 'w') as f:
-			for i in range(len(self.file)):
-				if i in funcsrows:
-					continue
-				f.write(self.file[i] + '\n')
-		'''
+	def extractFuncs(self, funcs_name):
+		self.getFuncs()
+		if len(funcs_name) == 0:
+			self.required_funcs = copy.deepcopy(self.funcs)
+			return True
+		
+		check = True
+		for func_name in funcs_name:
+			if func_name in self.funcsname:
+				self.required_funcs[func_name] = self.funcs[func_name]
+			else:
+				check = False
+
+		return check
+
+	def writeFuncs(self, save_to):
+		if not os.path.exists(save_to):
+			os.makedirs(save_to)
+		for func in self.required_funcs.values():
+			file_name = os.path.basename(self.file_path)
+			with open(os.path.join(save_to, file_name), 'a') as f:
+				f.write(f'{func}\n\n')
 
 
 	def _readfile(self, path):
@@ -119,7 +118,7 @@ class ExtractFuncs(object):
 					if len(stack) > 1:
 						stack.pop()
 					elif len(stack) == 1:
-						self.funcs.append([stack[0], i])
+						self.funcsrows.append([stack[0], i])
 						stack.pop()
 						break
 
@@ -154,7 +153,7 @@ class ExtractFuncs(object):
 
 	'''
 	def _getFuncName(self):
-		for func in self.funcs:
+		for func in self.funcsrows:
 			for i in range(func[0], func[1]):
 				r = self.file[i]
 				if '(' in r:
@@ -166,8 +165,21 @@ class ExtractFuncs(object):
 	'''
 
 if __name__ == '__main__':
-	e = ExtractFuncs()
-	e.findFuncs('/home/kali/oliver/DataHandling/testdata/2132/2132-O0/2132-O0-decompile/2132-O0-Hex-Rays-8.0.0.220729/2132-O0-Hex-Rays-8.0.0.220729.txt')
-#	e.findFuncs('../ds2/coreutils/src/copy.c')
-	e.writeFuncs()
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-s', '--source', required=True, help="path to file to be processed")
+	parser.add_argument('-o', '--save-to', required=True, help='path to save results')
+	parser.add_argument('-e', '--err', required=True, help='path to save errors')
+	parser.add_argument('-f', '--funcs-name', default='', nargs='+', help='name to functions to be extracted')
+
+	args= parser.parse_args()
+
+	e = ExtractFuncs(args.source)
+	if not e.extractFuncs(args.funcs_name):
+		err_path = os.path.dirname(args.err)
+		if not os.path.exists(err_path):
+			os.makedirs(err_path)
+		with open(args.err, 'a') as f:
+			writer = csv.writer(f)
+			f.write([args.source])
+	e.writeFuncs(args.save_to)
 
