@@ -1,7 +1,7 @@
 # README
 
 
-### ir generate and preprocess
+### ir generate, preprocess and execution
 
 - **step 1:** compile IR from source code ` data\_process/raw\_data\_gen/code\_gen/make\_ir.sh`.
 

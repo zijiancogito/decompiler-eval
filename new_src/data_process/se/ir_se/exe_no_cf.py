@@ -24,13 +24,17 @@ def process_functions(ir_file, save_to):
 
     mod = llvm.parse_assembly(llvm_ir)
     mod.verify()
-    for function in mod.functions:
-        if function.name != 'func0':
-            continue
-        exps, symbols= symbolic_execution(function)
-        if exps != None:
-            dump_to_file(save_to, exps, symbols)
-        break
+    try:
+        for function in mod.functions:
+            if function.name != 'func0':
+                continue
+            exps, symbols= symbolic_execution(function)
+            if exps != None:
+                dump_to_file(save_to, exps, symbols)
+            break
+        return False 
+    except:
+        return True 
 
 def dump_to_file(save_to, exps, symbols):
     js_dict = {}

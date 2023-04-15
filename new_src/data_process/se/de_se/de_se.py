@@ -6,12 +6,15 @@ from tqdm import tqdm
 
 import exe_no_cf
 
-optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-decompilers = ['Ghidra', 'ida', 'RetDec', 'BinaryNinja', 'angr']
-compilers = ['clang', 'gcc']
+def log(log_list, log_file):
+    with open(log_file, 'w') as f:
+        for l  in log_list:
+            f.write(f'{l}\n')
 
-
-def process_df2(dec_dir, save_dir):
+def process_df2(dec_dir, save_dir, log_dir):
+    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
+    decompilers = ['Ghidra', 'ida', 'RetDec', 'BinaryNinja', 'angr']
+    compilers = ['clang', 'gcc']
     for compiler in compilers:
         for opt_level in optimizations:
             for decompiler in decompilers:
@@ -20,10 +23,22 @@ def process_df2(dec_dir, save_dir):
                 if not os.path.exists(save):
                     os.makedirs(save)
                 dec_files = os.listdir(dec)
+
+                fail_list = []
                 for dec_file in tqdm(dec_files):
                     dec_path = os.path.join(dec, dec_file)
                     save_path = os.path.join(save, f"{dec_file.split('.')[0]}.json")
-                    exe_no_cf.process_function(dec_path, save_path)
+                    # TODO
+                    fail = exe_no_cf.process_function(dec_path, save_path)
+                    if fail:
+                        fail_list.append(fail)
+
+                log_sub_dir = os.path.join(log_dir, compiler, opt_level)
+                if not os.path.exists(log_sub_dir):
+                    os.makedirs(log_sub_dir)
+                log_file = os.path.join(log_sub_dir, log_file)
+                log(fail_list, log_file)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='de_df.py')
@@ -32,9 +47,10 @@ if __name__ == '__main__':
 
     parser.add_argument('-i', '--dec', type=str, help="decompiling result dir")
     parser.add_argument('-o', '--save', type=str, help="execution result dir")
+    parser.add_argument('-l', '--log', type=str, help="execution failed log dir")
 
     args = parser.parse_args()
 
     if args.exp == 'df2':
-        process_df2(args.dec, args.save)
+        process_df2(args.dec, args.save, args.log)
 
