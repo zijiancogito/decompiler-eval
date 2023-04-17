@@ -2,18 +2,17 @@ import sys
 
 import os
 import argparse
-from tqdm import tqdm
 
 import exe_no_cf
 
 def log(log_list, log_file):
-    with open(log_file, 'w') as f:
+    with open(log_file, 'a') as f:
         for l  in log_list:
             f.write(f'{l}\n')
-
+'''
 def process_df2(dec_dir, save_dir, log_dir):
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['Ghidra', 'ida', 'RetDec', 'BinaryNinja', 'angr']
+    decompilers = ['Ghidra', 'Hex-Rays', 'RetDec', 'BinaryNinja', 'angr']
     compilers = ['clang', 'gcc']
     for compiler in compilers:
         for opt_level in optimizations:
@@ -38,7 +37,18 @@ def process_df2(dec_dir, save_dir, log_dir):
                     os.makedirs(log_sub_dir)
                 log_file = os.path.join(log_sub_dir, log_file)
                 log(fail_list, log_file)
+'''
 
+def process_df2(dec_file, save_dir, log_file):
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    save_path = os.path.join(save_dir, f"{os.path.basename(dec_file).split('.')[0]}.json")
+    fail = exe_no_cf.process_function(dec_file, save_path)
+    if fail is not None:
+        log_dir = os.path.dirname(log_file)
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        log([fail], log_file)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='de_df.py')

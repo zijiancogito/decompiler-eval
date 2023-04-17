@@ -48,8 +48,20 @@ class DecompilerSpider(object):
 		return res
 	
 	def lower_version(self, v1, v2):
-		v1_list = v1.split('.')
-		v2_list = v2.split('.')
+		v1_list = v1.split('-')
+		v2_list = v2.split('-')
+		v1_list_copy = v1_list.copy()
+		v2_list_copy = v2_list.copy()
+		for v in v1_list_copy:
+			tmp = v.split('.')
+			v1_list += tmp
+		for v in v1_list_copy:
+			v1_list.remove(v)
+		for v in v2_list_copy:
+			tmp = v.split('.')
+			v2_list += tmp
+		for v in v2_list_copy:
+			v2_list.remove(v)
 		v1_len = len(v1_list)
 		v2_len = len(v2_list)
 		for i in range(v1_len):

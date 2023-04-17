@@ -73,3 +73,8 @@ def exptree_to_json(tree):
             dic['children'].append(exptree_to_json(child))
     return dic
 
+def json_to_exptree(json_data):
+    tree = ExpTree(json_data["tag"], json_data["data"])
+    for child in json_data["children"]:
+        tree.add_child(sejson_to_exptree(child))
+    return tree
