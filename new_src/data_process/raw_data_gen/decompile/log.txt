@@ -1670,3 +1670,7 @@ HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url
 url:https://dogbolt.org/api/binaries/53cc4d4a-702d-47e1-ae01-09ed671d73b2/decompilations/
 HTTPSConnectionPool(host='dogbolt.org', port=443): Read timed out. (read timeout=10)
 
+2023-04-18 21:29:56,740 - __main__ - WARNING - 193 get wrong
+url:https://dogbolt.org/api/binaries/b0e46c9d-6b38-42c6-b9b8-a39e5758470d/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/b0e46c9d-6b38-42c6-b9b8-a39e5758470d/decompilations/ (Caused by ProxyError('Cannot connect to proxy.', TimeoutError('_ssl.c:980: The handshake operation timed out')))
+
