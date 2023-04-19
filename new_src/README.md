@@ -3,11 +3,11 @@
 
 ### Compiling, preprocess and execution
 
-- **step 1:** Compile IR from source code ` data_processgraw_data_gen/code_gen/make_ir.sh`.
+- **step 1:** Compile IR from source code ` data_process/raw_data_gen/code_gen/make_ir.sh`.
 
-- **step 2:** Preprocess IR, remove "attr" instructions from ir file. Remove ir files containing "poison" and "select" instructions from dataset. ` data_process/raw_data_gen/ir/run.sh`. check if there is still "attr" "poison" "select" after remove ` data_process/raw_data_gen/ir/check.sh`.
+- **step 2:** Preprocess IR, remove "attr" instructions from ir file. Remove ir files containing "poison" and "select" instructions from dataset. Check if there is still "attr" "poison" "select" after remove `data_process/raw_data_gen/ir/df2_check.sh`
 
-- **step 3:** Symbolic execution IR ` data_process/se/ir_se/exe.sh`.
+- **step 3:** Symbolic execution IR ` data_process/se/ir_se/exe_df2.sh`.
 
 - **step 4:** Check invalid symbols in symbolic execution results ` data_process/se/check/check_ir.sh`.
 

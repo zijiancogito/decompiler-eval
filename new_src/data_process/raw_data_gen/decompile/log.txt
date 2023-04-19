@@ -1674,3 +1674,11 @@ HTTPSConnectionPool(host='dogbolt.org', port=443): Read timed out. (read timeout
 url:https://dogbolt.org/api/binaries/b0e46c9d-6b38-42c6-b9b8-a39e5758470d/decompilations/
 HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/b0e46c9d-6b38-42c6-b9b8-a39e5758470d/decompilations/ (Caused by ProxyError('Cannot connect to proxy.', TimeoutError('_ssl.c:980: The handshake operation timed out')))
 
+2023-04-19 15:55:14,209 - __main__ - WARNING - 171 get wrong
+url:https://dogbolt.org/api/binaries/425c6ac6-4d58-4bd6-bb23-18b57e053cc8/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/425c6ac6-4d58-4bd6-bb23-18b57e053cc8/decompilations/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-19 20:58:06,642 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/os/BinaryNinja get wrong
+url: https://dogbolt.org/api/binaries/0f3c2c03-0413-4fd8-b36a-cc480a4fb7e7/decompilations/1c294b9e-7575-49ac-a030-e34ae61bc7d4/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/0f3c2c03-0413-4fd8-b36a-cc480a4fb7e7/decompilations/1c294b9e-7575-49ac-a030-e34ae61bc7d4/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
