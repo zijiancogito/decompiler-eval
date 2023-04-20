@@ -67,12 +67,12 @@ if __name__ == '__main__':
     args= parser.parse_args()
     
     if args.ir:
-        save_to = os.path.join(args.save_to, 'raw/ir', args.opt)
+        save_to = os.path.join(args.save_to, args.opt)
         if not os.path.exists(save_to):
             os.makedirs(save_to)
         compile_ir(args.opt, args.src, save_to)
     else:
-        save_to = os.path.join(args.save_to, 'bin', args.compiler, args.opt)
+        save_to = os.path.join(args.save_to, args.compiler, args.opt)
         if not os.path.exists(save_to):
             os.makedirs(save_to)
         compile_bin(args.opt, args.compiler, args.src, save_to)
