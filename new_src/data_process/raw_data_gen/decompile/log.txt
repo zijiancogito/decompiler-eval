@@ -1682,3 +1682,7 @@ HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url
 url: https://dogbolt.org/api/binaries/0f3c2c03-0413-4fd8-b36a-cc480a4fb7e7/decompilations/1c294b9e-7575-49ac-a030-e34ae61bc7d4/download/
 HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/0f3c2c03-0413-4fd8-b36a-cc480a4fb7e7/decompilations/1c294b9e-7575-49ac-a030-e34ae61bc7d4/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
 
+2023-04-20 04:12:21,132 - __main__ - WARNING - 264 get wrong
+url:https://dogbolt.org/api/binaries/8b6eb06c-ee8c-43ba-abc5-8838cf21f9e0/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/8b6eb06c-ee8c-43ba-abc5-8838cf21f9e0/decompilations/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
+

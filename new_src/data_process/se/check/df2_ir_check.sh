@@ -1,7 +1,7 @@
 #!/bin/bash
 
 IR_DIR=/home/eval/DF2/se/ir/
-LOG_DIR=/home/eval/DF2/se/ir/check_log/
+LOG_DIR=/home/eval/DF2/se/trash/ir/check_log/
 MOVE_DIR=/home/eval/DF2/se/trash/ir/
 
 rm -r $LOG_DIR
