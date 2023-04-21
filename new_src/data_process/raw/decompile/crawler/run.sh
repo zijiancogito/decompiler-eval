@@ -5,8 +5,8 @@ for com in ${coms[@]}
 do
     for opti in ${optis[@]}
     do
-        datas_path=/home/eval/DF2/bin/$com/$opti
-        save_to=/home/eval/DF2/raw_de/$com/$opti
+        datas_path=/home/eval/DF3/bin/$com/$opti
+        save_to=/home/eval/DF3/raw_de/$com/$opti
         while :
         do
             let num=0

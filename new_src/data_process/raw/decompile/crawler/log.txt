@@ -1686,3 +1686,47 @@ HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url
 url:https://dogbolt.org/api/binaries/8b6eb06c-ee8c-43ba-abc5-8838cf21f9e0/decompilations/
 HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/8b6eb06c-ee8c-43ba-abc5-8838cf21f9e0/decompilations/ (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(104, 'Connection reset by peer')))
 
+2023-04-21 15:41:07,359 - __main__ - WARNING - 181 get wrong
+url:https://dogbolt.org/api/binaries/96bec6cd-9940-4073-8fe9-06ed1ba9f057/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/96bec6cd-9940-4073-8fe9-06ed1ba9f057/decompilations/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-21 15:41:12,169 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/os/BinaryNinja get wrong
+url: https://dogbolt.org/api/binaries/0ee6d0ef-af76-4eb6-a53d-03bbf2dc62fe/decompilations/1e517071-d96b-41d2-91dc-af5043c17360/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/0ee6d0ef-af76-4eb6-a53d-03bbf2dc62fe/decompilations/1e517071-d96b-41d2-91dc-af5043c17360/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-21 15:41:14,610 - __main__ - WARNING - /home/eval/DF2/raw_de/clang/os/Ghidra get wrong
+url: https://dogbolt.org/api/binaries/0ee6d0ef-af76-4eb6-a53d-03bbf2dc62fe/decompilations/33be658d-146a-45c3-9f9d-06e79fcabe3c/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/0ee6d0ef-af76-4eb6-a53d-03bbf2dc62fe/decompilations/33be658d-146a-45c3-9f9d-06e79fcabe3c/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-21 15:41:29,387 - __main__ - WARNING - 19 get wrong
+url:https://dogbolt.org/api/binaries/fef6ffb2-4b95-4627-8b61-941dea191bb4/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/fef6ffb2-4b95-4627-8b61-941dea191bb4/decompilations/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-21 15:47:10,673 - __main__ - WARNING - /home/eval/DF3/raw_de/clang/os/BinaryNinja get wrong
+url: https://dogbolt.org/api/binaries/425c6ac6-4d58-4bd6-bb23-18b57e053cc8/decompilations/4326fac1-96d2-4634-a236-03ec3998af49/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/425c6ac6-4d58-4bd6-bb23-18b57e053cc8/decompilations/4326fac1-96d2-4634-a236-03ec3998af49/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-21 15:47:19,755 - __main__ - WARNING - 174 get wrong
+url:https://dogbolt.org/api/binaries/a67b9972-6de8-4bde-8670-4d6b1cd490d5/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/a67b9972-6de8-4bde-8670-4d6b1cd490d5/decompilations/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-21 15:47:38,589 - __main__ - WARNING - /home/eval/DF3/raw_de/clang/os/angr get wrong
+url: https://dogbolt.org/api/binaries/0457b744-7909-4020-8166-d55514076e29/decompilations/2d17e3f6-ca83-4105-9162-97125000dfd6/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/0457b744-7909-4020-8166-d55514076e29/decompilations/2d17e3f6-ca83-4105-9162-97125000dfd6/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-21 15:48:00,448 - __main__ - WARNING - /home/eval/DF3/raw_de/clang/os/angr get wrong
+url: https://dogbolt.org/api/binaries/cdaa375c-9bff-4075-b46f-c364344f6fa7/decompilations/bbc7484e-416d-4a61-ad8a-5d5b3a3ae394/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/cdaa375c-9bff-4075-b46f-c364344f6fa7/decompilations/bbc7484e-416d-4a61-ad8a-5d5b3a3ae394/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-21 15:48:01,481 - __main__ - WARNING - /home/eval/DF3/raw_de/clang/os/Ghidra get wrong
+url: https://dogbolt.org/api/binaries/cdaa375c-9bff-4075-b46f-c364344f6fa7/decompilations/3fbb07b7-cc52-43ea-a8d8-62f576d65783/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/cdaa375c-9bff-4075-b46f-c364344f6fa7/decompilations/3fbb07b7-cc52-43ea-a8d8-62f576d65783/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-21 15:48:20,446 - __main__ - WARNING - /home/eval/DF3/raw_de/clang/os/Ghidra get wrong
+url: https://dogbolt.org/api/binaries/549ef4af-3968-42ed-ab0d-53cb8905cc4b/decompilations/ec557214-928b-4dfb-aa41-d94e61e57d49/download/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/549ef4af-3968-42ed-ab0d-53cb8905cc4b/decompilations/ec557214-928b-4dfb-aa41-d94e61e57d49/download/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
+2023-04-21 15:48:35,931 - __main__ - WARNING - 219 get wrong
+url:https://dogbolt.org/api/binaries/0645ceb6-af72-423e-9dda-5723bb402281/decompilations/
+HTTPSConnectionPool(host='dogbolt.org', port=443): Max retries exceeded with url: /api/binaries/0645ceb6-af72-423e-9dda-5723bb402281/decompilations/ (Caused by SSLError(SSLZeroReturnError(6, 'TLS/SSL connection has been closed (EOF) (_ssl.c:997)')))
+
