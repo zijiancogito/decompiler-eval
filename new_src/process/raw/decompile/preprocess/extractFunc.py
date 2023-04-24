@@ -66,8 +66,8 @@ class ExtractFuncs(object):
 				if self.funcsrows.count(funcrow):
 					self.funcsrows[self.funcsrows.index(funcrow)][0] = lr
 
-	def getFuncs(self, path):
-		self.findFuncs(path)
+	def getFuncs(self):
+		self.findFuncs()
 		for i in range(len(self.funcsrows)):
 			funcrow = self.funcsrows[i]
 			func_name = self.funcsname[i]
@@ -180,6 +180,6 @@ if __name__ == '__main__':
 			os.makedirs(err_path)
 		with open(args.err, 'a') as f:
 			writer = csv.writer(f)
-			f.write([args.source])
+			f.write(f"{args.source}\n")
 	e.writeFuncs(args.save_to)
 

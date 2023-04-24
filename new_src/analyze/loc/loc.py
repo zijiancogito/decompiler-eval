@@ -5,33 +5,9 @@ import re
 from ir_loc import get_ir_lines
 from c_loc import get_c_lines
 
-def dec_vs_src(src_path, dec_path, functions=['func0']):
-    src_loc = get_c_lines(src_path)
-    dec_loc = get_c_lines(dec_path)
-
-    dec_src = {}
-    for func in dec_loc:
-        if func not in src_loc:
-            continue
-        dec_src[func] = round(dec_loc[func] / src_loc[func], 2)
-
-    return dec_src
-
-def dec_vs_ir(ir_path, dec_path, functions=['func0']):
-    ir_loc = get_ir_lines(ir_path, functions)
-    dec_loc = get_c_lines(dec_path, functions)
-
-    dec_ir = {}
-    for func in dec_loc:
-        if func not in ir_loc:
-            continue
-        dec_ir[func] = round(dec_loc[func] / ir_loc[func], 2)
-
-    return dec_ir
-
 def process_df2(dec_dir, src_dir, ir_dir, log_dir):
     compilers = ['clang', 'gcc']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'ida', 'RetDec']
+    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     for compiler in compilers:
         for opt_level in optimizations:
@@ -63,6 +39,30 @@ def log(log_list, log_file):
         for l in log_list:
             f.write(l)
             f.write('\n')
+
+def dec_vs_src(src_path, dec_path, functions=['func0']):
+    src_loc = get_c_lines(src_path)
+    dec_loc = get_c_lines(dec_path)
+
+    dec_src = {}
+    for func in dec_loc:
+        if func not in src_loc:
+            continue
+        dec_src[func] = round(dec_loc[func] / src_loc[func], 2)
+
+    return dec_src
+
+def dec_vs_ir(ir_path, dec_path, functions=['func0']):
+    ir_loc = get_ir_lines(ir_path, functions)
+    dec_loc = get_c_lines(dec_path, functions)
+
+    dec_ir = {}
+    for func in dec_loc:
+        if func not in ir_loc:
+            continue
+        dec_ir[func] = round(dec_loc[func] / ir_loc[func], 2)
+
+    return dec_ir
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='analyze.py')

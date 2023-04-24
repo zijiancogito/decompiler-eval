@@ -4,31 +4,9 @@ import re
 
 import ir_var, c_var
 
-def dec_vs_src(src_path, dec_path, functions=['func0']):
-    src_vars = c_var.get_vars_from_file(src_path, functions)
-    dec_vars = c_var.get_vars_from_file(dec_path, functions)
-
-    dec_src = {}
-    for func in dec_vars:
-        if func not in src_vars:
-            continue
-        dec_src[func] = round(dec_vars[func] / src_vars[func], 2)
-    return dec_src
-
-def dec_vs_ir(ir_path, dec_path, functions=['func0']):
-    ir_vars = ir_var.get_vars_from_file(ir_path, functions)
-    dec_vars = c_var.get_vars_from_file(dec_path, functions)
-
-    dec_ir = {}
-    for func in dec_vars:
-        if func not in ir_vars:
-            continue
-        dec_ir[func] = round(dec_vars[func] / ir_vars[func], 2)
-    return dec_ir
-
 def process_df2(dec_dir, src_dir, ir_dir, log_dir):
     compilers = ['clang', 'gcc']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'ida', 'RetDec']
+    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
 
     for compiler in compilers:
@@ -63,6 +41,28 @@ def log(log_list, log_file):
         for l in log_list:
             f.write(l)
             f.write('\n')
+
+def dec_vs_src(src_path, dec_path, functions=['func0']):
+    src_vars = c_var.get_vars_from_file(src_path, functions)
+    dec_vars = c_var.get_vars_from_file(dec_path, functions)
+
+    dec_src = {}
+    for func in dec_vars:
+        if func not in src_vars:
+            continue
+        dec_src[func] = round(dec_vars[func] / src_vars[func], 2)
+    return dec_src
+
+def dec_vs_ir(ir_path, dec_path, functions=['func0']):
+    ir_vars = ir_var.get_vars_from_file(ir_path, functions)
+    dec_vars = c_var.get_vars_from_file(dec_path, functions)
+
+    dec_ir = {}
+    for func in dec_vars:
+        if func not in ir_vars:
+            continue
+        dec_ir[func] = round(dec_vars[func] / ir_vars[func], 2)
+    return dec_ir
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='analyze.py')

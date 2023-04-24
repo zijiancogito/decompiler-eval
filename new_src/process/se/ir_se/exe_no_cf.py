@@ -66,6 +66,10 @@ def symbolic_execution(function):
     """ symbols in expressions """
     input_symbols = []
     for sym in input_symbols_table:
+        if sym not in ['scanf', 'param']:
+            input_symbols.append(f"{sym}{i}")
+            continue
+
         for i in range(input_symbols_table[sym]):
             input_symbols.append(f"{sym}{i}")
 

@@ -9,7 +9,7 @@ from tqdm import tqdm
 optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
 
 def check_symbol(symbol):
-    if re.match('(param|scanf|[-]*[0-9]+|0x[0-9a-fA-F]+)[0-9]*', str(symbol)):
+    if re.match('(rand|f_rand|param|scanf|[-]*[0-9]+|0x[0-9a-fA-F]+)[0-9]*', str(symbol)):
         return True
     return False
 

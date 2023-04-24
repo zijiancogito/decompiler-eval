@@ -1,7 +1,9 @@
 #!/bin/bash
 RAW_DE=/home/eval/DF2/raw/de
 SAVE_DE=/home/eval/DF2/process/de
-ERR=/home/eval/DF2/trash/de
+ERR=/home/eval/DF2/trash/de/extract_func_log
+rm -r $ERR
+rm -r $SAVE_DE
 decoms=(angr BinaryNinja Ghidra Hex-Rays RetDec)
 coms=(clang gcc)
 optis=(o0 o1 o2 o3 os)
@@ -13,7 +15,7 @@ do
         do
             datas_path=$RAW_DE/$com/$opti/$dec
             save_to=$SAVE_DE/$com/$opti/$dec
-            err_file=/home/eval/DF2/de_src/err_log/$com/$opti/$dec/err.csv
+            err_file=$ERR/$com/$opti/$dec/err.csv
             for file in `ls $datas_path`
             do
                 data_path=$datas_path/$file

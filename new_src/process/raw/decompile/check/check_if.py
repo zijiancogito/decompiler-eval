@@ -2,14 +2,16 @@ import sys
 import os
 from tqdm import tqdm
 import shutil
+import argparse
+import re
 
 def check_file(dec_file):
     """
     dec_file: txt of func0
     """
-    # TODO: 
-    if hasIf:
-        return True
+    with open(dec_file, 'r') as f:
+        if 'if' in f.read():
+            return True
     return False
 
 def log(log_list, log_file):
@@ -18,7 +20,7 @@ def log(log_list, log_file):
             f.write(f'{l}\n')
 
 def check_dir(de_dir, move_to):
-    is not os.path.exists(move_to):
+    if not os.path.exists(move_to):
         os.makedirs(move_to)
     hasIfs = []
     des = os.listdir(de_dir)
@@ -27,7 +29,8 @@ def check_dir(de_dir, move_to):
         de_path = os.path.join(de_dir, de)
         if check_file(de_path):
             shutil.move(de_path, move_to)
-            hasIfs.append(ir)
+            hasIfs.append(de_path)
+    print(f"Found {len(hasIfs)}/{len(des)} files have IF") 
     print("Writing results to log file...")
     log_dir = os.path.dirname(move_to)
     decompiler = os.path.basename(move_to)
@@ -36,7 +39,7 @@ def check_dir(de_dir, move_to):
 def check_all(de_dir, move_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['Ghidra', 'ida', 'RetDec', 'BinaryNinja', 'angr']
+    decompilers = ['Ghidra', 'Hex-Rays', 'RetDec', 'BinaryNinja', 'angr']
 
     for compiler in compilers:
         for opt_level in optimizations:
@@ -54,5 +57,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    check_all(args.ir, args.out)
+    check_all(args.dec, args.out)
 

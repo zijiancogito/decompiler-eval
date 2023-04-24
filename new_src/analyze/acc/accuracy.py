@@ -7,16 +7,10 @@ from compare import feature, concolic
 from tqdm import tqdm
 import argparse
 
-def log(log_list, log_file):
-    with open(log_file, 'w') as f:
-        for l in log_list:
-            f.write(l)
-            f.write('\n')
-
 def process_df2(ir_dir, de_dir, log_dir):
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     compilers = ['clang', 'gcc']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'ida', 'RetDec']
+    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
 
     for compiler in compilers:
         print("---------------------------{compiler}-------------------------------")
@@ -27,7 +21,7 @@ def process_df2(ir_dir, de_dir, log_dir):
                 os.makedirs(log_sub_dir)
             for decompiler in decompilers:
                 print("{0:15}".format(decompiler), end='\t')
-                log_path = os.path.join(log_sub_dir, f"{decompiler}.json")
+                log_path = os.path.join(log_sub_dir, f"{decompiler}.csv")
                 de_files = os.listdir(os.path.join(de_dir, compiler, opt_level, decompiler))
                 logs = []
                 ps, rs = [], []
@@ -52,6 +46,12 @@ def process_df2(ir_dir, de_dir, log_dir):
                 print(f"{ps} {rs}", end='\t')
             print()
         print()
+
+def log(log_list, log_file):
+    with open(log_file, 'w') as f:
+        for l in log_list:
+            f.write(l)
+            f.write('\n')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='accuarcy.py')
