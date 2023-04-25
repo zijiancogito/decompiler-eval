@@ -2,7 +2,7 @@
 
 DE_DIR=/home/eval/DF2/se/de/
 LOG_DIR=/home/eval/DF2/se/de/check_log/
-MOVE_DIR=/home/eval/DF2/se/trash/de/
+MOVE_DIR=/home/eval/DF2/se/trash/de/check_fail
 
 rm -r $LOG_DIR
 rm -r $MOVE_DIR

@@ -2,16 +2,18 @@ CC       = clang
 CXX      = clang++
 CFLAGS   = -Wall -O -fPIC
 CXXFLAGS = -g -ljsoncpp
-INCLUDE  = -I ./ -I ../../../../utils/tree-sitter/ -I ../../../../utils/tree-sitter/tree-sitter/lib/include/ -I ../cfg/
-LIBS     = ../../../../utils/tree-sitter/tree-sitter/libtree-sitter.a ../../../../utils/tree-sitter/libparser.so ../cfg/libcfg.so
+ROOT	 = /home/eval/decompiler-eval/new_src
+NOW	 = /home/eval/decompiler-eval/new_src/process/se/de_se/
+INCLUDE  = -I ./ -I $(ROOT)/utils/tree-sitter/ -I $(ROOT)/utils/tree-sitter/tree-sitter/lib/include/ -I $(NOW)/cfg/
+LIBS     = $(ROOT)/utils/tree-sitter/tree-sitter/libtree-sitter.a $(ROOT)/utils/tree-sitter/libparser.so $(NOW)/cfg/libcfg.so
 TARGET   = libse.so
 # TARGET   = se
 
 OBJS     = parser.o
-SRCS     = ../../../../utils/tree-sitter/vendor/tree-sitter-c/src/parser.c
+SRCS     = $(ROOT)/utils/tree-sitter/vendor/tree-sitter-c/src/parser.c
 
 $(OBJS):$(SRCS)
-	$(CC) $(CFLAGS) -I ../../../../utils/tree-sitter/tree-sitter/lib/include/ -c $(SRCS)
+	$(CC) $(CFLAGS) -I $(ROOT)/utils/tree-sitter/tree-sitter/lib/include/ -c $(SRCS)
 
 all:$(OBJS)
 	$(CXX) -shared -fPIC $(INCLUDE) $(CXXFLAGS) se.cpp $(LIBS) $(OBJS) -o $(TARGET)

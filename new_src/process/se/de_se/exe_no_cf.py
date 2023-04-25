@@ -4,13 +4,13 @@ from ctypes import *
 from json_to_exptree import load_from_json
 
 
-def process_function(de_file, save_to):
+def process_function(de_file, save_to, exp):
     """
     de_file: decompiling results of function
     save_to: json file
     """
 
-    paths = symbolic_execution(de_file)
+    paths = symbolic_execution(de_file, exp)
     if paths is not None:
         dump_to_file(save_to, paths)
         return None
@@ -33,7 +33,7 @@ def dump_to_file(save_to, paths):
         json.dump(paths, f)
 
 
-def symbolic_execution(de_file):
+def symbolic_execution(de_file, exp):
     dese = cdll.LoadLibrary("./se/libse.so")
     run_se = dese.process
     run_se.argtypes = [POINTER(c_char), c_int]
@@ -43,6 +43,6 @@ def symbolic_execution(de_file):
     paths = run_se(STR, 0)
 
     if paths is not None:
-        paths = load_from_json(json.loads(paths.decode()))
+        paths = load_from_json(json.loads(paths.decode()), exp)
 
     return paths

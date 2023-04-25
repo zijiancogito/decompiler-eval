@@ -34,7 +34,7 @@ def json_to_exptree(json_data: dict):
 
     return tree
 
-def load_from_json(json_data):
+def load_from_json(json_data, exp):
     ret = {}
     ret['symbols'] = []
     scanf_num = json_data['scanf_num']
@@ -58,7 +58,12 @@ def load_from_json(json_data):
         for j in range(len(paths[i]['outputs'])):
             path[paths[i]['outputs'][j]['id']] = exptree_to_json(json_to_exptree(paths[i]['outputs'][j]))
         ret['expressions'].append(path)
+
     s_copy = copy.deepcopy(ret['symbols'])
+
+    if exp == 'df2':
+        ret['expressions'] = ret['expressions'][0]
+
     expressions = str(ret['expressions'])
     for s in s_copy:
         if s not in expressions:

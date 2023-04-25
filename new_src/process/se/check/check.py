@@ -85,14 +85,14 @@ def check_ir(ir_dir, log_dir, move_dir):
                     invalid_irs.append(ir_path)
 
         for err_ir in invalid_irs:
-            shutil.move(err_ir, move_to)
+            shutil.copy(err_ir, move_to)
         print(f"{len(invalid_irs)}/{len(irs)} files failed in {opt_level}.")
         print()
 
 
 def check_de(de_dir, log_dir, move_dir):
     compilers = ['clang', 'gcc']
-    decompilers = ['Ghidra', 'angr', 'BinaryNinja', 'ida', 'RetDec']
+    decompilers = ['Ghidra', 'angr', 'BinaryNinja', 'Hex-Rays', 'RetDec']
 
     for compiler in compilers:
         for opt_level in optimizations:

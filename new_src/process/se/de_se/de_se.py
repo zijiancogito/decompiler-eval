@@ -43,7 +43,7 @@ def process_df2(dec_file, save_dir, log_file):
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     save_path = os.path.join(save_dir, f"{os.path.basename(dec_file).split('.')[0]}.json")
-    fail = exe_no_cf.process_function(dec_file, save_path)
+    fail = exe_no_cf.process_function(dec_file, save_path, 'df2')
     if fail is not None:
         log_dir = os.path.dirname(log_file)
         if not os.path.exists(log_dir):
