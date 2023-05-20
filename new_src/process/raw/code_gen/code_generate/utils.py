@@ -7,7 +7,7 @@ import random
 from settings import *
 
 def _rand():
-  print("Generate rand function...")
+  # print("Generate rand function...")
   body = C.block(innerIndent=3)
   body.append(C.statement(f"{C.variable('var0', 'int')} = {C.fcall('rand')}"))
   body.append(C.statement('return var0'))
@@ -15,11 +15,11 @@ def _rand():
   func = C.sequence()
   func.append(head)
   func.append(body)
-  print(str(func))
+  # print(str(func))
   return func
 
 def _scanf_no_pointer():
-  print("Generate scanf function...")
+  # print("Generate scanf function...")
   body = C.block(innerIndent=3)
   body.append(C.statement(C.variable('var0', 'int')))
   body.append(C.statement(C.fcall('scanf').add_arg('\"%d\"').add_arg('&var0')))
@@ -28,18 +28,18 @@ def _scanf_no_pointer():
   func = C.sequence()
   func.append(head)
   func.append(body)
-  print(str(func))
+  # print(str(func))
   return func
 
 def _printf():
-  print("Generate printf function...")
+  # print("Generate printf function...")
   body = C.block(innerIndent=3)
   body.append(C.statement(C.fcall('printf').add_arg('\"%d\"').add_arg('p0')))
   head = C.function('f_printf', 'void',).add_param(C.variable('p0', 'int'))
   func = C.sequence()
   func.append(head)
   func.append(body)
-  print(str(func))
+  # print(str(func))
   return func
 
 def _expression(all_vars: list, op_seq: list, target):
@@ -60,7 +60,7 @@ def _expression(all_vars: list, op_seq: list, target):
 
 
 def _func(funcname):
-  print(f"Generate {funcname}...")
+  # print(f"Generate {funcname}...")
   para_count = random.randint(0, MAX_PARA)
   local_count = LOCAL_VARS 
   local_const = LOCAL_CONST
@@ -95,11 +95,11 @@ def _func(funcname):
   func = C.sequence()
   func.append(head)
   func.append(body)
-  print(hash(body))
+  # print(hash(body))
   return func, para_count
 
 def _main(count, fd):
-  print("Generate main function...")
+  # print("Generate main function...")
   func = C.sequence()
   head = C.function('main', 'int',)
   body = C.block(innerIndent=3)

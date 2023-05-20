@@ -11,12 +11,12 @@ def process_df2(dec_dir, src_dir, ir_dir, log_dir):
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     for compiler in compilers:
         for opt_level in optimizations:
+            log_sub_dir = os.path.join(log_dir, compiler, opt_level)
+            if not os.path.exists(log_sub_dir):
+                os.makedirs(log_sub_dir)
             for decompiler in decompilers:
                 dec_files = os.listdir(dec_dir, compiler, opt_level, decompiler)
                 
-                log_sub_dir = os.path.join(log_dir, compiler, opt_level)
-                if not os.path.exists(log_sub_dir):
-                    os.makedirs(log_sub_dir)
                 logs = []
                 for dec_file in dec_files:
                     dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
@@ -24,15 +24,49 @@ def process_df2(dec_dir, src_dir, ir_dir, log_dir):
                     ir_path = os.path.join(ir_dir, opt_level, f"{dec_file.split('.')[0]}.ll")
                     dec_src = dec_vs_src(src_path, dec_path, ['func0'])
                     dec_ir = dec_vs_ir(ir_path, dec_path, ['func0'])
-                    log_line = f"{dec_file}" 
-                    if 'func0' in dec_src:
-                        log_line = log_line + f"\t{dec_src['func0']}"
-                    if 'func0' in dec_ir:
-                        log_line = log_line + f"\t{dec_ir['func0']}"
+                    
+                    if 'func0' in dec_src and 'func0' in dec_ir:
+                        log_line = f"{dec_file}\t{dec_src['func0']}\t{dec_ir['func0']}"
+                    elif 'func0' in dec_src and 'func0' not in dec_ir:
+                        log_line = f"{dec_file}\t{dec_src['func0']}\tNULL"
+                    elif 'func0' not in dec_src and 'func0' in dec_ir:
+                        log_line = f"{dec_file}\tNULL\t{dec_ir['func0']}"
+                    else:
+                        log_line = f"{dec_file}\tNULL\tNULL"
+
                     logs.append(log_line)
 
-                log(logs, os.path.join(log_sub_dir, f"{decompiler}.csv"))
+                log(logs, os.path.join(log_sub_dir, f"loc-{decompiler}.csv"))
 
+def process_cf(dec_dir, src_dir, ir_dir, log_dir):
+    compilers = ['clang', 'gcc']
+    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
+    for compiler in compilers:
+        log_sub_dir = os.path.join(log_dir, compiler)
+        if not os.path.exists(log_sub_dir):
+            os.makedirs(log_sub_dir)
+            
+        for decompiler in decompilers:
+            logs = []
+            for i in range(5):
+                dec_path = os.path.join(dec_dir, compiler, decompiler, f"{i}.txt")
+                ir_path = os.path.join(ir_dir, f"{i}.ll")
+                src_path = os.path.join(src_dir, f"{i}.c")
+                dec_src = dec_vs_src(dec_path, src_path)
+                dec_ir = dec_vs_ir(dec_path, ir_path)
+                for function in dec_src:
+                    if function in dec_ir:
+                        log_line = f"{dec_path}-{function}\t{dec_src[function]}\t{dec_ir[function]}"
+                        logs.append(log_line)
+                    else:
+                        log_line = f"{dec_path}-{function}\t{dec_src[function]}\t0"
+                        logs.append(log_line)
+                for function in dec_ir:
+                    if function not in dec_src:
+                        log_line = f"{dec_path}-{function}\t0\t{dec_ir[function]}"
+                        logs.append(log_line)
+            log_file = os.path.join(log_sub_dir, f"loc-{decompiler}.csv")
+            log(logs, log_file)
 
 def log(log_list, log_file):
     with open(log_file, 'w') as f:
@@ -65,8 +99,8 @@ def dec_vs_ir(ir_path, dec_path, functions=['func0']):
     return dec_ir
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(prog='analyze.py')
-    parser.add_argument('-e', '--experiment', choices=['df2'], type=str, help='Datasets')
+    parser = argparse.ArgumentParser(prog='loc.py')
+    parser.add_argument('-e', '--experiment', choices=['df2', 'cf'], type=str, help='Datasets')
     parser.add_argument('-i', '--ir', type=str, help='dir of IR')
     parser.add_argument('-s', '--src', type=str, help='dir of SRC')
     parser.add_argument('-d', '--dec', type=str, help='dir of DEC')
@@ -76,3 +110,5 @@ if __name__ == '__main__':
 
     if args.experiment == 'df2':
         process_df2(args.dec, args.src, args.ir, args.log)
+    elif args.experiment == 'cf':
+        process_cf(args.dec, args.src, args.ir, args.log)

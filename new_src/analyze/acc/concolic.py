@@ -1,9 +1,10 @@
 import sys
 sys.path.append('/home/eval/decompiler-eval/new_src/utils/exp_tree')
 import exp_tree
-import os
 import random
 import json
+
+import numpy as np
 
 def func_acc(ir_json_file, c_json_file):
     ir_json = None
@@ -28,6 +29,7 @@ def func_acc(ir_json_file, c_json_file):
     wrong_vars = []
     for var in ir_json["expressions"]:
         if var not in c_json["expressions"]:
+            wrong_vars.append(var)
             continue
         ir_exp = exp_tree.json_to_exptree(ir_json["expressions"][var])
         c_exp = exp_tree.json_to_exptree(c_json["expressions"][var])
@@ -55,17 +57,16 @@ def passrate(ir_json_file, c_json_file):
     for sym in ir_json["symbols"]:
         symbols.append(sym)
         
-    total_tmp = 0
-    total_count = 0
+    total_tmp = []
     for var in ir_json["expressions"]:
         if var not in c_json["expressions"]:
+            total_tmp.append(0)
             continue
         ir_exp = exp_tree.json_to_exptree(ir_json["expressions"][var])
         c_exp = exp_tree.json_to_exptree(c_json["expressions"][var])
         correct_rate = sample(ir_exp, c_exp, symbols)
-        total_tmp += correct_rate
-        total_count += 1
-    avg_passrate = round(total_tmp / total_count, 2) 
+        total_tmp.append(correct_rate)
+    avg_passrate = round(np.mean(total_tmp), 2) 
     
     return avg_passrate
 

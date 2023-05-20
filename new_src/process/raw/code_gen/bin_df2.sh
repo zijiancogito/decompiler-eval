@@ -1,6 +1,6 @@
 #!/bin/bash
-SRC_ROOT=/home/eval/DF2/raw/src
-BIN_ROOT=/home/eval/DF2/raw/bin
+SRC_ROOT=/home/eval/data/DF2/raw/src
+BIN_ROOT=/home/eval/data/DF2/raw/bin
 
 echo "\n\n Compiling GCC BINs from O0 to Os"
 echo "\nCompile gcc O0 Binaries"

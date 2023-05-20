@@ -29,29 +29,29 @@ def process_df2(ir_dir, de_dir, log_dir):
             for decompiler in decompilers:
                 de_files = os.listdir(os.path.join(de_dir, compiler, opt_level, decompiler))
                 logs = []
-                ps, rs = [], []
+                avgs, sums = [], []
                 for de_file in de_files:
                     de_path = os.path.join(de_dir, compiler, opt_level, decompiler, de_file)
                     ir_path = os.path.join(ir_dir, opt_level, de_file)
                     if not os.path.exists(ir_path):
                         continue
 
-                    precision, recall, wrong_vars = symbolic.func_acc(ir_path, de_path)
-                    ps.append(precision)
-                    rs.append(recall)
+                    avg_distance, sum_distance = symbolic.func_dist(ir_path, de_path)
+                    avgs.append(avg_distance)
+                    sums.append(sum_distance)
 
-                    log_line = f"{de_path}\t{precision}\t{recall}\t{' '.join(wrong_vars)}"
+                    log_line = f"{de_file}\t{avg_distance}\t{sum_distance}"
                     logs.append(log_line)
 
-                log_path = os.path.join(log_sub_dir, f"symbolic-{decompiler}.csv")
+                log_path = os.path.join(log_sub_dir, f"symbolic-match-{decompiler}.csv")
                 log(logs, log_path)
                 
-                p_avg, r_avg = 0, 0
-                if len(ps) != 0:
-                    p_avg = round(np.mean(ps), 2)
-                if len(rs) != 0:
-                    r_avg = round(np.mean(rs), 2)
-                print("{0:12}".format(f"{p_avg}/{r_avg}"), end='\t')
+                avg_avg, sum_avg = 0, 0
+                if len(avgs) != 0:
+                    avg_avg = round(np.mean(avgs), 2)
+                if len(sums) != 0:
+                    sum_avg = round(np.mean(sums), 2)
+                print("{0:12}".format(f"{avg_avg}/{sum_avg}"), end='\t')
             print()
         print()
 

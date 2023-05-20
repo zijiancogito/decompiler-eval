@@ -3,9 +3,12 @@ import sys
 sys.path.append('/home/eval/decompiler-eval/new_src/utils/exp_tree')
 import exp_tree
 import json
-import os
 
 def func_acc(ir_json_file, c_json_file):
+    """
+        Return recall, precision, wrong vars
+        if all nodes in tree_c matched with tree_b, matched = 1
+    """
     ir_json = None
     with open(ir_json_file, 'r') as f:
         ir_json = json.load(f)
@@ -20,6 +23,7 @@ def func_acc(ir_json_file, c_json_file):
     wrong_vars = []
     for var in ir_json["expressions"]:
         if var not in c_json["expressions"]:
+            wrong_vars.append(var)
             continue
         ir_exp = ir_json["expressions"][var]
         c_exp = c_json["expressions"][var]
@@ -33,6 +37,11 @@ def func_acc(ir_json_file, c_json_file):
     return precision, recall, wrong_vars
 
 def func_dist(ir_json_file, c_json_file):
+    """
+        Return average and sum distance of all key vars in a function
+        return average, sum
+        distance = count(different nodes) / count(all nodes)
+    """
     ir_json = None
     with open(ir_json_file, 'r') as f:
         ir_json = json.load(f)
@@ -46,6 +55,7 @@ def func_dist(ir_json_file, c_json_file):
     func_sum = []
     for var in ir_json["expressions"]:
         if var not in c_json["expressions"]:
+            func_sum.append(1)
             continue
         ir_exp = ir_json["expressions"][var]
         c_exp = c_json["expressions"][var]
@@ -58,8 +68,8 @@ def func_dist(ir_json_file, c_json_file):
     # func_avg_avg = round(np.mean(func_avg), 2)
     # func_avg_sum = sum(func_avg)
     
-    func_sum_avg = round(np.mean(func_sum), 2)
-    func_sum_sum = sum(func_sum)
+    func_sum_avg = round(np.mean(func_sum), 2) # average distance of all vars in one function
+    func_sum_sum = sum(func_sum) # sum distance of all vars in one function 
 
     return func_sum_avg, func_sum_sum
 
@@ -88,11 +98,14 @@ def distance(ir_exp, c_exp):
     exp_tree.op_type(tree_b, b_op_type)
     
     dist = []
+    all_sym = 0 # all_sym = sym_count_of(tree_a) + sym_count_of(tree_b)
     for key in a_op_type:
+        all_sym += 1
         if key not in b_op_type:
             dist.append(a_op_type[key])
     
     for key in b_op_type:
+        all_sym += 1
         if key not in a_op_type:
             dist.append(b_op_type[key])
             
@@ -103,6 +116,5 @@ def distance(ir_exp, c_exp):
 
     import numpy as np
     # avg_dist = round(np.mean(dist), 2)
-    sum_dist = sum(dist)
+    sum_dist = sum(dist) / all_sym
     return sum_dist
-

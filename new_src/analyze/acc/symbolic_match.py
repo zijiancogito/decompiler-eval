@@ -3,7 +3,7 @@ import sys
 import os
 import re
 import numpy as np
-import concolic
+import symbolic
 from tqdm import tqdm
 import argparse
 
@@ -36,14 +36,14 @@ def process_df2(ir_dir, de_dir, log_dir):
                     if not os.path.exists(ir_path):
                         continue
 
-                    precision, recall, wrong_vars = concolic.func_acc(ir_path, de_path)
+                    precision, recall, wrong_vars = symbolic.func_acc(ir_path, de_path)
                     ps.append(precision)
                     rs.append(recall)
 
-                    log_line = f"{de_path}\t{precision}\t{recall}\t{' '.join(wrong_vars)}"
+                    log_line = f"{de_file}\t{precision}\t{recall}\t{' '.join(wrong_vars)}"
                     logs.append(log_line)
 
-                log_path = os.path.join(log_sub_dir, f"concolic-{decompiler}.csv")
+                log_path = os.path.join(log_sub_dir, f"symbolic-match-{decompiler}.csv")
                 log(logs, log_path)
                 
                 p_avg, r_avg = 0, 0

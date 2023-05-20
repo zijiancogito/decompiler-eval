@@ -20,12 +20,21 @@ def isBranch(line):
         return True
     return False
 
-def get_c_cycles(function):
+def function_cycles(function):
     conds = 0
     for l in str(function).strip().split('\n'):
         if isBranch(l):
-            conds += 1S
+            conds += 1
     return conds + 1
 
-
+def get_c_cycles(code_file, function_filter):
+    extract_func = ExtractFuncs()
+    funcs, funcs_name = extract_func.getFuncs(code_file)
     
+    cycles = {}
+
+    for fname, fcode in zip(funcs_name, funcs):
+        if re.match(function_filter, fname):
+            cycles[fname] = function_cycles(fcode)
+            
+    return cycles

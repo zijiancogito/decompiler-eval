@@ -76,5 +76,5 @@ def exptree_to_json(tree):
 def json_to_exptree(json_data):
     tree = ExpTree(json_data["tag"], json_data["data"])
     for child in json_data["children"]:
-        tree.add_child(sejson_to_exptree(child))
+        tree.add_child(json_to_exptree(child))
     return tree

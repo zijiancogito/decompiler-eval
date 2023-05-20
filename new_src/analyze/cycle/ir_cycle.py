@@ -15,13 +15,29 @@ def isBranch(opc):
     if opc == 'select':
         return True
 
-def get_ir_cycles(function):
+def function_cycles(function):
     dot_str = llvm.get_function_cfg(function, show_inst=False)
     Gtmp = pgv.AGraph(dot_str)
     G = nx.Graph(Gtmp)
     cycles = len(G.edges) - len(G.nodes) + 2
     return cycles
     
+def get_ir_cycles(ir_file, function_filter):
+    llvm_ir = None
+    with open(ir_file, 'r') as f:
+        llvm_ir = f.read().strip()
+
+    mod = llvm.parse_assembly(llvm_ir)
+    mod.verify()
+    
+    cycles = {}
+    for function in mod.functions:
+        if re.match(function_filter, function.name):
+            cycles[function.name] = function_cycles(function)
+            
+    return cycles
+            
+
 if __name__ == '__main__':
     llvm_ir = None
     path = "/home/eval/decompiler-eval/new_src/test/0.ll"

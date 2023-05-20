@@ -117,8 +117,8 @@ def check_de(de_dir, log_dir, move_dir):
                             f.write(f"{log}\n")
                             invalid_des.append(de_path)
 
-                # for err_de in invalid_des:
-                    # shutil.move(err_de, move_to)
+                for err_de in invalid_des:
+                    shutil.move(err_de, move_to)
 
                 print(f"{len(invalid_des)}/{len(des)} files failed in {compiler} {opt_level} {decompiler}.")
                 print()

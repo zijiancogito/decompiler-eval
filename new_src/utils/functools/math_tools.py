@@ -65,6 +65,7 @@ def plot_multi(pairs, save_to, colors, decompilers):
     idx = 0
     for xi, yi in pairs:
         plt.scatter(xi, yi, c=colors[idx], label=decompilers[idx], edgecolors='none')
+        idx += 1
     plt.legend()
     plt.grid(True)
     plt.savefig(save_to)
@@ -79,3 +80,8 @@ def plot_split(pairs, save_to, colors, decompilers):
     plt.cla()
     plt.close('all')
 
+if __name__ == '__main__':
+    x = [1,2,3]
+    ys = [[1,2,3], [4,5,6], [7,8,9]]
+    pairs = [(x, ys[0]), (x, ys[1]), (x, ys[2])]
+    plot_multi(pairs, './test.png', ['red', 'green', 'blue'], ['angr', 'ida', 'ghidra'])
