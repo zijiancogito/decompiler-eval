@@ -41,32 +41,40 @@ def process_df2(dec_dir, src_dir, ir_dir, log_dir):
 def process_cf(dec_dir, src_dir, ir_dir, log_dir):
     compilers = ['clang', 'gcc']
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
+    optimizations = ['o0']
     for compiler in compilers:
-        log_sub_dir = os.path.join(log_dir, compiler)
-        if not os.path.exists(log_sub_dir):
-            os.makedirs(log_sub_dir)
-            
-        for decompiler in decompilers:
-            logs = []
-            for i in range(5):
-                dec_path = os.path.join(dec_dir, compiler, decompiler, f"{i}.txt")
-                ir_path = os.path.join(ir_dir, f"{i}.ll")
-                src_path = os.path.join(src_dir, f"{i}.c")
-                dec_src = dec_vs_src(dec_path, src_path)
-                dec_ir = dec_vs_ir(dec_path, ir_path)
-                for function in dec_src:
-                    if function in dec_ir:
-                        log_line = f"{dec_path}-{function}\t{dec_src[function]}\t{dec_ir[function]}"
-                        logs.append(log_line)
-                    else:
-                        log_line = f"{dec_path}-{function}\t{dec_src[function]}\t0"
-                        logs.append(log_line)
-                for function in dec_ir:
-                    if function not in dec_src:
-                        log_line = f"{dec_path}-{function}\t0\t{dec_ir[function]}"
-                        logs.append(log_line)
-            log_file = os.path.join(log_sub_dir, f"loc-{decompiler}.csv")
-            log(logs, log_file)
+        for opt_level in optimizations:
+            log_sub_dir = os.path.join(log_dir, opt_level, compiler)
+            if not os.path.exists(log_sub_dir):
+                os.makedirs(log_sub_dir)
+                
+            for decompiler in decompilers:
+                dec_files = os.listdir(os.path.join(dec_dir, compiler, opt_level, decompiler))
+                logs = []
+                for dec_file in dec_files:
+                    dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
+                    ir_path = os.path.join(ir_dir, f"{dec_file.split('.')[0]}.ll")
+                    src_path = os.path.join(src_dir, f"{dec_file.split('.')[0]}.c")
+                    functions = ['func_1']
+                    dec_src = dec_vs_src(dec_path, src_path, functions)
+                    dec_ir = dec_vs_ir(dec_path, ir_path, functions)
+                    for function in dec_src:
+                        if function in dec_ir:
+                            log_line = f"{dec_path}-{function}\t{dec_src[function]}\t{dec_ir[function]}"
+                            logs.append(log_line)
+                        else:
+                            log_line = f"{dec_path}-{function}\t{dec_src[function]}\t0"
+                            logs.append(log_line)
+                    for function in dec_ir:
+                        if function not in dec_src:
+                            log_line = f"{dec_path}-{function}\t0\t{dec_ir[function]}"
+                            logs.append(log_line)
+                    for function in functions:
+                        if function not in dec_src and function not in dec_ir:
+                            log_line = f"{dec_path}-{function}\t0\t0"
+                            logs.append(log_line)
+                log_file = os.path.join(log_sub_dir, f"loc-{decompiler}.csv")
+                log(logs, log_file)
 
 def log(log_list, log_file):
     with open(log_file, 'w') as f:
@@ -75,8 +83,8 @@ def log(log_list, log_file):
             f.write('\n')
 
 def dec_vs_src(src_path, dec_path, functions=['func0']):
-    src_loc = get_c_lines(src_path)
-    dec_loc = get_c_lines(dec_path)
+    src_loc = get_c_lines(src_path, functions)
+    dec_loc = get_c_lines(dec_path, functions)
 
     dec_src = {}
     for func in dec_loc:

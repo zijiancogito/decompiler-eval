@@ -12,7 +12,7 @@ import math_tools
 
 # different decompiler on one optimization level
 
-def function_concolic_accuracy_of_different_decompilers(root_dir, save_dir):
+def func_concolic_accuracy_of_different_decompilers(root_dir, save_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
@@ -51,9 +51,9 @@ def function_concolic_accuracy_of_different_decompilers(root_dir, save_dir):
             math_tools.plot_multi(precisions, precision_fig, colors, decompilers)
 
             recall_fig = os.path.join(save_sub_dir, f"recall.png")
-            math_tools.plot_multi(recall, recall_fig, colors, decompilers)
+            math_tools.plot_multi(recalls, recall_fig, colors, decompilers)
 
-def function_concolic_passrate_of_different_decompilers(root_dir, save_dir):
+def func_concolic_passrate_of_different_decompilers(root_dir, save_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
@@ -88,7 +88,7 @@ def function_concolic_passrate_of_different_decompilers(root_dir, save_dir):
             passrate_fig = os.path.join(save_sub_dir, f"passrate.png")
             math_tools.plot_multi(passrates, passrate_fig, colors, decompilers)
 
-def function_symbolic_match_of_different_decompilers(root_dir, save_dir):
+def func_symbolic_match_of_different_decompilers(root_dir, save_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
@@ -129,7 +129,7 @@ def function_symbolic_match_of_different_decompilers(root_dir, save_dir):
             recall_fig = os.path.join(save_sub_dir, f"recall.png")
             math_tools.plot_multi(recall, recall_fig, colors, decompilers)
 
-def function_symbolic_distance_of_different_decompilers(root_dir, save_dir):
+def func_symbolic_distance_of_different_decompilers(root_dir, save_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
@@ -170,7 +170,7 @@ def function_symbolic_distance_of_different_decompilers(root_dir, save_dir):
             sum_fig = os.path.join(save_sub_dir, f"sum.png")
             math_tools.plot_multi(sums, sum_fig, colors, decompilers)
         
-def function_concolic_accuracy_of_different_optimizations(root_dir, save_dir):
+def func_concolic_accuracy_of_different_optimizations(root_dir, save_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
@@ -206,7 +206,7 @@ def function_concolic_accuracy_of_different_optimizations(root_dir, save_dir):
             recall_fig = os.path.join(save_dir, "recall.png")
             math_tools.plot_multi(recall, recall_fig, colors, optimizations)
 
-def function_concolic_passrate_of_different_optimizations(root_dir, save_dir):
+def func_concolic_passrate_of_different_optimizations(root_dir, save_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
@@ -236,7 +236,7 @@ def function_concolic_passrate_of_different_optimizations(root_dir, save_dir):
             passrate_fig = os.path.join(save_sub_dir, "passrate.png")
             math_tools.plot_multi(passrates, passrate_fig, colors, optimizations)
             
-def function_symbolic_match_of_different_optimizations(root_dir, save_dir):
+def func_symbolic_match_of_different_optimizations(root_dir, save_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
@@ -272,7 +272,7 @@ def function_symbolic_match_of_different_optimizations(root_dir, save_dir):
             recall_fig = os.path.join(save_dir, "recall.png")
             math_tools.plot_multi(recall, recall_fig, colors, optimizations)
             
-def function_symbolic_distance_of_different_optimizations(root_dir, save_dir):
+def func_symbolic_distance_of_different_optimizations(root_dir, save_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
@@ -318,12 +318,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.experiment == 'decompilers':
-        function_concolic_accuracy_of_different_decompilers(args.log, args.save)
-        function_concolic_passrate_of_different_decompilers(args.log, args.save)
-        function_symbolic_match_of_different_decompilers(args.log, args.save)
-        function_symbolic_distance_of_different_decompilers(args.log, args.save)
+        func_concolic_accuracy_of_different_decompilers(args.log, args.save)
+        func_concolic_passrate_of_different_decompilers(args.log, args.save)
+        func_symbolic_match_of_different_decompilers(args.log, args.save)
+        func_symbolic_distance_of_different_decompilers(args.log, args.save)
     elif args.experiment == 'optimizations':
-        function_concolic_accuracy_of_different_optimizations(args.log, args.save)
-        function_concolic_passrate_of_different_optimizations(args.log, args.save)
-        function_symbolic_match_of_different_optimizations(args.log, args.save)
-        function_symbolic_distance_of_different_optimizations(args.log, args.save)
+        func_concolic_accuracy_of_different_optimizations(args.log, args.save)
+        func_concolic_passrate_of_different_optimizations(args.log, args.save)
+        func_symbolic_match_of_different_optimizations(args.log, args.save)
+        func_symbolic_distance_of_different_optimizations(args.log, args.save)

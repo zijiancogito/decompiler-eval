@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SRC_ROOT=/home/eval/DF2/raw/src
-IR_ROOT=/home/eval/DF2/raw/ir
+SRC_ROOT=/home/eval/data/DF2/raw/src
+IR_ROOT=/home/eval/data/DF2/raw/ir
 
 echo "Compiling IRs from O0 to Os"
 echo "Compile O0 IRs"

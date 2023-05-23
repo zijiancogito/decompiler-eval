@@ -46,6 +46,7 @@ def compile_bin(opt_level, compiler, src_path, save_to):
             stdout, stderr = p.communicate()
             stderr = stderr.decode('ISO-8859-1')
             if ('error' in stderr):
+                print(stderr)
                 with open(f'err_{opt_level}_c.csv', 'a') as f:
                     row = [c_path]
                     write = csv.writer(f)

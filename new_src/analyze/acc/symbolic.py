@@ -98,14 +98,11 @@ def distance(ir_exp, c_exp):
     exp_tree.op_type(tree_b, b_op_type)
     
     dist = []
-    all_sym = 0 # all_sym = sym_count_of(tree_a) + sym_count_of(tree_b)
     for key in a_op_type:
-        all_sym += 1
         if key not in b_op_type:
             dist.append(a_op_type[key])
     
     for key in b_op_type:
-        all_sym += 1
         if key not in a_op_type:
             dist.append(b_op_type[key])
             
@@ -116,5 +113,6 @@ def distance(ir_exp, c_exp):
 
     import numpy as np
     # avg_dist = round(np.mean(dist), 2)
+    all_sym = len(a_op_type.keys()) + len(b_op_type.keys()) # all_sym = sym_count_of(tree_a) + sym_count_of(tree_b)
     sum_dist = sum(dist) / all_sym
     return sum_dist
