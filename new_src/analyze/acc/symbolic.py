@@ -11,13 +11,19 @@ def func_acc(ir_json_file, c_json_file):
     """
     ir_json = None
     with open(ir_json_file, 'r') as f:
-        ir_json = json.load(f)
-    assert ir_json, "Load ir json failed."
+        try:
+            ir_json = json.load(f)
+        except:
+            ir_json = None
 
     c_json = None
     with open(c_json_file, 'r') as f:
-        c_json = json.load(f)
-    assert c_json, "Load c json failed."
+        try:
+            c_json = json.load(f)
+        except:
+            c_json = None
+    if ir_json == None or c_json == None:
+        return 0, 0, []
 
     matched = 0
     wrong_vars = []
@@ -44,13 +50,19 @@ def func_dist(ir_json_file, c_json_file):
     """
     ir_json = None
     with open(ir_json_file, 'r') as f:
-        ir_json = json.load(f)
-    assert ir_json, "Load ir json failed."
+        try:
+            ir_json = json.load(f)
+        except:
+            ir_json = None
 
     c_json = None
     with open(c_json_file, 'r') as f:
-        c_json = json.load(f)
-    assert c_json, "Load c json failed."
+        try:
+            c_json = json.load(f)
+        except:
+            c_json = None
+    if ir_json == None or c_json == None:
+        return 0, 0, []
 
     func_sum = []
     for var in ir_json["expressions"]:

@@ -36,8 +36,9 @@ def decompile(binfile, func_filter=r'func0'):
                 for i in line.contents.tokens:
                     if i.type == InstructionTextTokenType.TagToken:
                         continue
-                    decompiler_funcs[func.name] += f"{str(i)}\n"
+                    decompiler_funcs[func.name] += f"{str(i)}"
                     # sys.stdout.write(str(i))
+                decompiler_funcs[func.name] += "\n"
                 # print("")
 
             if not cursor.next():

@@ -16,6 +16,7 @@ def decompile(binfile, func_filter=r'func0'):
         normalize=True,
         resolve_indirect_jumps=True,
         data_references=True,
+        
     )
     p.analyses.CompleteCallingConventions(
         cfg=cfg.model, recover_variables=True, analyze_callsites=True
@@ -38,7 +39,7 @@ def decompile(binfile, func_filter=r'func0'):
                 decompiler_funcs[func.name] = f"// No decompilation output for function {func.name}\n"
                 # print(f"// No decompilation output for function {func.name}\n")
                 continue
-            decompiler_funcs[func.name] = decompiler.codegen.text
+            decompiler_funcs[func.name] = str(decompiler.codegen.text)
             # print(decompiler.codegen.text)
         except Exception as e:
             decompiler_funcs[func.name] = f"Exception thrown decompiling function {func.name}: {e}"
@@ -53,5 +54,5 @@ def decompile(binfile, func_filter=r'func0'):
 
 
 if __name__ == '__main__':
-    outputs = decompile(sys.argv[1], r'func[0-9]+')
+    outputs = decompile(sys.argv[1], r'func\_[0-9]+')
     print(outputs)

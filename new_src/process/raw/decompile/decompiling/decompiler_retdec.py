@@ -17,7 +17,7 @@ def decompile(binfile):
         decompiler_outputs = f"{decomp.stdout.decode(encoding='gb2312')}\n{decomp.stderr.decode(encoding='gb2312')}"
         # print(f"{decomp.stdout.decode(encoding='gb2312')}\n{decomp.stderr.decode(encoding='gb2312')}")
 
-    with open(outfile, 'rb') as f:
+    with open(outfile, 'r') as f:
         decompiler_outputs = f.read()
         # sys.stdout.buffer.write(f.read())
     return decompiler_outputs

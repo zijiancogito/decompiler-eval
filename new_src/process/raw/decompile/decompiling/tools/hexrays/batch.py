@@ -66,11 +66,13 @@ def delete_files(path, exts):
 def main():
   # parse command line arguments
   parser = argparse.ArgumentParser(description='Batch decompile a file')
+  # parser.add_argument('--tempdir', '-o', type=str,
+                      # help="temp output of decompiling results")
   parser.add_argument('--idadir', '-d', type=str,
                       help='Directory with IDA Pro executable')
-  parser.add_argument('--timeout', '-T', type=int,
+  parser.add_argument('--timeout', '-T', type=int, default=6000,
                       help='Timeout in seconds')
-  parser.add_argument('--keep-idb', '-k', action='store_true',
+  parser.add_argument('--keep-idb', '-k', action='store_false',
                       help='Do not delete the database after decompilation')
   parser.add_argument('input_files', nargs='+', default=[],
                       help='Input files to decompile')
@@ -79,7 +81,7 @@ def main():
   # determine IDA installation directory
   idadir = args.idadir
   if not idadir:
-    idat = shutil.which('idat64')
+    idat = shutil.which('idat64.exe')
     if idat:
       idadir = os.path.dirname(idat)
     else:
@@ -110,10 +112,11 @@ def main():
 
     # we just ask ida to batch decompile using the option -Ohexrays
     is64 = bitness == 64
-    idat = os.path.join(idadir, 'idat64' if is64 else 'idat')
+    idat = os.path.join(idadir, 'idat64.exe' if is64 else 'idat.exe')
     hexopt = '-Ohexrays:-errs:' + input + '.c:ALL'
     try:
-      p = subprocess.run([idat, hexopt, '-c', '-A', input], timeout=args.timeout)
+      p = subprocess.run([idat, hexopt, '-c', '-A', input], timeout=1000)
+      # delete_files(input, ['.id0', '.id1', '.id2', '.nam', '.til'])
     except subprocess.TimeoutExpired:
       # clean up temporary files
       if not args.keep_idb:
@@ -122,7 +125,7 @@ def main():
 
     # delete the database unless asked otherwise
     if not args.keep_idb:
-      delete_files(input, ['.i64' if is64 else '.idb'])
+      delete_files(input, ['.i64' if is64 else '.idb', '.id0', '.id1', '.id2', '.nam', '.til'])
 
 #----------------------------------------------------------------------------
 main()

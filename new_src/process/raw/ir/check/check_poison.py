@@ -36,6 +36,10 @@ def log(log_list, log_file):
             f.write(l)
             f.write('\n')
 
+def replace_file(path):
+    with open(path, 'w') as f:
+        f.write("")
+
 def check_all(ir_dir, move_to):
     hasIfs = []
     for opt_level in optimizations:
@@ -47,6 +51,7 @@ def check_all(ir_dir, move_to):
         for ir in tqdm(irs):
             ir_path = os.path.join(ir_dir, opt_level, ir)
             if check_file(ir_path):
+                # replace_file(ir_path)
                 shutil.move(ir_path, move_path)
                 hasIfs.append(f"{opt_level}\t{ir}")
     print("Writing results to log file...")

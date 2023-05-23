@@ -32,7 +32,7 @@ def check_all(ir_dir, check_options):
                 elif option == 'ATTR':
                     _check_attr(ir_path)
                 elif option == 'POISON':
-                    _check_attr(poison)
+                    _check_poison(ir_path)
                 else:
                     assert False, f"invalid check options {option}"
     print()

@@ -14,8 +14,10 @@ TEMPDIR = Path("D:/tmp/decompiling/tmp/ghidra")
 
 def decompile(binfile):
     project_dir = TEMPDIR / 'project'
+    if not Path(project_dir).exists():
+        Path(project_dir).mkdir()
     
-    output_file = TEMPDIR / 'out'
+    output_file = TEMPDIR / os.path.basename(binfile)
     parent_dir = "tools/ghidra/"
 
     decompile_command = [
@@ -43,5 +45,5 @@ def decompile(binfile):
     return decompiler_outputs
         
 if __name__ == '__main__':
-    decompiler_outputs = decompile(sys.argv[1], './tmp/ghidra/1')
+    decompiler_outputs = decompile(sys.argv[1])
     print(decompiler_outputs)

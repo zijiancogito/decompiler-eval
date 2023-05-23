@@ -39,6 +39,10 @@ def log(log_list, log_file):
         for l  in tqdm(log_list):
             f.write(l)
             f.write('\n')
+            
+def repleace_file(path):
+    with open(path, 'w') as f:
+        f.write("")
 
 def check_all(ir_dir, move_to):
     hasIfs = []
@@ -51,6 +55,7 @@ def check_all(ir_dir, move_to):
         for ir in tqdm(irs):
             ir_path = os.path.join(ir_dir, opt_level, ir)
             if check_file(ir_path):
+                # repleace_file(ir_path)
                 shutil.move(ir_path, move_path)
                 hasIfs.append(f"{opt_level}\t{ir}")
     print("Writing results to log file...")
