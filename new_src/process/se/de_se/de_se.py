@@ -49,6 +49,8 @@ def process_df2(dec_file, save_dir, log_file):
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
         log([fail], log_file)
+        with open(save_path, 'w') as f:
+            f.write("")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='de_df.py')

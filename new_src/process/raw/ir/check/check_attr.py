@@ -3,7 +3,6 @@ import os
 import argparse
 from tqdm import tqdm
 
-optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
 
 def check_file(ir_path):
     """
@@ -37,7 +36,7 @@ def delete_comment(ir_path):
             if not l.strip().startswith(';'):
                 f.write(l)
 
-def delete_all(ir_dir):
+def delete_all(ir_dir, optimizations):
     for opt_level in optimizations:
         irs = os.listdir(os.path.join(ir_dir, opt_level))
         print(f"check_attr.py:\tProcessing {opt_level}...")
@@ -49,9 +48,15 @@ def delete_all(ir_dir):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='preprocess.py')
     parser.add_argument('-i', '--ir', type=str, help='ir file dir')
+    parser.add_argument('-d', '--dataset', type=str, choices=['df2', 'cf'], help='Dataset')
 
     args = parser.parse_args()
 
-    delete_all(args.ir)
+    if args.dataset == 'df2':
+        optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
+        delete_all(args.ir, optimizations)
+    elif args.dataset == 'cf':
+        optimizations = ['o0']
+        delete_all(args.ir, optimizations)
 
 

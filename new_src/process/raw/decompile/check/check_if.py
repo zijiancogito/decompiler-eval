@@ -19,6 +19,10 @@ def log(log_list, log_file):
         for l  in tqdm(log_list):
             f.write(f'{l}\n')
 
+def replace_file(path):
+    with open(path, 'w') as f:
+        f.write("void func0 () {}")
+
 def check_dir(de_dir, move_to):
     if not os.path.exists(move_to):
         os.makedirs(move_to)
@@ -28,7 +32,8 @@ def check_dir(de_dir, move_to):
     for de in tqdm(des):
         de_path = os.path.join(de_dir, de)
         if check_file(de_path):
-            shutil.move(de_path, move_to)
+            # shutil.move(de_path, move_to)
+            replace_file(de_path)
             hasIfs.append(de_path)
     print(f"Found {len(hasIfs)}/{len(des)} files have IF") 
     print("Writing results to log file...")
@@ -48,6 +53,20 @@ def check_all(de_dir, move_dir):
                 move_sub_dir = os.path.join(move_dir, compiler, opt_level, decompiler)
                 check_dir(de_sub_dir, move_sub_dir)
                 print()
+                
+def check(de_dir):
+    compilers = ['clang', 'gcc']
+    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
+    decompilers = ['Ghidra', 'Hex-Rays', 'RetDec', 'BinaryNinja', 'angr']
+
+    for compiler in compilers:
+        for opt_level in optimizations:
+            for decompiler in decompilers:
+                de_sub_dir = os.path.join(de_dir, compiler, opt_level, decompiler)
+                dec_files = os.listdir(de_sub_dir)
+                for dec_file in dec_files:
+                    dec_path = os.path.join(de_sub_dir, dec_file)
+                    assert not check_file(dec_path), dec_path
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='check_if.py')
@@ -58,4 +77,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     check_all(args.dec, args.out)
+    check(args.dec)
 

@@ -12,7 +12,6 @@ llvm.initialize()
 llvm.initialize_native_target()
 llvm.initialize_native_asmprinter()
 
-optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
 
 def check_file(ir_file):
     """
@@ -40,8 +39,8 @@ def replace_file(path):
     with open(path, 'w') as f:
         f.write("")
 
-def check_all(ir_dir, move_to):
-    hasIfs = []
+def check_all(ir_dir, move_to, optimizations):
+    hasPoisons = []
     for opt_level in optimizations:
         irs = os.listdir(os.path.join(ir_dir, opt_level))
         move_path = os.path.join(move_to, opt_level)
@@ -53,15 +52,20 @@ def check_all(ir_dir, move_to):
             if check_file(ir_path):
                 # replace_file(ir_path)
                 shutil.move(ir_path, move_path)
-                hasIfs.append(f"{opt_level}\t{ir}")
+                hasPoisons.append(f"{opt_level}\t{ir}")
     print("Writing results to log file...")
-    log(hasIfs, os.path.join(move_to, 'log.txt'))
+    log(hasPoisons, os.path.join(move_to, 'log.txt'))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='check_poison.py')
     parser.add_argument('-i', '--ir', type=str, help='raw ir file dir')
     parser.add_argument('-o', '--out', type=str, help='path to save file with poison')
+    parser.add_argument('-d', '--dataset', type=str, choices=['df2', 'cf'], help='Dataset')
     
     args = parser.parse_args()
-
-    check_all(args.ir, args.out)
+    if args.dataset == 'df2':
+        optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
+        check_all(args.ir, args.out, optimizations)
+    elif args.dataset == 'cf':
+        optimizations = ['o0']
+        check_all(args.ir, args.out)

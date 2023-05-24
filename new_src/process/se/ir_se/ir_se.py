@@ -36,7 +36,7 @@ def process_df2(ir_dirs, save_dir, log_dir):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='ir_se.py', description='ir symbolic execution program')
-    parser.add_argument('-e', '--exp', type=str, choices=['df2'], help="dataset to process")
+    parser.add_argument('-D', '--dataset', type=str, choices=['df2'], help="dataset to process")
     parser.add_argument('-i', '--ir', type=str, help="ir dir")
     parser.add_argument('-o', '--save', type=str, help="execution result dir")
     parser.add_argument('-l', '--log', type=str, help="execution failed log dir")

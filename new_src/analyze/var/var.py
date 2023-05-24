@@ -104,7 +104,7 @@ def dec_vs_ir(ir_path, dec_path, functions=['func0']):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='analyze.py')
-    parser.add_argument('-e', '--experiment', choices=['df2', 'cf'], type=str, help='Datasets')
+    parser.add_argument('-D', '--dataset', choices=['df2', 'cf'], type=str, help='Datasets')
     parser.add_argument('-i', '--ir', type=str, help='dir of IR')
     parser.add_argument('-s', '--src', type=str, help='dir of SRC')
     parser.add_argument('-d', '--dec', type=str, help='dir of DEC')
@@ -112,8 +112,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if args.experiment == 'df2':
+    if args.dataset == 'df2':
         process_df2(args.dec, args.src, args.ir, args.log)
-    elif args.experiment == 'cf':
+    elif args.dataset == 'cf':
         process_cf(args.dec, args.src, args.ir, args.log)
 

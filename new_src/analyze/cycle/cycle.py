@@ -68,7 +68,7 @@ def dec_vs_src(dec_path, src_path, func_filter=r'func\_1'):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='cycle.py', description='Cyclomatic complexity')
-    parser.add_argument('-e', '--experiment', choices=['cf'], type=str, help='Cyclomatic complexity')
+    parser.add_argument('-D', '--dataset', choices=['cf'], type=str, help='Cyclomatic complexity')
     parser.add_argument('-i', '--ir', type=str, help='dir of IR')
     parser.add_argument('-s', '--src', type=str, help='dir of SRC')
     parser.add_argument('-d', '--dec', type=str, help='dir of DEC')
@@ -76,5 +76,5 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
 
-    if args.experiment == 'cf':
+    if args.dataset == 'cf':
         process_cf(args.dec, args.src, args.ir, args.log)

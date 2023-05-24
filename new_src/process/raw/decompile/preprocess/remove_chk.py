@@ -52,6 +52,31 @@ def check_df2(de_dir, log_dir):
                         rewrite(de_path, new_func)
                         logs.append(de_file)
                 print(f"{len(logs)}/{len(des)} files have been rewritten")
+                   
+def check_cf(de_dir, log_dir):
+    compilers = ['clang', 'gcc']
+    optimizations = ['o0']
+    decompilers = ['Ghidra', 'Hex-Rays', 'RetDec', 'BinaryNinja', 'angr']
+    
+    for compiler in compilers:
+        for opt_level in optimizations:
+            for decompiler in decompilers:
+                log_sub_dir = os.path.join(log_dir, compiler, opt_level)
+                if not os.path.exists(log_sub_dir):
+                    os.makedirs(log_sub_dir)
+                log_file = os.path.join(log_sub_dir, f"{decompiler}.csv")
+
+                des = os.listdir(os.path.join(de_dir, compiler, opt_level, decompiler))
+                logs = []
+                print(f"Checking {compiler} {opt_level} {decompiler} ...")
+                for de_file in tqdm(des):
+                    de_path = os.path.join(de_dir, compiler, opt_level, decompiler, de_file)
+                    new_func = check_chk(de_path)
+                    if new_func != None:
+                        rewrite(de_path, new_func)
+                        logs.append(de_file)
+                print(f"{len(logs)}/{len(des)} files have been rewritten")
+    
 
 def log(log_list, log_file):
     with open(log_file, 'w') as f:
@@ -61,12 +86,14 @@ def log(log_list, log_file):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='remove_chk.py')
 
-    parser.add_argument('-d', '--dec', type=str, help='raw dec file dir')
+    parser.add_argument('-i', '--dec', type=str, help='raw dec file dir')
     parser.add_argument('-l', '--log', type=str, help='log file dir')
-    parser.add_argument('-e', '--exp', type=str, choices=['df2'], help='dataset')
+    parser.add_argument('-d', '--dataset', type=str, choices=['df2', 'cf'], help="Dataset")
 
     args = parser.parse_args()
 
-    if args.exp == 'df2':
+    if args.dataset == 'df2':
         check_df2(args.dec, args.log)
+    elif args.dataset == 'cf':
+        check_cf(args.dec, args.log)
 
