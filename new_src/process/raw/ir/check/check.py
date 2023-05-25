@@ -41,7 +41,7 @@ def check_all(ir_dir, check_options, optimizations):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='check_poison.py')
     parser.add_argument('-i', '--ir', type=str, help='ir file dir')
-    parser.add_argument('-o', '--opt', nargs=3, help='IF ATTR POISON') 
+    parser.add_argument('-o', '--opt', nargs='+', help='IF ATTR POISON') 
     parser.add_argument('-d', '--dataset', choices=['df2', 'cf'], type=str, help='Dataset')
 
     args = parser.parse_args()

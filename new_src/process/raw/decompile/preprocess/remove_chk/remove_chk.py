@@ -29,18 +29,18 @@ def rewrite(file_path, new_content):
     with open(file_path, 'w') as f:
         f.write(new_content)
 
-def check_df2(de_dir, log_dir):
+def check_df2(de_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['Ghidra', 'Hex-Rays', 'RetDec', 'BinaryNinja', 'angr']
+    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
 
     for compiler in compilers:
         for opt_level in optimizations:
             for decompiler in decompilers:
-                log_sub_dir = os.path.join(log_dir, compiler, opt_level)
-                if not os.path.exists(log_sub_dir):
-                    os.makedirs(log_sub_dir)
-                log_file = os.path.join(log_sub_dir, f"{decompiler}.csv")
+                # log_sub_dir = os.path.join(log_dir, compiler, opt_level)
+                # if not os.path.exists(log_sub_dir):
+                    # os.makedirs(log_sub_dir)
+                # log_file = os.path.join(log_sub_dir, f"{decompiler}.csv")
 
                 des = os.listdir(os.path.join(de_dir, compiler, opt_level, decompiler))
                 logs = []
@@ -53,18 +53,18 @@ def check_df2(de_dir, log_dir):
                         logs.append(de_file)
                 print(f"{len(logs)}/{len(des)} files have been rewritten")
                    
-def check_cf(de_dir, log_dir):
+def check_cf(de_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0']
-    decompilers = ['Ghidra', 'Hex-Rays', 'RetDec', 'BinaryNinja', 'angr']
+    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
     
     for compiler in compilers:
         for opt_level in optimizations:
             for decompiler in decompilers:
-                log_sub_dir = os.path.join(log_dir, compiler, opt_level)
-                if not os.path.exists(log_sub_dir):
-                    os.makedirs(log_sub_dir)
-                log_file = os.path.join(log_sub_dir, f"{decompiler}.csv")
+                # log_sub_dir = os.path.join(log_dir, compiler, opt_level)
+                # if not os.path.exists(log_sub_dir):
+                    # os.makedirs(log_sub_dir)
+                # log_file = os.path.join(log_sub_dir, f"{decompiler}.csv")
 
                 des = os.listdir(os.path.join(de_dir, compiler, opt_level, decompiler))
                 logs = []
@@ -87,13 +87,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='remove_chk.py')
 
     parser.add_argument('-i', '--dec', type=str, help='raw dec file dir')
-    parser.add_argument('-l', '--log', type=str, help='log file dir')
+    # parser.add_argument('-l', '--log', type=str, help='log file dir')
     parser.add_argument('-d', '--dataset', type=str, choices=['df2', 'cf'], help="Dataset")
 
     args = parser.parse_args()
 
     if args.dataset == 'df2':
-        check_df2(args.dec, args.log)
+        check_df2(args.dec)
     elif args.dataset == 'cf':
-        check_cf(args.dec, args.log)
+        check_cf(args.dec)
 

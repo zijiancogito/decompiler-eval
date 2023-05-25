@@ -39,7 +39,6 @@ def print_err_types(log_dir, optimizations):
                 err_types, err_cnt = check_err_type(log_file)
                 for err in err_types:
                     print(f"{err}\t{err_types[err]}/{err_cnt}\t{round(err_types[err]/err_cnt, 2)}")
-
             print()
         print()
 
@@ -73,7 +72,7 @@ def check_all(de_dir, log_dir, optimizations):
             
                 log_file = os.path.join(log_sub_dir, f"decompiling-err-{decompiler}.csv")
                 log(logs, log_file)
-                print("{0:12}".format(f"{round((len(dec_files) - len(logs)) / len(dec_files), 2)}"), end='\t')
+                print("{0:12}".format(f"{round((len(dec_files) - len(logs)) / len(dec_files), 3)}"), end='\t')
 
             print()
         print()

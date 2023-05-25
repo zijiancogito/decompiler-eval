@@ -104,10 +104,11 @@ class ExtractFuncs(object):
 	def writeNULL(self, save_to, func_name):
 		if not os.path.exists(save_to):
 			os.makedirs(save_to)
-		for func in self.required_funcs.values():
-			file_name = os.path.basename(self.file_path)
+		file_name = os.path.basename(self.file_path)
+		for func in func_name:
 			with open(os.path.join(save_to, file_name), 'a') as f:
-				f.write("void %s () { }\n" % func_name)
+				print(self.file_path)
+				f.write("void %s() {}\n" % func_name[0])
 		
 
 	def _readfile(self, path):
@@ -190,5 +191,6 @@ if __name__ == '__main__':
 			writer = csv.writer(f)
 			f.write(f"{args.source}\n")
 		e.writeNULL(args.save_to, args.funcs_name)
-	e.writeFuncs(args.save_to)
+	else:
+		e.writeFuncs(args.save_to)
 

@@ -68,4 +68,4 @@ if __name__ == '__main__':
         check_all(args.ir, args.out, optimizations)
     elif args.dataset == 'cf':
         optimizations = ['o0']
-        check_all(args.ir, args.out)
+        check_all(args.ir, args.out, optimizations)

@@ -1,7 +1,8 @@
 #!/bin/bash
-RAW_DE=/home/eval/DF2/raw/de
-SAVE_DE=/home/eval/DF2/process/de
-ERR=/home/eval/DF2/trash/de/extract_func_log
+RAW_DE=/home/eval/data/DF2/raw/de
+SAVE_DE=/home/eval/data/DF2/process/de
+ERR=/home/eval/data/DF2/trash/de/extract_func_log
+
 rm -r $ERR
 rm -r $SAVE_DE
 decoms=(angr BinaryNinja Ghidra Hex-Rays RetDec)
@@ -20,7 +21,7 @@ do
             do
                 data_path=$datas_path/$file
                 python3 extractFunc.py -s $data_path -o $save_to -e $err_file -f func0 >/dev/null
-                echo Over: $data_path
+                # echo Over: $data_path
             done
         done
     done
