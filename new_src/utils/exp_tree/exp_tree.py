@@ -74,6 +74,8 @@ def exptree_to_json(tree):
     return dic
 
 def json_to_exptree(json_data):
+    if json_data == {}:
+        return None
     tree = ExpTree(json_data["tag"], json_data["data"])
     for child in json_data["children"]:
         tree.add_child(json_to_exptree(child))

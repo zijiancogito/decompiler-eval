@@ -39,13 +39,16 @@ def func_acc(ir_json_file, c_json_file):
             continue
         ir_exp = exp_tree.json_to_exptree(ir_json["expressions"][var])
         c_exp = exp_tree.json_to_exptree(c_json["expressions"][var])
-        correct_rate = sample(ir_exp, c_exp, symbols)
-        if correct_rate > 0.8:
-            matched += 1
-        else:
+        if ir_exp == None or c_exp == None:
             wrong_vars.append(var)
-    recall = round(matched / len(ir_json["expressions"]), 2)
-    precision = round(matched / len(c_json["expressions"]), 2)
+        else:
+            correct_rate = sample(ir_exp, c_exp, symbols)
+            if correct_rate > 0.8:
+                matched += 1
+            else:
+                wrong_vars.append(var)
+    recall = round(matched / len(ir_json["expressions"]), 2) if len(ir_json["expressions"]) != 0 else 0
+    precision = round(matched / len(c_json["expressions"]), 2) if len(c_json["expressions"]) != 0 else 0
     return precision, recall, wrong_vars
 
 def passrate(ir_json_file, c_json_file):
@@ -63,7 +66,7 @@ def passrate(ir_json_file, c_json_file):
         except:
             c_json = None
     if ir_json == None or c_json == None:
-        return 0, 0, []
+        return 0
     
     symbols = []
     for sym in ir_json["symbols"]:
@@ -76,10 +79,12 @@ def passrate(ir_json_file, c_json_file):
             continue
         ir_exp = exp_tree.json_to_exptree(ir_json["expressions"][var])
         c_exp = exp_tree.json_to_exptree(c_json["expressions"][var])
-        correct_rate = sample(ir_exp, c_exp, symbols)
-        total_tmp.append(correct_rate)
+        if ir_exp == None or c_exp == None:
+            total_tmp.append(0)
+        else:
+            correct_rate = sample(ir_exp, c_exp, symbols)
+            total_tmp.append(correct_rate)
     avg_passrate = round(np.mean(total_tmp), 2) 
-    
     return avg_passrate
 
 def sample(ir_exp, c_exp, symbols):
@@ -135,6 +140,12 @@ def execution(tree, st):
         if op1 == None or op2 == None:
             return None
         return mul(op1, op2)
+    elif tree.data == '%':
+        op1 = execution(tree.children[0], st)
+        op2 = execution(tree.children[1], st)
+        if op1 == None or op2 == None:
+            return None
+        return mod(op1, op2)
     elif tree.data == '&':
         if len(tree.children) == 2:
             op1 == execution(tree.children[0], st)
@@ -148,6 +159,25 @@ def execution(tree, st):
         if op1 == None or op2 == None:
             return None
         return or2(op1, op2)
+    elif tree.data == '^':
+        op1 = execution(tree.children[0], st)
+        op2 = execution(tree.children[1], st)
+        if op1 == None or op2 == None:
+            return None
+        return xor(op1, op2)
+    elif tree.data == '>>':
+        op1 = execution(tree.children[0], st)
+        op2 = execution(tree.children[1], st)
+        if op1 == None or op2 == None:
+            return None
+        return shr(op1, op2)
+    elif tree.data == '<<':
+        op1 = execution(tree.children[0], st)
+        op2 = execution(tree.children[1], st)
+        if op1 == None or op2 == None:
+            return None
+        return shl(op1, op2)
+    elif tree
 
 def add(op1, op2):
     return int(op1) + int(op2)
@@ -163,6 +193,11 @@ def div(op1, op2):
         return None
     return int(int(op1) / int(op2))
 
+def mod(op1, op2):
+    if int(op2) == 0:
+        return None
+    return int(int(op1) % int(op2))
+
 def neg(op):
     return -int(op)
 
@@ -174,3 +209,9 @@ def or2(op1, op2):
 
 def xor(op1, op2):
     return int(op1) ^ int(op2)
+
+def shr(op1, op2):
+    return int(op1) >> int(op2)
+
+def shl(op1, op2):
+    return int(op1) << int(op2)

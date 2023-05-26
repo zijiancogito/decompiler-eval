@@ -5,6 +5,7 @@ import re
 import c_cycle
 import ir_cycle
 import argparse
+from tqdm import tqdm
 
 def process_cf(dec_dir, src_dir, ir_dir, log_dir):
     compilers = ['clang', 'gcc']
@@ -15,24 +16,28 @@ def process_cf(dec_dir, src_dir, ir_dir, log_dir):
             log_sub_dir = os.path.join(log_dir, compiler, opt_level)
             if not os.path.exists(log_sub_dir):
                 os.makedirs(log_sub_dir)
+            
             for decompiler in decompilers:
                 dec_files = os.listdir(os.path.join(dec_dir, compiler, opt_level, decompiler))
 
                 logs = []
-                for dec_file in dec_files:
+                print(f"{compiler}-{opt_level}-{decompiler}:")
+                for dec_file in tqdm(dec_files):
                     dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
-                    ir_path = os.path.join(ir_dir, f"{dec_file.split('.')[0]}.ll")
+                    ir_path = os.path.join(ir_dir, opt_level, f"{dec_file.split('.')[0]}.ll")
+                    if not os.path.exists(ir_path):
+                        continue
                     src_path = os.path.join(src_dir, f"{dec_file.split('.')[0]}.c")
                     dec_src = dec_vs_src(dec_path, src_path, r'func\_1')
                     dec_ir = dec_vs_ir(dec_path, ir_path, r'func\_1')
                     if 'func_1' in dec_src and 'func_1' in dec_ir:
-                        log_line = f"{dec_file}\t{dec_src['func_1']}\t{dec_ir['func_1']}"
+                        log_line = f"{dec_file}\t{dec_src['func_1'][0]}\t{dec_src['func_1'][1]}\t{dec_src['func_1'][2]}\t{dec_ir['func_1'][0]}\t{dec_ir['func_1'][1]}\t{dec_ir['func_1'][2]}"
                     elif 'func_1' in dec_src and 'func_1' not in dec_ir:
-                        log_line = f"{dec_file}\t{dec_src['func_1']}\t0"
+                        log_line = f"{dec_file}\t{dec_src['func_1'][0]}\t{dec_src['func_1'][1]}\t{dec_src['func_1'][2]}\t0\t0\t0"
                     elif 'func_1' not in dec_src and 'func_1' in dec_ir:
-                        log_line = f"{dec_file}\t0\t{dec_ir['func_1']}"
+                        log_line = f"{dec_file}\t0\t0\t0\t{dec_ir['func_1'][0]}\t{dec_src['func_1'][1]}\t{dec_src['func_1'][2]}"
                     else:
-                        log_line = f"{dec_file}\t0\t0"
+                        log_line = f"{dec_file}\t0\t0\t0\t0\t0\t0"
                     logs.append(log_line)
                 
                 log_file = os.path.join(log_sub_dir, f"cycle-{decompiler}.csv")
@@ -52,7 +57,7 @@ def dec_vs_ir(dec_path, ir_path, func_filter=r'func\_1'):
     for func in dec_cycles:
         if func not in ir_cycles:
             continue
-        dec_ir[func] = round(dec_cycles[func] / ir_cycles[func], 2)
+        dec_ir[func] = (round(dec_cycles[func] / ir_cycles[func], 2), dec_cycles[func], ir_cycles[func])
     return dec_ir
 
 def dec_vs_src(dec_path, src_path, func_filter=r'func\_1'):
@@ -63,7 +68,7 @@ def dec_vs_src(dec_path, src_path, func_filter=r'func\_1'):
     for func in dec_cycles:
         if func not in src_cycles:
             continue
-        dec_src[func] = round(dec_cycles[func] / src_cycles[func], 2)
+        dec_src[func] = (round(dec_cycles[func] / src_cycles[func], 2), dec_cycles[func], src_cycles[func])
     return dec_src
 
 if __name__ == '__main__':

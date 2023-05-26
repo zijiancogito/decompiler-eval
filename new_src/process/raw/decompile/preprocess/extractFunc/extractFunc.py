@@ -47,7 +47,7 @@ class ExtractFuncs(object):
 		funcsrows = self.funcsrows.copy()
 		for funcrow in funcsrows:
 			sr = funcrow[0]  # the number of row of {
-			if self._preChar(sr) != ')':
+			if not self._checkFunc(sr):
 				self.funcsrows.remove(funcrow)
 				continue
 			lr, idx = self._findPare(sr)
@@ -159,6 +159,40 @@ class ExtractFuncs(object):
 				if not r[j].isspace():
 					return r[j]
 		return None
+	
+	def _preStr(self, row):
+		ret = ''
+		r = self.file[row]
+		idx = r.find('{')
+		after_not_space = False
+		for i in range(idx - 1, -1, -1):
+			if r[i].isspace() and after_not_space:
+				break
+			if not r[i].isspace():
+				after_not_space = True
+				ret = r[i] + ret
+
+		if len(ret) != 0:
+			return ret
+
+		for i in range(row - 1, -1, -1):
+			r = self.file[i]
+			after_not_space = False
+			for j in range(len(r) - 1, -1, -1):
+				if r[j].isspace() and after_not_space:
+					break
+				if not r[j].isspace():
+					after_not_space = True
+					ret = r[j] + ret
+			if len(ret) != 0:
+				return ret
+			
+		return None
+	
+	def _checkFunc(self, row):
+		if self._preChar(row) == ')' or self._preStr(row) == '__noreturn':
+			return True
+		return False
 
 	'''
 	def _getFuncName(self):

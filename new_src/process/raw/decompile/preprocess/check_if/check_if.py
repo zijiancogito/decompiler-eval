@@ -9,10 +9,11 @@ def check_file(dec_file):
     """
     dec_file: txt of func0
     """
+    flag = False
     with open(dec_file, 'r') as f:
         if 'if' in f.read():
-            return True
-    return False
+            flag = True
+    return flag
 
 def log(log_list, log_file):
     with open(log_file, 'w') as f:
@@ -33,7 +34,7 @@ def check_dir(de_dir, move_to):
         de_path = os.path.join(de_dir, de)
         if check_file(de_path):
             # shutil.move(de_path, move_to)
-            replace_file(de_path)
+            # replace_file(de_path)
             hasIfs.append(de_path)
     print(f"Found {len(hasIfs)}/{len(des)} files have IF") 
     print("Writing results to log file...")
@@ -44,7 +45,7 @@ def check_dir(de_dir, move_to):
 def check_all(de_dir, move_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['Ghidra', 'Hex-Rays', 'RetDec', 'BinaryNinja', 'angr']
+    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
 
     for compiler in compilers:
         for opt_level in optimizations:
@@ -57,7 +58,7 @@ def check_all(de_dir, move_dir):
 def check(de_dir):
     compilers = ['clang', 'gcc']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['Ghidra', 'Hex-Rays', 'RetDec', 'BinaryNinja', 'angr']
+    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
 
     for compiler in compilers:
         for opt_level in optimizations:

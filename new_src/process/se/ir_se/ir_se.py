@@ -43,5 +43,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if args.exp == 'df2':
+    if args.dataset == 'df2':
         process_df2(args.ir, args.save, args.log)

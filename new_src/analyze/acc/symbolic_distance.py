@@ -63,7 +63,7 @@ def log(log_list, log_file):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='accuarcy.py')
-    parser.add_argument('-D', '--data', choices=['df2'], type=str, help='Datasets')
+    parser.add_argument('-D', '--dataset', choices=['df2'], type=str, help='Datasets')
     parser.add_argument('-i', '--ir', type=str, help='execution results of IR')
     parser.add_argument('-d', '--dec', type=str, help='execution results of DEC')
     parser.add_argument('-l', '--log', type=str, help='log dir')

@@ -38,8 +38,8 @@ def func_acc(ir_json_file, c_json_file):
         else:
             wrong_vars.append(var)
 
-    recall = round(matched / len(ir_json["expressions"]), 2)
-    precision = round(matched / len(c_json["expressions"]), 2)
+    recall = round(matched / len(ir_json["expressions"]), 2) if len(ir_json["expressions"]) != 0 else 0
+    precision = round(matched / len(c_json["expressions"]), 2) if len(c_json["expressions"]) != 0 else 0
     return precision, recall, wrong_vars
 
 def func_dist(ir_json_file, c_json_file):
@@ -62,7 +62,7 @@ def func_dist(ir_json_file, c_json_file):
         except:
             c_json = None
     if ir_json == None or c_json == None:
-        return 0, 0, []
+        return 1, 100
 
     func_sum = []
     for var in ir_json["expressions"]:
@@ -88,6 +88,8 @@ def func_dist(ir_json_file, c_json_file):
 def compare(ir_exp, c_exp):
     tree_a = exp_tree.json_to_exptree(ir_exp)
     tree_b = exp_tree.json_to_exptree(c_exp)
+    if tree_a == None or tree_b == None:
+        return False
 
     a_leaf = exp_tree.leaf_num(tree_a)
     b_leaf = exp_tree.leaf_num(tree_b)
@@ -104,17 +106,22 @@ def compare(ir_exp, c_exp):
 def distance(ir_exp, c_exp):
     tree_a = exp_tree.json_to_exptree(ir_exp)
     tree_b = exp_tree.json_to_exptree(c_exp)
+    if tree_a == None or tree_b == None:
+        return 1
     
     a_op_type, b_op_type = {}, {}
     exp_tree.op_type(tree_a, a_op_type)
     exp_tree.op_type(tree_b, b_op_type)
     
     dist = []
+    all_sym = 0
     for key in a_op_type:
+        all_sym += a_op_type[key]
         if key not in b_op_type:
             dist.append(a_op_type[key])
     
     for key in b_op_type:
+        all_sym += b_op_type[key]
         if key not in a_op_type:
             dist.append(b_op_type[key])
             
@@ -125,6 +132,9 @@ def distance(ir_exp, c_exp):
 
     import numpy as np
     # avg_dist = round(np.mean(dist), 2)
-    all_sym = len(a_op_type.keys()) + len(b_op_type.keys()) # all_sym = sym_count_of(tree_a) + sym_count_of(tree_b)
+    if all_sym == 0:
+        return 1
     sum_dist = sum(dist) / all_sym
     return sum_dist
+
+

@@ -7,6 +7,7 @@ from tqdm import tqdm
 BinaryNinja = "\*\(fsbase[^\n]+;\n[^\n]+if [^\n]+\n[^\n]+\{\n[\s]+__stack_chk_fail\(\);\n[^\n]+\n[^\n]+\}"
 Ghidra = "if[^\n]+\{\n[^\n]+(return[^\n]+;)\n[^\n]+\}\n[^\n]+\n[^\n]+__stack_chk_fail\(\);"
 RetDec = "if[^\n]+\{\n[^\n]+\n[^\n]+(return[^\n]+;)\n[^\n]+\}\n[^\n]+\n[^\n]+__stack_chk_fail\(\);\n[^\n]+return[^\n]+;"
+RetDec2 = "if[^\n]+{\n[^\n]+\n[\s]+__stack_chk_fail\(\);\n[^\n]+\n[^\n]*}"
 
 def check_chk(file_path):
     content = None
@@ -23,6 +24,8 @@ def check_chk(file_path):
             # print(re.search(RetDec, content).group(0))
             matched = re.findall(RetDec, file_content)
             content = re.sub(RetDec, matched[0], file_content)
+        elif re.search(RetDec2, file_content):
+            content = re.sub(RetDec2, '', file_content)
     return content
 
 def rewrite(file_path, new_content):

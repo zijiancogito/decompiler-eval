@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DE_DIR=/home/eval/CF/raw/de
-LOG_DIR=/home/eval/CF/trash/de/err
+DE_DIR=/home/eval/data/CF/raw/de
+LOG_DIR=/home/eval/data/CF/trash/de/err
 
 rm -r $LOG_DIR
 

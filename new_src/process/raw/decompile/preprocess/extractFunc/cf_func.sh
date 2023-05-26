@@ -1,8 +1,8 @@
 #!/bin/bash
 
-RAW_DE=/home/eval/CF/raw/de
-SAVE_DE=/home/eval/CF/process/de
-ERR=/home/eval/CF/trash/de/extract_func_log
+RAW_DE=/home/eval/data/CF/raw/de
+SAVE_DE=/home/eval/data/CF/process/de
+ERR=/home/eval/data/CF/trash/de/extract_func_log
 rm -r $ERR
 rm -r $SAVE_DE
 decoms=(angr BinaryNinja Ghidra Hex-Rays RetDec)
