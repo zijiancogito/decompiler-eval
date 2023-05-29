@@ -21,7 +21,7 @@ do
             do
                 data_path=$datas_path/$file
                 python3 extractFunc.py -s $data_path -o $save_to -e $err_file -f func0 >/dev/null
-                # echo Over: $data_path
+                echo Over: $data_path
             done
         done
     done

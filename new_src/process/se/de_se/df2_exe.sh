@@ -27,6 +27,7 @@ do
             for file in `ls $de_dir`
             do
                 de_file=$de_dir/$file
+		echo $de_file
                 python3 de_se.py -e df2 -i $de_file -o $se_dir -l $err_log_file
                 let i=i+1
                 let num=i*100/l

@@ -177,41 +177,56 @@ def execution(tree, st):
         if op1 == None or op2 == None:
             return None
         return shl(op1, op2)
-    elif tree
+    elif tree.data == '!':
+        op1 = execution(tree.children[0], st)
+        if op1 == None:
+            return None
+        return not1(op1)
+    elif tree.data == '~':
+        op1 = execution(tree.children[0], st)
+        if op1 == None:
+            return None
+        return notbit(op1)
 
-def add(op1, op2):
+def add(op1, op2):                           # +
     return int(op1) + int(op2)
 
-def sub(op1, op2):
+def sub(op1, op2):                           # -
     return int(op1) - int(op2)
 
-def mul(op1, op2):
+def mul(op1, op2):                           # *
     return int(op1) * int(op2)
 
-def div(op1, op2):
+def div(op1, op2):                           # /
     if int(op2) == 0:
         return None
     return int(int(op1) / int(op2))
 
-def mod(op1, op2):
+def mod(op1, op2):                           # %
     if int(op2) == 0:
         return None
     return int(int(op1) % int(op2))
 
-def neg(op):
+def neg(op):                                 # -
     return -int(op)
 
-def and2(op1, op2):
+def and2(op1, op2):                          # &
     return int(op1) & int(op2)
 
-def or2(op1, op2):
+def or2(op1, op2):                           # |
     return int(op1) | int(op2)
 
-def xor(op1, op2):
+def xor(op1, op2):                           # ^
     return int(op1) ^ int(op2)
 
-def shr(op1, op2):
+def shr(op1, op2):                           # >>
     return int(op1) >> int(op2)
 
-def shl(op1, op2):
+def shl(op1, op2):                           # <<
     return int(op1) << int(op2)
+
+def not1(op1):                               # !
+    return not int(op1)
+
+def notbit(op1):
+    return ~(int(op1))

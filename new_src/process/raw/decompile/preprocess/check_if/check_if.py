@@ -11,7 +11,7 @@ def check_file(dec_file):
     """
     flag = False
     with open(dec_file, 'r') as f:
-        if 'if' in f.read():
+        if ' if' in f.read():
             flag = True
     return flag
 
@@ -33,8 +33,8 @@ def check_dir(de_dir, move_to):
     for de in tqdm(des):
         de_path = os.path.join(de_dir, de)
         if check_file(de_path):
-            # shutil.move(de_path, move_to)
-            # replace_file(de_path)
+            shutil.move(de_path, move_to)
+            replace_file(de_path)
             hasIfs.append(de_path)
     print(f"Found {len(hasIfs)}/{len(des)} files have IF") 
     print("Writing results to log file...")
@@ -61,22 +61,39 @@ def check(de_dir):
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
 
     for compiler in compilers:
+        print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
+        print("{0:15}".format("Optimization"), end='\t')
+        print("{0:12}".format("|Angr"), end='\t')
+        print("{0:12}".format("|BinaryNinja"), end='\t')
+        print("{0:12}".format("|Ghidra"), end='\t')
+        print("{0:12}".format("|Hex-Rays"), end='\t')
+        print("{0:12}".format("|RetDec"))
         for opt_level in optimizations:
+            print("{0:15}".format(opt_level), end='\t')
             for decompiler in decompilers:
                 de_sub_dir = os.path.join(de_dir, compiler, opt_level, decompiler)
                 dec_files = os.listdir(de_sub_dir)
+                logs = []
                 for dec_file in dec_files:
                     dec_path = os.path.join(de_sub_dir, dec_file)
-                    assert not check_file(dec_path), dec_path
+                    if check_file(dec_path):
+                        logs.append(dec_path)
+                        # assert False, dec_path
+                print("{0:12}".format(f"{len(logs)}/{len(dec_files)}"), end='\t')
+            print()
+        print()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='check_if.py')
 
     parser.add_argument('-i', '--dec', type=str, help='raw dec file dir')
-    parser.add_argument('-o', '--out', type=str, help='path to save file with IF')
+    parser.add_argument('-l', '--log', type=str, help='path to save file with IF')
+    parser.add_argument('-o', '--option', type=str, choices=['check', 'replace'], help='Option')
 
     args = parser.parse_args()
 
-    check_all(args.dec, args.out)
-    check(args.dec)
+    if args.option == 'replace':
+        check_all(args.dec, args.log)
+    elif args.option == 'check':
+        check(args.dec)
 
