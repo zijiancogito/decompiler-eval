@@ -1,8 +1,8 @@
 #!/bin/bash
 
-DE_DIR=/home/eval/data/DF2/process/de
-DE_SE_DIR=/home/eval/data/DF2/se/de
-DE_SE_LOG_DIR=/home/eval/data/DF2/se/trash/de/bug
+DE_DIR=/home/eval/data/DF2/process/de2
+DE_SE_DIR=/home/eval/data/DF2/se/de2
+DE_SE_LOG_DIR=/home/eval/data/DF2/se/trash/de2/bug
 
 rm -r $DE_SE_DIR
 rm -r $DE_SE_LOG_DIR

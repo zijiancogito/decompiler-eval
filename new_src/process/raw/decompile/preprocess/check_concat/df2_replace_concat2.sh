@@ -1,10 +1,10 @@
 #!/bin/bash
-DE_DIR1=/home/eval/data/DF2/process/de
+RAW_DE_DIR=/home/eval/data/DF2/process/de
 DE_DIR=/home/eval/data/DF2/process/de2
-LOG_DIR=/home/eval/data/DF2/trash/de2/concat
+LOG_DIR=/home/eval/data/DF2/trash/de/concat2
 
 rm -r $DE_DIR
-cp -r $DE_DIR $DE_DIR1
+cp -r $RAW_DE_DIR $DE_DIR
 
 rm -r $LOG_DIR
 mkdir -p $LOG_DIR

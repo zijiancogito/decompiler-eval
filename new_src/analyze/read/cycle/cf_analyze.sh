@@ -3,7 +3,7 @@
 IR_DIR=/home/eval/data/CF/process/ir
 DE_DIR=/home/eval/data/CF/process/de
 SRC_DIR=/home/eval/data/CF/raw/src
-LOG_DIR=/home/eval/data/CF/analyze/cycle
+LOG_DIR=/home/eval/data/CF/analyze/read/cycle
 
 rm -r $LOG_DIR
 mkdir -p $LOG_DIR

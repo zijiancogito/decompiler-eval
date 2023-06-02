@@ -2,7 +2,7 @@ import sys
 
 from tree_sitter import Language, Parser
 import re
-sys.path.append('../../utils/functools')
+sys.path.append('../../../utils/functools')
 from extractFunc import ExtractFuncs
 
 Language.build_library(

@@ -1,7 +1,7 @@
 import sys
 import os
 import re
-sys.path.append('../../utils/functools')
+sys.path.append('../../../utils/functools')
 from extractFunc import ExtractFuncs
 
 def isBranch(line):

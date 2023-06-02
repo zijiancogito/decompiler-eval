@@ -1,0 +1,78 @@
+uint64_t func0(int32_t arg1)
+{
+    int32_t var_10 = f_scanf_nop();
+    int32_t rax_1 = f_scanf_nop();
+    int32_t rax_2 = f_scanf_nop();
+    int32_t rax_3 = f_scanf_nop();
+    int32_t rax_4 = f_scanf_nop();
+    int32_t rax_5 = f_scanf_nop();
+    int32_t rax_6 = f_scanf_nop();
+    int32_t var_2c = f_scanf_nop();
+    int32_t rax_8 = f_scanf_nop();
+    int32_t rax_9 = f_scanf_nop();
+    int32_t var_38 = 0xfffffff9;
+    int32_t var_40 = 0xfffffffe;
+    int32_t rax_11 = (rax_5 | rax_1);
+    f_printf(rax_11);
+    int32_t rax_14 = ((rax_8 | rax_1) * 1);
+    f_printf(rax_14);
+    int32_t rax_15 = (0xa | arg1);
+    int32_t temp2;
+    int32_t temp3;
+    temp2 = HIGHW(((int64_t)rax_9));
+    temp3 = LOWW(((int64_t)rax_9));
+    f_printf(((COMBINE(temp3, temp3) / 0xa) + 2));
+    int32_t temp8;
+    int32_t temp9;
+    temp8 = HIGHW(((int64_t)(1 + rax_6)));
+    temp9 = LOWW(((int64_t)(1 + rax_6)));
+    f_printf((COMBINE(temp9, temp9) / rax_4));
+    int32_t var_2c_2 = (0xa & rax_9);
+    int32_t var_c_1 = (rax_5 ^ rax_2);
+    f_printf(((rax_5 + rax_2) + rax_3));
+    int32_t rax_30 = (rax_11 & rax_5);
+    f_printf(rax_30);
+    int32_t rax_32 = (rax_11 | rax_5);
+    int32_t rax_34 = ((1 | rax_4) | rax_3);
+    f_printf(rax_34);
+    int32_t temp14;
+    int32_t temp15;
+    temp14 = HIGHW(((int64_t)((rax_11 + rax_14) ^ rax_32)));
+    temp15 = LOWW(((int64_t)((rax_11 + rax_14) ^ rax_32)));
+    int32_t temp0_2 = (COMBINE(temp15, temp15) / rax_14);
+    int32_t var_1c_1 = (((rax_11 & rax_3) - rax_30) & 2);
+    int32_t temp20;
+    int32_t temp21;
+    temp20 = HIGHW(((int64_t)((rax_4 + rax_14) ^ rax_15)));
+    temp21 = LOWW(((int64_t)((rax_4 + rax_14) ^ rax_15)));
+    int32_t rax_49 = ((COMBINE(temp21, temp21) / 1) + rax_30);
+    f_printf(rax_49);
+    int32_t rax_51 = (rax_5 & rax_49);
+    int32_t rax_54 = ((rax_30 - temp0_2) - rax_11);
+    int32_t rax_55 = (2 ^ ((COMBINE(temp3, temp3) / 0xa) + 2));
+    f_printf(rax_55);
+    int32_t var_28_2 = (((((COMBINE(temp3, temp3) / 0xa) + 2) * rax_5) ^ rax_55) ^ rax_54);
+    int32_t temp26;
+    int32_t temp27;
+    temp26 = HIGHW(((int64_t)rax_15));
+    temp27 = LOWW(((int64_t)rax_15));
+    int32_t temp32;
+    int32_t temp33;
+    temp32 = HIGHW(((int64_t)(rax_4 - rax_15)));
+    temp33 = LOWW(((int64_t)(rax_4 - rax_15)));
+    int32_t temp0_5 = (COMBINE(temp33, temp33) / rax_5);
+    int32_t var_c_4 = (((rax_51 | ((COMBINE(temp27, temp27) / 2) - (((rax_11 - ((COMBINE(temp3, temp3) / 0xa) + 2)) & rax_54) & rax_34))) * rax_32) - rax_4);
+    int32_t rax_80 = (rax_5 & rax_15);
+    int32_t rax_82 = (temp0_2 - rax_4);
+    f_printf(((rax_2 & ((rax_54 * rax_55) * 1)) ^ rax_11));
+    int32_t temp38;
+    int32_t temp39;
+    temp38 = HIGHW(((int64_t)rax_80));
+    temp39 = LOWW(((int64_t)rax_80));
+    int32_t var_28_4 = (rax_82 & temp0_5);
+    int32_t var_28_6 = (((rax_82 - (rax_51 - rax_54)) + rax_5) - temp0_5);
+    return ((uint64_t)(((((rax_4 | ((COMBINE(temp39, temp39) / temp0_2) * temp0_5)) * rax_80) * rax_15) * rax_80) - rax_15));
+}
+
+
+
