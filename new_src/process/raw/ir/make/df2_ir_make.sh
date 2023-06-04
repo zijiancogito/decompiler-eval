@@ -20,5 +20,3 @@ python3 make.py --opt o3 --ir --src $SRC_ROOT -o $IR_ROOT
 echo "\nCompile Os IRs"
 python3 make.py --opt os --ir --src $SRC_ROOT -o $IR_ROOT
 
-
-

@@ -25,6 +25,22 @@ def count_dir(root_dir, optimizations):
                 print("{0:12}".format(len(files)), end='\t')
             print()
         print()
+        
+def count_ir_dir(root_dir, optimizations):
+
+    print(f"{'-'*30}LLVM IR{'-'*30}")
+    print("{0:15}".format("Optimization"), end='\t')
+    print("{0:12}".format("|O0"), end='\t')
+    print("{0:12}".format("|O1"), end='\t')
+    print("{0:12}".format("|O2"), end='\t')
+    print("{0:12}".format("|O3"), end='\t')
+    print("{0:12}".format("|Os"))
+    for opt_level in optimizations:
+        sub_dir = os.path.join(root_dir, opt_level)
+        files = os.listdir(sub_dir)
+        print("{0:12}".format(len(files)), end='\t')
+
+    print()
                 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='check_null_func.py')
@@ -39,6 +55,9 @@ if __name__ == '__main__':
     elif args.dataset == 'cf':
         optimizations = ['o0']
         count_dir(args.dir, optimizations)
+    elif args.dataset == 'ir':
+        optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
+        count_ir_dir(args.dir, optimizations)
 
                 
                 
