@@ -7,7 +7,7 @@ import argparse
 
 sys.path.append('../')
 import data_load
-sys.path.append('/home/eval/decompiler-eval/new_src/utils/')
+sys.path.append('/home/eval/decompiler-eval/src/utils/')
 import math_tools
 
 

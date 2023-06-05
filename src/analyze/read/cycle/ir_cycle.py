@@ -41,7 +41,7 @@ def get_ir_cycles(ir_file, function_filter):
 
 if __name__ == '__main__':
     llvm_ir = None
-    path = "/home/eval/decompiler-eval/new_src/test/0.ll"
+    path = "/home/eval/decompiler-eval/src/test/0.ll"
     with open(path, 'r') as f:
         llvm_ir = f.read().strip()
 

@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append('/home/eval/decompiler-eval/new_src/utils/exp_tree')
+sys.path.append('/home/eval/decompiler-eval/src/utils/exp_tree')
 import exp_tree
 import json
 

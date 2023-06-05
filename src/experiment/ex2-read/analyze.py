@@ -4,7 +4,7 @@ import argparse
 
 sys.append('..')
 import data_load
-sys.path.append('/home/eval/decompiler-eval/new_src/utils/')
+sys.path.append('/home/eval/decompiler-eval/src/utils/')
 import math_tools
 
 def func_cyclomatic_complexity_of_different_decompilers(root_dir, save_dir):

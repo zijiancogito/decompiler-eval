@@ -96,7 +96,7 @@ def log(log_list, log_file):
 
 if __name__ == '__main__':
     """
-    path = "/home/eval/decompiler-eval/new_src/test/0-de.c"
+    path = "/home/eval/decompiler-eval/src/test/0-de.c"
     errors = clang_check(path)
     parse_err(errors)
     """
