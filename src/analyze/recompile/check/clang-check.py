@@ -1,6 +1,7 @@
 import sys
 import os
 import subprocess
+import shutil
 
 from tqdm import tqdm
 import re
@@ -12,15 +13,18 @@ def clang_check(path):
     extra_opt = "--extra-arg"
     err_lim = "-ferror-limit=10000"
     _chk = subprocess.run(["clang-check", extra_opt, err_lim, opt, path], capture_output=True)
+    # print(_chk.stderr)
+    os.unlink(f'{os.path.splitext({os.path.basename(path)})[0]}.plist')
     return _chk.stderr.decode(encoding='utf8')
     
 def parse_err(err_str):
-    err_pat = r'error: ([^\n]+)'
+    err_pat = r'(error|warning): ([^\n]+)'
     err_msgs = re.finditer(err_pat, err_str)
     err_filter = r'\'[^\n\']*\''
     err_dict = {}
     for e in err_msgs:
-        err_type = re.sub(err_filter, '', e.group(1)).strip()
+        # err_type = re.sub(err_filter, '', e.group(1)).strip()
+        err_type = e.group(2)
         if err_type in err_dict:
             err_dict[err_type] += 1
         else:
@@ -32,16 +36,18 @@ def process_df2(dec_dir, log_dir):
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
     optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
 
-    logs = []
-    errs = {}
-    log_file = os.path.join(log_dir, f"compile-err.csv")
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    for decompiler in decompilers:
+        logs = []
+        errs = {}
+        log_file = os.path.join(log_dir, f"compile-err-{decompiler}.csv")
 
-    for compiler in compilers:
         for opt_level in optimizations:
-            for decompiler in decompilers:
+            for compiler in compilers:
                 dec_files = os.listdir(os.path.join(dec_dir, compiler, opt_level, decompiler))
                 for dec_file in tqdm(dec_files, desc=f"{compiler}-{opt_level}-{decompiler}"):
-                    dec_path = os.path.join(dec_dir, compiler, compiler, opt_level, decompiler, dec_file)
+                    dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
                     
                     err_str = clang_check(dec_path)
                     err_dict = parse_err(err_str)
@@ -51,27 +57,27 @@ def process_df2(dec_dir, log_dir):
                         else:
                             errs[err_type] = err_dict[err_type]
                 
-    for err_type in errs:
-        logs.append(f"{err_type}\t{errs[err_type]}")
-        print(f"{err_type}\t{errs[err_type]}")
-    log(logs, log_file)
+        for err_type in errs:
+            logs.append(f"{err_type}\t{errs[err_type]}")
+            print(f"{err_type}\t{errs[err_type]}")
+        log(logs, log_file)
 
 def process_cf(dec_dir, log_dir):
     compilers = ['clang', 'gcc']
     decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
     optimizations = ['o0']
-    
-    log_file = os.path.join(log_dir, f"compile-err-{decompiler}.csv")
-    logs = []
-    errs = {}
-
-    for compiler in compilers:
-        for opt_level in optimizations:
-            for decompiler in decompilers:
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    for decompiler in decompilers:
+        log_file = os.path.join(log_dir, f"compile-err-{decompiler}.csv")
+        logs = []
+        errs = {}
+        for compiler in compilers:
+            for opt_level in optimizations:
                 dec_files = os.listdir(os.path.join(dec_dir, compiler, opt_level, decompiler))
 
                 for dec_file in tqdm(dec_files, desc=f"{compiler}-{opt_level}-{decompiler}"):
-                    dec_path = os.path.join(dec_dir, compiler, compiler, opt_level, decompiler, dec_file)
+                    dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
                     
                     err_str = clang_check(dec_path)
                     err_dict = parse_err(err_str)
@@ -81,10 +87,10 @@ def process_cf(dec_dir, log_dir):
                         else:
                             errs[err_type] = err_dict[err_type]
                 
-    for err_type in errs:
-        logs.append(f"{err_type}\t{errs[err_type]}")
-        print(f"{err_type}\t{errs[err_type]}")
-    log(logs, log_file)
+        for err_type in errs:
+            logs.append(f"{err_type}\t{errs[err_type]}")
+            print(f"{err_type}\t{errs[err_type]}")
+        log(logs, log_file)
     
 # def process_poj
 
