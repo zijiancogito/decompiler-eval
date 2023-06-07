@@ -19,3 +19,8 @@ NULL_FUNC_LOG_DIR=/home/eval/data/POJ/trash/de/null-func/
 rm -r $NULL_FUNC_LOG_DIR
 mkdir -p $NULL_FUNC_LOG_DIR
 python3 check_null_func.py -D cf -d $DE_DIR -l $NULL_FUNC_LOG_DIR
+
+
+echo "--------------------------------------------------------------------\n"
+echo "Change the extension of files from .txt to .c"
+python3 ./decompile/preprocess/change_ext/change_ext.py -D poj -d $DE_DIR

@@ -20,10 +20,10 @@
 --main
 --no-math64
 --no-inline-function
---max-block-depth 10
---max-block-size 5
+--max-block-depth 2
+--max-block-size 2
 --max-expr-complexity 2
---max-funcs 100
+--max-funcs 1
 --max-pointer-depth 0
 --max-struct-fields 0
 --max-union-fields 0

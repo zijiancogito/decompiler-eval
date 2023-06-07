@@ -13,8 +13,7 @@ def clang_check(path):
     extra_opt = "--extra-arg"
     err_lim = "-ferror-limit=10000"
     _chk = subprocess.run(["clang-check", extra_opt, err_lim, opt, path], capture_output=True)
-    # print(_chk.stderr)
-    os.unlink(f'{os.path.splitext({os.path.basename(path)})[0]}.plist')
+    os.unlink(f'{os.path.splitext(os.path.basename(path))[0]}.plist')
     return _chk.stderr.decode(encoding='utf8')
     
 def parse_err(err_str):
@@ -31,17 +30,13 @@ def parse_err(err_str):
             err_dict[err_type] = 1
     return err_dict
 
-def process_df2(dec_dir, log_dir):
-    compilers = ['clang', 'gcc']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-
+def check_all(compilers, decompilers, optimizations, dec_dir, log_dir):
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
     for decompiler in decompilers:
         logs = []
         errs = {}
-        log_file = os.path.join(log_dir, f"compile-err-{decompiler}.csv")
+        log_file = os.path.join(log_dir, f"raw-compile-err-{decompiler}.csv")
 
         for opt_level in optimizations:
             for compiler in compilers:
@@ -50,49 +45,9 @@ def process_df2(dec_dir, log_dir):
                     dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
                     
                     err_str = clang_check(dec_path)
-                    err_dict = parse_err(err_str)
-                    for err_type in err_dict:
-                        if err_type in errs:
-                            errs[err_type] += err_dict[err_type]
-                        else:
-                            errs[err_type] = err_dict[err_type]
-                
-        for err_type in errs:
-            logs.append(f"{err_type}\t{errs[err_type]}")
-            print(f"{err_type}\t{errs[err_type]}")
+                    logs.append(err_str)
         log(logs, log_file)
 
-def process_cf(dec_dir, log_dir):
-    compilers = ['clang', 'gcc']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    optimizations = ['o0']
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-    for decompiler in decompilers:
-        log_file = os.path.join(log_dir, f"compile-err-{decompiler}.csv")
-        logs = []
-        errs = {}
-        for compiler in compilers:
-            for opt_level in optimizations:
-                dec_files = os.listdir(os.path.join(dec_dir, compiler, opt_level, decompiler))
-
-                for dec_file in tqdm(dec_files, desc=f"{compiler}-{opt_level}-{decompiler}"):
-                    dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
-                    
-                    err_str = clang_check(dec_path)
-                    err_dict = parse_err(err_str)
-                    for err_type in err_dict:
-                        if err_type in errs:
-                            errs[err_type] += err_dict[err_type]
-                        else:
-                            errs[err_type] = err_dict[err_type]
-                
-        for err_type in errs:
-            logs.append(f"{err_type}\t{errs[err_type]}")
-            print(f"{err_type}\t{errs[err_type]}")
-        log(logs, log_file)
-    
-# def process_poj
 
 def log(log_list, log_file):
     with open(log_file, 'w') as f:
@@ -107,16 +62,14 @@ if __name__ == '__main__':
     parse_err(errors)
     """
     parser = argparse.ArgumentParser(prog='clang-check.py')
-    parser.add_argument('-D', '--dataset', choices=['df2', 'cf', 'poj'], type=str, help='Datasets')
+    # parser.add_argument('-D', '--dataset', choices=['df2', 'cf', 'poj'], type=str, help='Datasets')
     parser.add_argument('-d', '--dec', type=str, help='dir of DEC')
     parser.add_argument('-l', '--log', type=str, help='log dir')
+    parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+    parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+    parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
 
     args = parser.parse_args()
 
-    if args.dataset == 'df2':
-        process_df2(args.dec, args.log)
-    elif args.dataset == 'cf':
-        process_cf(args.dec, args.log)
-    elif args.dataset == 'poj':
-        process_df2(args.dec, args.log)
+    check_all(args.compilers, args.decompilers, args.optimizations, args.dec, args.log)
     

@@ -128,4 +128,8 @@ DE_DIR2=/home/eval/data/DF2/process/de2
 python3 check_concat.py -d df2 -i $DE_DIR1 -o check
 python3 check_concat.py -d df2 -i $DE_DIR2 -o check
 
+echo "--------------------------------------------------------------------\n"
+echo "Change the extension of files from .txt to .c"
+python3 ./decompile/preprocess/change_ext/change_ext.py -D df2 -d $DE_DIR_1
+python3 ./decompile/preprocess/change_ext/change_ext.py -D df2 -d $DE_DIR_2
 
