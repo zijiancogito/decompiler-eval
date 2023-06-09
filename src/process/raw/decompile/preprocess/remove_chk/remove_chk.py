@@ -36,43 +36,10 @@ def rewrite(file_path, new_content):
     with open(file_path, 'w') as f:
         f.write(new_content)
 
-def check_df2(de_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-
+def replace_all(de_dir, optimizations, decompilers, compilers):
     for compiler in compilers:
         for opt_level in optimizations:
             for decompiler in decompilers:
-                # log_sub_dir = os.path.join(log_dir, compiler, opt_level)
-                # if not os.path.exists(log_sub_dir):
-                    # os.makedirs(log_sub_dir)
-                # log_file = os.path.join(log_sub_dir, f"{decompiler}.csv")
-
-                des = os.listdir(os.path.join(de_dir, compiler, opt_level, decompiler))
-                logs = []
-                print(f"Checking {compiler} {opt_level} {decompiler} ...")
-                for de_file in tqdm(des):
-                    de_path = os.path.join(de_dir, compiler, opt_level, decompiler, de_file)
-                    new_func = check_chk(de_path)
-                    if new_func != None:
-                        rewrite(de_path, new_func)
-                        logs.append(de_file)
-                print(f"{len(logs)}/{len(des)} files have been rewritten")
-                   
-def check_cf(de_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    
-    for compiler in compilers:
-        for opt_level in optimizations:
-            for decompiler in decompilers:
-                # log_sub_dir = os.path.join(log_dir, compiler, opt_level)
-                # if not os.path.exists(log_sub_dir):
-                    # os.makedirs(log_sub_dir)
-                # log_file = os.path.join(log_sub_dir, f"{decompiler}.csv")
-
                 des = os.listdir(os.path.join(de_dir, compiler, opt_level, decompiler))
                 logs = []
                 print(f"Checking {compiler} {opt_level} {decompiler} ...")
@@ -84,26 +51,16 @@ def check_cf(de_dir):
                         logs.append(de_file)
                 print(f"{len(logs)}/{len(des)} files have been rewritten")
 
-def check(de_dir, optimizations):
-    compilers = ['clang', 'gcc']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    
+def check_all(de_dir, optimizations, decompilers, compilers):
     for compiler in compilers:
         print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
         print("{0:15}".format("Optimization"), end='\t')
-        print("{0:12}".format("|Angr"), end='\t')
-        print("{0:12}".format("|BinaryNinja"), end='\t')
-        print("{0:12}".format("|Ghidra"), end='\t')
-        print("{0:12}".format("|Hex-Rays"), end='\t')
-        print("{0:12}".format("|RetDec"))
+        for decompiler in decompilers:
+            print("{0:12}".format(decompiler), end='\t')
+        print()
         for opt_level in optimizations:
             print("{0:15}".format(opt_level), end='\t')
             for decompiler in decompilers:
-                # log_sub_dir = os.path.join(log_dir, compiler, opt_level)
-                # if not os.path.exists(log_sub_dir):
-                    # os.makedirs(log_sub_dir)
-                # log_file = os.path.join(log_sub_dir, f"{decompiler}.csv")
-
                 des = os.listdir(os.path.join(de_dir, compiler, opt_level, decompiler))
                 logs = []
                 for de_file in des:
@@ -130,22 +87,16 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='remove_chk.py')
 
     parser.add_argument('-i', '--dec', type=str, help='raw dec file dir')
-    # parser.add_argument('-l', '--log', type=str, help='log file dir')
-    parser.add_argument('-d', '--dataset', type=str, choices=['df2', 'cf'], help="Dataset")
+    # parser.add_argument('-d', '--dataset', type=str, choices=['df2', 'cf'], help="Dataset")
     parser.add_argument('-o', '--option', type=str, choices=['check', 'replace'], help="Option")
+    parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+    parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+    parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
 
     args = parser.parse_args()
 
     if args.option == 'replace':
-        if args.dataset == 'df2':
-            check_df2(args.dec)
-        elif args.dataset == 'cf':
-            check_cf(args.dec)
+        replace_all(args.dec, args.optimizations, args.decompilers, args.compilers)
     elif args.option == 'check':
-        if args.dataset == 'df2':
-            optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-            check(args.dec, optimizations)
-        elif args.dataset == 'cf':
-            optimizations = ['o0']
-            check(args.dec, optimizations)
+        check_all(args.dec, args.optimizations, args.decompilers, args.compilers)
 

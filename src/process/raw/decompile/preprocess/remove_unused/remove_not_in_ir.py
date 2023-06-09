@@ -3,9 +3,9 @@ import os
 import argparse
 from tqdm import tqdm
 
-def check(dec_dir, ir_dir, optimizations):
-    compilers = ['clang', 'gcc']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
+def check(dec_dir, ir_dir, optimizations, decompilers, compilers):
+    # compilers = ['clang', 'gcc']
+    # decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
     for compiler in compilers:
         for opt_level in optimizations:
             ir_files = [f.split('.')[0] for f in os.listdir(os.path.join(ir_dir, opt_level))]
@@ -27,13 +27,12 @@ if __name__ == '__main__':
 
     parser.add_argument('-i', '--ir', type=str, help='ir file dir')
     parser.add_argument('-d', '--dec', type=str, help='dec file dir')
-    parser.add_argument('-D', '--dataset', type=str, choices=['df2', 'cf'], help="Dataset")
+    # parser.add_argument('-D', '--dataset', type=str, choices=['df2', 'cf'], help="Dataset")
+    parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+    parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+    parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
+    
 
     args = parser.parse_args()
     
-    if args.dataset == 'df2':
-        optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-        check(args.dec, args.ir, optimizations)
-    elif args.dataset == 'cf':
-        optimizations = ['o0']
-        check(args.dec, args.ir, optimizations)
+    check(args.dec, args.ir, args.optimizations, args.decompilers, args.compilers)

@@ -18,23 +18,11 @@ def change_all(compilers, decompilers, optimizations, de_dir):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='change_ext.py')
-    parser.add_argument('-D', '--dataset', choices=['df2', 'cf', 'poj'], type=str, help='Datasets')
     parser.add_argument('-d', '--dec', type=str, help='execution results of DEC')
+    parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+    parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+    parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
     
     args = parser.parse_args()
 
-    if args.dataset == 'df2':
-        compilers = ['clang', 'gcc']
-        decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-        optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-        change_all(compilers, decompilers, optimizations, args.dec)
-    elif args.dataset == 'cf':
-        compilers = ['clang', 'gcc']
-        decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-        optimizations = ['o0']
-        change_all(compilers, decompilers, optimizations, args.dec)
-    elif args.dataset == 'poj':
-        compilers = ['clang', 'gcc']
-        decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-        optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-        change_all(compilers, decompilers, optimizations, args.dec)
+    change_all(args.compilers, args.decompilers, args.optimizations, args.dec)

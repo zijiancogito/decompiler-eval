@@ -1,12 +1,16 @@
 #!/bin/bash
+#
+DECOMPILERS="angr BinaryNinja Ghidra Hex-Rays RetDec"
+COMPILERS="clang gcc"
+OPTIMIZATIONS="o0"
 
 echo "--------------------------------------------------------------------\n"
 echo "Checking Decompiling ERRORS"
 RAW_DE_DIR=/home/eval/data/CF/raw/de
 ERR_LOG_DIR=/home/eval/data/CF/trash/de/err
 rm -r $ERR_LOG_DIR
-python3 ./decompile/preprocess/check_err/check_err.py -o check -D cf -d $RAW_DE_DIR -l $ERR_LOG_DIR
-python3 ./decompile/preprocess/check_err/check_err.py -o print -D cf -l $ERR_LOG_DIR
+python3 ./decompile/preprocess/check_err/check_err.py -o check -d $RAW_DE_DIR -l $ERR_LOG_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS
+python3 ./decompile/preprocess/check_err/check_err.py -o print -l $ERR_LOG_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS
 
 echo "--------------------------------------------------------------------\n"
 echo "Extract func_1 from decompiling results\n"
@@ -30,7 +34,7 @@ do
             do
                 data_path=$datas_path/$file
                 python3 ./decompile/preprocess/extractFunc/extractFunc.py -s $data_path -o $save_to -e $err_file -f func_1 >/dev/null
-                echo Over: $data_path
+                # echo Over: $data_path
             done
         done
     done
@@ -39,15 +43,15 @@ done
 echo "--------------------------------------------------------------------\n"
 echo "Remove files not in IR.\n"
 IR_DIR=/home/eval/data/CF/process/ir
-python3 ./decompile/preprocess/remove_unused/remove_not_in_ir.py -d $DE_DIR -i $IR_DIR -D cf
+python3 ./decompile/preprocess/remove_unused/remove_not_in_ir.py -d $DE_DIR -i $IR_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS
 
 echo "--------------------------------------------------------------------\n"
 echo "Check Number of NULL FUNC"
 NULL_FUNC_LOG_DIR=/home/eval/data/CF/trash/de/null-func/
 rm -r $NULL_FUNC_LOG_DIR
 mkdir -p $NULL_FUNC_LOG_DIR
-python3 ./decompile/preprocess/extractFunc/check_null_func.py -D cf -d $DE_DIR -l $NULL_FUNC_LOG_DIR
+python3 ./decompile/preprocess/extractFunc/check_null_func.py -d $DE_DIR -l $NULL_FUNC_LOG_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS -t cf
 
 echo "--------------------------------------------------------------------\n"
 echo "Change the extension of files from .txt to .c"
-python3 ./decompile/preprocess/change_ext/change_ext.py -D cf -d $DE_DIR
+python3 ./decompile/preprocess/change_ext/change_ext.py -d $DE_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS

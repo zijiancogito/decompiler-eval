@@ -42,11 +42,7 @@ def check_dir(de_dir, move_to):
     decompiler = os.path.basename(move_to)
     log(hasIfs, os.path.join(log_dir, f"{decompiler}.log"))
 
-def check_all(de_dir, move_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-
+def replace_all(de_dir, move_dir, optimizations, decompilers, compilers):
     for compiler in compilers:
         for opt_level in optimizations:
             for decompiler in decompilers:
@@ -55,19 +51,13 @@ def check_all(de_dir, move_dir):
                 check_dir(de_sub_dir, move_sub_dir)
                 print()
                 
-def check(de_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-
+def check_all(de_dir, optimizations, decompilers, compilers):
     for compiler in compilers:
         print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
         print("{0:15}".format("Optimization"), end='\t')
-        print("{0:12}".format("|Angr"), end='\t')
-        print("{0:12}".format("|BinaryNinja"), end='\t')
-        print("{0:12}".format("|Ghidra"), end='\t')
-        print("{0:12}".format("|Hex-Rays"), end='\t')
-        print("{0:12}".format("|RetDec"))
+        for decompiler in decompilers:
+            print("{0:12}".format(decompiler), end='\t')
+        print()
         for opt_level in optimizations:
             print("{0:15}".format(opt_level), end='\t')
             for decompiler in decompilers:
@@ -89,11 +79,14 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--dec', type=str, help='raw dec file dir')
     parser.add_argument('-l', '--log', type=str, help='path to save file with IF')
     parser.add_argument('-o', '--option', type=str, choices=['check', 'replace'], help='Option')
+    parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+    parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+    parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
 
     args = parser.parse_args()
 
     if args.option == 'replace':
-        check_all(args.dec, args.log)
+        replace_all(args.dec, args.log, args.optimizations, args.decompilers, args.compilers)
     elif args.option == 'check':
-        check(args.dec)
+        check_all(args.dec, args.optimizations, args.decompilers, args.compilers)
 

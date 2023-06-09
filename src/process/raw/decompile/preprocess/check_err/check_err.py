@@ -24,9 +24,9 @@ def check_err_type(path):
             err_dict[err] += 1
     return err_dict, len(err_logs)
 
-def print_err_types(log_dir, optimizations):
-    compilers = ['clang', 'gcc']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
+def print_err_types(log_dir, optimizations, decompilers, compilers):
+    # compilers = ['clang', 'gcc']
+    # decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
 
     for compiler in compilers:
         for opt_level in optimizations:
@@ -42,18 +42,16 @@ def print_err_types(log_dir, optimizations):
             print()
         print()
 
-def check_all(de_dir, log_dir, optimizations):
-    compilers = ['clang', 'gcc']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
+def check_all(de_dir, log_dir, optimizations, decompilers, compilers):
+    # compilers = ['clang', 'gcc']
+    # decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
 
     for compiler in compilers:
         print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
         print("{0:15}".format("Optimization"), end='\t')
-        print("{0:12}".format("|Angr"), end='\t')
-        print("{0:12}".format("|BinaryNinja"), end='\t')
-        print("{0:12}".format("|Ghidra"), end='\t')
-        print("{0:12}".format("|Hex-Rays"), end='\t')
-        print("{0:12}".format("|RetDec"))
+        for decompiler in decompilers:
+            print("{0:12}".format(decompiler), end='\t')
+        print()
         for opt_level in optimizations:
             log_sub_dir = os.path.join(log_dir, compiler, opt_level)
             if not os.path.exists(log_sub_dir):
@@ -86,24 +84,17 @@ def log(logs, log_file):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='check_err.py')
     parser.add_argument('-o', '--option', choices=['check', 'print'], type=str, help='Options')
-    parser.add_argument('-D', '--dataset', choices=['df2', 'cf'], type=str, help='Datasets')
+    # parser.add_argument('-D', '--dataset', choices=['df2', 'cf'], type=str, help='Datasets')
     parser.add_argument('-d', '--dec', type=str, help='execution results of DEC')
     parser.add_argument('-l', '--log', type=str, help='log dir')
+    parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+    parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+    parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
     
     args = parser.parse_args()
 
     if args.option == 'check':
-        if args.dataset == 'df2':
-            optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-            check_all(args.dec, args.log, optimizations)
-        elif args.dataset == 'cf':
-            optimizations = ['o0']
-            check_all(args.dec, args.log, optimizations)
+        check_all(args.dec, args.log, args.optimizations, args.decompilers, args.compilers)
     elif args.option == 'print':
-        if args.dataset == 'df2':
-            optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-            print_err_types(args.log, optimizations)
-        elif args.dataset == 'cf':
-            optimizations = ['o0']
-            print_err_types(args.log, optimizations)
+        print_err_types(args.log, args.optimizations, args.decompilers, args.compilers)
              

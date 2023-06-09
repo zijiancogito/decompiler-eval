@@ -58,7 +58,7 @@ do
 done
 
 echo "Count files"
-python3 count_files.py -D df2 -d $DE_SE_DIR_1
+python3 ./de_se/count_files.py -D df2 -d $DE_SE_DIR_1
 
 # echo "Check symbolic execution results"
 # DE_CHK_LOG_DIR_1=/home/eval/DF2/se/de/check_log1/

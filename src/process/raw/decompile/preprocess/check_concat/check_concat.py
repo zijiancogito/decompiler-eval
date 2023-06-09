@@ -228,19 +228,13 @@ def check_file(dec_file):
             flag = True
     return flag
             
-def replace_all(de_dir, log_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-
+def replace_all(de_dir, log_dir, optimizations, decompilers, compilers):
     for compiler in compilers:
         print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
         print("{0:15}".format("Optimization"), end='\t')
-        print("{0:12}".format("|Angr"), end='\t')
-        print("{0:12}".format("|BinaryNinja"), end='\t')
-        print("{0:12}".format("|Ghidra"), end='\t')
-        print("{0:12}".format("|Hex-Rays"), end='\t')
-        print("{0:12}".format("|RetDec"))
+        for decompiler in decompilers:
+            print("{0:12}".format(decompiler), end='\t')
+        print()
         for opt_level in optimizations:
             log_sub_dir = os.path.join(log_dir, compiler, opt_level)
             if not os.path.exists(log_sub_dir):
@@ -268,19 +262,13 @@ def replace_all(de_dir, log_dir):
             print()
         print()
         
-def replace_all2(de_dir, log_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-
+def replace_all2(de_dir, log_dir, optimizations, decompilers, compilers):
     for compiler in compilers:
         print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
         print("{0:15}".format("Optimization"), end='\t')
-        print("{0:12}".format("|Angr"), end='\t')
-        print("{0:12}".format("|BinaryNinja"), end='\t')
-        print("{0:12}".format("|Ghidra"), end='\t')
-        print("{0:12}".format("|Hex-Rays"), end='\t')
-        print("{0:12}".format("|RetDec"))
+        for decompiler in decompilers:
+            print("{0:12}".format(decompiler), end='\t')
+        print()
         for opt_level in optimizations:
             log_sub_dir = os.path.join(log_dir, compiler, opt_level)
             if not os.path.exists(log_sub_dir):
@@ -309,19 +297,13 @@ def replace_all2(de_dir, log_dir):
         print()
 
         
-def check_all(de_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-
+def check_all(de_dir, optimizations, decompilers, compilers):
     for compiler in compilers:
         print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
         print("{0:15}".format("Optimization"), end='\t')
-        print("{0:12}".format("|Angr"), end='\t')
-        print("{0:12}".format("|BinaryNinja"), end='\t')
-        print("{0:12}".format("|Ghidra"), end='\t')
-        print("{0:12}".format("|Hex-Rays"), end='\t')
-        print("{0:12}".format("|RetDec"))
+        for decompiler in decompilers:
+            print("{0:12}".format(decompiler), end='\t')
+        print()
         for opt_level in optimizations:
             print("{0:15}".format(opt_level), end='\t')
 
@@ -360,15 +342,17 @@ if __name__ == '__main__':
 
     parser.add_argument('-i', '--dec', type=str, help='raw dec file dir')
     parser.add_argument('-l', '--log', type=str, help='log file dir')
-    parser.add_argument('-d', '--dataset', type=str, choices=['df2', 'cf'], help="Dataset")
     parser.add_argument('-o', '--option', type=str, choices=['check', 'replace', 'replace2'], help="Option")
+    parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+    parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+    parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
 
     args = parser.parse_args()
     if args.option == 'check':
-        check_all(args.dec)
+        check_all(args.dec, args.optimizations, args.decompilers, args.compilers)
     elif args.option == 'replace':
-        replace_all(args.dec, args.log)
+        replace_all(args.dec, args.log, args.optimizations, args.decompilers, args.compilers)
     elif args.option == 'replace2':
-        replace_all(args.dec, args.log)
+        replace_all(args.dec, args.log, args.optimizations, args.decompilers, args.compilers)
 
     # COMBINE((((COMBINE(temp3, temp3) / rcx_1) & 3) ^ 2), (((COMBINE(temp3, temp3) / rcx_1) & 3) ^ 2)) / r15

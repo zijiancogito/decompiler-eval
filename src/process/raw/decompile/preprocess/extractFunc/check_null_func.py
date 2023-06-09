@@ -10,18 +10,15 @@ def isNullFunc(path, null_template):
             check_flag = True
     return check_flag
   
-def check_all(de_dir, log_dir, optimizations, null_template):
-    compilers = ['clang', 'gcc']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-
+def check_all(de_dir, log_dir, optimizations, null_template, decompilers, compilers):
+    # compilers = ['clang', 'gcc']
+    # decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
     for compiler in compilers:
         print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
         print("{0:15}".format("Optimization"), end='\t')
-        print("{0:12}".format("|Angr"), end='\t')
-        print("{0:12}".format("|BinaryNinja"), end='\t')
-        print("{0:12}".format("|Ghidra"), end='\t')
-        print("{0:12}".format("|Hex-Rays"), end='\t')
-        print("{0:12}".format("|RetDec"))
+        for decompiler in decompilers:
+            print("{0:12}".format(decompiler), end='\t')
+        print()
         for opt_level in optimizations:
             print("{0:15}".format(opt_level), end='\t')
             log_sub_dir = os.path.join(log_dir, compiler, opt_level)
@@ -51,19 +48,17 @@ def log(logs, log_file):
         for line in logs:
             f.write(f"{line}\n")
 
+df2_template = r"void func0\(\) \{\}"
+cf_template = r"void func_1\(\) \{\}"
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='check_null_func.py')
-    parser.add_argument('-D', '--dataset', choices=['df2', 'cf'], type=str, help='Datasets')
+    parser.add_argument('-t', '--template', choices=['df2', 'cf', 'poj'], type=str, help='Datasets')
     parser.add_argument('-d', '--dec', type=str, help='execution results of DEC')
     parser.add_argument('-l', '--log', type=str, help="Log")
+    parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+    parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+    parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
     
     args = parser.parse_args()
 
-    if args.dataset == 'df2':
-        optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-        template = r"void func0\(\) \{\}"
-        check_all(args.dec, args.log, optimizations, template)
-    elif args.dataset == 'cf':
-        optimizations = ['o0']
-        template = r"void func_1\(\) \{\}"
-        check_all(args.dec, args.log, optimizations, template)
+    check_all(args.dec, args.log, args.optimizations, args.template, args.decompilers, args.compilers)
