@@ -2,17 +2,17 @@ import sys
 
 from tree_sitter import Language, Parser
 import re
-sys.path.append('../../../utils/functools')
+sys.path.append('/home/eval/decompiler-eval/src/utils/functools')
 from extractFunc import ExtractFuncs
 
 Language.build_library(
-        'build/c-language.so',
+        '/home/eval/decompiler-eval/src/analyze/read/var/build/c-language.so',
         [
             '/home/eval/decompiler-eval/src/utils/tree-sitter/vendor/tree-sitter-c',
         ]
 )
 
-C = Language('build/c-language.so', 'c')
+C = Language('/home/eval/decompiler-eval/src/analyze/read/var/build/c-language.so', 'c')
 
 c_parser = Parser()
 c_parser.set_language(C)

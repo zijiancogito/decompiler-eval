@@ -1,7 +1,7 @@
 import sys
 import os
 import re
-sys.path.append('../../../utils/functools')
+sys.path.append('/home/eval/decompiler-eval/src/utils/functools')
 from extractFunc import ExtractFuncs
 
 def isValid(line):

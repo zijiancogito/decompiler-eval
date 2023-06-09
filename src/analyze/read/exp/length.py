@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../../../utils/functools')
+sys.path.append('/home/eval/decompiler-eval/src/utils/functools')
 from extractFunc import ExtractFuncs
 
 
@@ -11,6 +11,7 @@ def function_exp_len(function):
             exp_dict[l_len] += 1
         else:
             exp_dict[l_len] = 1
+    return exp_dict
             
 def get_c_exp_len(code_file, functions=['func0']):
     extract_func = ExtractFuncs()

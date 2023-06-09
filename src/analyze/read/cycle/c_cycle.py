@@ -1,7 +1,7 @@
 import sys
 import os
 import re
-sys.path.append('../../../utils/functools')
+sys.path.append('/home/eval/decompiler-eval/src/utils/functools')
 from extractFunc import ExtractFuncs
 
 def isBranch(line):
@@ -27,15 +27,14 @@ def function_cycles(function):
             conds += 1
     return conds + 1
 
-def get_c_cycles(code_file, function_filter):
+def get_c_cycles(code_file, func_filter):
     extract_func = ExtractFuncs()
     funcs, funcs_name = extract_func.getFuncs(code_file)
     
     cycles = {}
 
     for fname, fcode in zip(funcs_name, funcs):
-        if function_filter != "" and not re.match(function_filter, fname):
+        if len(func_filter) != 0 and not fname not in func_filter:
             continue
         cycles[fname] = function_cycles(fcode)
-            
     return cycles

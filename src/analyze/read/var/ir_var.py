@@ -24,18 +24,14 @@ def get_vars_from_file(code_file, functions=['func0']):
     return vars
 
 def get_var_count(function):
-    last_block = None
-    for block in function.blocks:
-        last_block = block
-    if last_block == None:
-        return 0
     last_var = None
-    for insn in last_block.instructions:
-        pat = '\%([\S]+) [\S\s]+'
-        mat = re.match(pat, str(insn).strip())
-        if not mat:
-            continue
-        last_var = int(mat.groups(1)[0])
+    for block in function.blocks:
+        for insn in block.instructions:
+            pat = '\%([\S]+) [\S\s]+'
+            mat = re.match(pat, str(insn).strip())
+            if not mat:
+                continue
+            last_var = int(mat.groups(1)[0])
 
     if last_var == None:
         return 0

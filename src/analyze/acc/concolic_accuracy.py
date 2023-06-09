@@ -72,4 +72,3 @@ if __name__ == '__main__':
 
     if args.dataset == 'df2':
         process_df2(args.ir, args.dec, args.log)
-

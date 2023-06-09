@@ -22,7 +22,7 @@ def function_cycles(function):
     cycles = len(G.edges) - len(G.nodes) + 2
     return cycles
     
-def get_ir_cycles(ir_file, function_filter):
+def get_ir_cycles(ir_file, func_filter):
     llvm_ir = None
     with open(ir_file, 'r') as f:
         llvm_ir = f.read().strip()
@@ -32,12 +32,10 @@ def get_ir_cycles(ir_file, function_filter):
     
     cycles = {}
     for function in mod.functions:
-        if function_filter != "" and not re.match(function_filter, function.name):
+        if len(func_filter) != 0 and function.name not in func_filter:
             continue
         cycles[function.name] = function_cycles(function)
-            
     return cycles
-            
 
 if __name__ == '__main__':
     llvm_ir = None
