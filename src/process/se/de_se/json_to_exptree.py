@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../../../utils/exp_tree')
+sys.path.append('/home/eval/decompiler-eval/src/utils/exp_tree')
 import copy
 from exp_tree import *
 

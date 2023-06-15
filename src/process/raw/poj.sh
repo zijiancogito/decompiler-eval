@@ -1,13 +1,13 @@
-#!/bin/bash
+#!/bin/bash -v
 
-mkdir -p /home/eval/data/POJ/raw
-RAW_SRC=/home/eval/trash/POJ/ds1
+# mkdir -p /home/eval/data/POJ/raw
+# RAW_SRC=/home/eval/trash/POJ/ds1
 NEW_SRC=/home/eval/data/POJ/raw/src/
 
-rm -r $NEW_SRC
-mkdir -p $NEW_SRC
+# rm -r $NEW_SRC
+# mkdir -p $NEW_SRC
 
-python3 ./code_gen/poj/move_files.py --src $RAW_SRC --to $NEW_SRC
+# python3 ./code_gen/poj/move_files.py --src $RAW_SRC --to $NEW_SRC
 
 BIN_ROOT=/home/eval/data/POJ/raw/bin
 rm -r $BIN_ROOT

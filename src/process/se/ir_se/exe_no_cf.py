@@ -8,7 +8,7 @@ import json
 
 from instruction import execution_instruction
 
-sys.path.append('../../../utils/exp_tree/')
+sys.path.append('/home/eval/decompiler-eval/src/utils/exp_tree/')
 from exp_tree import ExpTree, copy_tree, exptree_to_json
 
 llvm.initialize()

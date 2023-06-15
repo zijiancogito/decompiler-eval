@@ -16,15 +16,16 @@ def compile_ir(opt_level, src_path, save_to):
         c_path = os.path.join(src_path, c)
         c_name = os.path.splitext(c)[0]
         ll_path = os.path.join(save_to, c_name+'.ll')
-        cmd = f'clang -{opt_level.capitalize()} -lm -emit-llvm ' + c_path + ' -S -o ' + ll_path
+        cmd = f'clang -{opt_level.capitalize()} -emit-llvm ' + c_path + ' -S -o ' + ll_path + ' -lm'
         with subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
             stdout, stderr = p.communicate()
             stderr = stderr.decode('ISO-8859-1')
             if ('error' in stderr):
-                with open(f'err_{opt_level}_ir.csv', 'a') as f:
-                    row = [c_path]
-                    write = csv.writer(f)
-                    write.writerow(row)
+                print(c_path, stderr)
+                # with open(f'err_{opt_level}_ir.csv', 'a') as f:
+                    # row = [c_path]
+                    # write = csv.writer(f)
+                    # write.writerow(row)
                 # print(f'{opt_level}-ir-Error: ', c_path)
             else:
                 cnt += 1
@@ -41,16 +42,16 @@ def compile_bin(opt_level, compiler, src_path, save_to):
         c_path = os.path.join(src_path, c)
         c_name = os.path.splitext(c)[0]
         binary_path = os.path.join(save_to, c_name)
-        cmd = f'{compiler} -{opt_level.capitalize()} -lm ' + c_path + ' -o ' + binary_path
+        cmd = f'{compiler} -{opt_level.capitalize()} ' + c_path + ' -o ' + binary_path + ' -lm'
         with subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
             stdout, stderr = p.communicate()
             stderr = stderr.decode('ISO-8859-1')
             if ('error' in stderr):
-                print(stderr)
-                with open(f'err_{opt_level}_c.csv', 'a') as f:
-                    row = [c_path]
-                    write = csv.writer(f)
-                    write.writerow(row)
+                print(c_path, stderr)
+                # with open(f'err_{opt_level}_c.csv', 'a') as f:
+                    # row = [c_path]
+                    # write = csv.writer(f)
+                    # write.writerow(row)
                 # print(f'{opt_level}-c-Error: ', c_path)
             else:
                 cnt += 1

@@ -34,7 +34,7 @@ def dump_to_file(save_to, paths):
 
 
 def symbolic_execution(de_file, exp):
-    dese = cdll.LoadLibrary("./se/libse.so")
+    dese = cdll.LoadLibrary("/home/eval/decompiler-eval/src/process/se/de_se/se/libse.so")
     run_se = dese.process
     run_se.argtypes = [POINTER(c_char), c_int]
     run_se.restype = c_char_p

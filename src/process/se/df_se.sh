@@ -1,5 +1,9 @@
 #!/bin/bash
 
+COMPILERS="clang gcc"
+DECOMPILERS="angr BinaryNinja Ghidra Hex-Rays RetDec"
+OPTIMIZATIONS="o0 o1 o2 o3 os"
+
 IR_DIR=/home/eval/data/DF2/process/ir
 IR_SE_DIR=/home/eval/data/DF2/se/ir
 IR_SE_LOG_FILE=/home/eval/data/DF2/se/trash/ir/exe_fail
@@ -45,8 +49,7 @@ do
             for file in `ls $de_dir`
             do
                 de_file=$de_dir/$file
-		echo $de_file
-                python3 de_se.py -e df2 -i $de_file -o $se_dir -l $err_log_file
+                python3 ./de_se/de_se.py -e df2 -i $de_file -o $se_dir -l $err_log_file
                 let i=i+1
                 let num=i*100/l
                 str=$(seq -s "#" $num | tr -d "[:digit:]")
@@ -95,8 +98,7 @@ do
             for file in `ls $de_dir`
             do
                 de_file=$de_dir/$file
-		echo $de_file
-                python3 de_se.py -e df2 -i $de_file -o $se_dir -l $err_log_file
+                python3 ./de_se/de_se.py -e df2 -i $de_file -o $se_dir -l $err_log_file
                 let i=i+1
                 let num=i*100/l
                 str=$(seq -s "#" $num | tr -d "[:digit:]")
@@ -120,3 +122,11 @@ python3 count_files.py -D df2 -d $DE_SE_DIR_2
 # mkdir -p $DE_CHK_MOVE_DIR_2
 # python3 check.py -c de -i $DE_SE_DIR_2 -l $DE_CHK_LOG_DIR_2 -o $DE_CHK_MOVE_DIR_2
 
+echo "Count files of IR SE"
+python3 count_files.py -d $IR_SE_DIR -o ir -O $OPTIMIZATIONS
+
+echo "Count files of DE SE 1"
+python3 count_files.py -d $DE_SE_DIR_1 -o de -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS
+
+echo "Count files of DE SE 2"
+python3 count_files.py -d $DE_SE_DIR_2 -o de -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS
