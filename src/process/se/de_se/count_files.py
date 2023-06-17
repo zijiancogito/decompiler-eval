@@ -42,7 +42,7 @@ def count_ir_dir(root_dir, optimizations):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='check_null_func.py')
     parser.add_argument('-d', '--dir', type=str, help='Dir')
-    parser.add_argument('-o', '--options', choices=['ir', 'de'])
+    parser.add_argument('-o', '--option', choices=['ir', 'de'])
     parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
     parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
     parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
@@ -51,5 +51,5 @@ if __name__ == '__main__':
 
     if args.option == 'ir':
         count_ir_dir(args.dir, args.optimizations)
-    elif args.options == 'de':
+    elif args.option == 'de':
         count_dir(args.dir, args.optimizations, args.decompilers, args.compilers)

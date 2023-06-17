@@ -17,12 +17,13 @@ if __name__ == '__main__':
     if not os.path.exists(save_to):
         os.makedirs(save_to)
 
+    code_path = "/home/eval/decompiler-eval/src/process/raw/code_gen"
     if args.dataset == 'df2':
         print(f"Generating source codes for DF2")
         for i in tqdm(range(args.number)):
             out = os.path.join(save_to, f'{i}.c')
             # print(f"Generate {i}.c")
-            cmd = f'python3 code_generate/gen.py gen -f {out} -n {args.func}'
+            cmd = f'python3 {code_path}/code_generate/gen.py gen -f {out} -n {args.func}'
             os.system(cmd)
     elif args.dataset == 'cf':
         print(f"Generating source codes for CF")

@@ -8,7 +8,7 @@ OPTIMIZATIONS="o0 o1 o2 o3 os"
 echo "--------------------------------------------------------------------\n"
 echo "Checking Decompiling ERRORS"
 RAW_DE_DIR=/home/eval/data/DF2/raw/de
-ERR_LOG_DIR=/home/eval/data/CF/trash/de/err
+ERR_LOG_DIR=/home/eval/data/DF2/trash/de/err
 rm -r $ERR_LOG_DIR
 mkdir -p $ERR_LOG_DIR
 python3 ./decompile/preprocess/check_err/check_err.py -o check -d $RAW_DE_DIR -l $ERR_LOG_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS

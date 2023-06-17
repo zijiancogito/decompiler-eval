@@ -40,4 +40,4 @@ echo "Expression length"
 EXP_LOG_DIR=/home/eval/data/POJ/analyze/read/explen
 rm -r $EXP_LOG_DIR
 mkdir -p $EXP_LOG_DIR
-python3 exp_len.py -D poj -s $SRC_DIR -d $DE_DIR -l $EXP_LOG_DIR
+python3 ./exp/exp_len.py -D poj -s $SRC_DIR -d $DE_DIR -l $EXP_LOG_DIR

@@ -1,0 +1,19 @@
+Generate source code.
+\n\n Compiling GCC BINs from O0 to Os
+\nCompile gcc O0 Binaries
+\nCompile gcc O1 Binaries
+\nCompile gcc O2 Binaries
+\nCompile gcc O3 Binaries
+\nCompile gcc Os Binaries
+\n\n Compiling CLANG BINs from O0 to Os
+\nCompile clang O0 Binaries
+\nCompile clang O1 Binaries
+\nCompile clang O2 Binaries
+\nCompile clang O3 Binaries
+\nCompile clang Os Binaries
+Compiling IRs from O0 to Os
+Compile O0 IRs
+\nCompile O1 IRs
+\nCompile O2 IRs
+\nCompile O3 IRs
+\nCompile Os IRs

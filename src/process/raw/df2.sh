@@ -5,10 +5,10 @@ rm -r $ROOT
 mkdir -p $ROOT
 
 echo "Generate source code."
-python3 ./code_gen/source_gen.py -d df2 -o $ROOT f 1 -n 1000
+python3 ./code_gen/source_gen.py -d df2 -o $ROOT -f 1 -n 1000
+
 
 #---------------------------------------------------------------------------
-
 SRC_ROOT=/home/eval/data/DF2/raw/src
 BIN_ROOT=/home/eval/data/DF2/raw/bin
 rm -r $BIN_ROOT
@@ -54,7 +54,6 @@ python3 ./code_gen/make.py --opt o3 --ir --src $SRC_ROOT -o $IR_ROOT
 echo "\nCompile Os IRs"
 python3 ./code_gen/make.py --opt os --ir --src $SRC_ROOT -o $IR_ROOT
 
-
 #---------------------------------------------------------------------------
 
 IR_DIR=/home/eval/data/DF2/process/ir
@@ -63,6 +62,9 @@ POISON_MOVE_DIR=/home/eval/data/DF2/trash/ir/poison
 rm -r $POISON_MOVE_DIR
 rm -r $IF_MOVE_DIR
 rm -r $IR_DIR
+mkdir -p /home/eval/data/DF2/process/
+mkdir -p $POISON_MOVE_DIR
+mkdir -p $IF_MOVE_DIR
 
 cp -r $IR_ROOT $IR_DIR
 

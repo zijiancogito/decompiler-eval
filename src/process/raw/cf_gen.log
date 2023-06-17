@@ -1,0 +1,13 @@
+Generate source code for CF
+Generating source codes for CF
+\n\n Compiling GCC BINs from O0 to Os
+\nCompile gcc O0 Binaries
+0/0 o0-bin-Complete.
+\n\n Compiling CLANG BINs from O0 to Os
+\nCompile clang O0 Binaries
+0/0 o0-bin-Complete.
+Compile O0 IRs
+0/0 o0-ir-Complete.
+\n
+\n
+Checking results

@@ -123,10 +123,10 @@ python3 count_files.py -D df2 -d $DE_SE_DIR_2
 # python3 check.py -c de -i $DE_SE_DIR_2 -l $DE_CHK_LOG_DIR_2 -o $DE_CHK_MOVE_DIR_2
 
 echo "Count files of IR SE"
-python3 count_files.py -d $IR_SE_DIR -o ir -O $OPTIMIZATIONS
+python3 ./de_se/count_files.py -d $IR_SE_DIR -o ir -O $OPTIMIZATIONS
 
 echo "Count files of DE SE 1"
-python3 count_files.py -d $DE_SE_DIR_1 -o de -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS
+python3 ./de_se/count_files.py -d $DE_SE_DIR_1 -o de -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS
 
 echo "Count files of DE SE 2"
-python3 count_files.py -d $DE_SE_DIR_2 -o de -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS
+python3 ./de_se/count_files.py -d $DE_SE_DIR_2 -o de -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS
