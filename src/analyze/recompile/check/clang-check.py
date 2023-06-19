@@ -13,7 +13,8 @@ def clang_check(path):
     extra_opt = "--extra-arg"
     err_lim = "-ferror-limit=10000"
     _chk = subprocess.run(["clang-check", extra_opt, err_lim, opt, path], capture_output=True)
-    os.unlink(f'{os.path.splitext(os.path.basename(path))[0]}.plist')
+    if os.path.exists(f'{os.path.splitext(os.path.basename(path))[0]}.plist'):
+        os.unlink(f'{os.path.splitext(os.path.basename(path))[0]}.plist')
     return _chk.stderr.decode(encoding='utf8')
     
 def parse_err(err_str):
@@ -62,7 +63,6 @@ if __name__ == '__main__':
     parse_err(errors)
     """
     parser = argparse.ArgumentParser(prog='clang-check.py')
-    # parser.add_argument('-D', '--dataset', choices=['df2', 'cf', 'poj'], type=str, help='Datasets')
     parser.add_argument('-d', '--dec', type=str, help='dir of DEC')
     parser.add_argument('-l', '--log', type=str, help='log dir')
     parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')

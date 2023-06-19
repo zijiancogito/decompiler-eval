@@ -1,0 +1,8 @@
+------------------------------clang------------------------------
+Optimization   	|Angr       	|BinaryNinja	|Ghidra     	|Hex-Rays   	|RetDec     
+o0             	        1000	        1000	        1000	        1000	        1000	
+
+------------------------------gcc  ------------------------------
+Optimization   	|Angr       	|BinaryNinja	|Ghidra     	|Hex-Rays   	|RetDec     
+o0             	        1000	        1000	        1000	        1000	        1000	
+

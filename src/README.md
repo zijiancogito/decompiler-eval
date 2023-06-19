@@ -40,3 +40,35 @@
 
 - **EX2:**
 
+
+## DF2
+
+```sh
+cd process/raw
+./df_gen.sh | tee ../../log/DF/xxxxxxxx/df_gen.log
+./df_check.sh | tee ../../log/DF/xxxxxxxx/df_count_decompiling.log
+./df_de.sh | tee ../../log/DF/xxxxxxxx/df_de.log
+
+cd ../se
+./df_se.sh | tee ../../log/DF/xxxxxxxx/df_se.log
+./df_count_all.sh | tee ../../log/DF/xxxxxxxx/df_count_se.log
+
+cd ../../analyze/decompile/
+./df-analyze.sh | tee ../../log/DF/xxxxxxxx/df_dec_err.log
+
+cd ../recompile/
+./df.sh | tee ../../log/DF/xxxxxxxx/df_recompile.log
+
+cd ../acc/
+./df_analyze.sh | tee ../../log/DF/xxxxxxxx/df_correctness.log
+
+cd ../read/
+./df.sh | tee ../../log/DF/xxxxxxxx/df_read.log
+```
+
+## CF
+
+```sh
+cd process/raw
+./cf
+```

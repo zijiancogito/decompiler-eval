@@ -6,7 +6,7 @@ rm -r $ROOT
 mkdir -p $ROOT
 
 echo "Generate source code for CF"
-python3 ./code_gen/source_gen.py -d cf -o $ROOT -n 1000 -c csmith/config
+python3 ./code_gen/source_gen.py -d cf -o $ROOT -n 1000 -c ./code_gen/csmith/config
 
 SRC_ROOT=/home/eval/data/CF/raw/src
 BIN_ROOT=/home/eval/data/CF/raw/bin
@@ -25,6 +25,8 @@ IR_ROOT=/home/eval/data/CF/raw/ir
 
 echo "Compile O0 IRs"
 python3 ./code_gen/make.py --opt o0 --ir --src $SRC_ROOT -o $IR_ROOT
+
+mkdir -p /home/eval/data/CF/process
 
 IR_DIR=/home/eval/data/CF/process/ir
 POISON_MOVE_DIR=/home/eval/data/CF/trash/ir/poison

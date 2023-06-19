@@ -1,0 +1,726 @@
+--------------------------------------------------------------------\n
+Checking Decompiling ERRORS
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	1.0         	1.0         	1.0         	1.0         	1.0         	
+o1             	1.0         	1.0         	1.0         	1.0         	1.0         	
+o2             	1.0         	1.0         	1.0         	1.0         	1.0         	
+o3             	1.0         	1.0         	1.0         	1.0         	1.0         	
+os             	1.0         	1.0         	1.0         	1.0         	1.0         	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	1.0         	1.0         	1.0         	1.0         	1.0         	
+o1             	1.0         	1.0         	1.0         	1.0         	1.0         	
+o2             	0.999       	1.0         	1.0         	1.0         	1.0         	
+o3             	1.0         	1.0         	1.0         	1.0         	1.0         	
+os             	1.0         	1.0         	1.0         	1.0         	1.0         	
+
+--------------------------------------------------------------------\n
+Print Decompiling ERRORS
+clang-o0-angr:
+clang-o0-BinaryNinja:
+clang-o0-Ghidra:
+clang-o0-Hex-Rays:
+clang-o0-RetDec:
+
+clang-o1-angr:
+clang-o1-BinaryNinja:
+clang-o1-Ghidra:
+clang-o1-Hex-Rays:
+clang-o1-RetDec:
+
+clang-o2-angr:
+clang-o2-BinaryNinja:
+clang-o2-Ghidra:
+clang-o2-Hex-Rays:
+clang-o2-RetDec:
+
+clang-o3-angr:
+clang-o3-BinaryNinja:
+clang-o3-Ghidra:
+clang-o3-Hex-Rays:
+clang-o3-RetDec:
+
+clang-os-angr:
+clang-os-BinaryNinja:
+clang-os-Ghidra:
+clang-os-Hex-Rays:
+clang-os-RetDec:
+
+
+gcc-o0-angr:
+gcc-o0-BinaryNinja:
+gcc-o0-Ghidra:
+gcc-o0-Hex-Rays:
+gcc-o0-RetDec:
+
+gcc-o1-angr:
+gcc-o1-BinaryNinja:
+gcc-o1-Ghidra:
+gcc-o1-Hex-Rays:
+gcc-o1-RetDec:
+
+gcc-o2-angr:
+Not Impletement Error.
+	1/1	1.0
+gcc-o2-BinaryNinja:
+gcc-o2-Ghidra:
+gcc-o2-Hex-Rays:
+gcc-o2-RetDec:
+
+gcc-o3-angr:
+gcc-o3-BinaryNinja:
+gcc-o3-Ghidra:
+gcc-o3-Hex-Rays:
+gcc-o3-RetDec:
+
+gcc-os-angr:
+gcc-os-BinaryNinja:
+gcc-os-Ghidra:
+gcc-os-Hex-Rays:
+gcc-os-RetDec:
+
+
+--------------------------------------------------------------------\n
+Extract func0 from decompiling results\n
+--------------------------------------------------------------------\n
+Remove files not in IR.\n
+clang-o0-angr:
+Unlink 0/1000 files.
+clang-o0-BinaryNinja:
+Unlink 0/1000 files.
+clang-o0-Ghidra:
+Unlink 0/1000 files.
+clang-o0-Hex-Rays:
+Unlink 0/1000 files.
+clang-o0-RetDec:
+Unlink 0/1000 files.
+clang-o1-angr:
+Unlink 71/1000 files.
+clang-o1-BinaryNinja:
+Unlink 71/1000 files.
+clang-o1-Ghidra:
+Unlink 71/1000 files.
+clang-o1-Hex-Rays:
+Unlink 71/1000 files.
+clang-o1-RetDec:
+Unlink 71/1000 files.
+clang-o2-angr:
+Unlink 72/1000 files.
+clang-o2-BinaryNinja:
+Unlink 72/1000 files.
+clang-o2-Ghidra:
+Unlink 72/1000 files.
+clang-o2-Hex-Rays:
+Unlink 72/1000 files.
+clang-o2-RetDec:
+Unlink 72/1000 files.
+clang-o3-angr:
+Unlink 72/1000 files.
+clang-o3-BinaryNinja:
+Unlink 72/1000 files.
+clang-o3-Ghidra:
+Unlink 72/1000 files.
+clang-o3-Hex-Rays:
+Unlink 72/1000 files.
+clang-o3-RetDec:
+Unlink 72/1000 files.
+clang-os-angr:
+Unlink 72/1000 files.
+clang-os-BinaryNinja:
+Unlink 72/1000 files.
+clang-os-Ghidra:
+Unlink 72/1000 files.
+clang-os-Hex-Rays:
+Unlink 72/1000 files.
+clang-os-RetDec:
+Unlink 72/1000 files.
+gcc-o0-angr:
+Unlink 0/1000 files.
+gcc-o0-BinaryNinja:
+Unlink 0/1000 files.
+gcc-o0-Ghidra:
+Unlink 0/1000 files.
+gcc-o0-Hex-Rays:
+Unlink 0/1000 files.
+gcc-o0-RetDec:
+Unlink 0/1000 files.
+gcc-o1-angr:
+Unlink 71/1000 files.
+gcc-o1-BinaryNinja:
+Unlink 71/1000 files.
+gcc-o1-Ghidra:
+Unlink 71/1000 files.
+gcc-o1-Hex-Rays:
+Unlink 71/1000 files.
+gcc-o1-RetDec:
+Unlink 71/1000 files.
+gcc-o2-angr:
+Unlink 72/1000 files.
+gcc-o2-BinaryNinja:
+Unlink 72/1000 files.
+gcc-o2-Ghidra:
+Unlink 72/1000 files.
+gcc-o2-Hex-Rays:
+Unlink 72/1000 files.
+gcc-o2-RetDec:
+Unlink 72/1000 files.
+gcc-o3-angr:
+Unlink 72/1000 files.
+gcc-o3-BinaryNinja:
+Unlink 72/1000 files.
+gcc-o3-Ghidra:
+Unlink 72/1000 files.
+gcc-o3-Hex-Rays:
+Unlink 72/1000 files.
+gcc-o3-RetDec:
+Unlink 72/1000 files.
+gcc-os-angr:
+Unlink 72/1000 files.
+gcc-os-BinaryNinja:
+Unlink 72/1000 files.
+gcc-os-Ghidra:
+Unlink 72/1000 files.
+gcc-os-Hex-Rays:
+Unlink 72/1000 files.
+gcc-os-RetDec:
+Unlink 72/1000 files.
+--------------------------------------------------------------------\n
+Check Number of NULL FUNC
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	0/929       	0/929       	0/929       	
+o2             	0/928       	0/928       	0/928       	0/928       	0/928       	
+o3             	0/928       	0/928       	0/928       	0/928       	0/928       	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	0/929       	0/929       	0/929       	
+o2             	0/928       	0/928       	0/928       	0/928       	0/928       	
+o3             	0/928       	0/928       	0/928       	0/928       	0/928       	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+--------------------------------------------------------------------\n
+Check _chk() function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	0/929       	0/929       	0/929       	
+o2             	0/928       	0/928       	0/928       	0/928       	0/928       	
+o3             	0/928       	0/928       	0/928       	0/928       	0/928       	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	0/929       	0/929       	0/929       	
+o2             	0/928       	928/928     	822/928     	0/928       	928/928     	
+o3             	0/928       	928/928     	822/928     	0/928       	928/928     	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+--------------------------------------------------------------------\n
+Remove _chk() function in decompiling results
+Checking clang o0 angr ...
+0/1000 files have been rewritten
+Checking clang o0 BinaryNinja ...
+0/1000 files have been rewritten
+Checking clang o0 Ghidra ...
+0/1000 files have been rewritten
+Checking clang o0 Hex-Rays ...
+0/1000 files have been rewritten
+Checking clang o0 RetDec ...
+0/1000 files have been rewritten
+Checking clang o1 angr ...
+0/929 files have been rewritten
+Checking clang o1 BinaryNinja ...
+0/929 files have been rewritten
+Checking clang o1 Ghidra ...
+0/929 files have been rewritten
+Checking clang o1 Hex-Rays ...
+0/929 files have been rewritten
+Checking clang o1 RetDec ...
+0/929 files have been rewritten
+Checking clang o2 angr ...
+0/928 files have been rewritten
+Checking clang o2 BinaryNinja ...
+0/928 files have been rewritten
+Checking clang o2 Ghidra ...
+0/928 files have been rewritten
+Checking clang o2 Hex-Rays ...
+0/928 files have been rewritten
+Checking clang o2 RetDec ...
+0/928 files have been rewritten
+Checking clang o3 angr ...
+0/928 files have been rewritten
+Checking clang o3 BinaryNinja ...
+0/928 files have been rewritten
+Checking clang o3 Ghidra ...
+0/928 files have been rewritten
+Checking clang o3 Hex-Rays ...
+0/928 files have been rewritten
+Checking clang o3 RetDec ...
+0/928 files have been rewritten
+Checking clang os angr ...
+0/928 files have been rewritten
+Checking clang os BinaryNinja ...
+0/928 files have been rewritten
+Checking clang os Ghidra ...
+0/928 files have been rewritten
+Checking clang os Hex-Rays ...
+0/928 files have been rewritten
+Checking clang os RetDec ...
+0/928 files have been rewritten
+Checking gcc o0 angr ...
+0/1000 files have been rewritten
+Checking gcc o0 BinaryNinja ...
+0/1000 files have been rewritten
+Checking gcc o0 Ghidra ...
+0/1000 files have been rewritten
+Checking gcc o0 Hex-Rays ...
+0/1000 files have been rewritten
+Checking gcc o0 RetDec ...
+0/1000 files have been rewritten
+Checking gcc o1 angr ...
+0/929 files have been rewritten
+Checking gcc o1 BinaryNinja ...
+0/929 files have been rewritten
+Checking gcc o1 Ghidra ...
+0/929 files have been rewritten
+Checking gcc o1 Hex-Rays ...
+0/929 files have been rewritten
+Checking gcc o1 RetDec ...
+0/929 files have been rewritten
+Checking gcc o2 angr ...
+0/928 files have been rewritten
+Checking gcc o2 BinaryNinja ...
+928/928 files have been rewritten
+Checking gcc o2 Ghidra ...
+822/928 files have been rewritten
+Checking gcc o2 Hex-Rays ...
+0/928 files have been rewritten
+Checking gcc o2 RetDec ...
+928/928 files have been rewritten
+Checking gcc o3 angr ...
+0/928 files have been rewritten
+Checking gcc o3 BinaryNinja ...
+928/928 files have been rewritten
+Checking gcc o3 Ghidra ...
+822/928 files have been rewritten
+Checking gcc o3 Hex-Rays ...
+0/928 files have been rewritten
+Checking gcc o3 RetDec ...
+928/928 files have been rewritten
+Checking gcc os angr ...
+0/928 files have been rewritten
+Checking gcc os BinaryNinja ...
+0/928 files have been rewritten
+Checking gcc os Ghidra ...
+0/928 files have been rewritten
+Checking gcc os Hex-Rays ...
+0/928 files have been rewritten
+Checking gcc os RetDec ...
+0/928 files have been rewritten
+--------------------------------------------------------------------\n
+Check _chk() function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	0/929       	0/929       	0/929       	
+o2             	0/928       	0/928       	0/928       	0/928       	0/928       	
+o3             	0/928       	0/928       	0/928       	0/928       	0/928       	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	0/929       	0/929       	0/929       	
+o2             	0/928       	0/928       	0/928       	0/928       	0/928       	
+o3             	0/928       	0/928       	0/928       	0/928       	0/928       	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+--------------------------------------------------------------------\n
+Check IF stmt function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	120/929     	120/929     	41/929      	0/929       	
+o2             	0/928       	119/928     	119/928     	41/928      	0/928       	
+o3             	0/928       	119/928     	119/928     	41/928      	0/928       	
+os             	0/928       	119/928     	119/928     	41/928      	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	120/929     	120/929     	38/929      	0/929       	
+o2             	0/928       	120/928     	214/928     	50/928      	0/928       	
+o3             	0/928       	120/928     	214/928     	50/928      	0/928       	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+--------------------------------------------------------------------\n
+Remove IF stmt function in decompiling results
+Checking filse in /home/eval/data/DF2/process/de/clang/o0/angr...
+Found 0/1000 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o0/BinaryNinja...
+Found 0/1000 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o0/Ghidra...
+Found 0/1000 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o0/Hex-Rays...
+Found 0/1000 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o0/RetDec...
+Found 0/1000 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o1/angr...
+Found 0/929 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o1/BinaryNinja...
+Found 120/929 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o1/Ghidra...
+Found 120/929 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o1/Hex-Rays...
+Found 41/929 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o1/RetDec...
+Found 0/929 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o2/angr...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o2/BinaryNinja...
+Found 119/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o2/Ghidra...
+Found 119/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o2/Hex-Rays...
+Found 41/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o2/RetDec...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o3/angr...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o3/BinaryNinja...
+Found 119/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o3/Ghidra...
+Found 119/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o3/Hex-Rays...
+Found 41/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/o3/RetDec...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/os/angr...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/os/BinaryNinja...
+Found 119/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/os/Ghidra...
+Found 119/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/os/Hex-Rays...
+Found 41/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/clang/os/RetDec...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o0/angr...
+Found 0/1000 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o0/BinaryNinja...
+Found 0/1000 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o0/Ghidra...
+Found 0/1000 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o0/Hex-Rays...
+Found 0/1000 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o0/RetDec...
+Found 0/1000 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o1/angr...
+Found 0/929 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o1/BinaryNinja...
+Found 120/929 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o1/Ghidra...
+Found 120/929 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o1/Hex-Rays...
+Found 38/929 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o1/RetDec...
+Found 0/929 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o2/angr...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o2/BinaryNinja...
+Found 120/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o2/Ghidra...
+Found 214/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o2/Hex-Rays...
+Found 50/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o2/RetDec...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o3/angr...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o3/BinaryNinja...
+Found 120/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o3/Ghidra...
+Found 214/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o3/Hex-Rays...
+Found 50/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/o3/RetDec...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/os/angr...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/os/BinaryNinja...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/os/Ghidra...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/os/Hex-Rays...
+Found 0/928 files have IF
+Writing results to log file...
+
+Checking filse in /home/eval/data/DF2/process/de/gcc/os/RetDec...
+Found 0/928 files have IF
+Writing results to log file...
+
+--------------------------------------------------------------------\n
+Check IF stmt function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	0/929       	0/929       	0/929       	
+o2             	0/928       	0/928       	0/928       	0/928       	0/928       	
+o3             	0/928       	0/928       	0/928       	0/928       	0/928       	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	0/929       	0/929       	0/929       	
+o2             	0/928       	0/928       	0/928       	0/928       	0/928       	
+o3             	0/928       	0/928       	0/928       	0/928       	0/928       	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+--------------------------------------------------------------------\n
+Check COND stmt function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	37/1000     	
+o1             	0/929       	0/929       	0/929       	8/929       	279/929     	
+o2             	0/928       	0/928       	0/928       	7/928       	275/928     	
+o3             	0/928       	0/928       	0/928       	7/928       	275/928     	
+os             	0/928       	0/928       	0/928       	7/928       	275/928     	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	37/1000     	
+o1             	7/929       	0/929       	0/929       	5/929       	210/929     	
+o2             	5/928       	0/928       	0/928       	5/928       	203/928     	
+o3             	5/928       	0/928       	0/928       	5/928       	203/928     	
+os             	0/928       	0/928       	0/928       	4/928       	2/928       	
+
+--------------------------------------------------------------------\n
+Remove COND stmt function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	37/1000     	
+o1             	0/929       	0/929       	0/929       	8/929       	279/929     	
+o2             	0/928       	0/928       	0/928       	7/928       	275/928     	
+o3             	0/928       	0/928       	0/928       	7/928       	275/928     	
+os             	0/928       	0/928       	0/928       	7/928       	275/928     	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	37/1000     	
+o1             	7/929       	0/929       	0/929       	5/929       	210/929     	
+o2             	5/928       	0/928       	0/928       	5/928       	203/928     	
+o3             	5/928       	0/928       	0/928       	5/928       	203/928     	
+os             	0/928       	0/928       	0/928       	4/928       	2/928       	
+
+--------------------------------------------------------------------\n
+Check COND stmt function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	0/929       	0/929       	0/929       	
+o2             	0/928       	0/928       	0/928       	0/928       	0/928       	
+o3             	0/928       	0/928       	0/928       	0/928       	0/928       	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	0/929       	0/929       	0/929       	
+o2             	0/928       	0/928       	0/928       	0/928       	0/928       	
+o3             	0/928       	0/928       	0/928       	0/928       	0/928       	
+os             	0/928       	0/928       	0/928       	0/928       	0/928       	
+
+--------------------------------------------------------------------\n
+Check CONCAT stmt function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	906/1000    	1000/1000   	0/1000      	0/1000      	0/1000      	
+o1             	519/929     	805/929     	435/929     	0/929       	0/929       	
+o2             	513/928     	805/928     	433/928     	0/928       	0/928       	
+o3             	513/928     	805/928     	433/928     	0/928       	0/928       	
+os             	519/928     	805/928     	441/928     	0/928       	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	907/1000    	1000/1000   	0/1000      	0/1000      	0/1000      	
+o1             	436/929     	805/929     	193/929     	0/929       	0/929       	
+o2             	454/928     	804/928     	169/928     	0/928       	0/928       	
+o3             	454/928     	804/928     	169/928     	0/928       	0/928       	
+os             	439/928     	927/928     	239/928     	0/928       	0/928       	
+
+--------------------------------------------------------------------\n
+Remove CONCAT stmt function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	906/1000    	1000/1000   	0/1000      	0/1000      	0/1000      	
+o1             	519/929     	805/929     	435/929     	0/929       	0/929       	
+o2             	513/928     	805/928     	433/928     	0/928       	0/928       	
+o3             	513/928     	805/928     	433/928     	0/928       	0/928       	
+os             	519/928     	805/928     	441/928     	0/928       	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	907/1000    	1000/1000   	0/1000      	0/1000      	0/1000      	
+o1             	436/929     	805/929     	193/929     	0/929       	0/929       	
+o2             	454/928     	804/928     	169/928     	0/928       	0/928       	
+o3             	454/928     	804/928     	169/928     	0/928       	0/928       	
+os             	439/928     	927/928     	239/928     	0/928       	0/928       	
+
+--------------------------------------------------------------------\n
+Remove CONCAT stmt function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	906/1000    	1000/1000   	0/1000      	0/1000      	0/1000      	
+o1             	519/929     	805/929     	435/929     	0/929       	0/929       	
+o2             	513/928     	805/928     	433/928     	0/928       	0/928       	
+o3             	513/928     	805/928     	433/928     	0/928       	0/928       	
+os             	519/928     	805/928     	441/928     	0/928       	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	907/1000    	1000/1000   	0/1000      	0/1000      	0/1000      	
+o1             	436/929     	805/929     	193/929     	0/929       	0/929       	
+o2             	454/928     	804/928     	169/928     	0/928       	0/928       	
+o3             	454/928     	804/928     	169/928     	0/928       	0/928       	
+os             	439/928     	927/928     	239/928     	0/928       	0/928       	
+
+--------------------------------------------------------------------\n
+Check CONCAT stmt function in decompiling results
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	435/929     	0/929       	0/929       	
+o2             	0/928       	0/928       	433/928     	0/928       	0/928       	
+o3             	0/928       	0/928       	433/928     	0/928       	0/928       	
+os             	0/928       	0/928       	441/928     	0/928       	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	193/929     	0/929       	0/929       	
+o2             	0/928       	0/928       	169/928     	0/928       	0/928       	
+o3             	0/928       	0/928       	169/928     	0/928       	0/928       	
+os             	0/928       	0/928       	239/928     	0/928       	0/928       	
+
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	435/929     	0/929       	0/929       	
+o2             	0/928       	0/928       	433/928     	0/928       	0/928       	
+o3             	0/928       	0/928       	433/928     	0/928       	0/928       	
+os             	0/928       	0/928       	441/928     	0/928       	0/928       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/1000      	0/1000      	0/1000      	0/1000      	0/1000      	
+o1             	0/929       	0/929       	193/929     	0/929       	0/929       	
+o2             	0/928       	0/928       	169/928     	0/928       	0/928       	
+o3             	0/928       	0/928       	169/928     	0/928       	0/928       	
+os             	0/928       	0/928       	239/928     	0/928       	0/928       	
+
+--------------------------------------------------------------------\n
+Change the extension of files from .txt to .c

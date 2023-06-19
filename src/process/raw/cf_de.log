@@ -2,22 +2,12 @@
 Checking Decompiling ERRORS
 ------------------------------clang------------------------------
 Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
-o0             	0.452       	0.992       	1.0         	1.0         	1.0         	
+o0             	1.0         	1.0         	1.0         	1.0         	1.0         	
 
 ------------------------------gcc  ------------------------------
 Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
-o0             	0.0         	0.999       	1.0         	1.0         	1.0         	
-
-clang-o0-angr:
-Exception thrown decompiling function func_1: args' length must all be equal
-	539/548	0.98
-Exception thrown decompiling function func_1: 'NoneType' object has no attribute 'one_expr'
-	3/548	0.01
-Exception thrown decompiling function func_1: value
-	6/548	0.01
+o0             	0.0         	clang-o0-angr:
 clang-o0-BinaryNinja:
-int64_t func_1() Loading...
-	8/8	1.0
 clang-o0-Ghidra:
 clang-o0-Hex-Rays:
 clang-o0-RetDec:
@@ -27,46 +17,5 @@ gcc-o0-angr:
 Not Impletement Error.
 	1000/1000	1.0
 gcc-o0-BinaryNinja:
-int64_t func_1() Loading...
-	1/1	1.0
-gcc-o0-Ghidra:
-gcc-o0-Hex-Rays:
-gcc-o0-RetDec:
-
-
 --------------------------------------------------------------------\n
 Extract func_1 from decompiling results\n
---------------------------------------------------------------------\n
-Remove files not in IR.\n
-clang-o0-angr:
-Unlink 93/1000 files.
-clang-o0-BinaryNinja:
-Unlink 93/1000 files.
-clang-o0-Ghidra:
-Unlink 93/1000 files.
-clang-o0-Hex-Rays:
-Unlink 93/1000 files.
-clang-o0-RetDec:
-Unlink 93/1000 files.
-gcc-o0-angr:
-Unlink 93/1000 files.
-gcc-o0-BinaryNinja:
-Unlink 93/1000 files.
-gcc-o0-Ghidra:
-Unlink 93/1000 files.
-gcc-o0-Hex-Rays:
-Unlink 93/1000 files.
-gcc-o0-RetDec:
-Unlink 93/1000 files.
---------------------------------------------------------------------\n
-Check Number of NULL FUNC
-------------------------------clang------------------------------
-Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
-o0             	0/907       	0/907       	0/907       	0/907       	0/907       	
-
-------------------------------gcc  ------------------------------
-Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
-o0             	0/907       	0/907       	0/907       	0/907       	0/907       	
-
---------------------------------------------------------------------\n
-Change the extension of files from .txt to .c

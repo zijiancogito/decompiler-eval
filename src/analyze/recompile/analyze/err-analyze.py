@@ -73,6 +73,8 @@ if __name__ == '__main__':
   parser.add_argument('-e', '--err', type=str, help='dir of DEC')
   parser.add_argument('-l', '--log', type=str, help='log dir')
   parser.add_argument('-D', '--decompilers', nargs='+', help='log dir')
+  parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+  parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
 
   args = parser.parse_args()
 

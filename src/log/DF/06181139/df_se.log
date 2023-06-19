@@ -1,0 +1,55 @@
+Execution IRs
+Executing o0...
+0/1000 files execution failed in o0.
+Executing o1...
+0/929 files execution failed in o1.
+Executing o2...
+0/928 files execution failed in o2.
+Executing o3...
+0/928 files execution failed in o3.
+Executing os...
+0/928 files execution failed in os.
+Execution decompiling results of DF-de1
+
+Symbolic executing angr result of clang o0
+
+Symbolic executing angr result of clang o1
+Count files
+Count files of IR SE
+------------------------------LLVM IR------------------------------
+Optimization   	|O0         	|O1         	|O2         	|O3         	|Os         
+        1000	         929	         928	         928	         928	
+Count files of DE SE 1
+------------------------------clang------------------------------
+Optimization   	|Angr       	|BinaryNinja	|Ghidra     	|Hex-Rays   	|RetDec     
+o0             	        1000	        1000	        1000	        1000	        1000	
+o1             	         929	         929	         929	         929	         929	
+o2             	         928	         928	         928	         928	         928	
+o3             	         928	         928	         928	         928	         928	
+os             	         928	         928	         928	         928	         928	
+
+------------------------------gcc  ------------------------------
+Optimization   	|Angr       	|BinaryNinja	|Ghidra     	|Hex-Rays   	|RetDec     
+o0             	        1000	        1000	        1000	        1000	        1000	
+o1             	         929	         929	         928	         928	         929	
+o2             	         928	         928	         928	         928	         928	
+o3             	         928	         928	         928	         928	         928	
+os             	         928	         928	         927	         928	         928	
+
+Count files of DE SE 2
+------------------------------clang------------------------------
+Optimization   	|Angr       	|BinaryNinja	|Ghidra     	|Hex-Rays   	|RetDec     
+o0             	        1000	        1000	        1000	        1000	        1000	
+o1             	         929	         929	         929	         929	         929	
+o2             	         928	         928	         928	         928	         928	
+o3             	         928	         928	         928	         928	         928	
+os             	         928	         928	         928	         928	         928	
+
+------------------------------gcc  ------------------------------
+Optimization   	|Angr       	|BinaryNinja	|Ghidra     	|Hex-Rays   	|RetDec     
+o0             	        1000	        1000	        1000	        1000	        1000	
+o1             	         929	         929	         928	         928	         929	
+o2             	         928	         928	         928	         928	         928	
+o3             	         928	         928	         928	         928	         928	
+os             	         928	         928	         927	         928	         928	
+

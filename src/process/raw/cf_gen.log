@@ -2,12 +2,18 @@ Generate source code for CF
 Generating source codes for CF
 \n\n Compiling GCC BINs from O0 to Os
 \nCompile gcc O0 Binaries
-0/0 o0-bin-Complete.
+1000/1000 o0-bin-Complete.
 \n\n Compiling CLANG BINs from O0 to Os
 \nCompile clang O0 Binaries
-0/0 o0-bin-Complete.
+1000/1000 o0-bin-Complete.
 Compile O0 IRs
-0/0 o0-ir-Complete.
+1000/1000 o0-ir-Complete.
+check_attr.py:	Processing o0...
 \n
+check_poison.py:	Processing o0...
+Writing results to log file...
 \n
 Checking results
+Checking o0...
+
+All checked.
