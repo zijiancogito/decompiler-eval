@@ -5,8 +5,9 @@ def read_from_concolic(path):
     with open(path, 'r') as f:
         csv_reader = csv.reader(f, delimiter='\t')
         for line in csv_reader:
-            # print(line)
-            csvs[line[0]] = (line[1], line[2])
+            if len(line) == 0:
+                continue
+            csvs[line[0]] = (float(line[1]), float(line[2]))
     return csvs
 
 def read_from_passrate(path):
@@ -14,8 +15,9 @@ def read_from_passrate(path):
     with open(path, 'r') as f:
         csv_reader = csv.reader(f, delimiter='\t')
         for line in csv_reader:
-            # print(line)
-            csvs[line[0]] = line[1]
+            if len(line) == 0:
+                continue
+            csvs[line[0]] = float(line[1])
     return csvs
 
 def read_from_symbolic(path):
@@ -23,8 +25,9 @@ def read_from_symbolic(path):
     with open(path, 'r') as f:
         csv_reader = csv.reader(f, delimiter='\t')
         for line in csv_reader:
-            # print(line)
-            csvs[line[0]] = (line[1], line[2])
+            if len(line) == 0:
+                continue
+            csvs[line[0]] = (float(line[1]), float(line[2]))
     return csvs
 
 def read_from_distance(path):
@@ -32,8 +35,9 @@ def read_from_distance(path):
     with open(path, 'r') as f:
         csv_reader = csv.reader(f, delimiter='\t')
         for line in csv_reader:
-            # print(line)
-            csvs[line[0]] = (line[1], line[2])
+            if len(line) == 0:
+                continue
+            csvs[line[0]] = (float(line[1]), float(line[2]))
     return csvs
 
 def read_from_cycle(path):
@@ -41,7 +45,9 @@ def read_from_cycle(path):
     with open(path, 'r') as f:
         csv_reader = csv.reader(f, delimiter='\t')
         for line in csv_reader:
-            csvs[line[0]] = (line[1], line[2])
+            if len(line) == 0:
+                continue
+            csvs[line[0]] = (float(line[1]), float(line[2]))
     return csvs
 
 def read_from_var(path):
@@ -49,8 +55,10 @@ def read_from_var(path):
     with open(path, 'r') as f:
         csv_reader = csv.reader(f, delimiter='\t')
         for line in csv_reader:
+            if len(line) == 0:
+                continue
             if line[0] in csvs:
-                csvs[line[0]] = (line[1], line[2])
+                csvs[line[0]] = (float(line[1]), float(line[2]))
     return csvs
 
 def read_from_loc(path):
@@ -58,8 +66,10 @@ def read_from_loc(path):
     with open(path, 'r') as f:
         csv_reader = csv.reader(f, delimiter='\t')
         for line in csv_reader:
+            if len(line) == 0:
+                continue
             if line[0] in csvs:
-                csvs[line[0]] = (line[1], line[2])
+                csvs[line[0]] = (float(line[1]), float(line[2]))
     return csvs
 
 if __name__ == '__main__':

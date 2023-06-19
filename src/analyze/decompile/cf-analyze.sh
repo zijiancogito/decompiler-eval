@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RAW_ERR_DIR=/home/eval/data/CF/trash/de/errs
+RAW_ERR_DIR=/home/eval/data/CF/trash/de/err
 NEW_ERR_DIR=/home/eval/data/CF/analyze/decompile/errs
 
 rm -r $NEW_ERR_DIR

@@ -1,0 +1,64 @@
+--------------------------------------------------------------------\n
+Checking Decompiling ERRORS
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0.999       	1.0         	1.0         	1.0         	1.0         	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0.0         	1.0         	1.0         	1.0         	1.0         	
+
+clang-o0-angr:
+Timeout or Not Implemented Error.
+	1/1	1.0
+clang-o0-BinaryNinja:
+clang-o0-Ghidra:
+clang-o0-Hex-Rays:
+clang-o0-RetDec:
+
+
+gcc-o0-angr:
+Timeout or Not Implemented Error.
+	1000/1000	1.0
+gcc-o0-BinaryNinja:
+gcc-o0-Ghidra:
+gcc-o0-Hex-Rays:
+gcc-o0-RetDec:
+
+
+--------------------------------------------------------------------\n
+Extract func_1 from decompiling results\n
+--------------------------------------------------------------------\n
+Remove files not in IR.\n
+clang-o0-angr:
+Unlink 89/1000 files.
+clang-o0-BinaryNinja:
+Unlink 89/1000 files.
+clang-o0-Ghidra:
+Unlink 89/1000 files.
+clang-o0-Hex-Rays:
+Unlink 89/1000 files.
+clang-o0-RetDec:
+Unlink 89/1000 files.
+gcc-o0-angr:
+Unlink 89/1000 files.
+gcc-o0-BinaryNinja:
+Unlink 89/1000 files.
+gcc-o0-Ghidra:
+Unlink 89/1000 files.
+gcc-o0-Hex-Rays:
+Unlink 89/1000 files.
+gcc-o0-RetDec:
+Unlink 89/1000 files.
+--------------------------------------------------------------------\n
+Check Number of NULL FUNC
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/911       	0/911       	0/911       	0/911       	0/911       	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/911       	0/911       	0/911       	0/911       	0/911       	
+
+--------------------------------------------------------------------\n
+Change the extension of files from .txt to .c

@@ -9,6 +9,7 @@ echo "Checking Decompiling ERRORS"
 RAW_DE_DIR=/home/eval/data/CF/raw/de
 ERR_LOG_DIR=/home/eval/data/CF/trash/de/err
 rm -r $ERR_LOG_DIR
+mkdir -p $ERR_LOG_DIR
 python3 ./decompile/preprocess/check_err/check_err.py -o check -d $RAW_DE_DIR -l $ERR_LOG_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS
 python3 ./decompile/preprocess/check_err/check_err.py -o print -l $ERR_LOG_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS
 

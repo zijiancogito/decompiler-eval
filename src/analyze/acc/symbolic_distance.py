@@ -43,7 +43,7 @@ def process_df2(ir_dir, de_dir, log_dir):
                     log_line = f"{de_file}\t{avg_distance}\t{sum_distance}"
                     logs.append(log_line)
 
-                log_path = os.path.join(log_sub_dir, f"symbolic-match-{decompiler}.csv")
+                log_path = os.path.join(log_sub_dir, f"symbolic-distance-{decompiler}.csv")
                 log(logs, log_path)
                 
                 avg_avg, sum_avg = 0, 0

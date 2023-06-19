@@ -5,7 +5,7 @@ import argparse
 
 def err_type(path):
     content = None
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='gb2312') as f:
         content = f.read().strip()
         if len(content.split('\n')) > 3:
             content = None

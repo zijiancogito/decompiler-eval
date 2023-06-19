@@ -5,18 +5,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 
-sys.path.append('../')
+sys.path.append('..')
 import data_load
-sys.path.append('/home/eval/decompiler-eval/src/utils/')
+sys.path.append('/home/eval/decompiler-eval/src/utils/functools')
 import math_tools
 
 # different decompiler on one optimization level
 
-def func_concolic_accuracy_of_different_decompilers(root_dir, save_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    colors = ['red', 'green', 'blue', 'yellow', 'orange']
+def func_concolic_accuracy_of_different_decompilers(root_dir, save_dir, compilers, optimizations, decompilers, colors):
+    # compilers = ['clang', 'gcc']
+    # optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
+    # decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
+    # colors = ['red', 'green', 'blue', 'yellow', 'orange']
     
     for compiler in compilers:
         for opt_level in optimizations:
@@ -31,7 +31,7 @@ def func_concolic_accuracy_of_different_decompilers(root_dir, save_dir):
                     raise FileNotFoundError
                 csvs[decompiler] = data_load.read_from_concolic(log_path)
             
-            keys = csvs['angr'].keys()
+            keys = list(csvs['angr'].keys())
             keys.sort()
 
             precisions = []
@@ -40,25 +40,24 @@ def func_concolic_accuracy_of_different_decompilers(root_dir, save_dir):
             for decompiler in decompilers:
                 precision = [csvs[decompiler][key][0] for key in keys]
                 recall = [csvs[decompiler][key][1] for key in keys]
-                precisions.append((xs, precision))
-                recalls.append((xs, recall))
+                # precisions.append((xs, precision))
+                # recalls.append((xs, recall))
+                precisions.append(precision)
+                recalls.append(recall)
             
             save_sub_dir = os.path.join(save_dir, 'concolic-accuracy', compiler, opt_level)
             if not os.path.exists(save_sub_dir):
                 os.makedirs(save_sub_dir)
 
             precision_fig = os.path.join(save_sub_dir, f"precision.png")
-            math_tools.plot_multi(precisions, precision_fig, colors, decompilers)
+            # math_tools.plot_multi(precisions, precision_fig, colors, decompilers)
+            math_tools.plot_multi_hist(xs, precisions, precision_fig, colors, decompilers)
 
             recall_fig = os.path.join(save_sub_dir, f"recall.png")
-            math_tools.plot_multi(recalls, recall_fig, colors, decompilers)
+            # math_tools.plot_multi(recalls, recall_fig, colors, decompilers)
+            math_tools.plot_multi_hist(xs, recalls, recall_fig, colors, decompilers)
 
-def func_concolic_passrate_of_different_decompilers(root_dir, save_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    colors = ['red', 'green', 'blue', 'yellow', 'orange']
-
+def func_concolic_passrate_of_different_decompilers(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for compiler in compilers:
         for opt_level in optimizations:
             log_dir = os.path.join(root_dir, compiler, opt_level)
@@ -72,12 +71,14 @@ def func_concolic_passrate_of_different_decompilers(root_dir, save_dir):
                     raise FileNotFoundError
                 csvs[decompiler] = data_load.read_from_passrate(log_path)
                 
-            keys = csvs['angr'].keys()
+            keys = list(csvs['angr'].keys())
             keys.sort()
 
             passrates = []
             xs = list(range(len(keys)))
             for decompiler in decompilers:
+                # print(f"LOG: {compiler} {opt_level} {decompiler}")
+                # print(csvs[decompiler].keys())
                 passrate = [csvs[decompiler][key] for key in keys]
                 passrates.append((xs, passrate))
                 
@@ -88,12 +89,7 @@ def func_concolic_passrate_of_different_decompilers(root_dir, save_dir):
             passrate_fig = os.path.join(save_sub_dir, f"passrate.png")
             math_tools.plot_multi(passrates, passrate_fig, colors, decompilers)
 
-def func_symbolic_match_of_different_decompilers(root_dir, save_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    colors = ['red', 'green', 'blue', 'yellow', 'orange']
-
+def func_symbolic_match_of_different_decompilers(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for compiler in compilers:
         for opt_level in optimizations:
             log_dir = os.path.join(root_dir, compiler, opt_level)
@@ -107,7 +103,7 @@ def func_symbolic_match_of_different_decompilers(root_dir, save_dir):
                     raise FileNotFoundError
                 csvs[decompiler] = data_load.read_from_symbolic(log_path)
 
-            keys = csvs['angr'].keys()
+            keys = list(csvs['angr'].keys())
             keys.sort()
 
             precisions = []
@@ -127,14 +123,9 @@ def func_symbolic_match_of_different_decompilers(root_dir, save_dir):
             math_tools.plot_multi(precisions, precision_fig, colors, decompilers)
             
             recall_fig = os.path.join(save_sub_dir, f"recall.png")
-            math_tools.plot_multi(recall, recall_fig, colors, decompilers)
+            math_tools.plot_multi(recalls, recall_fig, colors, decompilers)
 
-def func_symbolic_distance_of_different_decompilers(root_dir, save_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    colors = ['red', 'green', 'blue', 'yellow', 'orange']
-
+def func_symbolic_distance_of_different_decompilers(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for compiler in compilers:
         for opt_level in optimizations:
             log_dir = os.path.join(root_dir, compiler, opt_level)
@@ -148,7 +139,7 @@ def func_symbolic_distance_of_different_decompilers(root_dir, save_dir):
                     raise FileNotFoundError
                 csvs[decompiler] = data_load.read_from_distance(log_path)
 
-            keys = csvs['angr'].keys()
+            keys = list(csvs['angr'].keys())
             keys.sort()
 
             avgs = []
@@ -170,12 +161,7 @@ def func_symbolic_distance_of_different_decompilers(root_dir, save_dir):
             sum_fig = os.path.join(save_sub_dir, f"sum.png")
             math_tools.plot_multi(sums, sum_fig, colors, decompilers)
         
-def func_concolic_accuracy_of_different_optimizations(root_dir, save_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    colors = ['red', 'green', 'blue', 'yellow', 'orange']
-
+def func_concolic_accuracy_of_different_optimizations(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for decompiler in decompilers:
         for compiler in compilers:
             csvs = {}
@@ -184,7 +170,7 @@ def func_concolic_accuracy_of_different_optimizations(root_dir, save_dir):
                 if not os.path.exists(log_path):
                     raise FileNotFoundError
                 csvs[opt_level] = data_load.read_from_concolic(log_path)
-            keys = csvs['o0'].keys()
+            keys = list(csvs['o0'].keys())
             keys.sort()
 
             precisions = []
@@ -204,14 +190,9 @@ def func_concolic_accuracy_of_different_optimizations(root_dir, save_dir):
             math_tools.plot_multi(precisions, precision_fig, colors, optimizations)
 
             recall_fig = os.path.join(save_dir, "recall.png")
-            math_tools.plot_multi(recall, recall_fig, colors, optimizations)
+            math_tools.plot_multi(recalls, recall_fig, colors, optimizations)
 
-def func_concolic_passrate_of_different_optimizations(root_dir, save_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    colors = ['red', 'green', 'blue', 'yellow', 'orange']
-
+def func_concolic_passrate_of_different_optimizations(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for decompiler in decompilers:
         for compiler in compilers:
             csvs = {}
@@ -220,7 +201,7 @@ def func_concolic_passrate_of_different_optimizations(root_dir, save_dir):
                 if not os.path.exists(log_path):
                     raise FileNotFoundError
                 csvs[opt_level] = data_load.read_from_passrate(log_path)
-            keys = csvs['o0'].keys()
+            keys = list(csvs['o0'].keys())
             keys.sort()
             
             passrates = []
@@ -236,12 +217,7 @@ def func_concolic_passrate_of_different_optimizations(root_dir, save_dir):
             passrate_fig = os.path.join(save_sub_dir, "passrate.png")
             math_tools.plot_multi(passrates, passrate_fig, colors, optimizations)
             
-def func_symbolic_match_of_different_optimizations(root_dir, save_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    colors = ['red', 'green', 'blue', 'yellow', 'orange']
-
+def func_symbolic_match_of_different_optimizations(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for decompiler in decompilers:
         for compiler in compilers:
             csvs = {}
@@ -250,7 +226,7 @@ def func_symbolic_match_of_different_optimizations(root_dir, save_dir):
                 if not os.path.exists(log_path):
                     raise FileNotFoundError
                 csvs[opt_level] = data_load.read_from_symbolic(log_path)
-            keys = csvs['o0'].keys()
+            keys = list(csvs['o0'].keys())
             keys.sort()
             
             precisions = []
@@ -270,14 +246,9 @@ def func_symbolic_match_of_different_optimizations(root_dir, save_dir):
             math_tools.plot_multi(precisions, precision_fig, colors, optimizations)
 
             recall_fig = os.path.join(save_dir, "recall.png")
-            math_tools.plot_multi(recall, recall_fig, colors, optimizations)
+            math_tools.plot_multi(recalls, recall_fig, colors, optimizations)
             
-def func_symbolic_distance_of_different_optimizations(root_dir, save_dir):
-    compilers = ['clang', 'gcc']
-    optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    colors = ['red', 'green', 'blue', 'yellow', 'orange']
-
+def func_symbolic_distance_of_different_optimizations(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for decompiler in decompilers:
         for compiler in compilers:
             csvs = {}
@@ -286,7 +257,7 @@ def func_symbolic_distance_of_different_optimizations(root_dir, save_dir):
                 if not os.path.exists(log_path):
                     raise FileNotFoundError
                 csvs[opt_level] = data_load.read_from_distance(log_path)
-            keys = csvs['o0'].keys()
+            keys = list(csvs['o0'].keys())
             keys.sort()
 
             avgs = []
@@ -310,20 +281,23 @@ def func_symbolic_distance_of_different_optimizations(root_dir, save_dir):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='analyze.py')
-    parser.add_argument('-d', '--dataset', choices=['df2'], type=str, help='Datasets')
     parser.add_argument('-e', '--experiment', choices=['decompilers', 'optimizations'], type=str, help='Experiments')
     parser.add_argument('-l', '--log', type=str, help='log dir')
     parser.add_argument('-s', '--save', type=str, help='figure save dir')
+    parser.add_argument('-P', '--colors', nargs='+', help='Colors')
+    parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+    parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+    parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
 
     args = parser.parse_args()
 
     if args.experiment == 'decompilers':
-        func_concolic_accuracy_of_different_decompilers(args.log, args.save)
-        func_concolic_passrate_of_different_decompilers(args.log, args.save)
-        func_symbolic_match_of_different_decompilers(args.log, args.save)
-        func_symbolic_distance_of_different_decompilers(args.log, args.save)
+        func_concolic_accuracy_of_different_decompilers(args.log, args.save, args.compilers, args.optimizations, args.decompilers, args.colors)
+        # func_concolic_passrate_of_different_decompilers(args.log, args.save, args.compilers, args.optimizations, args.decompilers, args.colors)
+        # func_symbolic_match_of_different_decompilers(args.log, args.save, args.compilers, args.optimizations, args.decompilers, args.colors)
+        # func_symbolic_distance_of_different_decompilers(args.log, args.save, args.compilers, args.optimizations, args.decompilers, args.colors)
     elif args.experiment == 'optimizations':
-        func_concolic_accuracy_of_different_optimizations(args.log, args.save)
-        func_concolic_passrate_of_different_optimizations(args.log, args.save)
-        func_symbolic_match_of_different_optimizations(args.log, args.save)
-        func_symbolic_distance_of_different_optimizations(args.log, args.save)
+        func_concolic_accuracy_of_different_optimizations(args.log, args.save, args.compilers, args.optimizations, args.decompilers, args.colors)
+        func_concolic_passrate_of_different_optimizations(args.log, args.save, args.compilers, args.optimizations, args.decompilers, args.colors)
+        func_symbolic_match_of_different_optimizations(args.log, args.save, args.compilers, args.optimizations, args.decompilers, args.colors)
+        func_symbolic_distance_of_different_optimizations(args.log, args.save, args.compilers, args.optimizations, args.decompilers, args.colors)

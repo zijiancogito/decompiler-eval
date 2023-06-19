@@ -13,9 +13,11 @@ def process_function(de_file, save_to, exp):
     paths = symbolic_execution(de_file, exp)
     if paths is not None:
         dump_to_file(save_to, paths)
-        return None
+        return False
     else:
-        return de_file
+        with open(save_to, 'w') as f:
+            f.write("")
+        return True
 
 def dump_to_file(save_to, paths):
     """

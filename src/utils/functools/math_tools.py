@@ -3,6 +3,10 @@ import sys
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from shapely.geometry import Point
+from shapely.ops import cascaded_union
+import brewer2mpl
+
 
 
 def average_x_y(x, y):
@@ -64,10 +68,46 @@ def plot_multi(pairs, save_to, colors, decompilers):
     plt.figure(figsize=(10, 10), dpi=100)
     idx = 0
     for xi, yi in pairs:
-        plt.scatter(xi, yi, c=colors[idx], label=decompilers[idx], edgecolors='none')
+        plt.scatter(xi, yi, c=colors[idx], label=decompilers[idx], edgecolors='none', alpha=0.5, marker=',')
         idx += 1
     plt.legend()
     plt.grid(True)
+    plt.savefig(save_to)
+    plt.cla()
+    plt.close('all')
+
+def plot_multi_stems(xs, ys, save_to, colors, decompilers):
+    plt.figure(figsize=(20, 10), dpi=100)
+    idx = 0
+    # bmap = brewer2mpl.get_map('Paired', 'Qualitative', len(decompilers))
+    # colors = bmap.mpl_colors
+    for yi in ys:
+        (markers, stemlines, baseline) = plt.stem(xs, yi, label=decompilers[idx], use_line_collection=True)
+        alpha = np.mean(yi)
+        plt.setp(stemlines, linestyle="-", linewidth=(1-alpha)*2, color=colors[idx], alpha=0)
+        plt.setp(baseline, linestyle="-", color=colors[idx], alpha=0)
+        plt.setp(markers, marker='*', color=colors[idx])
+        idx += 1
+    plt.legend()
+    plt.yticks(np.arange(0, 1, 0.5)) 
+    plt.savefig(save_to)
+    plt.cla()
+    plt.close('all')
+    
+def plot_multi_hist(xs, ys, save_to, colors, decompilers):
+    img = np.zeros((20, 5, 3), dtype=np.uint8)
+
+    counts = []
+    for i in range(0, 20):
+        ymin = float(i) / 20
+        ymax = ymin + 0.05
+        for dec, yi in enumerate(ys):
+            nyi = np.array(yi)
+            count = len(np.where((nyi >= ymin) & (nyi < ymax))[0])
+            img[i][dec] = [count / , count, 0]
+    plt.figure(figsize=(20, 5))       
+    plt.imshow(img)
+    plt.axis('off')
     plt.savefig(save_to)
     plt.cla()
     plt.close('all')

@@ -70,5 +70,36 @@ cd ../read/
 
 ```sh
 cd process/raw
-./cf
+./cf_gen.sh | tee ../../log/CF/xxxxxxxx/cf_gen.log
+./cf_check.sh | tee ../../log/CF/xxxxxxxx/cf_count_decompiling.log
+./cf_de.sh | tee ../../log/CF/xxxxxxxx/cf_de.log
+
+cd ../../analyze/decompile/
+./cf-analyze.sh | tee ../../log/CF/xxxxxxxx/cf_dec_err.log
+
+cd ../recompile/
+./cf.sh | tee ../../log/CF/xxxxxxxx/cf_recompile.log
+
+cd ../read/
+./cf.sh | tee ../../log/CF/xxxxxxxx/cf_read.log
+
+```
+
+## POJ
+
+```sh
+cd process/raw
+./poj_gen.sh | tee ../../log/POJ/xxxxxxxx/poj_gen.log
+./poj_check.sh | tee ../../log/POJ/xxxxxxxx/poj_count_decompiling.log
+./poj_de.sh | tee ../../log/POJ/xxxxxxxx/poj_de.log
+
+cd ../../analyze/decompile/
+./poj-analyze.sh | tee ../../log/POJ/xxxxxxxx/poj_dec_err.log
+
+cd ../recompile
+./poj.sh | tee ../../log/POJ/xxxxxxxx/poj_recompile.log
+
+cd ../read
+./poj.sh | tee ../../log/POJ/xxxxxxxx/poj_read.log
+
 ```

@@ -474,8 +474,7 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
         TSNode right_node = ts_node_child_by_field_name(expression_node, "right", strlen("right"));
         parse_expression(left_node, source, var_map, changed_vars);
         ret = parse_expression(right_node, source, var_map, changed_vars, get_self);
-    } else if (node_type.find("_literal") != std::string::npos && 
-             node_type.find("literal_") == std::string::npos) {
+    } else if (node_type.find("_literal") != std::string::npos && node_type.find("literal_") == std::string::npos) {
         // Get the value of the literal directly
         ret["type"] = node_type;
         std::string literal = get_content(expression_node, source);
@@ -636,7 +635,6 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             ret["value"] = return_cnt;
         }
     }
-
     while(simplification(ret));
 
     if (!get_self) {
@@ -1336,7 +1334,7 @@ void test(const char *str, MODE mode)
 int main()
 {
     // process("/home/eval/POJ/test/c/10-11-11/main.txt", FILE_NAME);
-    process("./s_test.c", FILE_NAME);
+    process("/home/zrz/ttt/src/369.c", FILE_NAME);
     // test("./s_test.c", FILE_NAME);
     return 0;
 }

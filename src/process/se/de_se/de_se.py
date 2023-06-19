@@ -44,13 +44,11 @@ def process_df2(dec_file, save_dir, log_file):
         os.makedirs(save_dir)
     save_path = os.path.join(save_dir, f"{os.path.basename(dec_file).split('.')[0]}.json")
     fail = exe_no_cf.process_function(dec_file, save_path, 'df2')
-    if fail is not None:
+    if fail:
         log_dir = os.path.dirname(log_file)
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
-        log([fail], log_file)
-        with open(save_path, 'w') as f:
-            f.write("")
+        log([dec_file], log_file)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='de_df.py')
