@@ -13,11 +13,6 @@ import math_tools
 # different decompiler on one optimization level
 
 def func_concolic_accuracy_of_different_decompilers(root_dir, save_dir, compilers, optimizations, decompilers, colors):
-    # compilers = ['clang', 'gcc']
-    # optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-    # decompilers = ['angr', 'BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
-    # colors = ['red', 'green', 'blue', 'yellow', 'orange']
-    
     for compiler in compilers:
         for opt_level in optimizations:
             log_dir = os.path.join(root_dir, compiler, opt_level)
@@ -40,8 +35,6 @@ def func_concolic_accuracy_of_different_decompilers(root_dir, save_dir, compiler
             for decompiler in decompilers:
                 precision = [csvs[decompiler][key][0] for key in keys]
                 recall = [csvs[decompiler][key][1] for key in keys]
-                # precisions.append((xs, precision))
-                # recalls.append((xs, recall))
                 precisions.append(precision)
                 recalls.append(recall)
             
@@ -80,14 +73,14 @@ def func_concolic_passrate_of_different_decompilers(root_dir, save_dir, compiler
                 # print(f"LOG: {compiler} {opt_level} {decompiler}")
                 # print(csvs[decompiler].keys())
                 passrate = [csvs[decompiler][key] for key in keys]
-                passrates.append((xs, passrate))
+                passrates.append(passrate)
                 
             save_sub_dir = os.path.join(save_dir, 'concolic-passrate', compiler, opt_level)
             if not os.path.exists(save_sub_dir):
                 os.makedirs(save_sub_dir)
                 
             passrate_fig = os.path.join(save_sub_dir, f"passrate.png")
-            math_tools.plot_multi(passrates, passrate_fig, colors, decompilers)
+            math_tools.plot_multi_stem(xs, passrates, passrate_fig, colors, decompilers)
 
 def func_symbolic_match_of_different_decompilers(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for compiler in compilers:
@@ -112,18 +105,18 @@ def func_symbolic_match_of_different_decompilers(root_dir, save_dir, compilers, 
             for decompiler in decompilers:
                 precision = [csvs[decompiler][key][0] for key in keys]
                 recall = [csvs[decompiler][key][1] for key in keys]
-                precisions.append((xs, precision))
-                recalls.append((xs, recall))
+                precisions.append(precision)
+                recalls.append(recall)
                 
             save_sub_dir = os.path.join(save_dir, 'symbolic-passrate', compiler, opt_level)
             if not os.path.exists(save_sub_dir):
                 os.makedirs(save_sub_dir)
                 
             precision_fig = os.path.join(save_sub_dir, f"precision.png")
-            math_tools.plot_multi(precisions, precision_fig, colors, decompilers)
+            math_tools.plot_multi_stem(xs, precisions, precision_fig, colors, decompilers)
             
             recall_fig = os.path.join(save_sub_dir, f"recall.png")
-            math_tools.plot_multi(recalls, recall_fig, colors, decompilers)
+            math_tools.plot_multi_stem(xs, recalls, recall_fig, colors, decompilers)
 
 def func_symbolic_distance_of_different_decompilers(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for compiler in compilers:
@@ -148,18 +141,18 @@ def func_symbolic_distance_of_different_decompilers(root_dir, save_dir, compiler
             for decompiler in decompilers:
                 _avg = [csvs[decompiler][key][0] for key in keys]
                 _sum = [csvs[decompiler][key][1] for key in keys]
-                avgs.append((xs, _avg))
-                sums.append((xs, _sum))
+                avgs.append(_avg)
+                sums.append(_sum)
                 
             save_sub_dir = os.path.join(save_dir, 'symbolic-distance', compiler, opt_level)
             if not os.path.exists(save_sub_dir):
                 os.makedirs(save_sub_dir)
                 
             avg_fig = os.path.join(save_sub_dir, f"average.png")
-            math_tools.plot_multi(avgs, avg_fig, colors, decompilers)
+            math_tools.plot_multi_stem(xs, avgs, avg_fig, colors, decompilers)
             
             sum_fig = os.path.join(save_sub_dir, f"sum.png")
-            math_tools.plot_multi(sums, sum_fig, colors, decompilers)
+            math_tools.plot_multi_stem(xs, sums, sum_fig, colors, decompilers)
         
 def func_concolic_accuracy_of_different_optimizations(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for decompiler in decompilers:
@@ -179,18 +172,18 @@ def func_concolic_accuracy_of_different_optimizations(root_dir, save_dir, compil
             for opt_level in optimizations:
                 precision = [csvs[opt_level][key][0] for key in keys]
                 recall = [csvs[opt_level][key][1] for key in keys]
-                precisions.append((xs, precision))
-                recalls.append((xs, recall))
+                precisions.append(precision)
+                recalls.append(recall)
             
             save_sub_dir = os.path.join(save_dir, 'concolic-accuracy', decompiler, compiler)
             if not os.path.exists(save_sub_dir):
                 os.makedirs(save_sub_dir)
                 
             precision_fig = os.path.join(save_sub_dir, "precision.png")
-            math_tools.plot_multi(precisions, precision_fig, colors, optimizations)
+            math_tools.plot_multi_stem(xs, precisions, precision_fig, colors, optimizations)
 
             recall_fig = os.path.join(save_dir, "recall.png")
-            math_tools.plot_multi(recalls, recall_fig, colors, optimizations)
+            math_tools.plot_multi_stem(xs, recalls, recall_fig, colors, optimizations)
 
 def func_concolic_passrate_of_different_optimizations(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for decompiler in decompilers:
@@ -215,7 +208,7 @@ def func_concolic_passrate_of_different_optimizations(root_dir, save_dir, compil
                 os.makedirs(save_sub_dir)
             
             passrate_fig = os.path.join(save_sub_dir, "passrate.png")
-            math_tools.plot_multi(passrates, passrate_fig, colors, optimizations)
+            math_tools.plot_multi_stem(xs, passrates, passrate_fig, colors, optimizations)
             
 def func_symbolic_match_of_different_optimizations(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for decompiler in decompilers:
@@ -235,18 +228,18 @@ def func_symbolic_match_of_different_optimizations(root_dir, save_dir, compilers
             for opt_level in optimizations:
                 precision = [csvs[opt_level][key][0] for key in keys]
                 recall = [csvs[opt_level][key][1] for key in keys]
-                precisions.append((xs, precision))
-                recalls.append((xs, recall))
+                precisions.append(precision)
+                recalls.append(recall)
             
             save_sub_dir = os.path.join(save_dir, 'symbolic-match', decompiler, compiler)
             if not os.path.exists(save_sub_dir):
                 os.makedirs(save_sub_dir)
                 
             precision_fig = os.path.join(save_sub_dir, "precision.png")
-            math_tools.plot_multi(precisions, precision_fig, colors, optimizations)
+            math_tools.plot_multi_stem(xs, precisions, precision_fig, colors, optimizations)
 
             recall_fig = os.path.join(save_dir, "recall.png")
-            math_tools.plot_multi(recalls, recall_fig, colors, optimizations)
+            math_tools.plot_multi_stem(xs, recalls, recall_fig, colors, optimizations)
             
 def func_symbolic_distance_of_different_optimizations(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for decompiler in decompilers:
@@ -274,10 +267,10 @@ def func_symbolic_distance_of_different_optimizations(root_dir, save_dir, compil
                 os.makedirs(save_sub_dir)
             
             avg_fig = os.path.join(save_sub_dir, f"average.png")
-            math_tools.plot_multi(avgs, avg_fig, colors, optimizations)
+            math_tools.plot_multi_stem(xs, avgs, avg_fig, colors, optimizations)
             
             sum_fig = os.path.join(save_sub_dir, f"sum.png")
-            math_tools.plot_multi(sums, sum_fig, colors, optimizations)
+            math_tools.plot_multi_stem(xs, sums, sum_fig, colors, optimizations)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='analyze.py')

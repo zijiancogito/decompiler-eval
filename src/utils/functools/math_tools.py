@@ -95,19 +95,23 @@ def plot_multi_stems(xs, ys, save_to, colors, decompilers):
     plt.close('all')
     
 def plot_multi_hist(xs, ys, save_to, colors, decompilers):
-    img = np.zeros((20, 5, 3), dtype=np.uint8)
+    img = np.zeros((5, 50), dtype=np.float32)
 
     counts = []
-    for i in range(0, 20):
-        ymin = float(i) / 20
-        ymax = ymin + 0.05
+    step = 2
+    for i in range(0, 100, step):
+        ymin = float(i) / 100
+        ymax = ymin + step / 100
         for dec, yi in enumerate(ys):
             nyi = np.array(yi)
             count = len(np.where((nyi >= ymin) & (nyi < ymax))[0])
-            img[i][dec] = [count / , count, 0]
-    plt.figure(figsize=(20, 5))       
-    plt.imshow(img)
-    plt.axis('off')
+            if count > 255:
+                count = 255
+            img[dec][int(i/step)] = count
+    plt.figure(figsize=(50, 5))       
+    plt.imshow(img, cmap='GnBu')
+    plt.yticks([1, 2, 3, 4, 5], decompilers)
+    plt.legend()
     plt.savefig(save_to)
     plt.cla()
     plt.close('all')

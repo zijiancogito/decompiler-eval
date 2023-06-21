@@ -3,9 +3,11 @@ import os
 import re
 import json
 
+import numpy as np
+
 import argparse
 sys.path.append('/home/eval/decompiler-eval/src/analyze/read/exp')
-from length import get_c_exp_len
+from length import get_c_exp_len, exp_score
 
 from tqdm import tqdm
 
@@ -28,24 +30,49 @@ def gen_log(dec_file, dec_exps, src_exps):
 
 def analyze_all(compilers, decompilers, optimizations, dec_dir, src_dir, log_dir, func_filter):
     for compiler in compilers:
+        print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
+        print("{0:15}".format("Optimization"), end='\t')
+        for decompiler in decompilers:
+            print("{0:20}".format(decompiler), end='\t')
+        print()
         for opt_level in optimizations:
             log_sub_dir = os.path.join(log_dir, compiler, opt_level)
             if not os.path.exists(log_sub_dir):
                 os.makedirs(log_sub_dir)
+            print("{0:15}".format(opt_level), end='\t')
+            
             for decompiler in decompilers:
                 dec_files = os.listdir(os.path.join(dec_dir, compiler, opt_level, decompiler))
                 
                 logs = []
-                for dec_file in tqdm(dec_files):
+                max_dec_exps = 0
+                max_src_exps = 0
+                decs, srcs = [], []
+                for dec_file in dec_files:
                     dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
                     src_path = os.path.join(src_dir, f"{dec_file.split('.')[0]}.c")
                     dec_exps = get_c_exp_len(dec_path, func_filter)
                     src_exps = get_c_exp_len(src_path, func_filter)
-
+                    avg_dec, avg_src, max_dec, max_src = exp_score(dec_exps, src_exps)
+                    if max_dec > max_dec_exps:
+                        max_dec_exps = max_dec
+                    if max_src > max_src_exps:
+                        max_src_exps = max_src
+                    decs.append(avg_dec)
+                    srcs.append(avg_src)
                     log_lines = gen_log(dec_file, dec_exps, src_exps)
                     logs.extend(log_lines)
 
                 log(logs, os.path.join(log_sub_dir, f"exp-len-{decompiler}.csv"))
+                
+                dec_avg, src_avg = 0, 0
+                if len(decs) > 0:
+                    dec_avg = round(np.mean(decs), 2)
+                if len(srcs) > 0:
+                    src_avg = round(np.mean(srcs), 2)
+                print("{0:20}".format(f"{dec_avg}/{src_avg} {max_dec_exps}/{max_src_exps}"), end='\t')
+            print()
+        print()
 
 def log(log_list, log_file):
     with open(log_file, 'w') as f:
@@ -58,7 +85,7 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--src', type=str, help='dir of SRC')
     parser.add_argument('-d', '--dec', type=str, help='dir of DEC')
     parser.add_argument('-l', '--log', type=str, help='log dir')
-    parser.add_argument('-f', '--func-filter', nargs='+', help='function filter')
+    parser.add_argument('-f', '--func-filter', nargs='*', help='function filter')
     parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
     parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
     parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')

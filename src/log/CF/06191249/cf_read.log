@@ -1,12 +1,52 @@
 Control structure
 Control structure - Cyclomatic complexity
 -----------------------------------------------\n
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0.76/0.57   	0.81/0.62   	0.59/0.49   	0.54/0.45   	0.49/0.42   	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0.49/0.41   	0.72/0.58   	0.58/0.49   	0.53/0.44   	0.5/0.42    	
+
 Control structure - Gotos
 -----------------------------------------------\n
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/0.0       	170/0.09    	300/0.11    	302/0.08    	302/0.07    	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0/0.0       	94/0.05     	144/0.05    	145/0.04    	145/0.03    	
+
 Code Complexity
 Code Complexity - Line of Code
 -----------------------------------------------\n
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	1.05/0.32   	1.36/0.31   	0.24/0.07   	0.21/0.07   	0.27/0.09   	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0.09/0.03   	0.93/0.24   	0.23/0.07   	0.2/0.06    	0.27/0.09   	
+
 Code Complexity - Variables Count
 -----------------------------------------------\n
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0.9/0.27    	1.93/0.32   	0.08/0.01   	0.02/0.0    	0.06/0.01   	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	0.0/0.0     	1.52/0.28   	0.05/0.01   	0.02/0.0    	0.0/0.0     	
+
 Code Complexity - Expression length
 -----------------------------------------------\n
+------------------------------clang------------------------------
+Optimization   	angr                	BinaryNinja         	Ghidra              	Hex-Rays            	RetDec              	
+o0             	17.42/35.29 230/661 	28.18/35.29 483/661 	12.91/35.29 100/661 	10.25/35.29 120/661 	14.6/35.29 275/661  	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr                	BinaryNinja         	Ghidra              	Hex-Rays            	RetDec              	
+o0             	16.0/35.29 16/661   	26.73/35.29 660/661 	12.13/35.29 100/661 	10.07/35.29 134/661 	14.67/35.29 1166/661	
+

@@ -2,6 +2,7 @@ import sys
 import os
 import re
 import argparse
+import numpy as np
 
 import ir_var, c_var
 
@@ -28,26 +29,47 @@ def gen_log(dec_file, dec_src, dec_ir, func_filter):
                 
 def analyze_all(compilers, decompilers, optimizations, dec_dir, src_dir, ir_dir, log_dir, func_filter):
     for compiler in compilers:
+        print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
+        print("{0:15}".format("Optimization"), end='\t')
+        for decompiler in decompilers:
+            print("{0:12}".format(decompiler), end='\t')
+        print()
         for opt_level in optimizations:
             log_sub_dir = os.path.join(log_dir, compiler, opt_level)
             if not os.path.exists(log_sub_dir):
                 os.makedirs(log_sub_dir)
+            print("{0:15}".format(opt_level), end='\t')
 
             for decompiler in decompilers:
                 logs = []
                 
+                srcs, irs = [], []
                 dec_files = os.listdir(os.path.join(dec_dir, compiler, opt_level, decompiler))
-                for dec_file in tqdm(dec_files):
+                for dec_file in dec_files:
                     dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
                     ir_path = os.path.join(ir_dir, opt_level, f"{dec_file.split('.')[0]}.ll")
                     src_path = os.path.join(src_dir, f"{dec_file.split('.')[0]}.c")
                     dec_src = dec_vs_src(dec_path, src_path, func_filter)
                     dec_ir = dec_vs_ir(dec_path, ir_path, func_filter)
+                    for func in dec_src:
+                        srcs.append(dec_src[func])
+                    for func in dec_ir:
+                        irs.append(dec_ir[func])
                     log_lines = gen_log(dec_file, dec_src, dec_ir, func_filter)
                     logs.extend(log_lines)
                 
                 log_file = os.path.join(log_sub_dir, f"var-{decompiler}.csv")
                 log(logs, log_file)
+
+                src_avg, ir_avg = 0, 0
+                if len(srcs) > 0:
+                    src_avg = round(np.mean(srcs), 2)
+                if len(irs) > 0:
+                    ir_avg = round(np.mean(irs), 2)
+                print("{0:12}".format(f"{src_avg}/{ir_avg}"), end='\t')
+            print()
+        print()
+                
 
 def log(log_list, log_file):
     with open(log_file, 'w') as f:
@@ -89,7 +111,7 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--src', type=str, help='dir of SRC')
     parser.add_argument('-d', '--dec', type=str, help='dir of DEC')
     parser.add_argument('-l', '--log', type=str, help='log dir')
-    parser.add_argument('-f', '--func-filter', nargs='+', help='function filter')
+    parser.add_argument('-f', '--func-filter', nargs='*', help='function filter')
     parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
     parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
     parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')

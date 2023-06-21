@@ -34,7 +34,7 @@ def get_c_cycles(code_file, func_filter):
     cycles = {}
 
     for fname, fcode in zip(funcs_name, funcs):
-        if len(func_filter) != 0 and not fname not in func_filter:
+        if len(func_filter) != 0 and fname not in func_filter:
             continue
         cycles[fname] = function_cycles(fcode)
     return cycles

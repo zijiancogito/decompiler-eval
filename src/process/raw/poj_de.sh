@@ -18,7 +18,17 @@ DE_DIR=/home/eval/data/POJ/process/de
 cp -r $RAW_DE_DIR $DE_DIR
 RAW_IR_DIR=/home/eval/data/POJ/raw/ir
 IR_DIR=/home/eval/data/POJ/process/ir
+rm -r $IR_DIR
 cp -r $RAW_IR_DIR $IR_DIR
+
+POISON_MOVE_DIR=/home/eval/data/POJ/trash/ir/poison
+python3 ./ir/check/check_attr.py -i $IR_DIR -d df2
+echo "\n"
+python3 ./ir/check/check_poison.py -i $IR_DIR -o $POISON_MOVE_DIR -d df2
+
+echo "checking result"
+python3 ./ir/check/check.py -i $IR_DIR -o ATTR POISON -d df2
+
 echo "--------------------------------------------------------------------\n"
 echo "Remove files not in IR.\n"
 python3 ./decompile/preprocess/remove_unused/remove_not_in_ir.py -d $DE_DIR -i $IR_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS

@@ -100,6 +100,26 @@ gcc-os-Hex-Rays:
 gcc-os-RetDec:
 
 
+check_attr.py:	Processing o0...
+check_attr.py:	Processing o1...
+check_attr.py:	Processing o2...
+check_attr.py:	Processing o3...
+check_attr.py:	Processing os...
+\n
+check_poison.py:	Processing o0...
+check_poison.py:	Processing o1...
+check_poison.py:	Processing o2...
+check_poison.py:	Processing o3...
+check_poison.py:	Processing os...
+Writing results to log file...
+checking result
+Checking o0...
+Checking o1...
+Checking o2...
+Checking o3...
+Checking os...
+
+All checked.
 --------------------------------------------------------------------\n
 Remove files not in IR.\n
 clang-o0-angr:
@@ -113,45 +133,45 @@ Unlink 0/2000 files.
 clang-o0-RetDec:
 Unlink 0/2000 files.
 clang-o1-angr:
-Unlink 0/2000 files.
+Unlink 1/2000 files.
 clang-o1-BinaryNinja:
-Unlink 0/2000 files.
+Unlink 1/2000 files.
 clang-o1-Ghidra:
-Unlink 0/2000 files.
+Unlink 1/2000 files.
 clang-o1-Hex-Rays:
-Unlink 0/2000 files.
+Unlink 1/2000 files.
 clang-o1-RetDec:
-Unlink 0/2000 files.
+Unlink 1/2000 files.
 clang-o2-angr:
-Unlink 0/2000 files.
+Unlink 241/2000 files.
 clang-o2-BinaryNinja:
-Unlink 0/2000 files.
+Unlink 241/2000 files.
 clang-o2-Ghidra:
-Unlink 0/2000 files.
+Unlink 241/2000 files.
 clang-o2-Hex-Rays:
-Unlink 0/2000 files.
+Unlink 241/2000 files.
 clang-o2-RetDec:
-Unlink 0/2000 files.
+Unlink 241/2000 files.
 clang-o3-angr:
-Unlink 0/2000 files.
+Unlink 249/2000 files.
 clang-o3-BinaryNinja:
-Unlink 0/2000 files.
+Unlink 249/2000 files.
 clang-o3-Ghidra:
-Unlink 0/2000 files.
+Unlink 249/2000 files.
 clang-o3-Hex-Rays:
-Unlink 0/2000 files.
+Unlink 249/2000 files.
 clang-o3-RetDec:
-Unlink 0/2000 files.
+Unlink 249/2000 files.
 clang-os-angr:
-Unlink 0/2000 files.
+Unlink 64/2000 files.
 clang-os-BinaryNinja:
-Unlink 0/2000 files.
+Unlink 64/2000 files.
 clang-os-Ghidra:
-Unlink 0/2000 files.
+Unlink 64/2000 files.
 clang-os-Hex-Rays:
-Unlink 0/2000 files.
+Unlink 64/2000 files.
 clang-os-RetDec:
-Unlink 0/2000 files.
+Unlink 64/2000 files.
 gcc-o0-angr:
 Unlink 0/2000 files.
 gcc-o0-BinaryNinja:
@@ -163,44 +183,44 @@ Unlink 0/2000 files.
 gcc-o0-RetDec:
 Unlink 0/2000 files.
 gcc-o1-angr:
-Unlink 0/2000 files.
+Unlink 1/2000 files.
 gcc-o1-BinaryNinja:
-Unlink 0/2000 files.
+Unlink 1/2000 files.
 gcc-o1-Ghidra:
-Unlink 0/2000 files.
+Unlink 1/2000 files.
 gcc-o1-Hex-Rays:
-Unlink 0/2000 files.
+Unlink 1/2000 files.
 gcc-o1-RetDec:
-Unlink 0/2000 files.
+Unlink 1/2000 files.
 gcc-o2-angr:
-Unlink 0/2000 files.
+Unlink 241/2000 files.
 gcc-o2-BinaryNinja:
-Unlink 0/2000 files.
+Unlink 241/2000 files.
 gcc-o2-Ghidra:
-Unlink 0/2000 files.
+Unlink 241/2000 files.
 gcc-o2-Hex-Rays:
-Unlink 0/2000 files.
+Unlink 241/2000 files.
 gcc-o2-RetDec:
-Unlink 0/2000 files.
+Unlink 241/2000 files.
 gcc-o3-angr:
-Unlink 0/2000 files.
+Unlink 249/2000 files.
 gcc-o3-BinaryNinja:
-Unlink 0/2000 files.
+Unlink 249/2000 files.
 gcc-o3-Ghidra:
-Unlink 0/2000 files.
+Unlink 249/2000 files.
 gcc-o3-Hex-Rays:
-Unlink 0/2000 files.
+Unlink 249/2000 files.
 gcc-o3-RetDec:
-Unlink 0/2000 files.
+Unlink 249/2000 files.
 gcc-os-angr:
-Unlink 0/2000 files.
+Unlink 64/2000 files.
 gcc-os-BinaryNinja:
-Unlink 0/2000 files.
+Unlink 64/2000 files.
 gcc-os-Ghidra:
-Unlink 0/2000 files.
+Unlink 64/2000 files.
 gcc-os-Hex-Rays:
-Unlink 0/2000 files.
+Unlink 64/2000 files.
 gcc-os-RetDec:
-Unlink 0/2000 files.
+Unlink 64/2000 files.
 --------------------------------------------------------------------\n
 Change the extension of files from .txt to .c

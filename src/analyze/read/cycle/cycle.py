@@ -6,6 +6,7 @@ import c_cycle
 import ir_cycle
 import argparse
 from tqdm import tqdm
+import numpy as np
 
 def gen_log(dec_file, dec_src, dec_ir, func_filter):
     logs = []
@@ -17,25 +18,33 @@ def gen_log(dec_file, dec_src, dec_ir, func_filter):
         logs.append(log_line)
     for func in dec_ir:
         if func not in dec_src:
-            log_line = f"{dec_file}\t{func}\t0\t0\t0\t{dec_ir[func][0]}\t{dec_src[func][1]}\t{dec_src[func][2]}"
+            log_line = f"{dec_file}\t{func}\t0\t0\t0\t{dec_ir[func][0]}\t{dec_ir[func][1]}\t{dec_ir[func][2]}"
             logs.append(log_line)
     for func in func_filter:
         if func not in dec_src and func not in dec_ir:
             log_line = f"{dec_file}\t{func}\t0\t0\t0\t0\t0\t0"
+            logs.append(log_line)
     return logs
 
 def analyze_all(compilers, decompilers, optimizations, dec_dir, src_dir, ir_dir, log_dir, func_filter):
     for compiler in compilers:
+        print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
+        print("{0:15}".format("Optimization"), end='\t')
+        for decompiler in decompilers:
+            print("{0:12}".format(decompiler), end='\t')
+        print()
         for opt_level in optimizations:
             log_sub_dir = os.path.join(log_dir, compiler, opt_level)
             if not os.path.exists(log_sub_dir):
                 os.makedirs(log_sub_dir)
+            print("{0:15}".format(opt_level), end='\t')
             
             for decompiler in decompilers:
                 dec_files = os.listdir(os.path.join(dec_dir, compiler, opt_level, decompiler))
 
                 logs = []
-                for dec_file in tqdm(dec_files, desc=f"{compiler}-{opt_level}-{decompiler}"):
+                dec_srcs, dec_irs = [], []
+                for dec_file in dec_files:
                     dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
                     ir_path = os.path.join(ir_dir, opt_level, f"{dec_file.split('.')[0]}.ll")
                     if not os.path.exists(ir_path):
@@ -43,12 +52,24 @@ def analyze_all(compilers, decompilers, optimizations, dec_dir, src_dir, ir_dir,
                     src_path = os.path.join(src_dir, f"{dec_file.split('.')[0]}.c")
                     dec_src = dec_vs_src(dec_path, src_path, func_filter)
                     dec_ir = dec_vs_ir(dec_path, ir_path, func_filter)
+                    for func in dec_src:
+                        dec_srcs.append(dec_src[func][0])
+                    for func in dec_ir:
+                        dec_irs.append(dec_ir[func][0])
                     log_lines = gen_log(dec_file, dec_src, dec_ir, func_filter)
                     logs.extend(log_lines)
                 
                 log_file = os.path.join(log_sub_dir, f"cycle-{decompiler}.csv")
                 log(logs, log_file)
-                
+                dec_src_avg, dec_ir_avg = 0, 0
+                if len(dec_srcs) != 0:
+                    dec_src_avg = round(np.mean(dec_srcs), 2)
+                if len(dec_irs) != 0:
+                    dec_ir_avg = round(np.mean(dec_irs), 2)
+                print("{0:12}".format(f"{dec_src_avg}/{dec_ir_avg}"), end='\t')
+            print()
+        print()
+
 def log(log_list, log_file):
     with open(log_file, 'w') as f:
         for l in log_list:
@@ -83,7 +104,7 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--src', type=str, help='dir of SRC')
     parser.add_argument('-d', '--dec', type=str, help='dir of DEC')
     parser.add_argument('-l', '--log', type=str, help='log dir')
-    parser.add_argument('-f', '--func-filter', nargs='+', help='function filter')
+    parser.add_argument('-f', '--func-filter', nargs='*', help='function filter')
     parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
     parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
     parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')

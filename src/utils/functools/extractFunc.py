@@ -110,8 +110,18 @@ class ExtractFuncs(object):
 	
 	def _findCBs(self):  # CB: curly braces
 		stack = []
+		is_comment = False
 		for i in range(len(self.file)):
-			r = self.file[i]
+			r = self.file[i].strip()
+			if r[0:2] == "//":
+				continue
+			if r[0:2] == "/*":
+				is_comment = True
+			if is_comment and "*/" in r:
+				is_comment = False
+				continue
+			if is_comment:
+				continue
 			for s in r:
 				if s == '{':
 					stack.append(i)
