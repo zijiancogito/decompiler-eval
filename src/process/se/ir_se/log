@@ -1,0 +1,52 @@
+c = [15, 20, 22]
+Remove (22, 15)
+Add (22, 17)
+Add (22, 20)
+Cycle Stack
+	[9, 15, 20, 22, 17]
+	[9, 15, 17]
+	[20, 22]
+c = [20, 22]
+Remove (22, 20)
+Add (22, 22)
+Cycle Stack
+	[22]
+	[9, 15, 20, 22, 17]
+	[9, 15, 17]
+c = [9, 15, 17]
+Remove (17, 9)
+Add (17, 15)
+Cycle Stack
+	[22]
+	[15, 20, 22, 17]
+	[15, 17]
+c = [15, 17]
+Remove (17, 15)
+Add (17, 17)
+Add (17, 20)
+Cycle Stack
+	[17]
+	[22]
+	[17, 20, 22]
+c = [17, 20, 22]
+Remove (22, 17)
+Add (22, 20)
+Cycle Stack
+	[17]
+	[22]
+	[20, 22]
+c = [20, 22]
+Remove (22, 20)
+Add (22, 22)
+Cycle Stack
+	[17]
+	[22]
+c = [22]
+Remove self-loop 22
+Cycle Stack
+	[17]
+c = [17]
+Remove self-loop 17
+Cycle Stack
+[0, 9, 15, 17, 20, 22, 25]
+[0, 9, 15, 20, 22, 25]

@@ -51,4 +51,11 @@ def symbolic_execution(function):
                   tmp_dict,
                   in_symbols_table)
   
+  paths = find_all_path(function)
   for 
+  
+def find_all_path(function):
+    
+  
+
+def execute_bb(bb):
