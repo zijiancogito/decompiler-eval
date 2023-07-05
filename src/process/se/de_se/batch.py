@@ -7,7 +7,7 @@ from path_process import change_ext
 from log import log_list2file
 
 
-def execute_all(dec_path, save_dir, log_path):
+def se_all(dec_path, save_dir, log_path):
   if not os.path.exists(save_dir):
     os.makedirs(save_dir)
   save_path = os.path.join(save_dir, f"{change_ext(dec_path, 'json', '.')}")
