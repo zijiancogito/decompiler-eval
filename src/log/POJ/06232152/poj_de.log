@@ -1,0 +1,226 @@
+--------------------------------------------------------------------\n
+Checking Decompiling ERRORS
+------------------------------clang------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	1.0         	1.0         	1.0         	1.0         	1.0         	
+o1             	0.999       	1.0         	1.0         	1.0         	1.0         	
+o2             	0.904       	1.0         	1.0         	1.0         	1.0         	
+o3             	0.901       	1.0         	1.0         	1.0         	1.0         	
+os             	0.98        	1.0         	1.0         	1.0         	1.0         	
+
+------------------------------gcc  ------------------------------
+Optimization   	angr        	BinaryNinja 	Ghidra      	Hex-Rays    	RetDec      	
+o0             	1.0         	1.0         	1.0         	1.0         	1.0         	
+o1             	1.0         	1.0         	1.0         	1.0         	1.0         	
+o2             	0.994       	1.0         	1.0         	1.0         	0.997       	
+o3             	0.932       	1.0         	1.0         	1.0         	0.997       	
+os             	1.0         	1.0         	1.0         	1.0         	1.0         	
+
+clang-o0-angr:
+clang-o0-BinaryNinja:
+clang-o0-Ghidra:
+clang-o0-Hex-Rays:
+clang-o0-RetDec:
+
+clang-o1-angr:
+Timeout or Not Implemented Error.
+	2/2	1.0
+clang-o1-BinaryNinja:
+clang-o1-Ghidra:
+clang-o1-Hex-Rays:
+clang-o1-RetDec:
+Timeout
+	1/1	1.0
+
+clang-o2-angr:
+Timeout or Not Implemented Error.
+	191/191	1.0
+clang-o2-BinaryNinja:
+clang-o2-Ghidra:
+clang-o2-Hex-Rays:
+clang-o2-RetDec:
+
+clang-o3-angr:
+Timeout or Not Implemented Error.
+	198/198	1.0
+clang-o3-BinaryNinja:
+clang-o3-Ghidra:
+clang-o3-Hex-Rays:
+clang-o3-RetDec:
+
+clang-os-angr:
+Timeout or Not Implemented Error.
+	40/40	1.0
+clang-os-BinaryNinja:
+clang-os-Ghidra:
+clang-os-Hex-Rays:
+clang-os-RetDec:
+Timeout
+	1/1	1.0
+
+
+gcc-o0-angr:
+gcc-o0-BinaryNinja:
+gcc-o0-Ghidra:
+gcc-o0-Hex-Rays:
+gcc-o0-RetDec:
+
+gcc-o1-angr:
+Timeout or Not Implemented Error.
+	1/1	1.0
+gcc-o1-BinaryNinja:
+gcc-o1-Ghidra:
+gcc-o1-Hex-Rays:
+gcc-o1-RetDec:
+
+gcc-o2-angr:
+Timeout or Not Implemented Error.
+	12/12	1.0
+gcc-o2-BinaryNinja:
+gcc-o2-Ghidra:
+gcc-o2-Hex-Rays:
+gcc-o2-RetDec:
+Timeout
+	7/7	1.0
+
+gcc-o3-angr:
+Timeout or Not Implemented Error.
+	135/135	1.0
+gcc-o3-BinaryNinja:
+gcc-o3-Ghidra:
+gcc-o3-Hex-Rays:
+gcc-o3-RetDec:
+Timeout
+	6/6	1.0
+
+gcc-os-angr:
+gcc-os-BinaryNinja:
+gcc-os-Ghidra:
+gcc-os-Hex-Rays:
+gcc-os-RetDec:
+
+
+check_attr.py:	Processing o0...
+check_attr.py:	Processing o1...
+check_attr.py:	Processing o2...
+check_attr.py:	Processing o3...
+check_attr.py:	Processing os...
+\n
+check_poison.py:	Processing o0...
+check_poison.py:	Processing o1...
+check_poison.py:	Processing o2...
+check_poison.py:	Processing o3...
+check_poison.py:	Processing os...
+Writing results to log file...
+checking result
+Checking o0...
+Checking o1...
+Checking o2...
+Checking o3...
+Checking os...
+
+All checked.
+--------------------------------------------------------------------\n
+Remove files not in IR.\n
+clang-o0-angr:
+Unlink 0/4000 files.
+clang-o0-BinaryNinja:
+Unlink 0/4000 files.
+clang-o0-Ghidra:
+Unlink 0/4000 files.
+clang-o0-Hex-Rays:
+Unlink 0/4000 files.
+clang-o0-RetDec:
+Unlink 0/4000 files.
+clang-o1-angr:
+Unlink 2/4000 files.
+clang-o1-BinaryNinja:
+Unlink 2/4000 files.
+clang-o1-Ghidra:
+Unlink 2/4000 files.
+clang-o1-Hex-Rays:
+Unlink 2/4000 files.
+clang-o1-RetDec:
+Unlink 2/4000 files.
+clang-o2-angr:
+Unlink 482/4000 files.
+clang-o2-BinaryNinja:
+Unlink 482/4000 files.
+clang-o2-Ghidra:
+Unlink 482/4000 files.
+clang-o2-Hex-Rays:
+Unlink 482/4000 files.
+clang-o2-RetDec:
+Unlink 482/4000 files.
+clang-o3-angr:
+Unlink 498/4000 files.
+clang-o3-BinaryNinja:
+Unlink 498/4000 files.
+clang-o3-Ghidra:
+Unlink 498/4000 files.
+clang-o3-Hex-Rays:
+Unlink 498/4000 files.
+clang-o3-RetDec:
+Unlink 498/4000 files.
+clang-os-angr:
+Unlink 128/4000 files.
+clang-os-BinaryNinja:
+Unlink 128/4000 files.
+clang-os-Ghidra:
+Unlink 128/4000 files.
+clang-os-Hex-Rays:
+Unlink 128/4000 files.
+clang-os-RetDec:
+Unlink 128/4000 files.
+gcc-o0-angr:
+Unlink 0/4000 files.
+gcc-o0-BinaryNinja:
+Unlink 0/4000 files.
+gcc-o0-Ghidra:
+Unlink 0/4000 files.
+gcc-o0-Hex-Rays:
+Unlink 0/4000 files.
+gcc-o0-RetDec:
+Unlink 0/4000 files.
+gcc-o1-angr:
+Unlink 2/4000 files.
+gcc-o1-BinaryNinja:
+Unlink 2/4000 files.
+gcc-o1-Ghidra:
+Unlink 2/4000 files.
+gcc-o1-Hex-Rays:
+Unlink 2/4000 files.
+gcc-o1-RetDec:
+Unlink 2/4000 files.
+gcc-o2-angr:
+Unlink 482/4000 files.
+gcc-o2-BinaryNinja:
+Unlink 482/4000 files.
+gcc-o2-Ghidra:
+Unlink 482/4000 files.
+gcc-o2-Hex-Rays:
+Unlink 482/4000 files.
+gcc-o2-RetDec:
+Unlink 482/4000 files.
+gcc-o3-angr:
+Unlink 498/4000 files.
+gcc-o3-BinaryNinja:
+Unlink 498/4000 files.
+gcc-o3-Ghidra:
+Unlink 498/4000 files.
+gcc-o3-Hex-Rays:
+Unlink 498/4000 files.
+gcc-o3-RetDec:
+Unlink 498/4000 files.
+gcc-os-angr:
+Unlink 128/4000 files.
+gcc-os-BinaryNinja:
+Unlink 128/4000 files.
+gcc-os-Ghidra:
+Unlink 128/4000 files.
+gcc-os-Hex-Rays:
+Unlink 128/4000 files.
+gcc-os-RetDec:
+Unlink 128/4000 files.
+--------------------------------------------------------------------\n
+Change the extension of files from .txt to .c

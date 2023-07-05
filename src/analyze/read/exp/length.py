@@ -12,6 +12,14 @@ def function_exp_len(function):
         else:
             exp_dict[l_len] = 1
     return exp_dict
+
+def get_len_over_80(code_file):
+    extract_func = ExtractFuncs()
+    funcs, _ = extract_func.getFuncs(code_file)
+    for fcode in funcs:
+        for l in str(fcode).strip().split('\n'):
+            if len(l.strip()) > 150:
+                print(f"{l}\t{len(l.strip())}")
             
 def get_c_exp_len(code_file, functions=['func0']):
     extract_func = ExtractFuncs()

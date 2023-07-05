@@ -76,6 +76,50 @@ def plot_multi(pairs, save_to, colors, decompilers):
     plt.cla()
     plt.close('all')
 
+def plot_stems(xs, ys, save_to, colors, decompilers):
+    xs = np.array(xs)
+    ys = np.array(ys)
+    plt.figure(figsize=(20, 10), dpi=100)
+    plt.xticks(np.arange(0, 1001, 200))
+    plt.yticks(np.arange(0, 1, 0.5))
+
+    labels = []
+    y = ys.T
+    for i in xs:
+        idx = np.argmax(y[i])
+        if decompilers[idx] in labels:
+            label = ''
+        else:
+            label = decompilers[idx]
+            labels.append(label)
+
+        (markers, stemlines, baseline) = plt.stem(i, y[i, idx], label=label)
+        plt.setp(stemlines, linestyle="-", linewidth=1, color=colors[idx], alpha=0.3)
+        plt.setp(baseline, linestyle="-", color=colors[idx], alpha=0)
+        plt.setp(markers, marker='*', color=colors[idx])
+
+    plt.legend()
+    plt.savefig(save_to)
+
+def plot_multi_stems2(xs, ys, save_to, colors, decompilers):
+    xs = np.array(xs)
+    ys = np.array(ys)
+    plt.figure(figsize=(20, 40), dpi=100)
+
+    for i in range(ys.shape[0]):
+        ax = plt.subplot(5, 1, i + 1)
+        (markers, stemlines, baseline) = plt.stem(xs, ys[i], label=decompilers[i])
+        plt.setp(stemlines, linestyle="-", linewidth=1, color=colors[i], alpha=0.3)
+        plt.setp(baseline, linestyle="-", color=colors[i], alpha=0)
+        plt.setp(markers, marker='*', color=colors[i])
+        plt.xticks(np.arange(0, 1001, 200))
+        plt.ylim((0, 1))
+        plt.yticks(np.arange(0, 1.1, 0.5))
+        ax.legend()
+
+    # plt.legend(loc='best',)
+    plt.savefig(save_to)
+
 def plot_multi_stems(xs, ys, save_to, colors, decompilers):
     plt.figure(figsize=(20, 10), dpi=100)
     idx = 0

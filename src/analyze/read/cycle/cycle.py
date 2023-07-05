@@ -53,9 +53,10 @@ def analyze_all(compilers, decompilers, optimizations, dec_dir, src_dir, ir_dir,
                     dec_src = dec_vs_src(dec_path, src_path, func_filter)
                     dec_ir = dec_vs_ir(dec_path, ir_path, func_filter)
                     for func in dec_src:
-                        dec_srcs.append(dec_src[func][0])
-                    for func in dec_ir:
-                        dec_irs.append(dec_ir[func][0])
+                        if func in dec_ir:
+                            dec_srcs.append(dec_src[func][0])
+                    # for func in dec_ir:
+                            dec_irs.append(dec_ir[func][0])
                     log_lines = gen_log(dec_file, dec_src, dec_ir, func_filter)
                     logs.extend(log_lines)
                 

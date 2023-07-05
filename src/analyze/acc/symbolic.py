@@ -113,23 +113,23 @@ def distance(ir_exp, c_exp):
     exp_tree.op_type(tree_a, a_op_type)
     exp_tree.op_type(tree_b, b_op_type)
     
-    dist = []
+    dist = 0
     all_sym = 0
     for key in a_op_type:
         all_sym += a_op_type[key]
         if key not in b_op_type:
-            dist.append(a_op_type[key])
+            # dist.append(a_op_type[key])
+            dist += a_op_type[key]
+        else:
+            # dist.append(abs(a_op_type[key] - b_op_type[key]))
+            dist += abs(a_op_type[key] - b_op_type[key])
     
     for key in b_op_type:
         all_sym += b_op_type[key]
         if key not in a_op_type:
-            dist.append(b_op_type[key])
+            # dist.append(b_op_type[key])
+            dist += b_op_type[key]
             
-    for key in a_op_type:
-        if key not in b_op_type:
-            continue
-        dist.append(abs(a_op_type[key] - b_op_type[key]))
-
     import numpy as np
     # avg_dist = round(np.mean(dist), 2)
     if all_sym == 0:

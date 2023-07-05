@@ -14,14 +14,16 @@ python3 ./decompile/preprocess/check_err/check_err.py -o check -d $RAW_DE_DIR -l
 python3 ./decompile/preprocess/check_err/check_err.py -o print -l $ERR_LOG_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS
 
 mkdir -p /home/eval/data/POJ/process/
+cp -r $RAW_DE_DIR /home/eval/data/POJ/process/
 DE_DIR=/home/eval/data/POJ/process/de
-cp -r $RAW_DE_DIR $DE_DIR
 RAW_IR_DIR=/home/eval/data/POJ/raw/ir
 IR_DIR=/home/eval/data/POJ/process/ir
 rm -r $IR_DIR
 cp -r $RAW_IR_DIR $IR_DIR
 
 POISON_MOVE_DIR=/home/eval/data/POJ/trash/ir/poison
+rm -r $POISON_MOVE_DIR
+mkdir -p $POISON_MOVE_DIR
 python3 ./ir/check/check_attr.py -i $IR_DIR -d df2
 echo "\n"
 python3 ./ir/check/check_poison.py -i $IR_DIR -o $POISON_MOVE_DIR -d df2
@@ -43,3 +45,6 @@ python3 ./decompile/preprocess/remove_unused/remove_not_in_ir.py -d $DE_DIR -i $
 echo "--------------------------------------------------------------------\n"
 echo "Change the extension of files from .txt to .c"
 python3 ./decompile/preprocess/change_ext/change_ext.py -d $DE_DIR -O $OPTIMIZATIONS -D $DECOMPILERS -C $COMPILERS
+
+# echo "Add header files"
+# python3 ./decompile/preprocess/headers/add_headers.py -d $DE_DIR -O $OPTIMIZATIONS -C $COMPILERS

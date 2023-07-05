@@ -44,11 +44,13 @@ def func_concolic_accuracy_of_different_decompilers(root_dir, save_dir, compiler
 
             precision_fig = os.path.join(save_sub_dir, f"precision.png")
             # math_tools.plot_multi(precisions, precision_fig, colors, decompilers)
-            math_tools.plot_multi_hist(xs, precisions, precision_fig, colors, decompilers)
+            math_tools.plot_multi_stems2(xs, precisions, precision_fig, colors, decompilers)
+            # math_tools.plot_stems(xs, precisions, precision_fig, colors, decompilers)
 
             recall_fig = os.path.join(save_sub_dir, f"recall.png")
             # math_tools.plot_multi(recalls, recall_fig, colors, decompilers)
-            math_tools.plot_multi_hist(xs, recalls, recall_fig, colors, decompilers)
+            math_tools.plot_multi_stems2(xs, recalls, recall_fig, colors, decompilers)
+            # math_tools.plot_stems(xs, recalls, recall_fig, colors, decompilers)
 
 def func_concolic_passrate_of_different_decompilers(root_dir, save_dir, compilers, optimizations, decompilers, colors):
     for compiler in compilers:

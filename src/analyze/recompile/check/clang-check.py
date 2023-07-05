@@ -12,7 +12,9 @@ def clang_check(path):
     opt = "--analyze"
     extra_opt = "--extra-arg"
     err_lim = "-ferror-limit=10000"
-    _chk = subprocess.run(["clang-check", extra_opt, err_lim, opt, path], capture_output=True)
+    extra_before = "--extra-arg-before"
+    include = "-I/home/eval/data/POJ/raw/headers"
+    _chk = subprocess.run(["clang-check", extra_before, include, extra_opt, err_lim, opt, path], capture_output=True)
     if os.path.exists(f'{os.path.splitext(os.path.basename(path))[0]}.plist'):
         os.unlink(f'{os.path.splitext(os.path.basename(path))[0]}.plist')
     return _chk.stderr.decode(encoding='utf8')
