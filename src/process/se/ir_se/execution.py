@@ -10,6 +10,7 @@ from func_timeout import func_set_timeout
 sys.path.append('/home/eval/decompiler-eval/src/utils/exp_tree/')
 from exp_tree import ExpTree, copy_tree, exptree_to_json
 from instruction import execution_instruction
+from cfg import CFG
 
 llvm.initialize()
 llvm.initialize_native_target()
@@ -54,8 +55,12 @@ def symbolic_execution(function):
   paths = find_all_path(function)
   for 
   
-def find_all_path(function):
-    
-  
+def build_cfg(function):
+  cfg = CFG()
+  for blk in function.blocks:
+    label = 
 
 def execute_bb(bb):
+
+    
+  

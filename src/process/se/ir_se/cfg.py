@@ -50,22 +50,52 @@ class CFG():
     
     def get_all_path(self):
         paths = nx.all_simple_paths(self.norm_cfg, self.entry, self.exit)
+        new_paths = []
         for p in paths:
-            print(p)
-        return paths
+            # TODO: 对路径里面，不在原始CFG图中的边，寻找一条在原始CFG上的两个节点的最简路径，加入进去，确保路径上的相邻两个节点在原始CFG中都是可达的
+            if len(p) <= 1:
+                new_paths.append(p)
+                continue
+            sub_path_dict = {}
+            key_idx = 0
+            p_graph = nx.DiGraph()
+            for idx in range(len(p) - 1):
+                u = p[idx]
+                v = p[idx + 1]
+                if not self.cfg.has_edge(u, v):
+                    sub_paths = nx.all_simple_paths(self.cfg, u, v)
+                    for sp in sub_paths:
+                        key = f"sp{key_idx}"
+                        p_graph.add_edge(u, key)
+                        p_graph.add_edge(key, v)
+                        sub_path_dict[key] = sp[1:-1]
+                        key_idx += 1
+                else:
+                    p_graph.add_edge(u, v)
+            graph_paths = nx.all_simple_paths(p_graph, self.entry, self.exit)
+            for gp in graph_paths:
+                if len(gp) <= 1:
+                    new_paths.append(gp)
+                    continue
+                np =[]
+                for v in gp:
+                    if v in sub_path_dict:
+                        np.extend(sub_path_dict[v])
+                    else:
+                        np.append(v)
+                new_paths.append(np)
+        return new_paths
 
     def build_cfg(self, edges):
         for e in edges:
             self.cfg.add_edge(e[0], e[1])
-            
 
 if __name__ == '__main__':
-    edges = [(0, 9), (9, 15), (15, 17), (17, 22), (15, 20), (20, 22), (22, 15), (22, 25), (25, 26)] 
+    edges = [(0, 9), (9, 15), (15, 17), (17, 9), (15, 20), (20, 22), (22, 20), (22, 25), (25, 26)] 
     cfg = CFG()
     cfg.build_cfg(edges)
     cfg.set_entry(0)
     cfg.set_exit(26)
     cfg.normalize_cfg()
-    cfg.get_all_path()
-
-        
+    paths = cfg.get_all_path()
+    print(paths)
