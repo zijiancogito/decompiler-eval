@@ -1,12 +1,8 @@
 import sys
-
-import utils
 import cfile as C
 import random
 
-MAX_BB_DEPTH = 3
-MAX_BB = 5
-MAX_FUNC = 1
+from statement import Statement
 
 class Function():
     def __init__(self, max_args, 
@@ -14,19 +10,21 @@ class Function():
                  max_const_variables,
                  max_expr_complexity,
                  max_block_size,
+                 max_block_depth,
                  max_funcs) -> None:
         self._max_args = max_args
         self._max_local_variables = max_local_variables
         self._max_const_variables = max_const_variables
         self._max_expr_complexity = max_expr_complexity
         self._max_block_size = max_block_size
+        self._max_block_depth = max_block_depth
         self._max_funcs = max_funcs
         self._bb_idx = 0
-
+        
     def make_inst(self, label):
         body = C.block(innerIndent=2)
         body.append(C.statement(f"{C.variable('v0', 'int')} = {C.fcall('rand')}"))
-        body.append(C.statement(C.fcall('printf', ["%d", label])))
+        body.append(C.statement(C.fcall('printf', ['"%d"', label])))
         body.append(C.statement('return v0'))
         head = C.function(f'f_rand_{label}', 'int')
         func = C.sequence()
@@ -34,60 +32,63 @@ class Function():
         func.append(body)
         return f'f_rand_{label}', func
 
-    def _basicblock_rec(local_out_bb, indent, max_exp_depth=1, max_bb_depth=1, max_bb=1, curr_depth=1):
+    def basicblock_rec(self, local_out_bb, indent, stmt_generator:Statement, max_exp_depth=1, max_bb_depth=1, max_bb=1, curr_depth=1):
         local_in_bb = []
         body = C.block(innerIndent=indent, indent=indent-2)
-        body.append(utils._basicblock_inst(self._bb_idx, indent=indent))
+        body.append(stmt_generator.basicblock_inst(self._bb_idx, indent=indent))
         self._bb_idx += 1
         isNewBB = False
         for i in range(max_bb):
             insert_bb = random.choice([True, False])
             if insert_bb and curr_depth < max_bb_depth:
                 if isNewBB:
-                    body.append(utils._basicblock_inst(self._bb_idx, indent=indent))
+                    body.append(stmt_generator.basicblock_inst(self._bb_idx, indent=indent))
                     self._bb_idx += 1
                 isNewBB = True
                 blk_type = random.choice(['while', 'if'])
                 if blk_type == 'while':
-                    cond_stmt = utils._while_stmt(local_out_bb + local_in_bb, indent)
+                    cond_stmt = stmt_generator.while_stmt(local_out_bb + local_in_bb, indent)
                     body.append(cond_stmt)
-                    bb = _basicblock_rec(local_out_bb + local_in_bb, 
-                                         indent + 2, 
-                                         max_exp_depth, 
-                                         max_bb_depth, 
-                                         max_bb, 
-                                         curr_depth + 1)
+                    bb = self.basicblock_rec(local_out_bb=local_out_bb + local_in_bb, 
+                                             indent=indent + 2, 
+                                             stmt_generator=stmt_generator,
+                                             max_exp_depth=max_exp_depth, 
+                                             max_bb_depth=max_bb_depth, 
+                                             max_bb=max_bb, 
+                                             curr_depth=curr_depth + 1)
                     body.append(bb)
                     self._bb_idx += 1
                 elif blk_type == 'if':
-                    cond_stmt = utils._if_stmt(local_out_bb + local_in_bb, indent)
+                    cond_stmt = stmt_generator.if_stmt(local_out_bb + local_in_bb, indent)
                     body.append(cond_stmt)
-                    bb = _basicblock_rec(local_out_bb + local_in_bb, 
-                                         indent + 2, 
-                                         max_exp_depth, 
-                                         max_bb_depth, 
-                                         max_bb, 
-                                         curr_depth + 1)
+                    bb = self.basicblock_rec(local_out_bb=local_out_bb + local_in_bb, 
+                                             indent=indent + 2, 
+                                             stmt_generator=stmt_generator,
+                                             max_exp_depth=max_exp_depth, 
+                                             max_bb_depth=max_bb_depth, 
+                                             max_bb=max_bb, 
+                                             curr_depth=curr_depth + 1)
 
                     body.append(bb)
                     hasElse = random.choice([True, False])                
                     if hasElse:
-                        else_stmt = utils._else_stmt(indent)
+                        else_stmt = stmt_generator.else_stmt(indent)
                         body.append(else_stmt)
-                        else_bb = _basicblock_rec(local_out_bb + local_in_bb, 
-                                                  indent + 2, 
-                                                  max_exp_depth,     
-                                                  max_bb_depth, 
-                                                  max_bb, 
-                                                  curr_depth + 1)
+                        else_bb = self.basicblock_rec(local_out_bb=local_out_bb + local_in_bb, 
+                                                      indent=indent + 2, 
+                                                      stmt_generator=stmt_generator,
+                                                      max_exp_depth=max_exp_depth,     
+                                                      max_bb_depth=max_bb_depth, 
+                                                      max_bb=max_bb, 
+                                                      curr_depth=curr_depth + 1)
                         body.append(else_bb)
                     
             else:
                 if isNewBB:  # 如果上一个语句是基本块，则说明下一个插入的stmt是新的基本块
-                    body.append(utils._basicblock_inst(self._bb_idx, indent=indent)) 
+                    body.append(stmt_generator.basicblock_inst(self._bb_idx, indent=indent)) 
                     self._bb_idx += 1   # 因此需要插入标记
                     isNewBB = False # 普通stmt的下一句不会开启新基本块，因此设置标记为F
-                stmt, new_local = utils._random_stmt(local_out_bb + local_in_bb, 
+                stmt, new_local = stmt_generator.random_stmt(local_out_bb + local_in_bb, 
                                                      indent, 
                                                      max_exp_depth)
                 if new_local != None:
@@ -99,7 +100,7 @@ class Function():
         # body.append(utils._basicblock_inst(self._bb_idx, indent=indent))
         return body
         
-    def make_function(self, arg_count, funcname):
+    def make_function(self, arg_count, funcname, stmt_generator:Statement):
         local_vars = []
 
         # prelog
@@ -117,11 +118,11 @@ class Function():
         for i in range(local_var_cnt):
             var = f"v{i}"
             inst = f"f_rand_{i}"
-            defs_list.append(utils._var_defination_stmt(var, inst))
+            defs_list.append(stmt_generator.var_defination_stmt(var, inst))
             local_vars.append(var)
         for i in range(local_const_cnt):
             var = f"v{i + local_var_cnt}"
-            defs_list.append(utils._const_defination_stmt(var))
+            defs_list.append(stmt_generator.const_defination_stmt(var))
             local_vars.append(var)
         random.shuffle(defs_list)
         for def_stmt in defs_list:
@@ -129,19 +130,20 @@ class Function():
 
         # main compond
         self._bb_idx = 0
-        commound = _basicblock_rec(local_out_bb=local_vars,
-                                   indent=2,
-                                   max_exp_depth=self._max_expr_complexity,
-                                   max_bb_depth=MAX_BB_DEPTH,
-                                   max_bb=MAX_BB,
-                                   curr_depth=0)
+        commound = self.basicblock_rec(local_out_bb=local_vars,
+                                       indent=2,
+                                       max_exp_depth=self._max_expr_complexity,
+                                       max_bb_depth=self._max_block_depth,
+                                       max_bb=self._max_block_size,
+                                       curr_depth=0,
+                                       stmt_generator=stmt_generator)
         func_body.append(commound.code)
 
         # insert ret stmt
 
-        func_body.append(utils._basicblock_inst(self._bb_idx, indent=2))
-        func_body.append(utils._ret_var_stmt(local_vars, indent=2, max_depth=self._max_expr_complexity))
-        func_body.append(utils._ret_stmt(indent=2))
+        func_body.append(stmt_generator.basicblock_inst(self._bb_idx, indent=2))
+        func_body.append(stmt_generator.ret_var_stmt(local_vars, indent=2, max_depth=self._max_expr_complexity))
+        func_body.append(stmt_generator.ret_stmt(indent=2))
         
         # make function
 
@@ -167,7 +169,7 @@ class Function():
                 break
         return body
 
-    def make_main(self, callees:list):
+    def make_main(self, callees:list, stmt_generator:Statement):
         head = C.function('main', 'int', )
         body = C.block(innerIndent=2)
         local_vars = []
@@ -176,18 +178,18 @@ class Function():
             local_vars.append(var)
             assignConst = random.choice([True, False])
             if assignConst:
-                body.append(utils._const_defination_stmt(var))
+                body.append(stmt_generator.const_defination_stmt(var))
             else:
                 inst = f"f_rand_{i}"
-                body.append(utils._var_defination_stmt(var, inst))
+                body.append(stmt_generator.var_defination_stmt(var, inst))
         
         var_idx = self._max_args
         for func, nargs in callees:
             args = random.choices(local_vars, k=nargs)
             var = f"v{var_idx}"
-            stmt = utils._nonvoid_call_stmt(var, func, args, 2)
+            stmt = stmt_generator.nonvoid_call_stmt(var, func, args, 2)
             body.append(stmt)
-            stmt = utils._void_call_stmt('printf', ["%d", var], 2)
+            stmt = stmt_generator.void_call_stmt('printf', ['"%d"', var], 2)
             body.append(stmt)
 
             local_vars.append(var)

@@ -12,6 +12,8 @@ from exp_tree import ExpTree, copy_tree, exptree_to_json
 from instruction import execution_instruction
 from cfg import CFG
 
+import ir_parser
+
 llvm.initialize()
 llvm.initialize_native_target()
 llvm.initialize_native_asmprinter()
@@ -47,8 +49,9 @@ def dump_to_file(save_to, exps, syms):
     
 def symbolic_execution(function):
   in_symbols_table = {}
-
-  find_parameters(str(function).strip(),
+  tmp_dict = {}
+  
+  ir_parser.find_parameters(str(function).strip(),
                   tmp_dict,
                   in_symbols_table)
   
@@ -60,7 +63,9 @@ def build_cfg(function):
   for blk in function.blocks:
     label = 
 
+
+
 def execute_bb(bb):
 
     
-  
+ 

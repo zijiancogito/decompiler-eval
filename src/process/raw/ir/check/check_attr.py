@@ -48,15 +48,8 @@ def delete_all(ir_dir, optimizations):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='preprocess.py')
     parser.add_argument('-i', '--ir', type=str, help='ir file dir')
-    parser.add_argument('-d', '--dataset', type=str, choices=['df2', 'cf'], help='Dataset')
+    parser.add_argument('-O', '--optimizations', nargs='+', help="Optimizations")
 
     args = parser.parse_args()
-
-    if args.dataset == 'df2':
-        optimizations = ['o0', 'o1', 'o2', 'o3', 'os']
-        delete_all(args.ir, optimizations)
-    elif args.dataset == 'cf':
-        optimizations = ['o0']
-        delete_all(args.ir, optimizations)
-
+    delete_all(args.ir, args.optimizations)
 
