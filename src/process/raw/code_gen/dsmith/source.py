@@ -31,7 +31,7 @@ def make_src_file(max_funcs,
     stmt_generator = Statement(has_logic, has_divs, max_const_values)
     
     for i in range(max(max_local_variables, max_args)):
-        f.code.append(func_generator.make_inst(i)[1])
+        f.code.append(func_generator.input_inst(i)[1])
         f.code.append(C.blank())
         
     nfuncs = []

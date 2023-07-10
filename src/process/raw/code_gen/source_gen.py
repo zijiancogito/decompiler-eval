@@ -38,7 +38,7 @@ if __name__ == '__main__':
             cmd = f"csmith {' '.join(config)} --output {out}"
             os.system(cmd)
     elif args.dataset == 'dsmith':
-        print(f"Generating source codes for CF")
+        print(f"Generating source codes for DSMITH")
         config = {'--max-funcs': 1,
                   '--max-args': 5,
                   '--max-block-size': 5,

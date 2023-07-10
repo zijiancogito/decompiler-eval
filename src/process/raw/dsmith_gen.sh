@@ -13,7 +13,7 @@ rm -r $SRC_ROOT
 mkdir -p $SRC_ROOT
 
 echo "Generate source code for DSMITH"
-python3 ./code_gen/source_gen.py -d dsmith -o $ROOT -n 500 -s ./code_gen/dsmith/source.py
+python3 ./code_gen/source_gen.py -d dsmith -o $ROOT -n 1000 -s ./code_gen/dsmith/source.py
 
 
 

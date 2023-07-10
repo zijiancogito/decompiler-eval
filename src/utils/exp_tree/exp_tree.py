@@ -1,4 +1,5 @@
 import json
+import copy
 class ExpTree:
     def __init__(self, tag, data):
         self.tag = tag
@@ -26,6 +27,10 @@ class ExpTree:
             for i in range(depth):
                 print('--', end='')
             child.show(depth)
+    
+    def copy(self, tree_a):
+        new_tree = copy.deepcopy(tree_a)
+        return new_tree
 
 def leaf_num(tree):
     if len(tree.children) == 0:

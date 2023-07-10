@@ -31,7 +31,7 @@ class Statement():
         return def_stmt
 
     def basicblock_inst(self, bb_index, indent):
-        inst_stmt = C.statement(C.fcall('printf', ['"%d"', bb_index]), indent=indent)
+        inst_stmt = C.statement(C.fcall('printf', ['"BB: %d"', bb_index]), indent=indent)
         return inst_stmt
 
     def random_stmt(self, source:list, indent, max_depth=1):

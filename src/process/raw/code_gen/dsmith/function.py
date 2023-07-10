@@ -21,10 +21,10 @@ class Function():
         self._max_funcs = max_funcs
         self._bb_idx = 0
         
-    def make_inst(self, label):
+    def input_inst(self, label):
         body = C.block(innerIndent=2)
         body.append(C.statement(f"{C.variable('v0', 'int')} = {C.fcall('rand')}"))
-        body.append(C.statement(C.fcall('printf', ['"%d"', label])))
+        body.append(C.statement(C.fcall('printf', ['"Input: %d"', label])))
         body.append(C.statement('return v0'))
         head = C.function(f'f_rand_{label}', 'int')
         func = C.sequence()
@@ -57,7 +57,6 @@ class Function():
                                              max_bb=max_bb, 
                                              curr_depth=curr_depth + 1)
                     body.append(bb)
-                    self._bb_idx += 1
                 elif blk_type == 'if':
                     cond_stmt = stmt_generator.if_stmt(local_out_bb + local_in_bb, indent)
                     body.append(cond_stmt)

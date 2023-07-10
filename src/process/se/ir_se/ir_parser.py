@@ -32,4 +32,56 @@ def find_parameters(function, tmp_dict, in_symbols_table):
             in_symbols_table["param"] = 1
 
 # def parse_select(instruction):
+#     pattern = "([^\s]+) = select[^,]+ ([^\s]+), ([^,]+), ([^,]+)"
+#     match = re.match(pattern, instruction)
+#     if not match:
+#         return None
+#     new_inst_1 = f"{match.group(1)} = {}
     
+def parse_jump_instruction(instruction):
+    pattern = "label %([0-9]+)"
+    find = re.findall(pattern, str(instruction))
+    findi = []
+    for i in find:
+        findi.append(int(i))
+    return findi
+    
+def extract_bb_inst(block):
+    bb_inst = None
+    for instruction in block.instructions:
+        if instruction.opcode == 'call':
+            func_name, plist, ret = parse_call(str(instruction).strip())
+            if func_name == "printf" or func_name == "__isoc99_printf":
+                bb_inst = plist[-1]
+                break
+    return bb_inst
+
+def parse_call(instruction):
+    pattern = "([\S]+)*( = )*[\s\S]*call [\s\S]*@([^(]+)[^\(]*\(([\s\S]*)\)"
+    _match = re.match(pattern, instruction)
+    if not _match:
+        return None
+    ret = _match.group(1)
+    func_name = _match.group(3)
+    params_str = _match.group(4)
+
+    pattern_params = "([^,]+\([^\)]+\))|([^,]+)"
+    # group 1 is a const string @ value
+    # group 2 is a % register or int value
+    params_find = re.findall(pattern_params, params_str)
+    params = []
+    for p in params_find:
+        if len(p[0]) > 0:
+            pat = "@([^\s,]+)"
+            pat_find = re.findall(pat, p[0])
+            if len(pat_find) > 0:
+                params.append(pat_find[0])
+        elif len(p[1]) > 0:
+            pat = "%[^\s,]+"
+            pat_find = re.findall(pat, p[1])
+            if len(pat_find) > 0:
+                params.append(pat_find[0])
+        else:
+            continue
+
+    return func_name, params, ret
