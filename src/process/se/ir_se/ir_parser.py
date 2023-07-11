@@ -30,7 +30,46 @@ def find_parameters(function, tmp_dict, in_symbols_table):
             tree = ExpTree("symbol", "param0")
             tmp_dict[var] = tree
             in_symbols_table["param"] = 1
+            
+def find_inputs(block, tmp_dict, in_symbols_table):
+    for instruction in block.instructions:
+        if instruction.opcode == 'call':
+            func_name, plist, ret = parse_call(str(instruction).strip())
+            if re.match('f_rand_[0-9]+', func_name):
+                if "rand" in in_symbols_table:
+                    index = in_symbols_table["rand"]
+                    tree = ExpTree("symbol", f"rand{index}")
+                    tmp_dict[ret] = tree
+                    in_symbols_table["rand"] += 1
+                else:
+                    tree = ExpTree("symbol", f"rand0")
+                    tmp_dict[ret] = tree
+                    in_symbols_table["rand"] = 1
 
+def find_return(block):
+    for instruction in block.instructions:
+        if instruction.opcode == 'ret':
+            op_ret = parse_ret(str(instruction).strip())
+            return op_ret
+    return None
+
+def parse_ret(instruction):
+    pattern_non_void = 'ret [\S]+ ([\S]+)'
+    pattern_void = 'ret void'
+
+    match_void = re.match(pattern_void, instruction)
+
+    if match_void:
+        return None
+    match_non_void = re.match(pattern_non_void, instruction)
+    if match_non_void:
+        ret = match_non_void.groups(1)[0]
+        if re.match("%[0-9]+", ret):
+            return match_non_void.groups(1)[0]
+        else:
+            return None
+    else:
+        return None
 # def parse_select(instruction):
 #     pattern = "([^\s]+) = select[^,]+ ([^\s]+), ([^,]+), ([^,]+)"
 #     match = re.match(pattern, instruction)
@@ -77,10 +116,10 @@ def parse_call(instruction):
             if len(pat_find) > 0:
                 params.append(pat_find[0])
         elif len(p[1]) > 0:
-            pat = "%[^\s,]+"
-            pat_find = re.findall(pat, p[1])
-            if len(pat_find) > 0:
-                params.append(pat_find[0])
+            pat = ".* ([^\s]+)"
+            pat_match = re.match(pat, p[1])
+            if pat_match:
+                params.append(pat_match.group(1))
         else:
             continue
 

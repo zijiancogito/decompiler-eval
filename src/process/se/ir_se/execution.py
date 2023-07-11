@@ -9,7 +9,7 @@ from func_timeout import func_set_timeout
 
 sys.path.append('/home/eval/decompiler-eval/src/utils/exp_tree/')
 from exp_tree import ExpTree, copy_tree, exptree_to_json
-from instruction import execution_instruction
+from instruction import execution_instruction, execution_phi
 from cfg import CFG
 
 import ir_parser
@@ -63,16 +63,41 @@ def symbolic_execution(function):
   cfg.normalize_cfg()
   paths = cfg.get_all_path()
   
+  exe_results = {}
   for path in paths:
     in_symbols_table = {}
     tmp_dict = {}
     ir_parser.find_parameters(str(function).strip(),
                               tmp_dict,
                               in_symbols_table)
-    for ver in path:
-      bb_inst = ir_parser.extract_bb_inst(blocks[ver])
-      print(bb_inst)
+    ir_parser.find_inputs(blocks[cfg.entry], tmp_dict, in_symbols_table)
+    print(in_symbols_table)
 
+    path_labels = []
+    for ver in path:
+      block = blocks[ver]
+      bb_inst = ir_parser.extract_bb_inst(block)
+      path_labels.append(bb_inst)
+      
+    ret_var = ir_parser.find_return(blocks[cfg.exit])
+    print(ret_var)
+    ret_value = None
+    if ret_var != None and ret_var in tmp_dict:
+      ret_value = tmp_dict[ret_var]
+    exe_results['-'.join(path_labels)] = copy.deepcopy(ret_value)
+    
+  return exe_results
+      
+def execution_block(block, pre_block, tmp_dict):
+  for instruction in block.instructions:
+    if instruction.opcode == 'phi':
+      result = execution_phi(str(instruction).strip(), tmp_dict, pre_block)
+      tmp_dict[result[0]] = copy.deepcopy(result[1])
+    elif instruction.opcode == 'ret':
+      continue
+    else:
+      execution_instruction(instruction, tmp_dict)
+      
   
 def build_cfg(blocks):
   cfg = CFG()

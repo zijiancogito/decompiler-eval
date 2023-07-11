@@ -6,17 +6,27 @@ from statement import Statement
 
 class Function():
     def __init__(self, max_args, 
+                 min_args,
                  max_local_variables, 
+                 min_local_variables, 
                  max_const_variables,
+                 min_const_variables,
                  max_expr_complexity,
+                 min_expr_complexity,
                  max_block_size,
+                 min_block_size,
                  max_block_depth,
                  max_funcs) -> None:
         self._max_args = max_args
+        self._min_args = min_args
         self._max_local_variables = max_local_variables
+        self._min_local_variables = min_local_variables
         self._max_const_variables = max_const_variables
+        self._min_const_variables = min_const_variables
         self._max_expr_complexity = max_expr_complexity
+        self._min_expr_complexity = min_expr_complexity
         self._max_block_size = max_block_size
+        self._min_block_size = min_block_size
         self._max_block_depth = max_block_depth
         self._max_funcs = max_funcs
         self._bb_idx = 0
@@ -32,15 +42,15 @@ class Function():
         func.append(body)
         return f'f_rand_{label}', func
 
-    def basicblock_rec(self, local_out_bb, indent, stmt_generator:Statement, max_exp_depth=1, max_bb_depth=1, max_bb=1, curr_depth=1):
+    def basicblock_rec(self, local_out_bb, indent, stmt_generator:Statement, curr_depth=1):
         local_in_bb = []
         body = C.block(innerIndent=indent, indent=indent-2)
         body.append(stmt_generator.basicblock_inst(self._bb_idx, indent=indent))
         self._bb_idx += 1
         isNewBB = False
-        for i in range(max_bb):
+        for i in range(self._max_block_size):
             insert_bb = random.choice([True, False])
-            if insert_bb and curr_depth < max_bb_depth:
+            if insert_bb and curr_depth < self._max_block_depth:
                 if isNewBB:
                     body.append(stmt_generator.basicblock_inst(self._bb_idx, indent=indent))
                     self._bb_idx += 1
@@ -52,9 +62,6 @@ class Function():
                     bb = self.basicblock_rec(local_out_bb=local_out_bb + local_in_bb, 
                                              indent=indent + 2, 
                                              stmt_generator=stmt_generator,
-                                             max_exp_depth=max_exp_depth, 
-                                             max_bb_depth=max_bb_depth, 
-                                             max_bb=max_bb, 
                                              curr_depth=curr_depth + 1)
                     body.append(bb)
                 elif blk_type == 'if':
@@ -63,9 +70,6 @@ class Function():
                     bb = self.basicblock_rec(local_out_bb=local_out_bb + local_in_bb, 
                                              indent=indent + 2, 
                                              stmt_generator=stmt_generator,
-                                             max_exp_depth=max_exp_depth, 
-                                             max_bb_depth=max_bb_depth, 
-                                             max_bb=max_bb, 
                                              curr_depth=curr_depth + 1)
 
                     body.append(bb)
@@ -76,9 +80,6 @@ class Function():
                         else_bb = self.basicblock_rec(local_out_bb=local_out_bb + local_in_bb, 
                                                       indent=indent + 2, 
                                                       stmt_generator=stmt_generator,
-                                                      max_exp_depth=max_exp_depth,     
-                                                      max_bb_depth=max_bb_depth, 
-                                                      max_bb=max_bb, 
                                                       curr_depth=curr_depth + 1)
                         body.append(else_bb)
                     
@@ -88,13 +89,14 @@ class Function():
                     self._bb_idx += 1   # 因此需要插入标记
                     isNewBB = False # 普通stmt的下一句不会开启新基本块，因此设置标记为F
                 stmt, new_local = stmt_generator.random_stmt(local_out_bb + local_in_bb, 
-                                                     indent, 
-                                                     max_exp_depth)
+                                                             indent, 
+                                                             max_depth=self._max_expr_complexity, 
+                                                             min_depth=self._min_expr_complexity)
                 if new_local != None:
                     local_in_bb.append(new_local)
                 body.append(stmt)
             _break = random.choice([True, False])    
-            if _break:
+            if _break and i >= self._max_block_size:
                 break
         # body.append(utils._basicblock_inst(self._bb_idx, indent=indent))
         return body
@@ -110,8 +112,8 @@ class Function():
             local_vars.append(p_var)
         
         # local var
-        local_var_cnt = random.randint(1, self._max_args)
-        local_const_cnt = random.randint(0, self._max_const_variables)
+        local_var_cnt = random.randint(self._min_local_variables, self._max_local_variables)
+        local_const_cnt = random.randint(self._min_const_variables, self._max_const_variables)
         func_body = C.block(innerIndent=2)
         defs_list = []
         for i in range(local_var_cnt):
@@ -131,9 +133,6 @@ class Function():
         self._bb_idx = 0
         commound = self.basicblock_rec(local_out_bb=local_vars,
                                        indent=2,
-                                       max_exp_depth=self._max_expr_complexity,
-                                       max_bb_depth=self._max_block_depth,
-                                       max_bb=self._max_block_size,
                                        curr_depth=0,
                                        stmt_generator=stmt_generator)
         func_body.append(commound.code)

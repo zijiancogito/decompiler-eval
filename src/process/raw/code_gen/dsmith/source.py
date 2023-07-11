@@ -7,11 +7,16 @@ from statement import Statement
 
 def make_src_file(max_funcs,
                   max_args,
+                  min_args,
                   max_block_size,
+                  min_block_size,
                   max_block_depth,
                   max_expr_complexity,
+                  min_expr_complexity,
                   max_local_variables,
+                  min_local_variables,
                   max_const_variables,
+                  min_const_variables,
                   max_const_values,
                   has_divs,
                   has_logic,
@@ -22,10 +27,15 @@ def make_src_file(max_funcs,
     f.code.append(C.blank())
     
     func_generator = Function(max_args, 
+                              min_args,
                               max_local_variables,
+                              min_local_variables,
                               max_const_variables,
+                              min_const_variables,
                               max_expr_complexity,
+                              min_expr_complexity,
                               max_block_size,
+                              min_block_size,
                               max_block_depth,
                               max_funcs)
     stmt_generator = Statement(has_logic, has_divs, max_const_values)
@@ -55,18 +65,35 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='dsmith', description='random code generator')
     parser.add_argument('--max-funcs', default=1, type=int, 
                         help="limit the number of functions (besides main) to <num>")
+
     parser.add_argument('--max-args', default=3, type=int,
                         help="max count of arguments of function")
+    parser.add_argument('--min-args', default=2, type=int,
+                        help="min count of arguments of function")
+
     parser.add_argument('--max-block-size', default=5, type=int,
                         help='limit the number of non-return statements in a block to <size> ')
+    parser.add_argument('--min-block-size', default=3, type=int,
+                        help='limit the number of non-return statements in a block to <size> ')
+
     parser.add_argument('--max-block-depth', default=3, type=int,
                         help='limit depth of nested blocks to <num>')
+
     parser.add_argument('--max-expr-complexity', default=3, type=int,
                         help='limit expression complexities to <num>')
-    parser.add_argument('--max-local-variables', default=3, type=int, 
+    parser.add_argument('--min-expr-complexity', default=1, type=int,
+                        help='limit expression complexities to <num>')
+
+    parser.add_argument('--max-local-variables', default=5, type=int, 
                         help='limit the number of local variables in a function')
-    parser.add_argument('--max-const-variables', default=3, type=int,
+    parser.add_argument('--min-local-variables', default=3, type=int, 
+                        help='limit the number of local variables in a function')
+
+    parser.add_argument('--max-const-variables', default=5, type=int,
                         help='limit the number of constants in a function')
+    parser.add_argument('--min-const-variables', default=3, type=int,
+                        help='limit the number of constants in a function')
+
     parser.add_argument('--max-const-values', default=1000, type=int,
                         help='limit the max value of const')
     parser.add_argument('--divs', default=True,
@@ -86,15 +113,20 @@ if __name__ == '__main__':
     if args.out != None:
         output_file = args.out
     func = make_src_file(args.max_funcs,
-                  args.max_args,
-                  args.max_block_size,
-                  args.max_block_depth,
-                  args.max_expr_complexity,
-                  args.max_local_variables,
-                  args.max_const_variables,
-                  args.max_const_values,
-                  args.divs,
-                  args.logic,
-                  output_file)
+                         args.max_args,
+                         args.min_args,
+                         args.max_block_size,
+                         args.min_block_size,
+                         args.max_block_depth,
+                         args.max_expr_complexity,
+                         args.min_expr_complexity,
+                         args.max_local_variables,
+                         args.min_local_variables,
+                         args.max_const_variables,
+                         args.min_const_variables,
+                         args.max_const_values,
+                         args.divs,
+                         args.logic,
+                         output_file)
     output_to_file(output_file, func)
     # print(func)

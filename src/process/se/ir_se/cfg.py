@@ -49,6 +49,11 @@ class CFG():
                 cycles_stack.append(tmp)
     
     def get_all_path(self):
+        if len(self.cfg.nodes) == 1:
+            paths = []
+            for node in self.cfg.nodes:
+                paths.append([node])
+            return paths
         paths = nx.all_simple_paths(self.norm_cfg, self.entry, self.exit)
         new_paths = []
         for p in paths:

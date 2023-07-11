@@ -34,12 +34,12 @@ class Statement():
         inst_stmt = C.statement(C.fcall('printf', ['"BB: %d"', bb_index]), indent=indent)
         return inst_stmt
 
-    def random_stmt(self, source:list, indent, max_depth=1):
+    def random_stmt(self, source:list, indent, max_depth=1, min_depth=1):
         expr = random.choice(source)
         expr_is_var = True
         for it in range(max_depth):
-            end = random.choice([True, False, False])
-            if end:
+            end = random.choice([True, False])
+            if end and it >= min_depth:
                 break
             opc = random.choice(self._operators)
             var = random.choice(source)
@@ -108,12 +108,12 @@ class Statement():
         stmt = C.line("else", indent=indent)
         return stmt
 
-    def ret_var_stmt(self, source:list, indent, max_depth):
+    def ret_var_stmt(self, source:list, indent, max_depth, min_depth=1):
         expr  = random.choice(source)
         expr_is_var = True
         for it in range(max_depth):
-            end = random.choice([True, False, False])
-            if end:
+            end = random.choice([True, False])
+            if end and it >= min_depth:
                 break
             opc = random.choice(self._operators)
             var = random.choice(source)

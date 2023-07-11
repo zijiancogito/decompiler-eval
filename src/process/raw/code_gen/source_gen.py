@@ -41,11 +41,16 @@ if __name__ == '__main__':
         print(f"Generating source codes for DSMITH")
         config = {'--max-funcs': 1,
                   '--max-args': 5,
+                  '--min-args': 3,
                   '--max-block-size': 5,
+                  '--min-block-size': 3,
                   '--max-block-depth': 3,
-                  '--max-expr-complexity': 3,
-                  '--max-local-variables': 3,
-                  '--max-const-variables': 3,
+                  '--min-expr-complexity': 3,
+                  '--max-expr-complexity': 5,
+                  '--max-local-variables': 5,
+                  '--min-local-variables': 3,
+                  '--max-const-variables': 5,
+                  '--min-const-variables': 3,
                   '--max-const-values': 1000}
         config_str = ""
         for k in config:
