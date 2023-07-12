@@ -36,15 +36,9 @@ def find_inputs(block, tmp_dict, in_symbols_table):
         if instruction.opcode == 'call':
             func_name, plist, ret = parse_call(str(instruction).strip())
             if re.match('f_rand_[0-9]+', func_name):
-                if "rand" in in_symbols_table:
-                    index = in_symbols_table["rand"]
-                    tree = ExpTree("symbol", f"rand{index}")
-                    tmp_dict[ret] = tree
-                    in_symbols_table["rand"] += 1
-                else:
-                    tree = ExpTree("symbol", f"rand0")
-                    tmp_dict[ret] = tree
-                    in_symbols_table["rand"] = 1
+                in_symbols_table[func_name] = 0
+                tree = ExpTree("symbol", func_name)
+                tmp_dict[ret] = tree
 
 def find_return(block):
     for instruction in block.instructions:
@@ -87,12 +81,16 @@ def parse_jump_instruction(instruction):
     
 def extract_bb_inst(block):
     bb_inst = None
+    flag = False
+    print(block)
     for instruction in block.instructions:
         if instruction.opcode == 'call':
-            func_name, plist, ret = parse_call(str(instruction).strip())
+            func_name, plist, _ = parse_call(str(instruction).strip())
             if func_name == "printf" or func_name == "__isoc99_printf":
+                flag = True
                 bb_inst = plist[-1]
                 break
+    print(flag)
     return bb_inst
 
 def parse_call(instruction):

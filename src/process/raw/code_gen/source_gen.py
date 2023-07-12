@@ -40,8 +40,8 @@ if __name__ == '__main__':
     elif args.dataset == 'dsmith':
         print(f"Generating source codes for DSMITH")
         config = {'--max-funcs': 1,
-                  '--max-args': 5,
-                  '--min-args': 3,
+                  '--max-args': 0,
+                  '--min-args': 0,
                   '--max-block-size': 5,
                   '--min-block-size': 3,
                   '--max-block-depth': 3,

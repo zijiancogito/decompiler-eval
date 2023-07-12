@@ -32,20 +32,20 @@ def execute_function(ir_path, save_to, func_filter='func'):
     for function in mod.functions:
       if function.name != 'func':
         continue
-      exps, syms = symbolic_execution(function)
-      if exps != None:
-        dump_to_file(save_to, exps, syms)
+      paths, syms = symbolic_execution(function)
+      if paths!= None:
+        dump_to_file(save_to, paths, syms)
       break
   except:
     return True
 
-def dump_to_file(save_to, exps, syms):
+def dump_to_file(save_to, paths, syms):
   js_dict = {}
   exps_json = {}
-  for path in exps:
-    exps_json[path] = exptree_to_json(exps[path])
+  for path in paths:
+    exps_json[path] = exptree_to_json(paths[path])
   js_dict["symbols"] = syms
-  js_dict["path"] = exps_json
+  js_dict["paths"] = exps_json
   with open(save_to, 'w') as out:
     json.dump(js_dict, out)
     
@@ -64,29 +64,32 @@ def symbolic_execution(function):
   paths = cfg.get_all_path()
   
   exe_results = {}
+  init_dict = {}
+  in_symbols_table = {}
+  # no parameters
+  # ir_parser.find_parameters(str(function).strip(),
+                            # init_dict,
+                            # in_symbols_table)
+  ir_parser.find_inputs(blocks[cfg.entry], init_dict, in_symbols_table)
+  in_symbols_list = list(in_symbols_table.keys())
   for path in paths:
-    in_symbols_table = {}
-    tmp_dict = {}
-    ir_parser.find_parameters(str(function).strip(),
-                              tmp_dict,
-                              in_symbols_table)
-    ir_parser.find_inputs(blocks[cfg.entry], tmp_dict, in_symbols_table)
-    print(in_symbols_table)
-
+    tmp_dict = copy.deepcopy(init_dict)
     path_labels = []
-    for ver in path:
+    for idx, ver in enumerate(path):
       block = blocks[ver]
       bb_inst = ir_parser.extract_bb_inst(block)
-      path_labels.append(bb_inst)
+      if bb_inst != None:
+        path_labels.append(bb_inst) 
+      execution_block(block, path[idx - 1], tmp_dict)
       
     ret_var = ir_parser.find_return(blocks[cfg.exit])
-    print(ret_var)
     ret_value = None
     if ret_var != None and ret_var in tmp_dict:
       ret_value = tmp_dict[ret_var]
+      # print(exptree_to_json(ret_value))
     exe_results['-'.join(path_labels)] = copy.deepcopy(ret_value)
     
-  return exe_results
+  return exe_results, in_symbols_list
       
 def execution_block(block, pre_block, tmp_dict):
   for instruction in block.instructions:
