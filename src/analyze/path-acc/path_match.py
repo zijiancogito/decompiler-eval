@@ -17,12 +17,33 @@ def func_match(ir_json_file, c_json_file):
         except:
             c_json = None
     if ir_json == None or c_json == None:
-        return None
+        return None, None, None, None
     
     matched_paths = 0
     unmatched_paths = []
+    bb_covered = set()
+    all_bb_ir = set()
     for path in ir_json["paths"]:
+        bbs = parse_path(path)
+        all_bb_ir = all_bb_ir.union(bbs)
         if path in c_json["paths"]:
-            matched += 1
+            matched_paths += 1
+            bb_covered = bb_covered.union(bbs)
         else:
-            
+            unmatched_paths.append(path)
+    
+    all_bb_c = set()
+    for path in c_json["paths"]:
+        bbs = parse_path(path)
+        all_bb_c = all_bb_c.union(bbs)
+
+    pcr = matched_paths / len(ir_json["paths"])
+    pcp = matched_paths / len(c_json["paths"])
+    bcr = len(bb_covered) / len(all_bb_ir)
+    bcp = len(bb_covered) / len(all_bb_c)
+    return pcr, pcp, bcr, bcp
+
+def parse_path(path):
+    tmp = path.split('-')
+    bbs = [int(i) for i in tmp]
+    return set(bbs)
