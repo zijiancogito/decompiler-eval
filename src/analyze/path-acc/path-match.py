@@ -1,8 +1,10 @@
 import sys
+sys.path.append('/home/eval/decompiler-eval/src/utils/functools')
+import log
 import os
 import json
 
-def func_match(ir_json_file, c_json_file):
+def func_match(ir_json_file, c_json_file, log_path):
     ir_json = None
     with open(ir_json_file, 'r') as f:
         try:
@@ -32,6 +34,8 @@ def func_match(ir_json_file, c_json_file):
         else:
             unmatched_paths.append(path)
     
+    uncover_bb = list(all_bb_ir - bb_covered)
+    log.log_line2file(unmatched_paths + uncover_bb, log_path)
     all_bb_c = set()
     for path in c_json["paths"]:
         bbs = parse_path(path)

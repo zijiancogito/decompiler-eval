@@ -1,12 +1,14 @@
 import sys
 sys.path.append('/home/eval/decompiler-eval/src/utils/exp_tree')
+sys.path.append('/home/eval/decompiler-eval/src/utils/functools')
 import exp_tree
+import log
 import random
 import json
 
 import numpy as np
 
-def func_acc(ir_json_file, c_json_file):
+def func_acc(ir_json_file, c_json_file, log_path):
     ir_json = None
     with open(ir_json_file, 'r') as f:
         try:
@@ -22,7 +24,6 @@ def func_acc(ir_json_file, c_json_file):
     if ir_json == None or c_json == None:
         return None
     
-    
     matched_paths = 0
     wrong_paths = []
     for path in ir_json["paths"]:
@@ -35,6 +36,15 @@ def func_acc(ir_json_file, c_json_file):
             wrong_paths.append(path)
         else:
             pass_rate = sample(exp_ir, exp_c, ir_json["symbols"], c_json["symbols"])
+            if pass_rate > 0.8:
+                matched_paths += 1
+            else:
+                wrong_paths.append(path)
+    log.log_line2file(wrong_paths, log_path)
+    recall = round(matched_paths / len(ir_json["paths"]), 2) if len(ir_json["paths"]) != 0 else 0
+    precision = round(matched_paths / len(c_json["paths"]), 2) if len(c_json["paths"]) != 0 else 0
+
+    return precision, recall
             
 def sample(exp_ir, exp_c, symbols_ir, symbols_c):
     passed_cases = 0
