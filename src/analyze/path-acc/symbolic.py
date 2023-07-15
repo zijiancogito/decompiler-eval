@@ -1,10 +1,12 @@
 import sys
 
 sys.path.append('/home/eval/decompiler-eval/src/utils/exp_tree')
+sys.path.append('/home/eval/decompiler-eval/src/utils/functools')
 import exp_tree
+import log
 import json
 
-def func_dist(ir_json_file, c_json_file):
+def func_dist(ir_json_file, c_json_file, log_path):
     ir_json = None
     with open(ir_json_file, 'r') as f:
         try:
@@ -32,6 +34,7 @@ def func_dist(ir_json_file, c_json_file):
         sum_distance = distance(exp_ir, exp_c)
         distance_paths.append(sum_distance)
     
+    log.log_list2file(unmatched_paths, log_path)
     import numpy as np
     func_avg = round(np.mean(distance_paths), 2)
     func_sum = sum(distance_paths)

@@ -48,6 +48,31 @@ def analyze_all(ir_dir, dec_dir, log_dir, compilers, decompilers, optimizations)
                     
                     log_line = f"{dec_file}\t{path_recall}\t{path_precision}\t{bb_recall}\t{bb_precision}"
                     logs.append(log_line)
+
+                decompiler_log_path = os.path.join(log_sub_dir, f"control-recovery-{decompiler}.csv")
+                log.log_list2file(logs, decompiler_log_path)
                 
+                pr_avg = round(np.mean(pr), 2) if len(pr) != 0 else 0
+                pp_avg = round(np.mean(pp), 2) if len(pp) != 0 else 0
+                br_avg = round(np.mean(br), 2) if len(br) != 0 else 0
+                bp_avg = round(np.mean(bp), 2) if len(bp) != 0 else 0
+                print("{0:12}".format(f"{pr_avg}/{pp_avg}/{br_avg}/{bp_avg}"), end='\t')
+            print()
+        print()
+                
+
+                
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(prog='path.py')
+    parser.add_argument('-i', '--ir', type=str, help='execution results of IR')
+    parser.add_argument('-d', '--dec', type=str, help='execution results of DEC')
+    parser.add_argument('-l', '--log', type=str, help='log dir')
+    parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+    parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+    parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
+
+    args = parser.parse_args()
+    analyze_all(args.ir, args.dec, args.log, args.compilers, args.decompilers, args.optimizations)
+
 
                     

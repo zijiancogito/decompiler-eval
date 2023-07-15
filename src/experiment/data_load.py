@@ -63,7 +63,7 @@ def read_from_var(path):
 
 def read_from_loc(path):
     csvs = {}
-    with open(path, 'r') as f:
+    with open(path, 'r') as f:k
         csv_reader = csv.reader(f, delimiter='\t')
         for line in csv_reader:
             if len(line) == 0:
@@ -71,6 +71,36 @@ def read_from_loc(path):
             if line[0] in csvs:
                 csvs[line[0]] = (float(line[1]), float(line[2]))
     return csvs
+
+def read_from_path_acc(path):
+    csvs = {}
+    with open(path, 'r') as f:
+        csv_reader = csv.reader(f, delimiter='\t')
+        for line in csv_reader:
+            if len(line) == 0:
+                continue
+            csvs[line[0]] = (float(line[1]), float(line[2]))
+    return csvs
+
+def read_from_path_match(path):
+    csvs = {}
+    with open(path, 'r') as f:
+        csv_reader = csv.reader(f, delimiter='\t')
+        for line in csv_reader:
+            if len(line) == 0:
+                continue
+            csvs[line[0]] = (float(line[1]), float(line[2]), float(line[3]), float(line[4]))
+    return csvs
+
+def read_from_path_dist(path):
+    csvs = {}
+    with open(path, 'r') as f:
+        csv_reader = csv.reader(f, delimiter='\t')
+        for line in csv_reader:
+            if len(line) == 0:
+                continue
+            csvs[line[0]] = (float(line[1]), float(line[2]))
+
 
 if __name__ == '__main__':
     read_from_concolic('/home/eval/DF2/analyze/acc/clang/o0/concolic-angr.csv')
