@@ -54,11 +54,13 @@ def analyze_all(decompilers, err_dir, log_dir):
     if not os.path.exists(os.path.join(log_dir, "token")):
       os.makedirs(os.path.join(log_dir, "token"))
     token_log_path = os.path.join(log_dir, "token", f"token-err-{decompiler}.csv")
+    token_logs.sort()
     log(token_logs, token_log_path)
     
     if not os.path.exists(os.path.join(log_dir, "type")):
       os.makedirs(os.path.join(log_dir, "type"))
     type_log_path = os.path.join(log_dir, "type", f"type-err-{decompiler}.csv")
+    type_logs.sort()
     log(type_logs, type_log_path)
 
 def log(log_list, log_file):
