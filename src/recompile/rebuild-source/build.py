@@ -24,6 +24,9 @@ def extract_functions(dec, src):
 def extract_struct(dec):
     raise NotImplementedError
 
+def extract_include(dec):
+    raise NotImplementedError
+
 def extract_define(dec):
     define_list = []
     with open(dec, 'r') as f:
