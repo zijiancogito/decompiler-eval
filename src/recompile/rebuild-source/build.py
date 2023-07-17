@@ -25,7 +25,13 @@ def extract_struct(dec):
     raise NotImplementedError
 
 def extract_include(dec):
-    raise NotImplementedError
+    include_list = []
+    with open(dec, 'r') as f:
+        lines = f.readlines()
+        for l in lines:
+            if l.startswith('\#include'):
+                include_list.append(l)
+    return include_list
 
 def extract_define(dec):
     define_list = []
@@ -37,6 +43,7 @@ def extract_define(dec):
     return define_list
 
 def build_source(dec, src, new_dec, header):
+    includes = extract_include(dec)
     defines = extract_define(dec)
     types = extract_struct(dec)
     bodys = extract_functions(dec, src)
@@ -44,6 +51,11 @@ def build_source(dec, src, new_dec, header):
     with open(new_dec, 'w') as f:
         f.write(f"#include <{header}>\n")
         f.write('\n')
+
+        for include in includes:
+            f.write(include)
+        f.write('\n')
+
         for define in defines:
             f.write(define)
         f.write('\n')
