@@ -1,108 +1,144 @@
-import requests
-import logging
-import random
-import time
-import sys
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
+
 import os
+import time
+import re
 
-ua_list = [
-	'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Maxthon 2.0',
-	'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11',
-	'User-Agent:Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11',
-	'Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1',
-	'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
-	'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
-	'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0',
-	'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1',
-	'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1',
-	'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1',
-]
+class RepairDriver(object):
+  def __init__(self) -> None:
+    firefox_options = webdriver.FirefoxOptions()
+    firefox_options.add_argument("--profile")
+    firefox_options.add_argument(os.path.abspath("./usiijz40.default-release"))
+    self.driver = webdriver.Remote(
+      command_executor='http://127.0.1.1:4444',
+      options=firefox_options
+    )
+    self.driver.get('http://10.42.0.107:8000/ide/')
+    
+  def select_case(self):
+    case_elem = self.driver.find_element(By.ID, 'caseCheck')
+    case_select = Select(case_elem)
+    case_select.select_by_value('No case')
 
-
-class Repair(object):
-    def __init__(self) -> None:
-        self.url = 'http://10.42.0.107:8000/ide/'
-        self.code = ''
-        
-        s = requests.session()
-        s.keep_alive = True
-
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(level=logging.WARNING)
-        handler = logging.FileHandler("log.txt")
-        handler.setLevel(level=logging.WARNING)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        
-
-    def upload_source(self, source):
-        headers = {'User-Agent': random.choice(ua_list)}#, 'Connection': 'close'}
-        self.code = source
-        files = {'file': open(self.code, 'rb')}
-        res = requests.get(url=self.url, files=files, headers=headers)
-        
-        self.html = res.json
-
-    def get_html(self, url):
-        for i in range(2):
-            try:
-                headers = {'User-Agent': random.choice(ua_list)}#, 'Connection': 'close'}
-                res = requests.get(url=url, headers=headers, timeout=10)
-            except Exception as e:
-                if i >= 1:
-                    raise e
-                else:
-                    time.sleep(0.5)
-            else:
-                time.sleep(0.3)
-                break
-        return res
-
-    def lower_version(self, v1, v2):
-        v1_list = v1.split('-')
-        v2_list = v2.split('-')
-        v1_list_copy = v1_list.copy()
-        v2_list_copy = v2_list.copy()
-        for v in v1_list_copy:
-            tmp = v.split('.')
-            v1_list += tmp
-        for v in v1_list_copy:
-            v1_list.remove(v)
-        for v in v2_list_copy:
-            tmp = v.split('.')
-            v2_list += tmp
-        for v in v2_list_copy:
-            v2_list.remove(v)
-        v1_len = len(v1_list)
-        v2_len = len(v2_list)
-        for i in range(v1_len):
-            v1_list[i] = int(v1_list[i])
-        for i in range(v2_len):
-            v2_list[i] = int(v2_list[i])
-
-        for i in range(min(v1_len, v2_len)):
-            if v1_list[i] != v2_list[i]:
-                return v1_list[i] < v2_list[i]
-
-        if v1_len != v2_len:
-            return v1_len < v2_len
-
-        return False
+  def send_code(self, code):
+    # editor_elem = self.driver.find_element(By.XPATH, '//*[@id="editor"]')
+    editor_elem = self.driver.find_element(By.ID, 'editor')
+    editor_elem.click()
+    time.sleep(3)
+    elem = self.driver.find_element(By.CLASS_NAME, "ace_text-input")
+    # elem = self.driver.find_element(By.ID, 'custom-input')
+    elem.clear()
+    elem.send_keys(code)
     
 
-    def parse_html(self):
-        print(self.html)
+  def clang_check(self):
+    elem = self.driver.find_element(By.ID, "runcode")
+    elem.click()
+
+  def fix(self):
+    elem = self.driver.find_element(By.ID, "fixcode")
+    if elem.is_displayed():
+      elem.click()
+
+
+  def repair(self, code):
+    self.select_case()
+    time.sleep(1)
+
+    self.send_code(code)
+
+    self.clang_check()
+    time.sleep(1)
+    self.fix()
     
-    def run(self, code):
-        self.upload_source(code)
-        self.parse_html()
+  def close(self):
+    self.driver.close()
+    # os.system('taskkill /f /im %s' % 'firefox')
+
+  def flush(self):
+    case_elem = self.driver.find_element(By.ID, 'caseCheck')
+    case_select = Select(case_elem)
+    case_select.select_by_value('case 1')
+
+  def parse_page(self):
+    page = self.driver.page_source
+    
+    pattern = "Fix successfully"
+    repaired = 0
+    repair_log = None
+    if pattern in page:
+      repaired = 1
+      output_elem = self.driver.find_element(By.XPATH, '//*[@class="output-text outputo"]')
+      repair_log = output_elem.text
+      # print(output_html)
+    return repaired, repair_log
+  
+  def replace(self, repair_log, code):
+    pattern = r'erronous lines:\n([\s\S]+)\n\nsuggested fix:\n([\s\S]+)'
+    finds = re.finditer(pattern, repair_log)
+    rep_dict = {}
+    code_list = code.split('\n')    
+    for f in finds:
+      err_lines = f.group(1).split('\n')
+      sug_lines = f.group(2)
+      err_pat = f'([0-9]+) [^\n]+'
+      for idx, line in enumerate(err_lines):
+        mat = re.match(err_pat, line)
+        if mat:
+          line_num = mat.group(1)
+          if idx == 0:
+            code_list[int(line_num) - 1] = sug_lines
+          else:
+            code_list[int(line_num) - 1] = ''
+    new_code_list = []
+    for l in code_list:
+      if l != '':
+        new_code_list.append(l)
+    return '\n'.join(new_code_list)
+  
+  def run(self, code):
+    self.repair(code)
+    fix_result, fix_log = self.parse_page()
+
+    new_code = None
+    if fix_result == 1:
+      new_code = self.replace(fix_log, code)
+
+    self.flush()
+    return fix_result, new_code
+
+def repair_all(dec_dir, new_dir, compilers, decompilers, optimizations):
+  wd = RepairDriver()
+  for compiler in compilers:
+    for opt_level in optimizations:
+      for decompiler in decompilers:
+        dec_sub_dir = os.path.join(dec_dir, compiler, opt_level, decompiler)
+        new_sub_dir = os.path.join(new_dir, compiler, opt_level, decompiler)
+        if not os.path.exists(new_sub_dir):
+          os.makedirs(new_sub_dir)
+        dec_files = os.listdir(dec_sub_dir)
+        for df in dec_files:
+          dec_path = os.path.join(dec_sub_dir, df)
+          fix_flag, new_code = None, None
+          with open(dec_path, 'r', encoding='ISO-8859-1') as f:
+            code = f.read()
+            fix_flag, new_code = wd.run(code)
+          if fix_flag == 1:
+            new_code_path = os.path.join(new_sub_dir, df)
+            save_fixed_code(new_code, new_code_path)
+          wd.flush()
+          
+  wd.close()
+
+def save_fixed_code(code, new_path):
+  with open(new_path, 'w') as f:
+    f.write(code)
 
 if __name__ == '__main__':
-    spider = Repair()
-    src_file = '/home/eval/data/POJ/process/de/clang/o2/Ghidra/0.c'
-    # with open('/home/eval/data/POJ/process/de/clang/o2/Ghidra/0.c', 'r', encoding='ISO-8859-1') as f:
-        # code = f.read()
-    
-
-    spider.run(src_file)
+  wd = RepairDriver()
+  _, nc = wd.run("int main() \n{return 0\n}\n")
+  print(nc)
+  wd.close()

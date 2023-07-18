@@ -1,0 +1,1461 @@
+$(document).ready(function(){
+
+	$('#user-input').click(function () {
+		$(".input-container").slideToggle();
+	});
+	var codeCase = {}
+	codeCase['case 1'] = '#include <stdio.h>\n' +
+		'#include <string.h>\n' +
+		'void pal(char c[],int k,int n){\n' +
+		'     if(k==n||n-k==1){\n' +
+		'         return 1;\n' +
+		'     }\n' +
+		'     if(c[k]==c[n]){\n' +
+		'         return pal(c,k+1,n-1);\n' +
+		'     }\n' +
+		'     else{\n' +
+		'         return 0;\n' +
+		'     }\n' +
+		' }\n' +
+		'int main()\n' +
+		'{\n' +
+		'    char s[100];\n' +
+		'    int a=getchar()\n' +
+		'    int i=0;\n' +
+		'    while(a!=\'\\0\'){\n' +
+		'        s[i]=a;\n' +
+		'        i++;\n' +
+		'        a=getchar();\n' +
+		'    }\n' +
+		'    if(pal(s,0,i-1)){\n' +
+		'        printf("Yes");\n' +
+		'    }\n' +
+		'    else{\n' +
+		'        printf("No");\n' +
+		'    }\n' +
+		'    return 0;\n' +
+		'}';
+	codeCase['case 2'] = "#include <stdio.h>\n" +
+		"#include <stdlib.h>\n" +
+		"\n" +
+		"// Write any other auxillary functions here \n" +
+		"\n" +
+		"void replace_substring(char *s,int m,char *t,char *w,int r,int i)\n" +
+		"{\n" +
+		"    int j;\n" +
+		"    for(j=i;j<i+m;j++){\n" +
+		"        s[j]=w[j-i];\n" +
+		"    }\n" +
+		"    for(j=i+m;j<m+r;j++){\n" +
+		"        s[j]=t[j];\n" +
+		"    }\n" +
+		"}\n" +
+		"\n" +
+		"int main()\n" +
+		"{\n" +
+		"\tint m,n,r,i,j,c=0;\n" +
+		"\tchar*s,*t,*w,*p;\n" +
+		"\tscanf(\"%d\",&m);\n" +
+		"\ts=(char*)malloc(sizeof(char)*(m+100));\n" +
+		"\tt=(char*)malloc(sizeof(char)*(m+100));\n" +
+		"\tfor(i=0;i<m;i++){\n" +
+		"\t    scanf(\"%c\",&s[i]);\n" +
+		"\t    t[i]=s[i];\n" +
+		"\t}\n" +
+		"\tscanf(\"%d\",&n);\n" +
+		"\tw=(char*)malloc(sizeof(char)*n);\n" +
+		"\t\tfor(i=0;i<m;i++){\n" +
+		"\t    scanf(\"%c\",&s[i]);\n" +
+		"\t}\n" +
+		"\tscanf(\"%d\",&r);\n" +
+		"\tp=(char*)malloc(sizeof(char)*r);\n" +
+		"\t\tfor(i=0;i<m;i++){\n" +
+		"\t    scanf(\"%c\",&s[i]);\n" +
+		"\t}\n" +
+		"\tfor(i=0;i<m;i++){\n" +
+		"\t    if(s[i]==p[0]){\n" +
+		"\t        for(j=i;j<(i+n);j++){\n" +
+		"\t            if(s[i]==p[j-i]){\n" +
+		"\t                c++;\n" +
+		"\t            }\n" +
+		"\t        }\n" +
+		"\t        if(c==n){\n" +
+		"\t            replace_substring(s,t,w,i);\n" +
+		"\t            i=i-r;\n" +
+		"\t        }\n" +
+		"\t        c=0;\n" +
+		"\t    }\n" +
+		"\t}\n" +
+		"\tprintf(\"%s\",s);\n" +
+		"\n" +
+		"\treturn 0;\n" +
+		"\n" +
+		"}";
+	codeCase['case 3'] = "#include <stdio.h>\n" +
+		"void reverse(char str1[],char str2[])\n" +
+		"{\n" +
+		"    int i,d,t=0,count1=0,count2=0,j;\n" +
+		"    for(i=0;str1[i]!='\\0';i++) count1++;\n" +
+		"    for(i=0;str2[i]!='\\0';i++) count2++;\n" +
+		"    int p=count2;\n" +
+		"    for(i=0;i<count1;i++)\n" +
+		"    {  d=0;\n" +
+		"        if(str1[i]==str2[t])\n" +
+		"        {\n" +
+		"          for(j=i;j<i+count2;j++)\n" +
+		"          {\n" +
+		"              if(str1[i]==str2[t])\n" +
+		"              {\n" +
+		"                d++;\n" +
+		"                t++;\n" +
+		"              }\n" +
+		"          }\n" +
+		"        }\n" +
+		"        if(d==count2)\n" +
+		"        {\n" +
+		"            for(j=i;j<i+count2;j++)\n" +
+		"            {\n" +
+		"                str1[j]=str1[j+p];p--;\n" +
+		"            }\n" +
+		"        }\n" +
+		"    }\n" +
+		"    \n" +
+		"}\n" +
+		"int main() {\n" +
+		"\tchar s1[100],s2[100];\n" +
+		"\tscanf(\"%s\",str1);\n" +
+		"\tscanf(\"%s\",str2);\n" +
+		"\treverse(str1,str2);\n" +
+		"\treturn 0;\n" +
+		"}";
+	codeCase['case 4'] = "#include<stdio.h>\n" +
+		"int main(){\n" +
+		"    int a=10,b=-100,c=1000;\n" +
+		"    printf(\"%d\",b*b-4a*c);\n" +
+		"    \n" +
+		"    return 0;\n" +
+		"}";
+	codeCase['No case'] = "";
+	var language = {}
+
+	language['C'] = '#include <stdio.h>\n' +
+		'#include <string.h>\n' +
+		'void pal(char c[],int k,int n){\n' +
+		'     if(k==n||n-k==1){\n' +
+		'         return 1;\n' +
+		'     }\n' +
+		'     if(c[k]==c[n]){\n' +
+		'         return pal(c,k+1,n-1);\n' +
+		'     }\n' +
+		'     else{\n' +
+		'         return 0;\n' +
+		'     }\n' +
+		' }\n' +
+		'int main()\n' +
+		'{\n' +
+		'    char s[100];\n' +
+		'    int a=getchar()\n' +
+		'    int i=0;\n' +
+		'    while(a!=\'\\0\'){\n' +
+		'        s[i]=a;\n' +
+		'        i++;\n' +
+		'        a=getchar();\n' +
+		'    }\n' +
+		'    if(pal(s,0,i-1)){\n' +
+		'        printf("Yes");\n' +
+		'    }\n' +
+		'    else{\n' +
+		'        printf("No");\n' +
+		'    }\n' +
+		'    return 0;\n' +
+		'}';
+	language['CPP'] = '#include <iostream>\nusing namespace std;\n\nint main()\n{\n     cout << "Hello World!" << endl;\n     return 0;\n}\n';
+	language['CLOJURE'] = '(println "Hello World!")';
+	language['CSS'] = "p {\n font-size: 18px; \n}\n";
+	language['CSHARP'] = 'using System;\nusing System.Numerics;\nclass Test {\n	static void Main(string[] args)	{\n	   /*\n		* \n		Read input from stdin and provide input before running\n		var line1 = System.Console.ReadLine().Trim();\n		var N = Int32.Parse(line1);\n		for (var i = 0; i < N; i++) {\n		System.Console.WriteLine("hello world");\n		}\n		*/\n\n		System.Console.WriteLine("Hello World!\\n");\n	}\n}\n';
+	language['GO'] = 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello World")\n}\n';
+	language['HASKELL'] = 'module Main\n where\n\nmain=putStrLn "Hello World!\\n"';
+	language['JAVA'] = 'class TestClass {\n    public static void main(String args[] ) throws Exception {\n        System.out.println("Hello World!");\n    }\n}\n';
+	language['JAVASCRIPT'] = "importPackage(java.io);\nimportPackage(java.lang);\n\nprint ('Hello World!\\n');\n";
+	language['LISP'] = '(display "Hello World!")\n';
+	language['OBJECTIVEC'] = '#import <Foundation/Foundation.h>\nint main(int argc, const char* argv[]){\n    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];\n    printf("Hello World");\n    [pool drain];\n    return 0;\n}\n';
+	language['PASCAL'] = "program Hello;\nbegin\n    writeln ('Hello World!')\nend.\n";
+	language['PERL'] = "use strict;\n=comment\n# Read input from stdin and provide input before running code\n# Echo input to output.\nwhile(my $fred = <STDIN>) {\n    print $fred;\n}\n=cut\nprint 'Hello World!'\n";
+	language['PHP'] = '<?php\n\necho "Hello World!";\n\n?>\n';
+	language['PYTHON'] = "print 'Hello World!'\n";
+	language['RUBY'] = "print 'Hello World!'\n";
+	language['R'] = 'cat("Hello World")\n';
+	language['RUST'] ='fn main() {\n    println!("Hello World!");\n}\n';
+	language['SCALA'] = 'object HelloWorld {\n    def main(args: Array[String]) {\n        println("Hello, world!")\n    }\n}\n';
+	language['TEXT'] = 'Paste the output here\n';
+
+	//------From Ace Documentation on inserting the editor------//
+	ace.require("ace/ext/language_tools");
+	var Range = ace.require('ace/range').Range;
+	var editor = ace.edit("editor");
+	var ongoing = false;
+	var selectedLang = "TEXT";
+	var selectedCase = "No case";
+	editor.setTheme("ace/theme/dawn");
+	editor.session.setMode("ace/mode/text");
+	editor.getSession().setTabSize(5);
+	var source_code = editor.getValue();
+	editor.setFontSize(14);
+	editor.setValue(language[selectedLang],-1);
+	var StatusBar = ace.require("ace/ext/statusbar").StatusBar;
+	var statusBar = new StatusBar(editor, document.getElementById("editor-statusbar"));
+	editor.setHighlightActiveLine(true);
+	editor.getSession().on('change', function(e) {
+		updateContent();
+		if(source_code == ""){
+			$("#runcode").prop('disabled', true);
+			$('#runcode').prop('title', "Editor is Empty! Please write some code.");
+		}
+		else{
+			$("#runcode").prop('disabled', false);
+			$('#runcode').prop('title', "Compile and Run");
+		}
+	});
+	$("#fixcode").hide();
+	// editor.session.getSelection().clearSelection();
+
+	//To Download the code in the editor
+	function download(content,lang){
+		var e = {
+			"C":"c","CPP":"cpp","CLOJURE":"clj","CSS":"css","CSHARP":"cs",
+			"GO":"go","HASKELL":"hs","JAVA":"java","JAVASCRIPT":"js",
+			"LISP":"scm","OBJECTIVEC":"m","PERL":"pl","PHP":"php",
+			"PYTHON":"py","RUBY":"rb","R":"r","RUST":"rs","SCALA":"scala",
+			"TEXT":"txt"
+		};
+		var element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+		element.setAttribute('download', "file." + e[lang]);
+		element.style.display = 'none';
+		document.body.appendChild(element);
+		element.click();
+		document.body.removeChild(element);
+	}
+
+	$("#download").click(function(){
+		updateContent();
+		download(source_code, $("#lang").val());
+
+	});
+
+	//To get the current contents in the editor
+	function updateContent(){
+		source_code = editor.getValue();
+	}
+
+	function clearMarkers() {
+		const prevMarkers = editor.session.getMarkers();
+		if (prevMarkers) {
+  		const prevMarkersArr = Object.keys(prevMarkers);
+  			for (let item of prevMarkersArr) {
+			  editor.session.removeMarker(prevMarkers[item].id);
+  			}
+		}
+	}
+	//To run the code and get all the status
+	function runCode(){
+		if(ongoing==true)
+			return;
+		ongoing = true;
+		updateContent();
+		$(".outputbox").hide();
+		$("#fixcode").prop('disabled', true);
+		$("#runcode").prop('disabled', true);
+
+		var token = $(":input[name='csrfmiddlewaretoken']").val();
+		var input_given = $("#custom-input").val();
+		var run_data = {
+				source: source_code,
+				lang: selectedLang,
+				csrfmiddlewaretoken:token
+		};
+		if( $("#user-input").prop('checked') == true ){
+			run_data.input = input_given;
+		}
+
+
+		// AJAX request to Django for running code
+		$.ajax({
+			url: "run/",
+			type: "POST",
+			data: run_data,
+			dataType: "json",
+			timeout: 1000000,
+			success: function(response){
+
+				ongoing = false;
+				$("html, body").delay(150).animate({
+						scrollTop: $('#showres').offset().top
+				}, 1000);
+				$(".outputbox").show();
+				$("#runcode").prop('disabled', false);
+				$("#fixcode").prop('disabled', false);
+				var cstat = response.compile_status;
+				var rstat = response.run_status.status;
+				if(cstat == "OK"){
+
+					$(".compilestat").children(".value").html(response.compile_status);
+					$(".runstat").children(".value").html(response.run_status.status);
+					$(".time").children(".value").html(response.run_status.time_used);
+					$(".memory").children(".value").html(response.run_status.memory_used);
+
+					if(rstat == "AC"){
+						// $(".outputerror").hide();
+						$(".outputerror").show();
+						$(".errormessage").css("background", "#dff0d8")
+						$(".errormessage").css('border', '1px solid #d6e9c6');
+						$(".errormessage").html("Compile successful!").css("color", "#000");
+						$(".io-show").show();
+						// $(".outputo").html(response.run_status.output_html).css("color", "#000");;
+						$(".outputo").html("test").css("color", "#000");;
+						if($("#user-input").prop('checked') == true)
+							$(".outputi").html(input_given).css("color", "#000");
+						else
+							$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+					}
+					else{
+						$(".io-show").show();
+						$(".outputo").html("Standard output is empty").css("color", "#a6a6a6");
+						if($("#user-input").prop('checked') == true)
+							$(".outputi").html(input_given).css("color", "#000");
+						else
+							$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+						$(".outputerror").show();
+ 
+						if(rstat == "MLE"){
+							$(".errorkey").html("Memory Error");
+							$(".errormessage").html("Memory limit exceeded");
+						}
+						else if (rstat == "TLE"){
+							$(".errorkey").html("Timeout Error");
+							$(".errormessage").html("Time limit exceeded.");
+						}
+						else {
+							$(".errorkey").html("Runtime Error");
+							$(".errormessage").html(response.run_status.status_detail);
+						}
+					}
+				}
+				else{
+					$("#fixcode").show();
+					$(".io-show").show();
+					$(".outputo").html("Standard output is empty").css("color", "#a6a6a6");
+					if($("#user-input").prop('checked') == true)
+						$(".outputi").html(input_given).css("color", "#000");
+					else
+						$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+					$(".time").children(".value").html("0.0");
+					$(".memory").children(".value").html("0");
+					$(".compilestat").children(".value").html("N/A");
+					$(".runstat").children(".value").html("CE");
+
+					$(".outputerror").show();
+					$(".errormessage").css("background", "#ff7272");
+					$(".errormessage").css('border', '1px solid #faa');
+					$(".errorkey").html("Compile Error");
+					$(".errormessage").html(response.compile_status);
+
+				}
+			},
+
+			error: function(error){
+
+				ongoing = false;
+				$("html, body").delay(150).animate({
+						scrollTop: $('#showres').offset().top
+				}, 1000);
+
+				$("#runcode").prop('disabled', false);
+				$("#fixcode").prop('disabled', false);
+				$(".outputbox").show();
+				$(".io-show").show();
+				$(".outputo").html("Standard output is empty").css("color", "#a6a6a6");
+				if($("#user-input").prop('checked') == true)
+					$(".outputi").html(input_given).css("color", "#000");
+				else
+					$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+				$(".outputio").show();
+				$(".time").children(".value").html("0.0");
+				$(".memory").children(".value").html("0");
+				$(".compilestat").children(".value").html("N/A");
+				$(".runstat").children(".value").html("N/A");
+
+				$(".errorkey").html("Server error");
+				$(".errormessage").html("Bad Request(403). Please try again!");
+
+
+			}
+		});
+	}
+
+	$("#runcode").click(function(){
+		clearMarkers();
+		runCode();
+	});
+
+	function fixCode(){
+
+		if(ongoing==true)
+			return;
+		ongoing = true;
+		updateContent();
+		$(".outputbox").hide();
+		$("#fixcode").prop('disabled', true);
+		$("#runcode").prop('disabled', true);
+		var token = $(":input[name='csrfmiddlewaretoken']").val();
+		var input_given = $("#custom-input").val();
+		var run_data = {
+				source: source_code,
+				lang: selectedLang,
+				csrfmiddlewaretoken:token
+		};
+		if( $("#user-input").prop('checked') == true ){
+			run_data.input = input_given;
+		}
+
+		// AJAX request to Django for running code
+		$.ajax({
+			url: "fix/",
+			type: "POST",
+			data: run_data,
+			dataType: "json",
+			timeout: 1000000,
+			success: function(response){
+
+				ongoing = false;
+				$("html, body").delay(150).animate({
+						scrollTop: $('#showres').offset().top
+				}, 1000);
+				$(".outputbox").show();
+				$("#runcode").prop('disabled', false);
+				$("#fixcode").prop('disabled', false);
+				var cstat = response.compile_status;
+				var rstat = response.fix_status.status;
+				if(cstat == "OK"){
+
+					$(".compilestat").children(".value").html(response.compile_status);
+					$(".runstat").children(".value").html(response.fix_status.status);
+					// $(".time").children(".value").html(response.fix_status.time_used);
+					// $(".memory").children(".value").html(response.fix_status.memory_used);
+
+					if(rstat == "OK"){
+						// $(".outputerror").hide();
+						var fix_data = response.fix_status.fix_data;
+						for (var i = 0; i < fix_data.length; i++) {
+							var lines = fix_data[i][0]
+							editor.getSession().addMarker(new Range(lines[0]-1, 0, lines[lines.length-1]-1, 200), "myMarker", "fullLine");
+						}
+						$(".outputerror").show();
+						$(".errorkey").html("Fix state");
+						$(".errormessage").css("background", "#dff0d8");
+						$(".errormessage").css('border', '1px solid #d6e9c6');
+						$(".errormessage").html("Fix successfully!").css("color", "#000");
+						$(".io-show").show();
+						// $(".outputo").html(response.run_status.output_html).css("color", "#000");;
+						$(".outputo").html(response.fix_status.fix).css("color", "#000");;
+						if($("#user-input").prop('checked') == true)
+							$(".outputi").html(input_given).css("color", "#000");
+						else
+							$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+					}
+					else{
+						var fix_data = response.fix_status.fix_data;
+						editor.getSession().addMarker(new Range(fix_data[0][0][0]-1, 0, fix_data[0][0][fix_data[0][0].length-1]-1, 200), "top1", "fullLine");
+						editor.getSession().addMarker(new Range(fix_data[1][0][0]-1, 0, fix_data[1][0][fix_data[1][0].length-1]-1, 200), "top2", "fullLine");
+						editor.getSession().addMarker(new Range(fix_data[2][0][0]-1, 0, fix_data[2][0][fix_data[2][0].length-1]-1, 200), "top3", "fullLine");
+						$(".io-show").show();
+						$(".errorkey").html("Fix state");
+						$(".errormessage").css("background", "#ec9a93");
+						$(".errormessage").css('border', '1px solid #d6e9c6');
+						$(".errormessage").html("Fix unsuccessfully!").css("color", "#000");
+						$(".outputo").html(response.fix_status.fix).css("color", "#000");;
+						if($("#user-input").prop('checked') == true)
+							$(".outputi").html(input_given).css("color", "#000");
+						else
+							$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+						$(".outputerror").show();
+
+						if(rstat == "MLE"){
+							$(".errorkey").html("Memory Error");
+							$(".errormessage").html("Memory limit exceeded");
+						}
+						else if (rstat == "TLE"){
+							$(".errorkey").html("Timeout Error");
+							$(".errormessage").html("Time limit exceeded.");
+						}
+					}
+				}
+				else{
+					$(".io-show").show();
+					$(".outputo").html("Standard output is empty").css("color", "#a6a6a6");
+					if($("#user-input").prop('checked') == true)
+						$(".outputi").html(input_given).css("color", "#000");
+					else
+						$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+					$(".time").children(".value").html("0.0");
+					$(".memory").children(".value").html("0");
+					$(".compilestat").children(".value").html("N/A");
+					$(".runstat").children(".value").html("CE");
+
+					$(".outputerror").show();
+					$(".errormessage").css("background", "#dff0d8");
+					$(".errormessage").css('border', '1px solid #d6e9c6');
+					$(".errorkey").html("Fix state");
+					$(".errormessage").html(response.compile_status);
+
+				}
+			},
+
+			error: function(error){
+
+				ongoing = false;
+				$("html, body").delay(150).animate({
+						scrollTop: $('#showres').offset().top
+				}, 1000);
+
+				$("#runcode").prop('disabled', false);
+				$("#fixcode").prop('disabled', false);
+				$(".outputbox").show();
+				$(".io-show").show();
+				$(".outputo").html("Standard output is empty").css("color", "#a6a6a6");
+				if($("#user-input").prop('checked') == true)
+					$(".outputi").html(input_given).css("color", "#000");
+				else
+					$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+				$(".outputio").show();
+				$(".time").children(".value").html("0.0");
+				$(".memory").children(".value").html("0");
+				$(".compilestat").children(".value").html("N/A");
+				$(".runstat").children(".value").html("N/A");
+
+				$(".errorkey").html("Server error");
+				$(".errormessage").html("Bad Request(403). Please try again!");
+
+
+			}
+		});
+
+	}
+	$("#fixcode").click(function(){
+		clearMarkers();
+		fixCode();
+		// editor.getSession().addMarker(new Range(4, 0, 6, 1), "blue", "text");
+	});
+	//When Changing the language
+	$("#lang").change(function(){
+		selectedLang = $("#lang").val();
+		editor.setValue(language[selectedLang],-1);
+		if(selectedLang == "C" || selectedLang == "CPP"){
+			editor.getSession().setMode("ace/mode/text");
+		}
+		else{
+			editor.getSession().setMode("ace/mode/" + selectedLang.toLowerCase());
+		}
+		editor.session.getSelection().clearSelection();
+	});
+	$("#caseCheck").change(function(){
+		selectedCase = $("#caseCheck").val();
+		editor.setValue(codeCase[selectedCase],-1);
+		editor.session.getSelection().clearSelection();
+		clearMarkers();
+		$("#fixcode").hide();
+		$(".outputbox").hide();
+	});
+
+	//When changing the theme
+	$("#theme").change(function(){
+		themeSelected = $("#theme").val();
+		if(themeSelected == "Light"){
+			editor.setTheme("ace/theme/dawn");
+		}
+		else if(themeSelected == "Monokai"){
+			editor.setTheme("ace/theme/monokai");
+		}
+		else if(themeSelected == "Solarised Light"){
+			editor.setTheme("ace/theme/solarized_light");
+		}
+		else if(themeSelected == "Twilight"){
+			editor.setTheme("ace/theme/twilight");
+		}
+	});
+
+});
+        î∑  xî∑kH   20230710222611-8l*   http://10.42.0.107:8000/static/js/my_js.js       dM  $(document).ready(function(){
+
+	$('#user-input').click(function () {
+		$(".input-container").slideToggle();
+	});
+	var codeCase = {}
+	codeCase['case 1'] = '#include <stdio.h>\n' +
+		'#include <string.h>\n' +
+		'void pal(char c[],int k,int n){\n' +
+		'     if(k==n||n-k==1){\n' +
+		'         return 1;\n' +
+		'     }\n' +
+		'     if(c[k]==c[n]){\n' +
+		'         return pal(c,k+1,n-1);\n' +
+		'     }\n' +
+		'     else{\n' +
+		'         return 0;\n' +
+		'     }\n' +
+		' }\n' +
+		'int main()\n' +
+		'{\n' +
+		'    char s[100];\n' +
+		'    int a=getchar()\n' +
+		'    int i=0;\n' +
+		'    while(a!=\'\\0\'){\n' +
+		'        s[i]=a;\n' +
+		'        i++;\n' +
+		'        a=getchar();\n' +
+		'    }\n' +
+		'    if(pal(s,0,i-1)){\n' +
+		'        printf("Yes");\n' +
+		'    }\n' +
+		'    else{\n' +
+		'        printf("No");\n' +
+		'    }\n' +
+		'    return 0;\n' +
+		'}';
+	codeCase['case 2'] = "#include <stdio.h>\n" +
+		"#include <stdlib.h>\n" +
+		"\n" +
+		"// Write any other auxillary functions here \n" +
+		"\n" +
+		"void replace_substring(char *s,int m,char *t,char *w,int r,int i)\n" +
+		"{\n" +
+		"    int j;\n" +
+		"    for(j=i;j<i+m;j++){\n" +
+		"        s[j]=w[j-i];\n" +
+		"    }\n" +
+		"    for(j=i+m;j<m+r;j++){\n" +
+		"        s[j]=t[j];\n" +
+		"    }\n" +
+		"}\n" +
+		"\n" +
+		"int main()\n" +
+		"{\n" +
+		"\tint m,n,r,i,j,c=0;\n" +
+		"\tchar*s,*t,*w,*p;\n" +
+		"\tscanf(\"%d\",&m);\n" +
+		"\ts=(char*)malloc(sizeof(char)*(m+100));\n" +
+		"\tt=(char*)malloc(sizeof(char)*(m+100));\n" +
+		"\tfor(i=0;i<m;i++){\n" +
+		"\t    scanf(\"%c\",&s[i]);\n" +
+		"\t    t[i]=s[i];\n" +
+		"\t}\n" +
+		"\tscanf(\"%d\",&n);\n" +
+		"\tw=(char*)malloc(sizeof(char)*n);\n" +
+		"\t\tfor(i=0;i<m;i++){\n" +
+		"\t    scanf(\"%c\",&s[i]);\n" +
+		"\t}\n" +
+		"\tscanf(\"%d\",&r);\n" +
+		"\tp=(char*)malloc(sizeof(char)*r);\n" +
+		"\t\tfor(i=0;i<m;i++){\n" +
+		"\t    scanf(\"%c\",&s[i]);\n" +
+		"\t}\n" +
+		"\tfor(i=0;i<m;i++){\n" +
+		"\t    if(s[i]==p[0]){\n" +
+		"\t        for(j=i;j<(i+n);j++){\n" +
+		"\t            if(s[i]==p[j-i]){\n" +
+		"\t                c++;\n" +
+		"\t            }\n" +
+		"\t        }\n" +
+		"\t        if(c==n){\n" +
+		"\t            replace_substring(s,t,w,i);\n" +
+		"\t            i=i-r;\n" +
+		"\t        }\n" +
+		"\t        c=0;\n" +
+		"\t    }\n" +
+		"\t}\n" +
+		"\tprintf(\"%s\",s);\n" +
+		"\n" +
+		"\treturn 0;\n" +
+		"\n" +
+		"}";
+	codeCase['case 3'] = "#include <stdio.h>\n" +
+		"void reverse(char str1[],char str2[])\n" +
+		"{\n" +
+		"    int i,d,t=0,count1=0,count2=0,j;\n" +
+		"    for(i=0;str1[i]!='\\0';i++) count1++;\n" +
+		"    for(i=0;str2[i]!='\\0';i++) count2++;\n" +
+		"    int p=count2;\n" +
+		"    for(i=0;i<count1;i++)\n" +
+		"    {  d=0;\n" +
+		"        if(str1[i]==str2[t])\n" +
+		"        {\n" +
+		"          for(j=i;j<i+count2;j++)\n" +
+		"          {\n" +
+		"              if(str1[i]==str2[t])\n" +
+		"              {\n" +
+		"                d++;\n" +
+		"                t++;\n" +
+		"              }\n" +
+		"          }\n" +
+		"        }\n" +
+		"        if(d==count2)\n" +
+		"        {\n" +
+		"            for(j=i;j<i+count2;j++)\n" +
+		"            {\n" +
+		"                str1[j]=str1[j+p];p--;\n" +
+		"            }\n" +
+		"        }\n" +
+		"    }\n" +
+		"    \n" +
+		"}\n" +
+		"int main() {\n" +
+		"\tchar s1[100],s2[100];\n" +
+		"\tscanf(\"%s\",str1);\n" +
+		"\tscanf(\"%s\",str2);\n" +
+		"\treverse(str1,str2);\n" +
+		"\treturn 0;\n" +
+		"}";
+	codeCase['case 4'] = "#include<stdio.h>\n" +
+		"int main(){\n" +
+		"    int a=10,b=-100,c=1000;\n" +
+		"    printf(\"%d\",b*b-4a*c);\n" +
+		"    \n" +
+		"    return 0;\n" +
+		"}";
+	codeCase['No case'] = "";
+	var language = {}
+
+	language['C'] = '#include <stdio.h>\n' +
+		'#include <string.h>\n' +
+		'void pal(char c[],int k,int n){\n' +
+		'     if(k==n||n-k==1){\n' +
+		'         return 1;\n' +
+		'     }\n' +
+		'     if(c[k]==c[n]){\n' +
+		'         return pal(c,k+1,n-1);\n' +
+		'     }\n' +
+		'     else{\n' +
+		'         return 0;\n' +
+		'     }\n' +
+		' }\n' +
+		'int main()\n' +
+		'{\n' +
+		'    char s[100];\n' +
+		'    int a=getchar()\n' +
+		'    int i=0;\n' +
+		'    while(a!=\'\\0\'){\n' +
+		'        s[i]=a;\n' +
+		'        i++;\n' +
+		'        a=getchar();\n' +
+		'    }\n' +
+		'    if(pal(s,0,i-1)){\n' +
+		'        printf("Yes");\n' +
+		'    }\n' +
+		'    else{\n' +
+		'        printf("No");\n' +
+		'    }\n' +
+		'    return 0;\n' +
+		'}';
+	language['CPP'] = '#include <iostream>\nusing namespace std;\n\nint main()\n{\n     cout << "Hello World!" << endl;\n     return 0;\n}\n';
+	language['CLOJURE'] = '(println "Hello World!")';
+	language['CSS'] = "p {\n font-size: 18px; \n}\n";
+	language['CSHARP'] = 'using System;\nusing System.Numerics;\nclass Test {\n	static void Main(string[] args)	{\n	   /*\n		* \n		Read input from stdin and provide input before running\n		var line1 = System.Console.ReadLine().Trim();\n		var N = Int32.Parse(line1);\n		for (var i = 0; i < N; i++) {\n		System.Console.WriteLine("hello world");\n		}\n		*/\n\n		System.Console.WriteLine("Hello World!\\n");\n	}\n}\n';
+	language['GO'] = 'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello World")\n}\n';
+	language['HASKELL'] = 'module Main\n where\n\nmain=putStrLn "Hello World!\\n"';
+	language['JAVA'] = 'class TestClass {\n    public static void main(String args[] ) throws Exception {\n        System.out.println("Hello World!");\n    }\n}\n';
+	language['JAVASCRIPT'] = "importPackage(java.io);\nimportPackage(java.lang);\n\nprint ('Hello World!\\n');\n";
+	language['LISP'] = '(display "Hello World!")\n';
+	language['OBJECTIVEC'] = '#import <Foundation/Foundation.h>\nint main(int argc, const char* argv[]){\n    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];\n    printf("Hello World");\n    [pool drain];\n    return 0;\n}\n';
+	language['PASCAL'] = "program Hello;\nbegin\n    writeln ('Hello World!')\nend.\n";
+	language['PERL'] = "use strict;\n=comment\n# Read input from stdin and provide input before running code\n# Echo input to output.\nwhile(my $fred = <STDIN>) {\n    print $fred;\n}\n=cut\nprint 'Hello World!'\n";
+	language['PHP'] = '<?php\n\necho "Hello World!";\n\n?>\n';
+	language['PYTHON'] = "print 'Hello World!'\n";
+	language['RUBY'] = "print 'Hello World!'\n";
+	language['R'] = 'cat("Hello World")\n';
+	language['RUST'] ='fn main() {\n    println!("Hello World!");\n}\n';
+	language['SCALA'] = 'object HelloWorld {\n    def main(args: Array[String]) {\n        println("Hello, world!")\n    }\n}\n';
+	language['TEXT'] = 'Paste the output here\n';
+
+	//------From Ace Documentation on inserting the editor------//
+	ace.require("ace/ext/language_tools");
+	var Range = ace.require('ace/range').Range;
+	var editor = ace.edit("editor");
+	var ongoing = false;
+	var selectedLang = "TEXT";
+	var selectedCase = "No case";
+	editor.setTheme("ace/theme/dawn");
+	editor.session.setMode("ace/mode/text");
+	editor.getSession().setTabSize(5);
+	var source_code = editor.getValue();
+	editor.setFontSize(14);
+	editor.setValue(language[selectedLang],-1);
+	var StatusBar = ace.require("ace/ext/statusbar").StatusBar;
+	var statusBar = new StatusBar(editor, document.getElementById("editor-statusbar"));
+	editor.setHighlightActiveLine(true);
+	editor.getSession().on('change', function(e) {
+		updateContent();
+		if(source_code == ""){
+			$("#runcode").prop('disabled', true);
+			$('#runcode').prop('title', "Editor is Empty! Please write some code.");
+		}
+		else{
+			$("#runcode").prop('disabled', false);
+			$('#runcode').prop('title', "Compile and Run");
+		}
+	});
+	$("#fixcode").hide();
+	// editor.session.getSelection().clearSelection();
+
+	//To Download the code in the editor
+	function download(content,lang){
+		var e = {
+			"C":"c","CPP":"cpp","CLOJURE":"clj","CSS":"css","CSHARP":"cs",
+			"GO":"go","HASKELL":"hs","JAVA":"java","JAVASCRIPT":"js",
+			"LISP":"scm","OBJECTIVEC":"m","PERL":"pl","PHP":"php",
+			"PYTHON":"py","RUBY":"rb","R":"r","RUST":"rs","SCALA":"scala",
+			"TEXT":"txt"
+		};
+		var element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+		element.setAttribute('download', "file." + e[lang]);
+		element.style.display = 'none';
+		document.body.appendChild(element);
+		element.click();
+		document.body.removeChild(element);
+	}
+
+	$("#download").click(function(){
+		updateContent();
+		download(source_code, $("#lang").val());
+
+	});
+
+	//To get the current contents in the editor
+	function updateContent(){
+		source_code = editor.getValue();
+	}
+
+	function clearMarkers() {
+		const prevMarkers = editor.session.getMarkers();
+		if (prevMarkers) {
+  		const prevMarkersArr = Object.keys(prevMarkers);
+  			for (let item of prevMarkersArr) {
+			  editor.session.removeMarker(prevMarkers[item].id);
+  			}
+		}
+	}
+	//To run the code and get all the status
+	function runCode(){
+		if(ongoing==true)
+			return;
+		ongoing = true;
+		updateContent();
+		$(".outputbox").hide();
+		$("#fixcode").prop('disabled', true);
+		$("#runcode").prop('disabled', true);
+
+		var token = $(":input[name='csrfmiddlewaretoken']").val();
+		var input_given = $("#custom-input").val();
+		var run_data = {
+				source: source_code,
+				lang: selectedLang,
+				csrfmiddlewaretoken:token
+		};
+		if( $("#user-input").prop('checked') == true ){
+			run_data.input = input_given;
+		}
+
+
+		// AJAX request to Django for running code
+		$.ajax({
+			url: "run/",
+			type: "POST",
+			data: run_data,
+			dataType: "json",
+			timeout: 1000000,
+			success: function(response){
+
+				ongoing = false;
+				$("html, body").delay(150).animate({
+						scrollTop: $('#showres').offset().top
+				}, 1000);
+				$(".outputbox").show();
+				$("#runcode").prop('disabled', false);
+				$("#fixcode").prop('disabled', false);
+				var cstat = response.compile_status;
+				var rstat = response.run_status.status;
+				if(cstat == "OK"){
+
+					$(".compilestat").children(".value").html(response.compile_status);
+					$(".runstat").children(".value").html(response.run_status.status);
+					$(".time").children(".value").html(response.run_status.time_used);
+					$(".memory").children(".value").html(response.run_status.memory_used);
+
+					if(rstat == "AC"){
+						// $(".outputerror").hide();
+						$(".outputerror").show();
+						$(".errormessage").css("background", "#dff0d8")
+						$(".errormessage").css('border', '1px solid #d6e9c6');
+						$(".errormessage").html("Compile successful!").css("color", "#000");
+						$(".io-show").show();
+						// $(".outputo").html(response.run_status.output_html).css("color", "#000");;
+						$(".outputo").html("test").css("color", "#000");;
+						if($("#user-input").prop('checked') == true)
+							$(".outputi").html(input_given).css("color", "#000");
+						else
+							$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+					}
+					else{
+						$(".io-show").show();
+						$(".outputo").html("Standard output is empty").css("color", "#a6a6a6");
+						if($("#user-input").prop('checked') == true)
+							$(".outputi").html(input_given).css("color", "#000");
+						else
+							$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+						$(".outputerror").show();
+ 
+						if(rstat == "MLE"){
+							$(".errorkey").html("Memory Error");
+							$(".errormessage").html("Memory limit exceeded");
+						}
+						else if (rstat == "TLE"){
+							$(".errorkey").html("Timeout Error");
+							$(".errormessage").html("Time limit exceeded.");
+						}
+						else {
+							$(".errorkey").html("Runtime Error");
+							$(".errormessage").html(response.run_status.status_detail);
+						}
+					}
+				}
+				else{
+					$("#fixcode").show();
+					$(".io-show").show();
+					$(".outputo").html("Standard output is empty").css("color", "#a6a6a6");
+					if($("#user-input").prop('checked') == true)
+						$(".outputi").html(input_given).css("color", "#000");
+					else
+						$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+					$(".time").children(".value").html("0.0");
+					$(".memory").children(".value").html("0");
+					$(".compilestat").children(".value").html("N/A");
+					$(".runstat").children(".value").html("CE");
+
+					$(".outputerror").show();
+					$(".errormessage").css("background", "#ff7272");
+					$(".errormessage").css('border', '1px solid #faa');
+					$(".errorkey").html("Compile Error");
+					$(".errormessage").html(response.compile_status);
+
+				}
+			},
+
+			error: function(error){
+
+				ongoing = false;
+				$("html, body").delay(150).animate({
+						scrollTop: $('#showres').offset().top
+				}, 1000);
+
+				$("#runcode").prop('disabled', false);
+				$("#fixcode").prop('disabled', false);
+				$(".outputbox").show();
+				$(".io-show").show();
+				$(".outputo").html("Standard output is empty").css("color", "#a6a6a6");
+				if($("#user-input").prop('checked') == true)
+					$(".outputi").html(input_given).css("color", "#000");
+				else
+					$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+				$(".outputio").show();
+				$(".time").children(".value").html("0.0");
+				$(".memory").children(".value").html("0");
+				$(".compilestat").children(".value").html("N/A");
+				$(".runstat").children(".value").html("N/A");
+
+				$(".errorkey").html("Server error");
+				$(".errormessage").html("Bad Request(403). Please try again!");
+
+
+			}
+		});
+	}
+
+	$("#runcode").click(function(){
+		clearMarkers();
+		runCode();
+	});
+
+	function fixCode(){
+
+		if(ongoing==true)
+			return;
+		ongoing = true;
+		updateContent();
+		$(".outputbox").hide();
+		$("#fixcode").prop('disabled', true);
+		$("#runcode").prop('disabled', true);
+		var token = $(":input[name='csrfmiddlewaretoken']").val();
+		var input_given = $("#custom-input").val();
+		var run_data = {
+				source: source_code,
+				lang: selectedLang,
+				csrfmiddlewaretoken:token
+		};
+		if( $("#user-input").prop('checked') == true ){
+			run_data.input = input_given;
+		}
+
+		// AJAX request to Django for running code
+		$.ajax({
+			url: "fix/",
+			type: "POST",
+			data: run_data,
+			dataType: "json",
+			timeout: 1000000,
+			success: function(response){
+
+				ongoing = false;
+				$("html, body").delay(150).animate({
+						scrollTop: $('#showres').offset().top
+				}, 1000);
+				$(".outputbox").show();
+				$("#runcode").prop('disabled', false);
+				$("#fixcode").prop('disabled', false);
+				var cstat = response.compile_status;
+				var rstat = response.fix_status.status;
+				if(cstat == "OK"){
+
+					$(".compilestat").children(".value").html(response.compile_status);
+					$(".runstat").children(".value").html(response.fix_status.status);
+					// $(".time").children(".value").html(response.fix_status.time_used);
+					// $(".memory").children(".value").html(response.fix_status.memory_used);
+
+					if(rstat == "OK"){
+						// $(".outputerror").hide();
+						var fix_data = response.fix_status.fix_data;
+						for (var i = 0; i < fix_data.length; i++) {
+							var lines = fix_data[i][0]
+							editor.getSession().addMarker(new Range(lines[0]-1, 0, lines[lines.length-1]-1, 200), "myMarker", "fullLine");
+						}
+						$(".outputerror").show();
+						$(".errorkey").html("Fix state");
+						$(".errormessage").css("background", "#dff0d8");
+						$(".errormessage").css('border', '1px solid #d6e9c6');
+						$(".errormessage").html("Fix successfully!").css("color", "#000");
+						$(".io-show").show();
+						// $(".outputo").html(response.run_status.output_html).css("color", "#000");;
+						$(".outputo").html(response.fix_status.fix).css("color", "#000");;
+						if($("#user-input").prop('checked') == true)
+							$(".outputi").html(input_given).css("color", "#000");
+						else
+							$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+					}
+					else{
+						var fix_data = response.fix_status.fix_data;
+						editor.getSession().addMarker(new Range(fix_data[0][0][0]-1, 0, fix_data[0][0][fix_data[0][0].length-1]-1, 200), "top1", "fullLine");
+						editor.getSession().addMarker(new Range(fix_data[1][0][0]-1, 0, fix_data[1][0][fix_data[1][0].length-1]-1, 200), "top2", "fullLine");
+						editor.getSession().addMarker(new Range(fix_data[2][0][0]-1, 0, fix_data[2][0][fix_data[2][0].length-1]-1, 200), "top3", "fullLine");
+						$(".io-show").show();
+						$(".errorkey").html("Fix state");
+						$(".errormessage").css("background", "#ec9a93");
+						$(".errormessage").css('border', '1px solid #d6e9c6');
+						$(".errormessage").html("Fix unsuccessfully!").css("color", "#000");
+						$(".outputo").html(response.fix_status.fix).css("color", "#000");;
+						if($("#user-input").prop('checked') == true)
+							$(".outputi").html(input_given).css("color", "#000");
+						else
+							$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+						$(".outputerror").show();
+
+						if(rstat == "MLE"){
+							$(".errorkey").html("Memory Error");
+							$(".errormessage").html("Memory limit exceeded");
+						}
+						else if (rstat == "TLE"){
+							$(".errorkey").html("Timeout Error");
+							$(".errormessage").html("Time limit exceeded.");
+						}
+					}
+				}
+				else{
+					$(".io-show").show();
+					$(".outputo").html("Standard output is empty").css("color", "#a6a6a6");
+					if($("#user-input").prop('checked') == true)
+						$(".outputi").html(input_given).css("color", "#000");
+					else
+						$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+					$(".time").children(".value").html("0.0");
+					$(".memory").children(".value").html("0");
+					$(".compilestat").children(".value").html("N/A");
+					$(".runstat").children(".value").html("CE");
+
+					$(".outputerror").show();
+					$(".errormessage").css("background", "#dff0d8");
+					$(".errormessage").css('border', '1px solid #d6e9c6');
+					$(".errorkey").html("Fix state");
+					$(".errormessage").html(response.compile_status);
+
+				}
+			},
+
+			error: function(error){
+
+				ongoing = false;
+				$("html, body").delay(150).animate({
+						scrollTop: $('#showres').offset().top
+				}, 1000);
+
+				$("#runcode").prop('disabled', false);
+				$("#fixcode").prop('disabled', false);
+				$(".outputbox").show();
+				$(".io-show").show();
+				$(".outputo").html("Standard output is empty").css("color", "#a6a6a6");
+				if($("#user-input").prop('checked') == true)
+					$(".outputi").html(input_given).css("color", "#000");
+				else
+					$(".outputi").html("Standard input is empty").css("color", "#a6a6a6");
+				$(".outputio").show();
+				$(".time").children(".value").html("0.0");
+				$(".memory").children(".value").html("0");
+				$(".compilestat").children(".value").html("N/A");
+				$(".runstat").children(".value").html("N/A");
+
+				$(".errorkey").html("Server error");
+				$(".errormessage").html("Bad Request(403). Please try again!");
+
+
+			}
+		});
+
+	}
+	$("#fixcode").click(function(){
+		clearMarkers();
+		fixCode();
+		// editor.getSession().addMarker(new Range(4, 0, 6, 1), "blue", "text");
+	});
+	//When Changing the language
+	$("#lang").change(function(){
+		selectedLang = $("#lang").val();
+		editor.setValue(language[selectedLang],-1);
+		if(selectedLang == "C" || selectedLang == "CPP"){
+			editor.getSession().setMode("ace/mode/text");
+		}
+		else{
+			editor.getSession().setMode("ace/mode/" + selectedLang.toLowerCase());
+		}
+		editor.session.getSelection().clearSelection();
+	});
+	$("#caseCheck").change(function(){
+		selectedCase = $("#caseCheck").val();
+		editor.setValue(codeCase[selectedCase],-1);
+		editor.session.getSelection().clearSelection();
+		clearMarkers();
+		$("#fixcode").hide();
+		$(".outputbox").hide();
+	});
+
+	//When changing the theme
+	$("#theme").change(function(){
+		themeSelected = $("#theme").val();
+		if(themeSelected == "Light"){
+			editor.setTheme("ace/theme/dawn");
+		}
+		else if(themeSelected == "Monokai"){
+			editor.setTheme("ace/theme/monokai");
+		}
+		else if(themeSelected == "Solarised Light"){
+			editor.setTheme("ace/theme/solarized_light");
+		}
+		else if(themeSelected == "Twilight"){
+			editor.setTheme("ace/theme/twilight");
+		}
+	});
+
+});
+”ò¿Ÿ=  ⁄          ∏OÄ      document   ¢Ñ
+      ready      .OV      #user-input    ü™‚X      click      f[N§      .input-container   ∞;ﬁ      slideToggle    gı4‹      codeCase   ÒØ¡      case 1"     ™~Ê_      case 2G     c¯˛      case 3e     rUú      case 4j     §B#      No casek    RßOƒ      CPPl    ∆ò˜m      #include <iostream>
+using namespace std;
+
+int main()
+{
+     cout << "Hello World!" << endl;
+     return 0;
+}
+m      «ØÎ      CLOJUREn    '¨úø      (println "Hello World!")o   ≠…}“      CSSp    ˘¢y!      p {
+ font-size: 18px; 
+}
+q      $≈7,      CSHARPr     6=p3p     using System;
+using System.Numerics;
+class Test {
+	static void Main(string[] args)	{
+	   /*
+		* 
+		Read input from stdin and provide input before running
+		var line1 = System.Console.ReadLine().Trim();
+		var N = Int32.Parse(line1);
+		for (var i = 0; i < N; i++) {
+		System.Console.WriteLine("hello world");
+		}
+		*/
+
+		System.Console.WriteLine("Hello World!\n");
+	}
+}
+s   ﬂ»?™K      package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello World")
+}
+t    C%WN      HASKELLu    öâø2      module Main
+ where
+
+main=putStrLn "Hello World!\n"v     m\Q4      JAVAw   )QÇ{Ö      class TestClass {
+    public static void main(String args[] ) throws Exception {
+        System.out.println("Hello World!");
+    }
+}
+x      Òœâ≠
+      JAVASCRIPTy     †∏ˆxM      importPackage(java.io);
+importPackage(java.lang);
+
+print ('Hello World!\n');
+z      æÊ›œ      LISP{   e-’“      (display "Hello World!")
+|      ˇ%vñ
+      OBJECTIVEC}     kîaÁ«      #import <Foundation/Foundation.h>
+int main(int argc, const char* argv[]){
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    printf("Hello World");
+    [pool drain];
+    return 0;
+}
+~    áÇ;      PASCAL     ∏»°?7      program Hello;
+begin
+    writeln ('Hello World!')
+end.
+Ä    Ã·B      PERLÅ   vÔπ¥      use strict;
+=comment
+# Read input from stdin and provide input before running code
+# Echo input to output.
+while(my $fred = <STDIN>) {
+    print $fred;
+}
+=cut
+print 'Hello World!'
+Ç   û∆—      PHPÉ    bÉ       <?php
+
+echo "Hello World!";
+
+?>
+Ñ   †∆ü      PYTHONÖ     ≈M•°      print 'Hello World!'
+Ü      RÀbì      RUBYá   ]˝€      cat("Hello World")
+à    n√◊∏      RUSTâ   áu’,      fn main() {
+    println!("Hello World!");
+}
+ä   ´…Ã      SCALAã      T⁄Œa      object HelloWorld {
+    def main(args: Array[String]) {
+        println("Hello, world!")
+    }
+}
+å      ¥ÿ;é      TEXTç   ÓÌrÛ      Paste the output here
+é     4ÉX¡      aceè    wÏ      requireê    ‡R      ace/ext/language_toolsë     π∞—      Rangeí      ˛Ë;“	      ace/rangeì      2»|»      editorî     \Ôùï      editï   ÀwL      ongoingñ    æqã      selectedLangó   ˝–˘q      selectedCaseò   nJû      setThemeô   ß$]H      ace/theme/dawnö     “60¨      sessionõ    6sP€      setModeú    ÓÚ@      ace/mode/textù      ò;h›
+      getSessionû     ∏<-±
+      setTabSizeü     >Õ°ó      source_code†    ∆⁄¸      getValue°   ˜®¿      setFontSize¢    ≠«uô      setValue£   †§Ü_	      StatusBar§      ,åbl      ace/ext/statusbar•      ä°F	      statusBar¶      t«£      getElementByIdß     2µf      editor-statusbar®   ñÁñƒ      setHighlightActiveLine©     Á˛¡      change™     ¶bó}      updateContent´      v#¶ë      #runcode¨   “P…ù      prop≠   ûzÉw      disabledÆ   “E      titleØ      —KäH(      Editor is Empty! Please write some code.∞   6Ø∆L      Compile and Run±    ÎÔØô      #fixcode≤   üvÙ}      hide≥   ¯Òµ…      download¥   4W»      contentµ    +~,      lang∂   ä‰ÅF      cpp∑    ﬂÌ?^      clj∏    >ü      cssπ    4√ïS      java∫   √c∞      scmª    H†§‰      phpº    ©=%      scalaΩ      æÇÅÂ      txtæ    DC      createElementø      ó{⁄D      setAttribute¿   ª©`X      href¡   ãÂïK      data:text/plain;charset=utf-8,¬     Å8_      file.√      e}ü      displayƒ    ,Ω      none≈   òh;      body∆   ≠$~      appendChild«    ˘˙K      removeChild»    R#ó≥	      #download…      ƒ„‹      #lang       &⁄õ      valÀ    [N˝      clearMarkersÃ   Ê÷Óµ      prevMarkersÕ    ΩÎ◊⁄
+      getMarkersŒ     ¿◊<)      prevMarkersArrœ     ˝ÑÃ∫      item–   ¶ñ`é      removeMarker—   ªŒ      runCode“    Íé¿Z
+      .outputbox”     £Ì>      token‘      x3S±"      :input[name='csrfmiddlewaretoken']’     C“;≠      input_given÷    NÛÈ      #custom-input◊      NáJÊ      run_dataÿ   phoI      csrfmiddlewaretokenŸ    »:0ó      checked⁄    æd»ê      ajax€   Bv      run/‹   ﬂ:      POST›   6ó(Å      dataﬁ   DoÄw      dataTypeﬂ   .¬      json‡   ∑\o      timeout·    …©\9      success‚    âOÁù      response„   ﬁY˙
+      html, body‰     ãC±¿      delayÂ      ÷q1º      animateÊ    ìGÎ	      scrollTopÁ      êß¯      #showresË   $√Á      topÈ    HáíK      showÍ   z√"∂      cstatÎ      ÙZ©      compile_statusÏ     ÏmØ±      rstatÌ      ;£"Ü
+      run_statusÓ     z…u      .compilestatÔ   
+}N      children   ‚ÏÕØ      .valueÒ     ‘„X      htmlÚ   ¶$“=      .runstatÛ   ≤üºP      .timeÙ      B◊;Î	      time_usedı      Vú      .memoryˆ    êUmt      memory_used˜    ,‘aÀ      .outputerror¯   ≈0i      .errormessage˘      ù,é
+      background˙     1õ˙P      #dff0d8˚    πÛp·      border¸     Ë      1px solid #d6e9c6˝      §Aó      Compile successful!˛    Ï
+ó      colorˇ      J[µ:      #000    ¥ç±      .io-show  EP2      .outputo  ”·ı      .outputi  4üÕ∂      Standard input is empty   Ò†“      #a6a6a6   î~«r      Standard output is empty  ≠Aµ       MLE   øç…"	      .errorkey      ZU      Memory Error	  \Än      Memory limit exceeded
+     (Ï’      TLE   «ÆZ      Timeout Error     Äü¶ó      Time limit exceeded.  CÃâ      Runtime Error     N˝£      status_detail     ›¢Q      0.0   D∏≥s      N/A   ﬁ‹ ô      #ff7272   êé™      1px solid #faa    û1{>      Compile Error     ˛tuW      error     I_3a	      .outputio     Ö^tà      Server error  {Gí#      Bad Request(403). Please try again!   'óΩÂ      fixCode   ^RÔ˝      fix/  [õeÇ
+      fix_status    I2ÀL      fix_data  /„%õ      lines     ;?K	      addMarker     3"3I      myMarker  Ï‘6˝      fullLine   fÉë	      Fix state!     A‰¥ë      Fix successfully!"     Ü¡Ö      top1#  æˇ¯#      top2$  wy0¬      top3%  êÅ Â      #ec9a93&   °W™©      Fix unsuccessfully!'   cΩ2	      ace/mode/(     RâDo      toLowerCase)    „qˆ      getSelection*  ¯˘4c      clearSelection+    ˜rö
+      #caseCheck,    ÃËk	      #theme-    ∂ráπ      themeSelected.     ›¢w5      Light/     †ß∞?      Monokai0   ≥nVw      ace/theme/monokai1     ∏z\h      Solarised Light2   D	Y      ace/theme/solarized_light3     Fv+≠      Twilight4  ‰[˚n      ace/theme/twilight5    ,‰ìœ     #include <stdio.h>
+#include <string.h>
+void pal(char c[],int k,int n){
+     if(k==n||n-k==1){
+         return 1;
+     }
+     if(c[k]==c[n]){
+         return pal(c,k+1,n-1);
+     }
+     else{
+         return 0;
+     }
+ }
+int main()
+{
+    char s[100];
+    int a=getchar()
+    int i=0;
+    while(a!='\0'){
+        s[i]=a;
+        i++;
+        a=getchar();
+    }
+    if(pal(s,0,i-1)){
+        printf("Yes");
+    }
+    else{
+        printf("No");
+    }
+    return 0;
+}6   !by<Ã     #include <stdio.h>
+#include <stdlib.h>
+
+// Write any other auxillary functions here 
+
+void replace_substring(char *s,int m,char *t,char *w,int r,int i)
+{
+    int j;
+    for(j=i;j<i+m;j++){
+        s[j]=w[j-i];
+    }
+    for(j=i+m;j<m+r;j++){
+        s[j]=t[j];
+    }
+}
+
+int main()
+{
+	int m,n,r,i,j,c=0;
+	char*s,*t,*w,*p;
+	scanf("%d",&m);
+	s=(char*)malloc(sizeof(char)*(m+100));
+	t=(char*)malloc(sizeof(char)*(m+100));
+	for(i=0;i<m;i++){
+	    scanf("%c",&s[i]);
+	    t[i]=s[i];
+	}
+	scanf("%d",&n);
+	w=(char*)malloc(sizeof(char)*n);
+		for(i=0;i<m;i++){
+	    scanf("%c",&s[i]);
+	}
+	scanf("%d",&r);
+	p=(char*)malloc(sizeof(char)*r);
+		for(i=0;i<m;i++){
+	    scanf("%c",&s[i]);
+	}
+	for(i=0;i<m;i++){
+	    if(s[i]==p[0]){
+	        for(j=i;j<(i+n);j++){
+	            if(s[i]==p[j-i]){
+	                c++;
+	            }
+	        }
+	        if(c==n){
+	            replace_substring(s,t,w,i);
+	            i=i-r;
+	        }
+	        c=0;
+	    }
+	}
+	printf("%s",s);
+
+	return 0;
+
+}7  L¸ŸbÀ     #include <stdio.h>
+void reverse(char str1[],char str2[])
+{
+    int i,d,t=0,count1=0,count2=0,j;
+    for(i=0;str1[i]!='\0';i++) count1++;
+    for(i=0;str2[i]!='\0';i++) count2++;
+    int p=count2;
+    for(i=0;i<count1;i++)
+    {  d=0;
+        if(str1[i]==str2[t])
+        {
+          for(j=i;j<i+count2;j++)
+          {
+              if(str1[i]==str2[t])
+              {
+                d++;
+                t++;
+              }
+          }
+        }
+        if(d==count2)
+        {
+            for(j=i;j<i+count2;j++)
+            {
+                str1[j]=str1[j+p];p--;
+            }
+        }
+    }
+    
+}
+int main() {
+	char s1[100],s2[100];
+	scanf("%s",str1);
+	scanf("%s",str2);
+	reverse(str1,str2);
+	return 0;
+}8   ùöÆi      #include<stdio.h>
+int main(){
+    int a=10,b=-100,c=1000;
+    printf("%d",b*b-4a*c);
+    
+    return 0;
+}                           Ô%,â                                                                                                                                                                    	                 
+                                                                                                                                                                                                ≥Oåc                            P `ë  Pì  Pï  Pñ  Pó  Pü  P£  •  ≥  P™  PÀ  P—  P P            ¥  µ  e  s                                             Ã            Œ           œ                ”  ’  P◊              ‚  Í  Ï                              ”  ’  P◊              ‚  Í  Ï   i                                              e                                                                                                  Ø¬0∞IÙ$KEÆ˙ö   _      C  k  m  o  q  ≤
+ t  v  x  z  |  Ä  Ç  Ñ  Ü  R  à  ä  å        ö  µ  ÿ     #   ‚  …  ›  ﬁ  ‡  ·         Ê          Ê          ö  µ  ÿ     #   ‚  …  ›  ﬁ  ‡  ·         Ê          Ê                  á&’™ç!´!   P    ∞øúùP                             ¥    ¥   p ⁄H   ›j   t ÿ°`P+P/PDÄ KP    ”¯‘  @                c        j   « 
+  ÿj   «   ÿj   «   ÿj   «   ÿj   «   ÿ¥       p ⁄H   ›j	   t ÿ7
+   «   ÿ∫      J   ÿ∫      J   ÿ∫      J   ÿ∫      J   ÿ∫      J   ÿ7   «   ÿ∫      J   ÿ∫      J   ÿ∫      J   ÿ∫      J   ÿ∫      J   ÿ∫      J    ÿ∫   !   J"   ÿ∫   #   J$   ÿ∫   %   J&   ÿ∫   '   J(   ÿ∫   )   J*   ÿ∫   +   J,   ÿ∫   -   J.   ÿ∫   /   J0   ÿ∫   1   J2   ÿ∫   1   J3   ÿ∫   4   J5   ÿ∫   6   J7   ÿ∫   8   J9   ÿ∫   :   J;   ÿ¥<   ⁄H=   ›>   t ÿ¥<   ⁄H=   ›?   p H@   «   ÿ¥<   ⁄HA   ›B   p «   ÿ«   ÿ;   «   ÿ   «   ÿ∫   ⁄HC   ›D   t ÿ∫   HE   ⁄HF   ›G   t ÿ∫   ⁄HH   ›p  ⁄HI   ›t ÿ∫   ⁄HJ   ›p  « 	  ÿ∫   ⁄HK   ›t ÿ∫   ⁄HL   ›∫   ∫   Iˇt ÿ¥<   ⁄H=   ›M   p HN   ∆   ÿ∑   }∫   ¥O   ⁄HP   ›Q   p ‹  ~ ∆  ÿ∫   ⁄HR   ›t ÿ∫   ⁄HH   ›p  ⁄HS   ›T   jU   t ÿ¥    V   p ⁄HW   ›t  ÿ¥    X   p ⁄H   ›jY   t ÿ¥    Z   p ⁄H   ›j[   t ÿ¥    V   p ⁄H   ›j\   t ÿ¥    ]   p ⁄HT   ›j^   t ÿ¥    _   p ⁄HT   ›j`   t ÿ¥    a   p ⁄HT   ›jb   t ÿ°∑@ `P+P/PD `P; `Pê@% `Pê@] `Pê@Ä  Ç `Pê@Ä  â `Pê0 `P;0 `Pê@Ä  ´ `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê0 `Pê000 `Pë P4 `Pë P> `Pë P9 `P7 `P; `P; `Pë P4 `Pñ P4 `P,P,P4 `P,P9 `P.P4 `Pô P4 `Pë P= `Põ P'ˇˇˇ·8 `P-P4 `P,Pî PDÄ  ⁄ `P+P*PDÄ  Ô `P+P/PDÄ ã `P+P/PDÄ  `P+P/PDÄ % `P+P/
+PDÄ 0 `P+P/PDÄ : `P+P/PDÄ JP  L   KÅ[ˇL                             ¥       p ⁄H   ›t  ÿ°0 `P+P*P4 P    ˇè‚z  ≥                         ∫    t  ÿ∫ 	     ñQ   ì   ¥       p ⁄H   ›   t ÿ¥       p ⁄H   ›      t ÿïL   ì   ¥       p ⁄H   ›   t ÿ¥       p ⁄H   ›      t ÿì   °0 `P: `Pï0 `P+Pê P4 `P+Pî PN0 `P+Pê P4 `P+Pî PI
+ P    ﬂË¿ﬁ           	       ,       7      :      :      :      :	   
+   :      :      :      :      :      :      :      :      :      :      :       :!   "   :#   $   :%   &   :'   ∆   ÿ¥(   ⁄H)   ›*   p ∆  ÿ∑  ⁄H+   ›,   -   ¥.    µ  p %t ÿ∑  ⁄H+   ›/   0   ∑   µ I%t ÿ∑  H1   2   J3   ÿ¥(   H4   ⁄H5   ›∑  t ÿ∑  ⁄H6   ›t  ÿ¥(   H4   ⁄H7   ›∑  t ÿ°0 
+`P5 ****: *
+**: ***: ****: O `Pë 	P8 `Pû @P$ˇˇˇ»P4 `Pû P4 `Pî0 `Pï P4 `P+P4 `Pï P4 P  p   Q√aÜp   2                          ∫    t  ÿ∫ 
+   ∫ 	  ¥       p ⁄H   ›p  t ÿ°0 `P: `Pñ P*P#ˇˇˇÁPD P D   x]gÿD                             ∫   ⁄H   ›p  « 	  ÿ°0 `P,P9 P ¨  æØL  „          
+              $™´   ÿ∫   H   ⁄H   ›p  ´   ÿ∑   ñπ   ì   ™´  ÿ¥   ⁄H   ›∑   p ´  ÿ™´  ÿ∑  ⁄I›r  a⁄H   ›î
+   ™´  ÿ€p  a ⁄H	   óT   ì   H
+   ¶´  ∫   H   ⁄H   ›∑   ∑  IH   t ÿï   ì   ®‹  `£ì   ÿïôˇˇˇì   Ÿ ÀÀì   À° 6 `Pë P8 `P.6 `Pê P8&`P° ˇˇˇÔú 4 `Pü Põ@ ñ@ P   ¨  |         ‚   ˇˇˇˇ   -   Ø          K   ê             ƒ             é   ,         f   l   <  nº[/<  y                -        ∫  ñ   ì    ûì   «  ÿ∫   t  ÿ¥       p ⁄H   ›t  ÿ¥       p ⁄H   ›   t ÿ¥       p ⁄H   ›   t ÿ¥       p ⁄H	   ›p  ∆   ÿ¥    
+   p ⁄H	   ›p  «   ÿ7   ∫	  :   ∫  :   ∑   :   ∆  ÿ¥       p ⁄H   ›   p ñ   ì!   ∑  ∫   J   ÿì"   ¥   ⁄H   ›7      :      :   ∑  :      :   	@B:   j   :   j   :   t ÿ°0 `Pë0 `PAÄ  Ö F `P7 `P: `P+P*P4 `P+Pê P4 `P+Pê PD	 `P+P*'P8 `P+P*P9 `P5 : : N `P+P/P? `Pî@ `Pë0 : : 9 : 9 Ji J PDÄ  Ö P H
+  QëàH
+  •                ¯       «  ÿ¥       p ⁄H   ›ñ p ⁄H   ›7   ¥       p ⁄H   ›p  H   :	   Ët ÿ¥    
+   p ⁄H   ›t  ÿ¥       p ⁄H   ›   t ÿ¥       p ⁄H   ›   t ÿµ  H   ∆   ÿµ  H   H   ∆  ÿ∑      ñq  ì   ¥       p ⁄H   ›   p ⁄H   ›µ  H   t ÿ¥       p ⁄H   ›   p ⁄H   ›µ  H   H   t ÿ¥       p ⁄H   ›   p ⁄H   ›µ  H   H   t ÿ¥       p ⁄H   ›   p ⁄H   ›µ  H   H   t ÿ∑     ñá  ì?   ¥       p ⁄H   ›t  ÿ¥       p ⁄H    ›!   "   t ÿ¥       p ⁄H    ›#   $   t ÿ¥       p ⁄H   ›%   p ⁄H    ›&   '   t ÿ¥    (   p ⁄H   ›t  ÿ¥    )   p ⁄H   ›*   p ⁄H    ›&   '   t ÿ¥    +   p ⁄H   ›,   p ñA   ìa   ¥    -   p ⁄H   ›∫   p ⁄H    ›&   '   t ÿï<   ìg   ¥    -   p ⁄H   ›.   p ⁄H    ›&   /   t ÿìm   ï  ìm   ¥    (   p ⁄H   ›t  ÿ¥    )   p ⁄H   ›0   p ⁄H    ›&   /   t ÿ¥    +   p ⁄H   ›,   p ñA   ì}   ¥    -   p ⁄H   ›∫   p ⁄H    ›&   '   t ÿï<   ìÉ   ¥    -   p ⁄H   ›.   p ⁄H    ›&   /   t ÿìâ   ¥       p ⁄H   ›t  ÿ∑  1   ñK   ìè   ¥    2   p ⁄H   ›3   t ÿ¥       p ⁄H   ›4   t ÿï®   ìó   ∑  5   ñK   ìô   ¥    2   p ⁄H   ›6   t ÿ¥       p ⁄H   ›7   t ÿïN   ì°   ¥    2   p ⁄H   ›8   t ÿ¥       p ⁄H   ›µ  H   H9   t ÿì´   ï\  ì´   ¥       p ⁄H   ›t  ÿ¥    (   p ⁄H   ›t  ÿ¥    )   p ⁄H   ›0   p ⁄H    ›&   /   t ÿ¥    +   p ⁄H   ›,   p ñA   ìø   ¥    -   p ⁄H   ›∫   p ⁄H    ›&   '   t ÿï<   ì≈   ¥    -   p ⁄H   ›.   p ⁄H    ›&   /   t ÿìÀ   ¥       p ⁄H   ›   p ⁄H   ›:   t ÿ¥       p ⁄H   ›   p ⁄H   ›;   t ÿ¥       p ⁄H   ›   p ⁄H   ›<   t ÿ¥       p ⁄H   ›   p ⁄H   ›=   t ÿ¥       p ⁄H   ›t  ÿ¥       p ⁄H    ›!   >   t ÿ¥       p ⁄H    ›#   ?   t ÿ¥    2   p ⁄H   ›@   t ÿ¥       p ⁄H   ›µ  H   t ÿì¯   °@ `P7 `P+P-P? +P*P=C PD `P+P*P4 `P+Pê P4 `P+Pê P4 `P= `Pí0 `Pî@ `P+P/Pí P4 `P+P/Pó P4 `P+P/
+Pó P4 `P+P/Pó PD `Pî@ `P+P*P4 `P+Pî P4 `P+Pî P4 `P+P/Pî P4 `P+P*PD `P+P/Pî P4 	`P+P/P? `P+P/Pî PN `P+P/Pî  Pì@ 0 `P+P*P4 `P+P/Pî !P4 	`P+P/P? `P+P/Pî PN& `P+P/Pî  P9 `P+P*PD) 	`Pî0 `P+P/P4 `P+P/PN- `Pî0 `P+P/P4 `P+P/PN10 `P+P/P4 `P+Pó Pì@70 `P+P*P4 `P+P*P4 `P+P/Pî !P4 `P+P/P? `P+P/Pî PN> `P+P/Pî  P9 `P+P/
+P/P4 `P+P/P/P4 `P+P/P/P4 `P+P/P/PDD `P+P*P4 `P+Pî P4 `P+Pî P4 `P+P/P4 `P+Pí PIK P  ®  Vp®  ü                 Y       «  ÿ¥       p ⁄H   ›ñ p ⁄H   ›7   ¥       p ⁄H   ›p  H   :	   Ët ÿ¥    
+   p ⁄H   ›   t ÿ¥       p ⁄H   ›   t ÿ¥       p ⁄H   ›t  ÿ¥       p ⁄H   ›t  ÿ¥       p ⁄H   ›   p ⁄H   ›      t ÿ¥       p ⁄H   ›   p ñA   ì)   ¥       p ⁄H   ›∫   p ⁄H   ›      t ÿï<   ì/   ¥       p ⁄H   ›   p ⁄H   ›      t ÿì5   ¥       p ⁄H   ›t  ÿ¥       p ⁄H   ›   p ⁄H   ›    t ÿ¥    !   p ⁄H   ›   p ⁄H   ›"   t ÿ¥    #   p ⁄H   ›   p ⁄H   ›$   t ÿ¥    %   p ⁄H   ›   p ⁄H   ›$   t ÿ¥    &   p ⁄H   ›'   t ÿ¥    (   p ⁄H   ›)   t ÿ°@ `P7 `P+P-P? +P*P=C PD `P+Pê P4 `P+Pê P4 `P+P*P4 `P+P*P4 `P+P/Pî !P4 `P+P/P? `P+P/Pî PN `P+P/Pî  P9 `P+P*P4 `P+P/
+P/P4 `P+P/P/P4 `P+P/P/P4 `P+P/P/PD `P+P/P4 `P+P/PD P H   rø˛DH                             ∫    t  ÿ∫    t  ÿ°0 `P: `P: P    <  ó» R<  y                -        ∫  ñ   ì    ûì   «  ÿ∫   t  ÿ¥       p ⁄H   ›t  ÿ¥       p ⁄H   ›   t ÿ¥       p ⁄H   ›   t ÿ¥       p ⁄H	   ›p  ∆   ÿ¥    
+   p ⁄H	   ›p  «   ÿ7   ∫	  :   ∫  :   ∑   :   ∆  ÿ¥       p ⁄H   ›   p ñ   ì!   ∑  ∫   J   ÿì"   ¥   ⁄H   ›7      :      :   ∑  :      :   	@B:   j   :   j   :   t ÿ°@ `Pë0 `PAÄ  é F `P7 `P: `P+P*P4 `P+Pê P4 `P+Pê P4 `P+P*'P8 `P+P*P9 `P5 : : N `P+P/P? `Pî@ `Pë0 : : 9 : 9 Jq J PDÄ  é P å  {…iÙ|  h	                =     «  ÿ¥       p ⁄H   ›ñ p ⁄H   ›7   ¥       p ⁄H   ›p  H   :	   Ët ÿ¥    
+   p ⁄H   ›t  ÿ¥       p ⁄H   ›   t ÿ¥       p ⁄H   ›   t ÿµ  H   ∆   ÿµ  H   H   ∆  ÿ∑      ñM  ì   ¥       p ⁄H   ›   p ⁄H   ›µ  H   t ÿ¥       p ⁄H   ›   p ⁄H   ›µ  H   H   t ÿ∑     ñW  ì/   µ  H   H   ∆  ÿ∆  ÿî1   ∑  ∑  H   ñy   ì4   ∑  ∑  II∆  ÿ∫  ⁄H   ›p  ⁄H   ›∫  }∑  I&∑  ∑  H   &I&» ‹  ~       t ÿ∑  .'∆  ÿïxˇˇˇìC   ¥       p ⁄H   ›t  ÿ¥        p ⁄H   ›!   t ÿ¥    "   p ⁄H#   ›$   %   t ÿ¥    "   p ⁄H#   ›&   '   t ÿ¥    "   p ⁄H   ›(   p ⁄H#   ›)   *   t ÿ¥    +   p ⁄H   ›t  ÿ¥    ,   p ⁄H   ›µ  H   H-   p ⁄H#   ›)   *   t ÿ¥    .   p ⁄H   ›/   p ñA   ìk   ¥    0   p ⁄H   ›∫   p ⁄H#   ›)   *   t ÿï<   ìq   ¥    0   p ⁄H   ›1   p ⁄H#   ›)   2   t ÿìw   ïx  ìw   µ  H   H   ∆  ÿ∫  ⁄H   ›p  ⁄H   ›∫  }∑  III&∑  II∑  IIH   &I&» ‹  ~ 3      t ÿ∫  ⁄H   ›p  ⁄H   ›∫  }∑  III&∑  II∑  IIH   &I&» ‹  ~ 4      t ÿ∫  ⁄H   ›p  ⁄H   ›∫  }∑  III&∑  II∑  IIH   &I&» ‹  ~ 5      t ÿ¥    +   p ⁄H   ›t  ÿ¥        p ⁄H   ›!   t ÿ¥    "   p ⁄H#   ›$   6   t ÿ¥    "   p ⁄H#   ›&   '   t ÿ¥    "   p ⁄H   ›7   p ⁄H#   ›)   *   t ÿ¥    ,   p ⁄H   ›µ  H   H-   p ⁄H#   ›)   *   t ÿ¥    .   p ⁄H   ›/   p ñA   ì–   ¥    0   p ⁄H   ›∫   p ⁄H#   ›)   *   t ÿï<   ì÷   ¥    0   p ⁄H   ›1   p ⁄H#   ›)   2   t ÿì‹   ¥       p ⁄H   ›t  ÿ∑  8   ñK   ì‚   ¥        p ⁄H   ›9   t ÿ¥    "   p ⁄H   ›:   t ÿïZ   ìÍ   ∑  ;   ñF   ìÏ   ¥        p ⁄H   ›<   t ÿ¥    "   p ⁄H   ›=   t ÿìÙ   ïC  ìÙ   ¥    +   p ⁄H   ›t  ÿ¥    ,   p ⁄H   ›>   p ⁄H#   ›)   2   t ÿ¥    .   p ⁄H   ›/   p ñA   ì  ¥    0   p ⁄H   ›∫   p ⁄H#   ›)   *   t ÿï<   ì
+  ¥    0   p ⁄H   ›1   p ⁄H#   ›)   2   t ÿì  ¥    ?   p ⁄H   ›   p ⁄H   ›@   t ÿ¥    A   p ⁄H   ›   p ⁄H   ›B   t ÿ¥       p ⁄H   ›   p ⁄H   ›C   t ÿ¥       p ⁄H   ›   p ⁄H   ›D   t ÿ¥       p ⁄H   ›t  ÿ¥    "   p ⁄H#   ›$   %   t ÿ¥    "   p ⁄H#   ›&   '   t ÿ¥        p ⁄H   ›!   t ÿ¥    "   p ⁄H   ›µ  H   t ÿì=  °@ `P7 `P+P-P? +P*P=C PD `P+P*P4 `P+Pê P4 `P+Pê P4 `P= `Pí0 `Pî@ `P+P/Pí P4 `P+P/Pó PD `Pî@ `Pí0  `P&fPò0 `Pê0 `P,P≤ P-ˇˇˇˆPD +`Pï@ `P+P*P4 `P+P/P4 `P+Pî P4 `P+Pî P4 `P+P/Pî P4 `P+P*PD  `P+Pó Pî P4 	`P+P/P? `P+P/Pî PN$ `P+P/Pî  Pì@&0 `Pí0 `P,Pæ P-ˇˇˇˆP4 `P,Pæ P-ˇˇˇˆP4 `P,P¡ P-ˇˇˇˆP4 `P+P*P4 `P+P/P4 `P+Pî P4 `P+Pî P4 `P+P/Pî P4 `P+Pó Pî P4 	`P+P/P? `P+P/Pî PN4 `P+P/Pî  P9 `P+P*PD7 	`Pî0 `P+P/P4 `P+P/PN; `Pî0 `P+P/P4 `P+P/Pì@A0 `P+P*P4 `P+P/Pî !P4 `P+P/P? `P+P/Pî PNG `P+P/Pî  P9 `P+P/
+P/P4 `P+P/P/P4 `P+P/P/P4 `P+P/P/PDM `P+P*P4 `P+Pî P4 `P+Pî P4 `P+P/P4 `P+Pí PIT P    å         r  ç   ®  Vp®  ü                 Y       «  ÿ¥       p ⁄H   ›ñ p ⁄H   ›7   ¥       p ⁄H   ›p  H   :	   Ët ÿ¥    
+   p ⁄H   ›   t ÿ¥       p ⁄H   ›   t ÿ¥       p ⁄H   ›t  ÿ¥       p ⁄H   ›t  ÿ¥       p ⁄H   ›   p ⁄H   ›      t ÿ¥       p ⁄H   ›   p ñA   ì)   ¥       p ⁄H   ›∫   p ⁄H   ›      t ÿï<   ì/   ¥       p ⁄H   ›   p ⁄H   ›      t ÿì5   ¥       p ⁄H   ›t  ÿ¥       p ⁄H   ›   p ⁄H   ›    t ÿ¥    !   p ⁄H   ›   p ⁄H   ›"   t ÿ¥    #   p ⁄H   ›   p ⁄H   ›$   t ÿ¥    %   p ⁄H   ›   p ⁄H   ›$   t ÿ¥    &   p ⁄H   ›'   t ÿ¥    (   p ⁄H   ›)   t ÿ°@ `P7 `P+P-P? +P*P=C PD `P+Pê P4 `P+Pê P4 `P+P*P4 `P+P*P4 `P+P/Pî !P4 `P+P/P? `P+P/Pî PN `P+P/Pî  P9 `P+P*P4 `P+P/
+P/P4 `P+P/P/P4 `P+P/P/P4 `P+P/P/PD `P+P/P4 `P+P/PD P H   ¯±™H                             ∫    t  ÿ∫    t  ÿ°0 `P: `PJ P   T  ±Ë]èT  Ë                          ¥       p ⁄H   ›p  «   ÿ∫   ⁄H   ›∫   ∫   Iˇt ÿ∫      ô   ì	   ÿ∫      ì
+   ñ.   ì   ∫   ⁄H   ›p  ⁄H   ›	   t ÿï9   ì   ∫   ⁄H   ›p  ⁄H   ›
+   ∫   ⁄H   ›p  %t ÿì   ∫   H   ⁄H   ›p  ⁄H   ›t  ÿ°0 `P+P*P9 `Pô P4 `P∞0 `P,P/PN0 `P,Põ 0P$ˇˇˇ›PI	 `Pë P*P4 P ¯   à;o¯   ó                          ¥       p ⁄H   ›p  «   ÿ∫   ⁄H   ›∫   ∫   Iˇt ÿ∫   H   ⁄H   ›p  ⁄H   ›t  ÿ∫    t  ÿ¥       p ⁄H	   ›t  ÿ¥    
+   p ⁄H	   ›t  ÿ°0 `P+P*P9 `Pô P4 `Pë P*P4 `P: `P+P*P4 `P+P*P4 P d  ◊áÛëd  Ô                          ±   ¥       p ⁄H   ›p  √   ÿ¥      ñ$   ì	   ∫   ⁄H   ›   t ÿïú   ì   ¥      ñ$   ì   ∫   ⁄H   ›	   t ÿïh   ì   ¥   
+   ñ$   ì   ∫   ⁄H   ›   t ÿï4   ì   ¥      ñ   ì   ∫   ⁄H   ›   t ÿì   °0 `Pê P*P9 `Pï0 `Pë PN 
+`Pï0 `Pë PN 
+`Pï0 `Pë PN 
+`Pï0 `Pë PI P    3ıÿ  `   @c  C  ∂  k  ∑  m  ∏  o   q   ≤
+ \ t  π  v  ‹ x  ∫  z  m  |  U Ä  ª  Ç  b Ñ  À Ü  r  R  ‹ à  º  ä  Ω  å     æ  a  ø  ¿  ¡  y   ≥  ¬  ™  ƒ  √  ≈  ∆    «    `†    `  `ö  Õ    `      `4  g   Ë  –  ç 	  `$  „  ‰  Â    @Á  S  Ë  Ê  “  È  ´  ¨  ≠  ±  Î  Ì  §  Æ Ó  Ô    Ò  Ú  Û  Ù  ı  ˆ  &	 ˜  ¯  ∏  ˘  ˙  ˚  ¸  ˝  ˛  ˇ     ∞    Ÿ         	 
+      0   ®	    
+  `$  „  ‰  Â    @Á  S  Ë  Ê  ´  ¨  ≠  ±  “  È     Ò   ∏  ˛     Ÿ   ˇ    Û  Ô     ı  0  Ó   Ú    ¯     `$  “  ≤  ±  ¨  ≠  ´  ‘     ÷    @ö  µ  ÿ    Ÿ  Ï   ⁄    @€  ‚  ‹  …  ›  ﬂ  ﬁ  ‡  	  p·  
+  p   `$  „  ‰  Â    @Á  S  Ë  Ê  “  È  ´  ¨  ≠  ±  Î   §  Æ Ó  Ô    Ò  Ú     ù     ˜     ¯  ∏  ˘  ˙  ˚  ¸  ! ˛  ˇ     ó     Ÿ     " # $ % &   	 
+    Û   ı  0   ®	   `$  „  ‰  Â    @Á  S  Ë  Ê  ´  ¨  ≠  ±  “  È     Ò   ∏  ˛     Ÿ   ˇ    Û  Ô     ı  0  Ó   Ú    ¯     `$  “  ≤  ±  ¨  ≠  ´  ‘     ÷    @ö  µ  ÿ    Ÿ  Ï   ⁄    @ ‚  ‹  …  ›  ﬂ  ﬁ  ‡    p·    p   `$        `v   $  ´  ¨  ≠  Æ  Ø  ∞    `$  …       `  `  `$  …     ¢  C  k  ù  õ  ú  ' ( ö  ) *   `$  +    ¢  ö  ) * ±  ≤  “    `- $  ,    . ò  ô  / 0 1 2 3 4   `  p  p  p  p  p$        p	  @5   6 "  7 G  8 e  v   j  
+  @C  l  k  n  m  p  o  r  q  s  ≤
+ u  t  w  v  y  x  {  z  }  |    ~  Å  Ä  É  Ç  Ö  Ñ  Ü  á  R  â  à  ã  ä  ç  å  é  è  ê  í  ë  î  ì  ò  ô  ö  õ  ú  ù  û  †  °  ¢  §  £     ¶  ß  ®   ©    p±  ≤  »    p´    p  p…    p+   p,   p   `$         pˇXÑˇ                ú  c           † a             † e  	           †     8   ≥      †  n             † 8      ™      †  :      À      †  ≤       —      †  G   A   ·      †
+ à   *        †
+ r             † A           †  “   E   ·      †
+   *        †
+ s             † t             † É             † é             † ùH©¿      dM      dM                 Ä   aM     aM                  @   n   7   n      !               3    3  –   *            ∫  -   ©  -   ﬂ               M   í   E   í                   ⁄   !  ƒ   !  ˜                !  
+"  !  
+"  ˚              ÄF"  ï3  6"  ï3                 Œ$  0  ∆$  0  !              0  å3  0  å3  n              ¥3  Ÿ3  ¨3  Ÿ3  å             ÄÓ3  óH  ﬁ3  óH  ë               u6  E  m6  E  ¨              E  çH  E  çH                µH  %I  ≠H  %I                  aI  ©J  YI  ©J  &               ÃJ  ûK  ƒJ  ûK  1                ŸK  \M  —K  \M  ;             5°›m‚.õ Y”h‰      d∂ë‘d∂ë‘E“3≈d∂ïz   Z    O^partitionKey=%28http%2C10.42.0.107%2C8000%29,:http://10.42.0.107:8000/static/js/my_js.js strongly-framed 1 request-method GET response-head HTTP/1.1 200 OK
+Content-Type: application/javascript
+Content-Length: 19812
+Content-Disposition: inline; filename="my_js.js"
+Last-Modified: Tue, 18 Jul 2023 08:19:08 GMT
+Date: Tue, 18 Jul 2023 13:08:05 GMT
+Server: WSGIServer/0.2 CPython/3.8.10
+ original-response-headers Date: Tue, 18 Jul 2023 08:52:39 GMT
+Server: WSGIServer/0.2 CPython/3.8.10
+Content-Type: application/javascript
+Content-Length: 19812
+Content-Disposition: inline; filename="my_js.js"
+Last-Modified: Tue, 18 Jul 2023 08:19:08 GMT
+ ctid 2 uncompressed-len 0 net-response-time-onstart 30 net-response-time-onstop 38 alt-data 1;19812,javascript/moz-script-bytecode-20230710222611-8l alt-data-from-child 1  
