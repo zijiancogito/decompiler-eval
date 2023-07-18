@@ -2,6 +2,8 @@ import sys
 import os
 import argparse
 
+from tqdm import tqdm
+
 sys.path.append('/home/eval/decompiler-eval/src/utils/functools')
 import extractFunc
 from header import header_files
@@ -26,7 +28,7 @@ def extract_struct(dec):
 
 def extract_include(dec):
     include_list = []
-    with open(dec, 'r') as f:
+    with open(dec, 'r', encoding='ISO-8859-1') as f:
         lines = f.readlines()
         for l in lines:
             if l.startswith('\#include'):
@@ -35,7 +37,7 @@ def extract_include(dec):
 
 def extract_define(dec):
     define_list = []
-    with open(dec, 'r') as f:
+    with open(dec, 'r', encoding='ISO-8859-1') as f:
         lines = f.readlines()
         for l in lines:
             if l.startswith('\#define'):
@@ -45,7 +47,7 @@ def extract_define(dec):
 def build_source(dec, src, new_dec, header):
     includes = extract_include(dec)
     defines = extract_define(dec)
-    types = extract_struct(dec)
+    # types = extract_struct(dec)
     bodys = extract_functions(dec, src)
     
     with open(new_dec, 'w') as f:
@@ -60,9 +62,9 @@ def build_source(dec, src, new_dec, header):
             f.write(define)
         f.write('\n')
         
-        for struct in types:
-            f.write(struct)
-        f.write('\n')
+        # for struct in types:
+            # f.write(struct)
+        # f.write('\n')
             
         for func in bodys:
             f.write(bodys[func])
@@ -76,10 +78,10 @@ def build_all(dec_dir, src_dir, new_dec_dir, compilers, decompilers, optimizatio
                 dec_files = os.listdir(dec_sub_dir)
                 
                 new_dec_sub_dir = os.path.join(new_dec_dir, compiler, opt_level, decompiler)
-                if not os.path.join(new_dec_sub_dir):
+                if not os.path.exists(new_dec_sub_dir):
                     os.makedirs(new_dec_sub_dir)
                     
-                for dec in dec_files:
+                for dec in tqdm(dec_files, desc=f"{compiler}-{opt_level}-{decompiler}"):
                     dec_path = os.path.join(dec_sub_dir, dec)
                     new_dec_path = os.path.join(new_dec_sub_dir, dec)
                     src_path = os.path.join(src_dir, dec)
