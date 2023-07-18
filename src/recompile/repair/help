@@ -1,0 +1,267 @@
+Usage: standalone [options]
+  Options:
+    --allow-cors
+      Whether the Selenium server should allow web browser connections from 
+      any host
+      Default: false
+    --bind-host
+      Whether the server should bind to the host address/name, or only use it 
+      to report its reachable url. Helpful in complex network topologies where 
+      the server cannot report itself with the current IP/hostname but rather 
+      an external IP or hostname (e.g. inside a Docker container).
+      Default: true
+    --config
+      Config file to read from (may be specified more than once)
+    --config-help
+      Output detailed information about config options
+      Default: false
+    --detect-drivers
+      Autodetect which drivers are available on the current system, and add 
+      them to the Node.
+      Default: true
+    -d, --distributor
+      Url of the distributor.
+    --distributor-host
+      Host on which the distributor is listening.
+    --distributor-implementation
+      Full classname of non-default distributor implementation
+      Default: org.openqa.selenium.grid.distributor.local.LocalDistributor
+    --distributor-port
+      Port on which the distributor is listening.
+    --docker, -D
+      Docker configs which map image name to stereotype capabilities (example: 
+      -D selenium/standalone-firefox:latest '{"browserName": "firefox"}')
+    --docker-assets-path
+      Absolute path where assets will be stored
+    --docker-devices
+      Exposes devices to a container. Each device mapping declaration must 
+      have  at least the path of the device in both host and container 
+      separated by a colon like in this example: 
+      /device/path/in/host:/device/path/in/container 
+    --docker-host
+      Host name where the docker daemon is running
+    --docker-port
+      Port where the docker daemon is running
+    --docker-url
+      URL for connecting to the docker daemon
+    --docker-video-image
+      Docker image to be used when video recording is enabled
+      Default: selenium/video:latest
+    --drain-after-session-count
+      Drain and shutdown the Node after X sessions have been executed. Useful 
+      for environments like Kubernetes. A value higher than zero enables this 
+      feature. 
+      Default: 0
+    --driver-configuration
+      List of configured drivers a Node supports. It is recommended to provide 
+      this type of configuration through a toml config file to improve 
+      readability. Command line example: --drivers-configuration 
+      display-name="Firefox Nightly" max-sessions=2 
+      webdriver-path="/usr/local/bin/geckodriver" stereotype='{"browserName": 
+      "firefox", "browserVersion": "86", "moz:firefoxOptions": 
+      {"binary":"/Applications/Firefox 
+      Nightly.app/Contents/MacOS/firefox-bin"}}' 
+    --driver-factory
+      Mapping of fully qualified class name to a browser configuration that 
+      this matches against. --driver-factory 
+      org.openqa.selenium.example.LynxDriverFactory '{"browserName": "lynx"}'
+    -I, --driver-implementation
+      Drivers that should be checked. If specified, will skip 
+      autoconfiguration. Example: -I "firefox" -I "chrome"
+      Default: []
+    --enable-bidi
+      Enable BiDi proxying in Grid. A Grid admin can disable BiDi if the 
+      network does not allow websockets. True by default
+      Default: true
+    --enable-cdp
+      Enable CDP proxying in Grid. A Grid admin can disable CDP if the network 
+      does not allow websockets. True by default
+      Default: true
+    --enable-managed-downloads
+      When enabled, the Grid node will automatically do the following: 1. 
+      Creates a temporary directory which will now represent the directory 
+      into which files downloaded by Chrome/Firefox/Edge browser will be 
+      under. 2. For every new session, a sub-directory will be created/deleted 
+      so that all files that were downloaded for a given session are stored 
+      in. 
+    --grid-url
+      Public URL of the Grid as a whole (typically the address of the Hub or 
+      the Router)
+    --healthcheck-interval
+      How often, in seconds, will the health check run for all Nodes.This 
+      ensures the server can ping all the Nodes successfully.
+      Default: 120
+    --heartbeat-period
+      How often, in seconds, will the Node send heartbeat events to the 
+      Distributor to inform it that the Node is up.
+      Default: 60
+    --host
+      Server IP or hostname: usually determined automatically.
+    --http-logs
+      Enable http logging. Tracing should be enabled to log http logs.
+      Default: false
+    --https-certificate
+      Server certificate for https. Get more detailed information by running 
+      "java -jar selenium-server.jar info security"
+    --https-private-key
+      Private key for https. Get more detailed information by running "java 
+      -jar selenium-server.jar info security"
+    --hub
+      The address of the Hub in a Hub-and-Node configuration. This can be a 
+      plain hostname or IP address (`hostname`), in which case the Hub will be 
+      assumed to be `http://hostname:4444`, the `--grid-url` will be the same, 
+      `--publish-events` will be `tcp://hostname:4442` and 
+      `--subscribe-events` will be `tcp://hostname:4443`. If `hostname` 
+      contains a port number, that will be used for `--grid-url` but the URIs 
+      for the event bus will remain the same. Any of these default values may 
+      be overridden but setting the correct flags. If the hostname has  a 
+      protocol (such as `https`) that will be used too.
+    --log
+      File to write out logs. Ensure the file path is compatible with the 
+      operating system's file path. Windows path example: 
+      \\path\to\file\gridlog.log OR C:\path\path\to\file\gridlog.log 
+      Linux/Unix/MacOS path example: /path/to/file/gridlog.log
+    --log-encoding
+      Log encoding
+    --log-level
+      Log level. Default logging level is INFO. Log levels are described here 
+      https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html 
+      Default: INFO
+    --log-timestamp-format
+      Format of the timestamp in log output
+    --max-sessions
+      Maximum number of concurrent sessions. Default value is the number of 
+      available processors.
+      Default: 4
+    --max-threads
+      Maximum number of listener threads. Default value is: (available 
+      processors) * 3.
+      Default: 0
+    --newsession-threadpool-size
+      The Distributor uses a fixed-sized thread pool to create new sessions as 
+      it consumes new session requests from the queue.This allows configuring 
+      the size of the thread pool. The default value is no. of available 
+      processors * 3. Note: If the no. of threads is way greater than the 
+      available processors it will not always increase the performance. A high 
+      number of threads causes more context switching which is an expensive 
+      operation. 
+      Default: 12
+    --no-vnc-port
+      If VNC is available, sets the port where the local noVNC stream can be 
+      obtained 
+      Default: 7900
+    --node-implementation
+      Full classname of non-default Node implementation. This is used to 
+      manage a session's lifecycle.
+      Default: org.openqa.selenium.grid.node.local.LocalNodeFactory
+    --override-max-sessions
+      The # of available processors is the recommended max sessions value (1 
+      browser session per processor). Setting this flag to true allows the 
+      recommended max value to be overwritten. Session stability and 
+      reliability might suffer as the host could run out of resources.
+      Default: false
+    --password
+      Password clients must use to connect to the server. Both this and the 
+      username need to be set in order to be used.
+    --plain-logs
+      Use plain log lines
+      Default: true
+    -p, --port
+      Port to listen on. There is no default as this parameter is used by 
+      different components, for example Router/Hub/Standalone will use 4444 
+      and Node will use 5555.
+    --register-cycle
+      How often, in seconds, the Node will try to register itself for the 
+      first time to the Distributor.
+      Default: 10
+    --register-period
+      How long, in seconds, will the Node try to register to the Distributor 
+      for the first time. After this period is completed, the Node will not 
+      attempt to register again.
+      Default: 120
+    --registration-secret
+      Node registration secret
+    --reject-unsupported-caps
+      Allow the Distributor to reject a request immediately if the Grid does 
+      not support the requested capability.Rejecting requests immediately is 
+      suitable for Grid set up that does not spin up Nodes on demand.
+      Default: false
+    --relax-checks
+      Relax checks on origin header and content type of incoming requests, in 
+      contravention of strict W3C spec compliance.
+      Default: false
+    --selenium-manager
+      When drivers are not available on the current system, use, Selenium 
+      Manager. 
+      Default: false
+    --service-configuration
+      Configuration for the service where calls will be relayed to. It is 
+      recommended to provide this type of configuration through a toml config 
+      file to improve readability. Command line example: 
+      --service-configuration max-sessions=2 stereotype='{"browserName": 
+      "safari", "platformName": "iOS", "appium:platformVersion": "14.5"}}'
+    --service-host
+      Host name where the service that supports WebDriver commands is running
+    --service-port
+      Port where the service that supports WebDriver commands is running
+    --service-status-endpoint
+      Endpoint to query the WebDriver service status, an HTTP 200 response is 
+      expected 
+    --service-url
+      URL for connecting to the service that supports WebDriver commands, like 
+      an Appium server or a cloud service.
+    --session-request-timeout
+      Timeout in seconds. New incoming session request is added to the queue. 
+      Requests sitting in the queue for longer than the configured time will 
+      timeout. 
+      Default: 300
+    --session-request-timeout-period
+      In seconds, how often the timeout for new session requests is checked.
+      Default: 10
+    --session-retry-interval
+      Session creation interval in milliseconds. If all slots are busy, new 
+      session request will be retried after the given interval.
+      Default: 15
+    --session-timeout
+      Let X be the session-timeout in seconds. The Node will automatically 
+      kill a session that has not had any activity in the last X seconds. This 
+      will release the slot for other tests.
+      Default: 300
+    --sq, --sessionqueue
+      Address of the session queue server.
+    --sessionqueue-batch-size
+      Maximum batch size that can consumed from queue based on the available 
+      slots. 
+      Default: 12
+    --sessionqueue-host
+      Host on which the session queue server is listening.
+    --sessionqueue-port
+      Port on which the session queue server is listening.
+    --slot-matcher
+      Full classname of non-default slot matcher to use. This is used to 
+      determine whether a Node can support a particular session.
+      Default: org.openqa.selenium.grid.data.DefaultSlotMatcher
+    --slot-selector
+      Full classname of non-default slot selector. This is used to select a 
+      slot in a Node once the Node has been matched.
+      Default: org.openqa.selenium.grid.distributor.selector.DefaultSlotSelector
+    --structured-logs
+      Use structured logs
+      Default: false
+    --sub-path
+      A sub-path that should be considered for all user facing routes on the 
+      Hub/Router/Standalone 
+    --tracing
+      Enable trace collection
+      Default: true
+    --username
+      User name clients must use to connect to the server. Both this and 
+      password need to be set in order to be used.
+    --version
+      Displays the version and exits.
+      Default: false
+    --vnc-env-var
+      Environment variable to check in order to determine if a vnc stream is 
+      available or not.
+      Default: SE_START_XVFB
+
