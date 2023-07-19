@@ -36,7 +36,6 @@ def parse_err(err_str):
     err_pat = r'(error|warning): ([^\n]+)'
     err_msgs = re.finditer(err_pat, err_str)
     
-    err_dict = {}
     for e in err_msgs:
         raise NotImplementedError
       

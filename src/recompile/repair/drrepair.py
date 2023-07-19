@@ -3,9 +3,17 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
+from tqdm import tqdm
+import func_timeout
 import os
 import time
 import re
+import argparse
+import shutil
+
+import sys
+sys.path.append('/home/eval/decompiler-eval/src/utils/functools/')
+import str_process
 
 class RepairDriver(object):
   def __init__(self) -> None:
@@ -17,6 +25,13 @@ class RepairDriver(object):
       options=firefox_options
     )
     self.driver.get('http://10.42.0.107:8000/ide/')
+
+    self.fixed_msg = 'Fix successfully!'
+    self.unfixed_msg = 'Fix unsuccessfully!'
+    self.timeout_msg = 'Bad Request(403). Please try again!'
+    
+  def kill_firefox(self):
+    cmd = "ps -ef | grep firefox | grep -v grep | xargs sudo kill -s 9"
     
   def select_case(self):
     case_elem = self.driver.find_element(By.ID, 'caseCheck')
@@ -24,15 +39,35 @@ class RepairDriver(object):
     case_select.select_by_value('No case')
 
   def send_code(self, code):
-    # editor_elem = self.driver.find_element(By.XPATH, '//*[@id="editor"]')
+    # select "No case" and clean the editor
+    case_elem = self.driver.find_element(By.ID, 'caseCheck')
+    case_select = Select(case_elem)
+    case_select.select_by_value('No case')
+    time.sleep(1)
+
+    # find and click code editor
     editor_elem = self.driver.find_element(By.ID, 'editor')
     editor_elem.click()
-    time.sleep(3)
+    # wiat for response
+    time.sleep(1)
+
+    # input code in the editor
     elem = self.driver.find_element(By.CLASS_NAME, "ace_text-input")
-    # elem = self.driver.find_element(By.ID, 'custom-input')
     elem.clear()
-    elem.send_keys(code)
-    
+    codes = code.split('\n')
+    for l in codes:
+      if l.strip() == '':
+        continue
+      if len(l.strip()) > 80:
+        sub_l = str_process.str_split(l.strip(), 80)
+        for sl in sub_l:
+          elem.send_keys(sl.strip())
+          elem.send_keys('\n')
+      else:
+        elem.send_keys(l.strip())
+        elem.send_keys('\n')
+    time.sleep(1)
+
 
   def clang_check(self):
     elem = self.driver.find_element(By.ID, "runcode")
@@ -45,25 +80,46 @@ class RepairDriver(object):
 
 
   def repair(self, code):
-    self.select_case()
-    time.sleep(1)
-
+    # input code
     self.send_code(code)
-
-    self.clang_check()
     time.sleep(1)
+
+    # compile code
+    self.clang_check()
+    time.sleep(3)
+
+    # fix code
     self.fix()
+    # check fixed results
+    start = time.time()
+    fixed = 0
+    while True:
+      if self.fixed_msg in self.driver.page_source:
+        fixed = 1
+        break
+      elif self.unfixed_msg in self.driver.page_source:
+        fixed = 2
+        break
+      elif self.timeout_msg in self.driver.page_source:
+        fixed = 0
+        break
+      end = time.time()
+      if end - start > 60:
+        break
+      time.sleep(3)
+    return fixed
+
     
   def close(self):
     self.driver.close()
     # os.system('taskkill /f /im %s' % 'firefox')
 
-  def flush(self):
+  def flush_page(self):
     case_elem = self.driver.find_element(By.ID, 'caseCheck')
     case_select = Select(case_elem)
     case_select.select_by_value('case 1')
 
-  def parse_page(self):
+  def get_fix_log(self):
     page = self.driver.page_source
     
     pattern = "Fix successfully"
@@ -76,7 +132,7 @@ class RepairDriver(object):
       # print(output_html)
     return repaired, repair_log
   
-  def replace(self, repair_log, code):
+  def fix_code(self, repair_log, code):
     pattern = r'erronous lines:\n([\s\S]+)\n\nsuggested fix:\n([\s\S]+)'
     finds = re.finditer(pattern, repair_log)
     rep_dict = {}
@@ -100,36 +156,47 @@ class RepairDriver(object):
     return '\n'.join(new_code_list)
   
   def run(self, code):
-    self.repair(code)
-    fix_result, fix_log = self.parse_page()
+    fixed = self.repair(code)
+    if fixed == 0 or fixed == 2:
+      return 0, None
+    fix_result, fix_log = self.get_fix_log()
 
     new_code = None
     if fix_result == 1:
-      new_code = self.replace(fix_log, code)
+      new_code = self.fix_code(fix_log, code)
 
-    self.flush()
+    self.flush_page()
     return fix_result, new_code
 
-def repair_all(dec_dir, new_dir, compilers, decompilers, optimizations):
+def repair_all(dec_dir, fixed_dir, unfixed_dir, compilers, decompilers, optimizations):
   wd = RepairDriver()
   for compiler in compilers:
     for opt_level in optimizations:
       for decompiler in decompilers:
         dec_sub_dir = os.path.join(dec_dir, compiler, opt_level, decompiler)
-        new_sub_dir = os.path.join(new_dir, compiler, opt_level, decompiler)
-        if not os.path.exists(new_sub_dir):
-          os.makedirs(new_sub_dir)
+        fixed_sub_dir = os.path.join(fixed_dir, compiler, opt_level, decompiler)
+        unfixed_sub_dir = os.path.join(unfixed_dir, compiler, opt_level, decompiler)
+        if not os.path.exists(fixed_sub_dir):
+          os.makedirs(fixed_sub_dir)
+        if not os.path.exists(unfixed_sub_dir):
+          os.makedirs(unfixed_sub_dir)
+
         dec_files = os.listdir(dec_sub_dir)
-        for df in dec_files:
+        fixed_cnt = 0
+        for df in dec_files: # tqdm(dec_files):
           dec_path = os.path.join(dec_sub_dir, df)
           fix_flag, new_code = None, None
           with open(dec_path, 'r', encoding='ISO-8859-1') as f:
             code = f.read()
+            code = re.sub('\t', '', code)
             fix_flag, new_code = wd.run(code)
           if fix_flag == 1:
-            new_code_path = os.path.join(new_sub_dir, df)
+            new_code_path = os.path.join(unfixed_sub_dir, df)
             save_fixed_code(new_code, new_code_path)
-          wd.flush()
+            fixed_cnt += 1
+          else:
+            shutil.copy(dec_path, unfixed_sub_dir)
+        print(f"{compiler}-{opt_level}-{decompiler}:\t\t{fixed_cnt}/{len(dec_files)}")
           
   wd.close()
 
@@ -138,7 +205,17 @@ def save_fixed_code(code, new_path):
     f.write(code)
 
 if __name__ == '__main__':
-  wd = RepairDriver()
-  _, nc = wd.run("int main() \n{return 0\n}\n")
-  print(nc)
-  wd.close()
+  parser = argparse.ArgumentParser(prog='clang-check.py')
+  parser.add_argument('-d', '--dec', type=str, help='dir of DEC')
+  parser.add_argument('-f', '--fixed-dec', type=str, help='dir of DEC')
+  parser.add_argument('-u', '--unfixed-dec', type=str, help='log dir')
+  parser.add_argument('-l', '--log', type=str, help='log dir')
+  
+  parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
+  parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
+  parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
+
+  args = parser.parse_args()
+
+  repair_all(args.dec, args.fixed_dec, args.unfixed_dec,
+             args.compilers, args.decompilers, args.optimizations)

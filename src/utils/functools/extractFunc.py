@@ -38,16 +38,18 @@ class ExtractFuncs(object):
 		self.path = path
 		self.funcs = []  # the number of rows of functions
 		self.funcsname = []
+		self.struct = []
 		self.file = self._readfile(path)
 		self._findCBs()
 		funcs = self.funcs.copy()
 		for func in funcs:
-			sr = func[0]  # the number of row of {
-			if self._preChar(sr) != ')':
-				self.funcs.remove(func)
-				continue
-			lr, idx = self._findPare(sr)
-			if lr != None:
+			sr = func[0]  # the number of row of "{"
+			if self._preChar(sr) == ')':
+				# function
+				lr, idx = self._findPare(sr)
+				if lr == None:
+					self.funcs.remove(func)
+					continue
 				s = self.file[lr]
 				s = s[:idx]
 				s = s.split()
@@ -71,6 +73,42 @@ class ExtractFuncs(object):
 				'''
 				if self.funcs.count(func):
 					self.funcs[self.funcs.index(func)][0] = lr
+			else:
+				# self.struct: quadruple [start row, start col, end row, end col]
+				self.funcs.remove(func)
+				r1 = sr
+				r2 = func[1]
+				c1 = c2 = None
+				over = False
+				wrong = False
+				for i in range(func[1], len(self.file)):
+					r = self.file[i].strip()
+					for j in range(len(r)):
+						c = r[j]
+						if c == ';':
+							r2 = i
+							c2 = j
+							over = True
+							break
+						if not (c.isdigit() or c.isalpha() or c.isspace() or c == '_' or c == '}'):
+							wrong = True
+							over = True
+							break
+					if over:
+						break
+				if wrong:
+					continue
+				for i in range(sr, -1, -1):
+					r = self.file[i].strip()
+					tmp = r.split()
+					if "struct" in r:
+						r1 = i
+						if "typedef" in r:
+							c1 = r.find("typedef")	
+						else:
+							c1 = r.find("struct")
+				if c1 is not None and c2 is not None:
+					self.struct.append([r1, c1, r2, c2])
 
 	def getFuncs(self, path):
 		self.findFuncs(path)
@@ -82,6 +120,19 @@ class ExtractFuncs(object):
 			funcs.append(func)
 
 		return funcs, self.funcsname
+	
+	def getStructs(self, path):
+		self.findFuncs(path)
+		structs = []
+		for structrow in self.struct:
+			struct = ""
+			struct += self.file[structrow[0]][structrow[1]:] + '\n'
+			for i in self.file[structrow[0] + 1: structrow[2]]:
+				struct += i + '\n'
+			struct += self.file[structrow[2]][:structrow[3] + 1] + '\n'
+			structs.append(struct)
+
+		return structs
 
 	def writeFuncs(self):
 		# after findFuncs
@@ -101,7 +152,6 @@ class ExtractFuncs(object):
 					continue
 				f.write(self.file[i] + '\n')
 		'''
-
 
 	def _readfile(self, path):
 		with open(path, 'r', encoding='ISO-8859-1') as f:
@@ -177,7 +227,6 @@ class ExtractFuncs(object):
 
 if __name__ == '__main__':
 	e = ExtractFuncs()
-	e.findFuncs('/home/kali/oliver/DataHandling/testdata/2132/2132-O0/2132-O0-decompile/2132-O0-Hex-Rays-8.0.0.220729/2132-O0-Hex-Rays-8.0.0.220729.txt')
-#	e.findFuncs('../ds2/coreutils/src/copy.c')
-	e.writeFuncs()
-
+	# e.getFuncs('/home/kali/oliver/DataHandling/testdata/2132/2132-O0/2132-O0-decompile/2132-O0-Hex-Rays-8.0.0.220729/2132-O0-Hex-Rays-8.0.0.220729.txt')
+	res = e.getStructs('./t.c')
+	print(res[0])
