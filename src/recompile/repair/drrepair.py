@@ -16,11 +16,11 @@ sys.path.append('/home/eval/decompiler-eval/src/utils/functools/')
 import str_process
 
 class RepairDriver(object):
-  def __init__(self) -> None:
+  def __init__(self, profile) -> None:
     self.kill_firefox()
     firefox_options = webdriver.FirefoxOptions()
     firefox_options.add_argument("--profile")
-    firefox_options.add_argument(os.path.abspath("./usiijz40.default-release"))
+    firefox_options.add_argument(os.path.abspath(profile))
     self.driver = webdriver.Remote(
       command_executor='http://127.0.1.1:4444',
       options=firefox_options
@@ -222,6 +222,8 @@ if __name__ == '__main__':
   parser.add_argument('-f', '--fixed-dec', type=str, help='dir of DEC')
   parser.add_argument('-u', '--unfixed-dec', type=str, help='log dir')
   parser.add_argument('-t', '--timeout-dec', type=str, help='log dir')
+
+  parser.add_argument('-p', '--profile', type=str, help="Profiles of firefox")
   
   parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
   parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')

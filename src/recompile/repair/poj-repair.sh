@@ -13,4 +13,6 @@ TIMEOUT_DIR=/home/eval/POJ/recompile/round-2/timeout
 rm -r $FIXED_DIR $UNFIXED_DIR $TIMEOUT_DIR
 mkdir -p $FIXED_DIR $UNFIXED_DIR $TIMEOUT_DIR
 
-python3 drrepair.py -d $DE_DIR -f $FIXED_DIR -u $UNFIXED_DIR -t $TIMEOUT_DIR -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS
+PROFILE=/home/eval/usiijz40.default-release
+
+python3 drrepair.py -d $DE_DIR -f $FIXED_DIR -u $UNFIXED_DIR -t $TIMEOUT_DIR -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS -p $PROFILE
