@@ -24,6 +24,9 @@ def extract_functions(dec, src):
     return user_defined_funcs
 
 def extract_struct(dec):
+    extract_struct = extractFunc.ExtractFuncs()
+    struct_list = extract_struct.getStructs(dec)
+    return struct_list
     raise NotImplementedError
 
 def extract_include(dec):

@@ -17,6 +17,7 @@ import str_process
 
 class RepairDriver(object):
   def __init__(self) -> None:
+    self.kill_firefox()
     firefox_options = webdriver.FirefoxOptions()
     firefox_options.add_argument("--profile")
     firefox_options.add_argument(os.path.abspath("./usiijz40.default-release"))
@@ -30,8 +31,10 @@ class RepairDriver(object):
     self.unfixed_msg = 'Fix unsuccessfully!'
     self.timeout_msg = 'Bad Request(403). Please try again!'
     
+    
   def kill_firefox(self):
-    cmd = "ps -ef | grep firefox | grep -v grep | xargs sudo kill -s 9"
+    cmd = "pkill -9 firefox"
+    os.system(cmd)
     
   def select_case(self):
     case_elem = self.driver.find_element(By.ID, 'caseCheck')
@@ -72,6 +75,7 @@ class RepairDriver(object):
   def clang_check(self):
     elem = self.driver.find_element(By.ID, "runcode")
     elem.click()
+    time.sleep(3)
 
   def fix(self):
     elem = self.driver.find_element(By.ID, "fixcode")
@@ -82,11 +86,9 @@ class RepairDriver(object):
   def repair(self, code):
     # input code
     self.send_code(code)
-    time.sleep(1)
 
     # compile code
     self.clang_check()
-    time.sleep(3)
 
     # fix code
     self.fix()
@@ -118,6 +120,7 @@ class RepairDriver(object):
     case_elem = self.driver.find_element(By.ID, 'caseCheck')
     case_select = Select(case_elem)
     case_select.select_by_value('case 1')
+    time.sleep(2)
 
   def get_fix_log(self):
     page = self.driver.page_source
@@ -158,7 +161,8 @@ class RepairDriver(object):
   def run(self, code):
     fixed = self.repair(code)
     if fixed == 0 or fixed == 2:
-      return 0, None
+      self.flush_page()
+      return fixed, None
     fix_result, fix_log = self.get_fix_log()
 
     new_code = None
@@ -168,7 +172,7 @@ class RepairDriver(object):
     self.flush_page()
     return fix_result, new_code
 
-def repair_all(dec_dir, fixed_dir, unfixed_dir, compilers, decompilers, optimizations):
+def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompilers, optimizations):
   wd = RepairDriver()
   for compiler in compilers:
     for opt_level in optimizations:
@@ -180,10 +184,13 @@ def repair_all(dec_dir, fixed_dir, unfixed_dir, compilers, decompilers, optimiza
           os.makedirs(fixed_sub_dir)
         if not os.path.exists(unfixed_sub_dir):
           os.makedirs(unfixed_sub_dir)
+        timeout_sub_dir = os.path.join(timeout_dir, compiler, opt_level)
+        if not os.path.exists(timeout_sub_dir):
+          os.makedirs(timeout_sub_dir)
 
         dec_files = os.listdir(dec_sub_dir)
-        fixed_cnt = 0
-        for df in dec_files: # tqdm(dec_files):
+        fixed_cnt, unfixed_cnt, timeout_cnt = 0, 0, 0
+        for df in tqdm(dec_files): # tqdm(dec_files):
           dec_path = os.path.join(dec_sub_dir, df)
           fix_flag, new_code = None, None
           with open(dec_path, 'r', encoding='ISO-8859-1') as f:
@@ -194,9 +201,14 @@ def repair_all(dec_dir, fixed_dir, unfixed_dir, compilers, decompilers, optimiza
             new_code_path = os.path.join(unfixed_sub_dir, df)
             save_fixed_code(new_code, new_code_path)
             fixed_cnt += 1
-          else:
+          elif fix_flag == 2:
             shutil.copy(dec_path, unfixed_sub_dir)
-        print(f"{compiler}-{opt_level}-{decompiler}:\t\t{fixed_cnt}/{len(dec_files)}")
+            unfixed_cnt += 1
+          elif fix_flag == 0:
+            shutil.copy(dec_path, timeout_sub_dir)
+            timeout_cnt += 1
+
+        print(f"{compiler}-{opt_level}-{decompiler}:\t\t{fixed_cnt}/{unfixed_cnt}/{timeout_cnt}/{len(dec_files)}")
           
   wd.close()
 
@@ -209,7 +221,7 @@ if __name__ == '__main__':
   parser.add_argument('-d', '--dec', type=str, help='dir of DEC')
   parser.add_argument('-f', '--fixed-dec', type=str, help='dir of DEC')
   parser.add_argument('-u', '--unfixed-dec', type=str, help='log dir')
-  parser.add_argument('-l', '--log', type=str, help='log dir')
+  parser.add_argument('-t', '--timeout-dec', type=str, help='log dir')
   
   parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
   parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
@@ -217,5 +229,5 @@ if __name__ == '__main__':
 
   args = parser.parse_args()
 
-  repair_all(args.dec, args.fixed_dec, args.unfixed_dec,
+  repair_all(args.dec, args.fixed_dec, args.unfixed_dec, args.timeout_dec,
              args.compilers, args.decompilers, args.optimizations)

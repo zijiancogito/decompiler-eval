@@ -57,5 +57,6 @@
         "chrono": "cpp",
         "ratio": "cpp",
         "regex": "cpp"
-    }
+    },
+    "editor.wordWrap": "on"
 }
