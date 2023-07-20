@@ -10,9 +10,7 @@ FIXED_DIR=/home/eval/POJ/recompile/round-2/fixed
 UNFIXED_DIR=/home/eval/POJ/recompile/round-2/unfixed
 TIMEOUT_DIR=/home/eval/POJ/recompile/round-2/timeout
 
-rm -r $FIXED_DIR $UNFIXED_DIR $TIMEOUT_DIR
-mkdir -p $FIXED_DIR $UNFIXED_DIR $TIMEOUT_DIR
 
-PROFILE=/home/eval/usiijz40.default-release
+PROFILE=/home/caoy/deceval/recompile/usiijz40.default-release
 
 python3 drrepair.py -d $DE_DIR -f $FIXED_DIR -u $UNFIXED_DIR -t $TIMEOUT_DIR -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS -p $PROFILE

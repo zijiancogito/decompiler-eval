@@ -12,7 +12,7 @@ import argparse
 import shutil
 
 import sys
-sys.path.append('/home/eval/decompiler-eval/src/utils/functools/')
+sys.path.append('../../utils/functools/')
 import str_process
 
 class RepairDriver(object):
