@@ -27,7 +27,6 @@ def extract_struct(dec):
     extract_struct = extractFunc.ExtractFuncs()
     struct_list = extract_struct.getStructs(dec)
     return struct_list
-    raise NotImplementedError
 
 def extract_include(dec):
     include_list = []
@@ -50,7 +49,7 @@ def extract_define(dec):
 def build_source(dec, src, new_dec, header):
     includes = extract_include(dec)
     defines = extract_define(dec)
-    # types = extract_struct(dec)
+    types = extract_struct(dec)
     bodys = extract_functions(dec, src)
     
     with open(new_dec, 'w') as f:
@@ -65,9 +64,9 @@ def build_source(dec, src, new_dec, header):
             f.write(define)
         f.write('\n')
         
-        # for struct in types:
-            # f.write(struct)
-        # f.write('\n')
+        for struct in types:
+            f.write(struct)
+        f.write('\n')
             
         for func in bodys:
             f.write(bodys[func])
