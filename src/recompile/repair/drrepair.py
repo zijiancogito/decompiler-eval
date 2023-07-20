@@ -12,15 +12,17 @@ import argparse
 import shutil
 
 import sys
-sys.path.append('/home/eval/decompiler-eval/src/utils/functools/')
+sys.path.append('../../utils/functools/')
 import str_process
 
 class RepairDriver(object):
   def __init__(self, profile) -> None:
     self.kill_firefox()
+
     firefox_options = webdriver.FirefoxOptions()
     firefox_options.add_argument("--profile")
     firefox_options.add_argument(os.path.abspath(profile))
+    firefox_options.add_argument("--headless")
     self.driver = webdriver.Remote(
       command_executor='http://127.0.1.1:4444',
       options=firefox_options
