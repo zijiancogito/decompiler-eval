@@ -55,15 +55,23 @@ def check_all(dec_dir, log_dir, include_dir, fail_dir, compilers, decompilers, o
                 failed_cnt = 0
                 dec_sub_dir = os.path.join(dec_dir, compiler, opt_level, decompiler)
                 fail_sub_dir = os.path.join(fail_dir, compiler, opt_level, decompiler)
+                log_sub_dir = os.path.join(log_dir, decompiler, compiler, opt_level)
                 if not os.path.exists(fail_sub_dir):
                     os.makedirs(fail_sub_dir)
+                if not os.path.exists(log_sub_dir):
+                    os.makedirs(log_sub_dir)
+
                 dec_files = os.listdir(dec_sub_dir)
-                for dec_file in dec_files:
+                for dec_file in tqdm(dec_files):
                     dec_path = os.path.join(dec_sub_dir, dec_file)
                     fail, err_str = clang_check(dec_path, include_dir)
                     if fail != 0:
                         failed_cnt += 1
                         errs = extract_err_msg(err_str)
+
+                        log_sub_path = os.path.join(log_sub_dir, f"{dec_file}.log")
+                        log.log_list2file(errs, log_sub_path)
+
                         logs.extend(errs)
                         failed_files.append(dec_path)
                         shutil.copy(dec_path, os.path.join(fail_sub_dir, dec_file))
