@@ -172,8 +172,8 @@ class RepairDriver(object):
     self.flush_page()
     return fix_result, new_code
 
-def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompilers, optimizations):
-  wd = RepairDriver()
+def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompilers, optimizations, profile):
+  wd = RepairDriver(profile)
   for compiler in compilers:
     for opt_level in optimizations:
       for decompiler in decompilers:
@@ -231,5 +231,11 @@ if __name__ == '__main__':
 
   args = parser.parse_args()
 
-  repair_all(args.dec, args.fixed_dec, args.unfixed_dec, args.timeout_dec,
-             args.compilers, args.decompilers, args.optimizations)
+  repair_all(args.dec, 
+             args.fixed_dec, 
+             args.unfixed_dec, 
+             args.timeout_dec,
+             args.compilers, 
+             args.decompilers, 
+             args.optimizations,
+             args.profile)

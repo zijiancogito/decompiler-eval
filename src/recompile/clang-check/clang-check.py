@@ -1,12 +1,9 @@
 import os
 import subprocess
 import shutil
-
 from tqdm import tqdm
 import re
-
 import argparse
-
 import sys
 sys.path.append('/home/eval/decompiler-eval/src/utils/functools/')
 import log
