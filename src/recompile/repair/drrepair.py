@@ -16,15 +16,20 @@ sys.path.append('../../utils/functools/')
 import str_process
 
 class RepairDriver(object):
-  def __init__(self, profile) -> None:
-    self.kill_firefox()
+  def __init__(self, port) -> None:
+    # self.kill_firefox()
 
     firefox_options = webdriver.FirefoxOptions()
-    firefox_options.add_argument("--profile")
-    firefox_options.add_argument(os.path.abspath(profile))
+    # firefox_options.add_argument("--profile")
+    # firefox_options.add_argument(os.path.abspath(profile))
     firefox_options.add_argument("--headless")
+    firefox_options.add_argument("--ignore-ssl-errors=yes")
+    firefox_options.add_argument("--ignore-certificate-errors")
+
+    # self.driver = webdriver.Firefox(firefox_options)
+    remote_uri = f"http://127.0.1.1:{port}/wd/hub"
     self.driver = webdriver.Remote(
-      command_executor='http://127.0.1.1:4444',
+      command_executor=remote_uri,
       options=firefox_options
     )
     self.driver.get('http://10.42.0.107:8000/ide/')
@@ -174,8 +179,8 @@ class RepairDriver(object):
     self.flush_page()
     return fix_result, new_code
 
-def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompilers, optimizations, profile):
-  wd = RepairDriver(profile)
+def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompilers, optimizations, port):
+  wd = RepairDriver(port)
   for compiler in compilers:
     for opt_level in optimizations:
       for decompiler in decompilers:
@@ -192,7 +197,7 @@ def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompil
 
         dec_files = os.listdir(dec_sub_dir)
         fixed_cnt, unfixed_cnt, timeout_cnt = 0, 0, 0
-        for df in tqdm(dec_files): # tqdm(dec_files):
+        for df in tqdm(dec_files, desc=f"{compiler}-{opt_level}-{decompiler}"): # tqdm(dec_files):
           dec_path = os.path.join(dec_sub_dir, df)
           fix_flag, new_code = None, None
           with open(dec_path, 'r', encoding='ISO-8859-1') as f:
@@ -225,7 +230,8 @@ if __name__ == '__main__':
   parser.add_argument('-u', '--unfixed-dec', type=str, help='log dir')
   parser.add_argument('-t', '--timeout-dec', type=str, help='log dir')
 
-  parser.add_argument('-p', '--profile', type=str, help="Profiles of firefox")
+  # parser.add_argument('-p', '--profile', type=str, help="Profiles of firefox")
+  parser.add_argument('-p', '--port', type=int, help="port of webservice")
   
   parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
   parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
@@ -240,4 +246,4 @@ if __name__ == '__main__':
              args.compilers, 
              args.decompilers, 
              args.optimizations,
-             args.profile)
+             args.port)

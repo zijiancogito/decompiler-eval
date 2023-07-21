@@ -2,7 +2,7 @@
 
 COMPILERS="clang gcc"
 # DECOMPILERS="BinaryNinja Ghidra Hex-Rays RetDec"
-DECOMPILERS="Ghidra"
+DECOMPILERS="Hex-Rays"
 OPTIMIZATIONS="o0 o1 o2 o3 os"
 
 DATA_DIR=/home/caoy/deceval/data/POJ
@@ -14,6 +14,4 @@ TIMEOUT_DIR=$DATA_DIR/recompile/round-2/timeout
 mkdir -p $FIXED_DIR $UNFIXED_DIR $TIMEOUT_DIR
 
 
-PROFILE=/home/caoy/deceval/recompile/usiijz40.default-release
-
-python3 drrepair.py -d $DE_DIR -f $FIXED_DIR -u $UNFIXED_DIR -t $TIMEOUT_DIR -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS -p $PROFILE
+python3 drrepair.py -d $DE_DIR -f $FIXED_DIR -u $UNFIXED_DIR -t $TIMEOUT_DIR -D $DECOMPILERS -C $COMPILERS -O $OPTIMIZATIONS
