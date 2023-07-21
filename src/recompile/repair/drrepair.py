@@ -64,18 +64,7 @@ class RepairDriver(object):
     # input code in the editor
     elem = self.driver.find_element(By.CLASS_NAME, "ace_text-input")
     elem.clear()
-    codes = code.split('\n')
-    for l in codes:
-      if l.strip() == '':
-        continue
-      if len(l.strip()) > 80:
-        sub_l = str_process.str_split(l.strip(), 80)
-        for sl in sub_l:
-          elem.send_keys(sl.strip())
-          elem.send_keys('\n')
-      else:
-        elem.send_keys(l.strip())
-        elem.send_keys('\n')
+    elem.send_keys(code)
     time.sleep(1)
 
 
@@ -88,7 +77,6 @@ class RepairDriver(object):
     elem = self.driver.find_element(By.ID, "fixcode")
     if elem.is_displayed():
       elem.click()
-
 
   def repair(self, code):
     # input code
@@ -145,7 +133,6 @@ class RepairDriver(object):
   def fix_code(self, repair_log, code):
     pattern = r'erronous lines:\n([\s\S]+)\n\nsuggested fix:\n([\s\S]+)'
     finds = re.finditer(pattern, repair_log)
-    rep_dict = {}
     code_list = code.split('\n')    
     for f in finds:
       err_lines = f.group(1).split('\n')
@@ -179,6 +166,20 @@ class RepairDriver(object):
     self.flush_page()
     return fix_result, new_code
 
+def normalize(code):
+  codes = code.split('\n')
+  norm_codes = []
+  for l in codes:
+    if l.strip() == '':
+      continue
+    if len(l.strip()) > 80:
+      sub_l = str_process.str_split(l.strip(), 80)
+      for sl in sub_l:
+        norm_codes.append(sl.strip())
+    else:
+      norm_codes.append(l.strip())
+  return '\n'.join(norm_codes)
+
 def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompilers, optimizations, port, web_port):
   wd = RepairDriver(port, web_port)
   for compiler in compilers:
@@ -202,7 +203,7 @@ def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompil
           fix_flag, new_code = None, None
           with open(dec_path, 'r', encoding='ISO-8859-1') as f:
             code = f.read()
-            code = re.sub('\t', '', code)
+            code = normalize(code)
             fix_flag, new_code = wd.run(code)
           if fix_flag == 1:
             new_code_path = os.path.join(unfixed_sub_dir, df)
