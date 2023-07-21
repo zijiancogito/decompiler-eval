@@ -33,7 +33,6 @@ class RepairDriver(object):
       options=firefox_options
     )
     web_uri = f'http://10.42.0.107:{web_port}/ide/'
-    print(web_uri)
     self.driver.get(web_uri)
 
     self.fixed_msg = 'Fix successfully!'
