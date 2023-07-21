@@ -1,0 +1,7 @@
+FROM localhost/transfix:v0
+
+
+RUN cd \
+	&& source oc3/bin/activate \
+	&& cd oc3/src/ \
+	&& HE_CLIENT_SECRET=91069a5ba9cc1d0bcbf41c415b53515baa712258 python manage.py runserver 0.0.0.0:8000

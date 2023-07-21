@@ -15,20 +15,16 @@ mkdir -p $FIXED_DIR $UNFIXED_DIR $TIMEOUT_DIR
 
 create_container(){
 	name=$1_$2_$3
-	# podman run -d -p $5:8000 --name $name-transfix localhost/transfix:v0
-	# sleep 5s
-	# podman attach $name-transfix
-	# sleep 5s
+	podman run -d -p $5:8000 --name $name-transfix localhost/transfix:v0
+	sleep 5s
 	podman run -d -p $4:4444 -p $5:7900 --shm-size="2g" --name $name-webdriver selenium/standalone-firefox:latest
 	# podman start $name
 	sleep 5s
-	python3 drrepair.py -d $DE_DIR -f $FIXED_DIR -u $UNFIXED_DIR -t $TIMEOUT_DIR -D $3 -C $1 -O $2 -p $4 &
 }
 
 wdport=4000
 hubport=7000
 webport=8001
-
 for compiler in ${COMPILERS[*]}; do
 	for opt in ${OPTIMIZATIONS[*]}; do
 		for decompiler in ${DECOMPILERS[*]}; do

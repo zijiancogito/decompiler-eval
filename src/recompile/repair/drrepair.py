@@ -16,7 +16,7 @@ sys.path.append('../../utils/functools/')
 import str_process
 
 class RepairDriver(object):
-  def __init__(self, port) -> None:
+  def __init__(self, port, web_port) -> None:
     # self.kill_firefox()
 
     firefox_options = webdriver.FirefoxOptions()
@@ -32,7 +32,7 @@ class RepairDriver(object):
       command_executor=remote_uri,
       options=firefox_options
     )
-    self.driver.get('http://10.42.0.107:8000/ide/')
+    self.driver.get(f'http://10.42.0.107:{web_port}/ide/')
 
     self.fixed_msg = 'Fix successfully!'
     self.unfixed_msg = 'Fix unsuccessfully!'
@@ -179,8 +179,8 @@ class RepairDriver(object):
     self.flush_page()
     return fix_result, new_code
 
-def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompilers, optimizations, port):
-  wd = RepairDriver(port)
+def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompilers, optimizations, port, web_port):
+  wd = RepairDriver(port, web_port)
   for compiler in compilers:
     for opt_level in optimizations:
       for decompiler in decompilers:
@@ -232,6 +232,7 @@ if __name__ == '__main__':
 
   # parser.add_argument('-p', '--profile', type=str, help="Profiles of firefox")
   parser.add_argument('-p', '--port', type=int, help="port of webservice")
+  parser.add_argument('-P', '--web-port', type=int, help="port of transfix")
   
   parser.add_argument('-D', '--decompilers', nargs='+', help='Decompilers')
   parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
@@ -246,4 +247,5 @@ if __name__ == '__main__':
              args.compilers, 
              args.decompilers, 
              args.optimizations,
-             args.port)
+             args.port,
+             args.web_port)

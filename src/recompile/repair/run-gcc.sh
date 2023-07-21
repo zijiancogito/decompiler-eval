@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-COMPILERS=(clang)
+COMPILERS=(gcc)
 OPTIMIZATIONS=(o0 o1 o2 o3 os)
 DECOMPILERS=(Hex-Rays BinaryNinja Ghidra RetDec)
 
@@ -22,11 +22,11 @@ create_container(){
 	podman run -d -p $4:4444 -p $5:7900 --shm-size="2g" --name $name-webdriver selenium/standalone-firefox:latest
 	# podman start $name
 	sleep 5s
-	python3 drrepair.py -d $DE_DIR -f $FIXED_DIR -u $UNFIXED_DIR -t $TIMEOUT_DIR -D $3 -C $1 -O $2 -p $4 &
+	python3 drrepair.py -d $DE_DIR -f $FIXED_DIR -u $UNFIXED_DIR -t $TIMEOUT_DIR -D $3 -C $1 -O $2 -p $4 -P $6 &
 }
 
-wdport=4000
-hubport=7000
+wdport=4400
+hubport=7901
 webport=8001
 
 for compiler in ${COMPILERS[*]}; do
@@ -35,7 +35,6 @@ for compiler in ${COMPILERS[*]}; do
 			create_container ${compiler} ${opt} ${decompiler} ${wdport} ${hubport} ${webport}
 			wdport=$((${wdport}+1))
 			hubport=$((${hubport}+1))
-			webport=$((${webport}+1))
 		done
 	done
 done
