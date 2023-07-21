@@ -191,7 +191,7 @@ def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompil
           os.makedirs(fixed_sub_dir)
         if not os.path.exists(unfixed_sub_dir):
           os.makedirs(unfixed_sub_dir)
-        timeout_sub_dir = os.path.join(timeout_dir, compiler, opt_level)
+        timeout_sub_dir = os.path.join(timeout_dir, compiler, opt_level, decompiler)
         if not os.path.exists(timeout_sub_dir):
           os.makedirs(timeout_sub_dir)
 
