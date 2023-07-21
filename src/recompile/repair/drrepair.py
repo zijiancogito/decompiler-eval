@@ -32,7 +32,9 @@ class RepairDriver(object):
       command_executor=remote_uri,
       options=firefox_options
     )
-    self.driver.get(f'http://10.42.0.107:{web_port}/ide/')
+    web_uri = f'http://10.42.0.107:{web_port}/ide/'
+    print(web_uri)
+    self.driver.get(web_uri)
 
     self.fixed_msg = 'Fix successfully!'
     self.unfixed_msg = 'Fix unsuccessfully!'

@@ -22,12 +22,12 @@ create_container(){
 	podman run -d -p $4:4444 -p $5:7900 --shm-size="2g" --name $name-webdriver selenium/standalone-firefox:latest
 	# podman start $name
 	sleep 5s
-	python3 drrepair.py -d $DE_DIR -f $FIXED_DIR -u $UNFIXED_DIR -t $TIMEOUT_DIR -D $3 -C $1 -O $2 -p $4 -P $5 &
+	python3 drrepair.py -d $DE_DIR -f $FIXED_DIR -u $UNFIXED_DIR -t $TIMEOUT_DIR -D $3 -C $1 -O $2 -p $4 -P $6 &
 }
 
 wdport=4000
 hubport=7000
-webport=8001
+webport=8000
 
 for compiler in ${COMPILERS[*]}; do
 	for opt in ${OPTIMIZATIONS[*]}; do
