@@ -186,13 +186,14 @@ def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompil
     for opt_level in optimizations:
       for decompiler in decompilers:
         dec_sub_dir = os.path.join(dec_dir, compiler, opt_level, decompiler)
+
         fixed_sub_dir = os.path.join(fixed_dir, compiler, opt_level, decompiler)
         unfixed_sub_dir = os.path.join(unfixed_dir, compiler, opt_level, decompiler)
+        timeout_sub_dir = os.path.join(timeout_dir, compiler, opt_level, decompiler)
         if not os.path.exists(fixed_sub_dir):
           os.makedirs(fixed_sub_dir)
         if not os.path.exists(unfixed_sub_dir):
           os.makedirs(unfixed_sub_dir)
-        timeout_sub_dir = os.path.join(timeout_dir, compiler, opt_level, decompiler)
         if not os.path.exists(timeout_sub_dir):
           os.makedirs(timeout_sub_dir)
 
@@ -206,7 +207,7 @@ def repair_all(dec_dir, fixed_dir, unfixed_dir, timeout_dir, compilers, decompil
             code = normalize(code)
             fix_flag, new_code = wd.run(code)
           if fix_flag == 1:
-            new_code_path = os.path.join(unfixed_sub_dir, df)
+            new_code_path = os.path.join(fixed_sub_dir, df)
             save_fixed_code(new_code, new_code_path)
             fixed_cnt += 1
           elif fix_flag == 2:
