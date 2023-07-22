@@ -81,6 +81,63 @@ def check_file(path):
         
     return msg_without_tok_dict, msg_with_tok_dict, token_types
 
+def list_files_for_each_err_type(err_msg_for_each_dec_dir, 
+                                 log_dir,
+                                 compilers, 
+                                 optimizations, 
+                                 decompilers):
+    for decompiler in decompilers:
+        total_without_tok_dict = {}
+        total_with_tok_dict = {}
+        total_log1_path = os.path.join(log_dir, f"msgs-without-tok-{decompiler}.csv")
+        total_log2_path = os.path.join(log_dir, f"msgs-with-tok-{decompiler}.csv")
+        for compiler in compilers:
+            for opt in optimizations:
+                err_sub_dir = os.path.join(err_msg_for_each_dec_dir, decompiler, compiler, opt)
+                log_sub_dir = os.path.join(log_dir, decompiler, compiler, opt)
+                if not os.path.exists(log_sub_dir):
+                    os.makedirs(log_sub_dir)
+                dec_log_dirs = os.listdir(err_sub_dir)
+                without_tok_dict = {}
+                with_tok_dict = {}
+
+                for dec_sub_dir in tqdm(dec_log_dirs, desc=f"{decompiler}-{compiler}-{opt}"):
+                    dec_log_dir = os.path.join(err_sub_dir, dec_sub_dir)
+                    err_without_tok_path = os.path.join(dec_log_dir, "msgs-without-tok.csv")
+                    err_with_tok_path = os.path.join(dec_log_dir, 'msgs-with-tok.csv')
+                    # token_types_path = os.path.join(dec_log_dir, "token-types.csv")
+
+                    with open(err_without_tok_path, 'r') as f:
+                        lines = f.readlines()
+                        for l in lines:
+                            msg = l.split('\t')[0]
+                            if msg in without_tok_dict:
+                                without_tok_dict[msg].append(dec_sub_dir)
+                            else:
+                                without_tok_dict[msg] = [dec_sub_dir]
+                            if msg in total_without_tok_dict:
+                                total_without_tok_dict[msg].append(dec_sub_dir)
+                            else:
+                                total_without_tok_dict[msg] = [dec_sub_dir]
+                    with open(err_with_tok_path, 'r') as f:
+                        lines = f.readlines()
+                        for l in lines:
+                            msg = l.split('\t')[0]
+                            if msg in with_tok_dict:
+                                with_tok_dict[msg] += 1
+                            else:
+                                with_tok_dict[msg] = 1
+                            if msg in total_with_tok_dict:
+                                total_with_tok_dict[msg] += 1
+                            else:
+                                total_with_tok_dict[msg] = 1
+                log1_path = os.path.join(log_sub_dir, "msgs-without-tok.csv")
+                log2_path = os.path.join(log_sub_dir, "msgs-with-tok.csv")
+                log.log_dict2file(without_tok_dict, log1_path)
+                log.log_dict2file(with_tok_dict, log2_path)
+        log.log_dict2file(total_without_tok_dict, total_log1_path)
+        log.log_dict2file(total_with_tok_dict, total_log2_path)
+
 def count_files_for_each_err(err_msg_for_each_dec_dir, 
                              log_dir,
                              compilers, 
@@ -220,7 +277,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-e', '--err-msg-dir', type=str, help='dir of DEC')
     parser.add_argument('-s', '--msg-save-dir', type=str, help='log dir')
-    parser.add_argument('-o', '--option', choices=['all', 'file', 'debug', 'count', 'summarize'], help='')
+    parser.add_argument('-o', '--option', choices=['all', 'file', 'debug', 'count', 'summarize', 'reverse'], help='')
     parser.add_argument('-D', '--decompilers', nargs='+', help='log dir')
     parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
     parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
@@ -237,3 +294,5 @@ if __name__ == '__main__':
         count_files_for_each_err(args.err_msg_dir, args.msg_save_dir, args.compilers, args.optimizations, args.decompilers)
     elif args.option == 'summarize':
         summarize_all_errs(args.err_msg_dir, args.msg_save_dir, args.decompilers)
+    elif args.option == 'reverse':
+        list_files_for_each_err_type(args.err_msg_dir, args.msg_save_dir, args.compilers, args.optimizations, args.decompilers)

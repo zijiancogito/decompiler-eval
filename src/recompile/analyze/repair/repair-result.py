@@ -24,7 +24,7 @@ def check_all(fixed_dir, unfixed_dir, timeout_dir, compilers, decompilers, optim
                 fixed_sub_dir = os.path.join(fixed_dir, compiler, opt_level, decompiler)
                 fixed_cnt = check_fixed(fixed_sub_dir)
 
-                unfixed_sub_dir = check_unfixed(unfixed_dir)
+                unfixed_sub_dir = os.path.join(unfixed_dir, compiler, opt_level, decompiler)
                 unfixed_cnt = check_unfixed(unfixed_sub_dir)
 
                 timeout_sub_dir = os.path.join(timeout_dir, compiler, opt_level, decompiler)
