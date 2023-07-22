@@ -7,7 +7,7 @@ OPTIMIZATIONS="o0 o1 o2 o3 os"
 DE_DIR=/home/eval/data/POJ/process/de
 ROUND_1=/home/eval/data/POJ/recompile/round-1
 FAIL_DIR=$ROUND_1/fail-compilation/
-LOG_DIR=$ROUND_1/raw_compilation-msg/
+LOG_DIR=$ROUND_1/raw-compilation-msg/
 
 rm -r $FAIL_DIR $LOG_DIR
 mkdir -p $FAIL_DIR $LOG_DIR
