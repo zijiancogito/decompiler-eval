@@ -108,7 +108,7 @@ const char *unnecessary[] = {
 const char *needchange[] = {
     "printf_2",
     "__isoc99_scanf_2",
-    "rand_2",
+    // "rand_2",
 };
 
 void init_node_list(NodeList * node_list);
