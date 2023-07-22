@@ -6,7 +6,7 @@ import argparse
 from tqdm import tqdm
 
 import sys
-sys.path.append('../../utils/functools')
+sys.path.append('../../../utils/functools')
 import log
 
  # elif re.fullmatch(r'([\S]*Var[0-9]+)|([\_]*local\_[\S]+)|(undefined[0-9]+)|(v[0-9]+)|(r[0-9]+)|(data\_[0-9]+)|(var\_[0-9]+)|(zmm[0-9]+)|([\_]*DAT\_[0-9]+)|([\S]*Stack\_[0-9]+)|(\_[a-z])|([\_]*completed\_[0-9]+)|(\_fini)|([\_]*end)|(\_s[\_t]+[0-9]+)|([\_]*start)|([a-z][0-9]*)|([\S]*Stack\_[a-z]+)|(ctr[0-9]+)|(count)|([a-zA-Z][xy]*)|(extraout\_[\S]+)|(in\_[\S]+)|(out\_[\S]+)|(stack0x[0-9a-e]+)|(chars_printed)|(len[0-9]*)|(mem[0-9]*)|(nmemb[0-9]*)|(putc\_rc)|(putchar\_rc)|(powl)|(result[0-9]*)|(str[0-9]*)|(stream[0-9]*)|(strcmp\_[\S]+)|(substr\_[\S]+)|(size)|(set\_mem[0-9]*)|([er][a-d]x[\S]*)|([er]di[\S]*)|(DiJiTian)|(NIXU)', token):
