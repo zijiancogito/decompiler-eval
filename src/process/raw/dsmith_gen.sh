@@ -1,23 +1,28 @@
 #!/bin/bash
 
-MAX_SRCS=500
+ROOT=/home/eval/data/DSMITH
+if "deceval" in $(pwd); then
+    ROOT=/home/caoy/deceval/data/DSMITH
+fi
+
+MAX_SRCS=1000
 OPTIMIZATIONS="o0 o1 o2 o3 os"
 
-ROOT=/home/eval/data/DSMITH/raw
+RAW_DIR=$ROOT/raw
 
-rm -r $ROOT
-mkdir -p $ROOT
+rm -r $RAW_DIR
+mkdir -p $RAW_DIR
 
-SRC_ROOT=/home/eval/data/DSMITH/raw/src
+SRC_ROOT=$RAW_DIR/src
 rm -r $SRC_ROOT
 mkdir -p $SRC_ROOT
 
 echo "Generate source code for DSMITH"
-python3 ./code_gen/source_gen.py -d dsmith -o $ROOT -n 1000 -s ./code_gen/dsmith/source.py
+python3 ./code_gen/source_gen.py -d dsmith -o $RAW_DIR -n 1000 -s ./code_gen/dsmith/source.py
 
 
 
-BIN_ROOT=/home/eval/data/DSMITH/raw/bin
+BIN_ROOT=$RAW_DIR/bin
 rm -r $BIN_ROOT
 mkdir -p $BIN_ROOT
 
@@ -46,7 +51,7 @@ echo "\nCompile clang Os Binaries"
 python3 ./code_gen/make.py --opt os -c clang --src $SRC_ROOT -o $BIN_ROOT
 
 
-IR_ROOT=/home/eval/data/DSMITH/raw/ir
+IR_ROOT=$RAW_DIR/ir
 
 echo "Compiling IRs from O0 to Os"
 echo "Compile O0 IRs"
@@ -61,13 +66,18 @@ echo "\nCompile Os IRs"
 python3 ./code_gen/make.py --opt os --ir --src $SRC_ROOT -o $IR_ROOT
 
 
-IR_DIR=/home/eval/data/DSMITH/process/ir
-POISON_MOVE_DIR=/home/eval/data/DSMITH/trash/ir/poison
+
+PROCESS_DIR=$ROOT/process
+rm -r $PROCESS_DIR
+mkdir -p $PROCESS_DIR
+
+TRASH_DIR=$ROOT/trash
+POISON_MOVE_DIR=$TRASH_DIR/ir/poison
 rm -r $POISON_MOVE_DIR
-rm -r $IR_DIR
-mkdir -p /home/eval/data/DSMITH/process
 mkdir -p $POISON_MOVE_DIR
 
+IR_DIR=$PROCESS_DIR/ir
+rm -r $IR_DIR
 cp -r $IR_ROOT $IR_DIR
 # 
 echo "Checking IRs."

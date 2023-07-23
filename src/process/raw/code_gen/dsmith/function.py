@@ -34,7 +34,7 @@ class Function():
     def input_inst(self, label):
         body = C.block(innerIndent=2)
         body.append(C.statement(f"{C.variable('v0', 'int')} = {C.fcall('rand')}"))
-        body.append(C.statement(C.fcall('printf', ['"Input: %d"', label])))
+        body.append(C.statement(C.fcall('printf', [f'"f_rand_{label}"'])))
         body.append(C.statement('return v0'))
         head = C.function(f'f_rand_{label}', 'int')
         func = C.sequence()
