@@ -89,8 +89,8 @@ def list_files_for_each_err_type(err_msg_for_each_dec_dir,
     for decompiler in decompilers:
         total_without_tok_dict = {}
         total_with_tok_dict = {}
-        total_log1_path = os.path.join(log_dir, f"msgs-without-tok-{decompiler}.csv")
-        total_log2_path = os.path.join(log_dir, f"msgs-with-tok-{decompiler}.csv")
+        # total_log1_path = os.path.join(log_dir, f"msgs-without-tok-{decompiler}.csv")
+        # total_log2_path = os.path.join(log_dir, f"msgs-with-tok-{decompiler}.csv")
         for compiler in compilers:
             for opt in optimizations:
                 err_sub_dir = os.path.join(err_msg_for_each_dec_dir, decompiler, compiler, opt)
@@ -135,8 +135,8 @@ def list_files_for_each_err_type(err_msg_for_each_dec_dir,
                 log2_path = os.path.join(log_sub_dir, "msgs-with-tok.csv")
                 log.log_dict2file(without_tok_dict, log1_path)
                 log.log_dict2file(with_tok_dict, log2_path)
-        log.log_dict2file(total_without_tok_dict, total_log1_path)
-        log.log_dict2file(total_with_tok_dict, total_log2_path)
+        # log.log_dict2file(total_without_tok_dict, total_log1_path)
+        # log.log_dict2file(total_with_tok_dict, total_log2_path)
 
 def count_files_for_each_err(err_msg_for_each_dec_dir, 
                              log_dir,

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ERR_DIR=/home/caoy/deceval/data/POJ/recompile/round-1/err-msgs-type-files
-LOG_DIR=/home/caoy/deceval/POJ/recompile/round-1/err-type-file-list
+LOG_DIR=/home/caoy/deceval/data/POJ/recompile/round-1/err-type-file-list
 
 rm -r $LOG_DIR
 mkdir -p $LOG_DIR
