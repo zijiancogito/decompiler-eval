@@ -20,7 +20,8 @@ llvm.initialize()
 llvm.initialize_native_target()
 llvm.initialize_native_asmprinter()
 
-def execute_function(ir_path, save_to, func_filter='func'):
+@func_set_timeout(10)
+def execute_function(ir_path, save_to, func_filter='func0'):
   llvm_ir = None
   with open(ir_path, 'r') as f:
     llvm_ir = f.read().strip()
@@ -28,16 +29,18 @@ def execute_function(ir_path, save_to, func_filter='func'):
   
   mod = llvm.parse_assembly(llvm_ir)
   mod.verify()
-  try:
-    for function in mod.functions:
-      if function.name != 'func':
-        continue
+  for function in mod.functions:
+    if function.name != 'func0':
+      continue
+    paths, syms = None
+    try:
       paths, syms = symbolic_execution(function)
-      if paths!= None:
-        dump_to_file(save_to, paths, syms)
-      break
-  except:
-    return True
+    except:
+      return True
+    if paths!= None:
+      dump_to_file(save_to, paths, syms)
+      return False
+  return True
 
 def dump_to_file(save_to, paths, syms):
   js_dict = {}
@@ -49,6 +52,7 @@ def dump_to_file(save_to, paths, syms):
   with open(save_to, 'w') as out:
     json.dump(js_dict, out)
     
+@func_set_timeout(10)
 def symbolic_execution(function):
   blocks = {}
   labels = []
