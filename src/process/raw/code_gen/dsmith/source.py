@@ -41,8 +41,8 @@ def make_src_file(max_funcs,
     stmt_generator = Statement(has_logic, has_divs, max_const_values)
     
     for i in range(max(max_local_variables, max_args)):
-        f.code.append(func_generator.input_inst(i)[1])
-        f.code.append(C.blank())
+        f.code.append(func_generator.input_inst_declare(i))
+    f.code.append(C.blank())
         
     nfuncs = []
     for i in range(max_funcs):
@@ -54,12 +54,18 @@ def make_src_file(max_funcs,
         
     f.code.append(func_generator.make_main(nfuncs, stmt_generator))
     f.code.append(C.blank())
+
+
+    for i in range(max(max_local_variables, max_args)):
+        f.code.append(func_generator.input_inst(i)[1])
+        f.code.append(C.blank())
     
     return str(f)
   
 def output_to_file(filename, code):
     with open(filename, 'w') as f:
         f.write(code)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='dsmith', description='random code generator')
@@ -106,6 +112,7 @@ if __name__ == '__main__':
     parser.add_argument('--no-logic', dest='logic', action='store_false')
     
     parser.add_argument('-o', '--out', type=str, help="specify the output file name.")
+    parser.add_argument('-d', '--debug', choices=['True', 'False'], default=False)
 
     args = parser.parse_args()
 
@@ -129,4 +136,5 @@ if __name__ == '__main__':
                          args.logic,
                          output_file)
     output_to_file(output_file, func)
-    # print(func)
+    if args.debug == 'True':
+        print(func)

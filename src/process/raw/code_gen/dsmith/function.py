@@ -34,13 +34,18 @@ class Function():
     def input_inst(self, label):
         body = C.block(innerIndent=2)
         body.append(C.statement(f"{C.variable('v0', 'int')} = {C.fcall('rand')}"))
-        body.append(C.statement(C.fcall('printf', [f'"f_rand_{label}"'])))
+        body.append(C.statement(C.fcall('printf', [f'"f_rand_{label}: %d"', label])))
         body.append(C.statement('return v0'))
         head = C.function(f'f_rand_{label}', 'int')
         func = C.sequence()
         func.append(head)
         func.append(body)
         return f'f_rand_{label}', func
+
+    def input_inst_declare(self, label):
+        # head = C.function(f'f_rand_{label}', 'int')
+        dec = C.statement(f'int f_rand_{label}() __attribute__((noinline))')
+        return dec
 
     def basicblock_rec(self, local_out_bb, indent, stmt_generator:Statement, curr_depth=1):
         local_in_bb = []
