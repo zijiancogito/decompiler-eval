@@ -8,7 +8,7 @@ LOG_DIR=$ROOT_DIR/round-2/fixed-errs
 rm -r $LOG_DIR
 mkdir -p $LOG_DIR
 
-COMPILERS="clang"
+COMPILERS="gcc"
 OPTIMIZATIONS="o0 o1 o2 o3 os"
 DECOMPILERS="BinaryNinja Ghidra Hex-Rays RetDec"
 

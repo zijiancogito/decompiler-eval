@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ROOT=/home/eval/data/DSMITH
-if "deceval" in $(pwd); then
-    ROOT=/home/caoy/deceval/data/DSMITH
-fi
+# if "deceval" in $(pwd); then
+    # ROOT=/home/caoy/deceval/data/DSMITH
+# fi
 
 MAX_SRCS=1000
 OPTIMIZATIONS="o0 o1 o2 o3 os"

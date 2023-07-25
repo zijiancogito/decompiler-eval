@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ROOT=/home/eval/data/DSMITH/raw
-IR=$ROOT/ir
+ROOT=/home/eval/data/DSMITH
+IR=$ROOT/process/ir
 DEC=$ROOT/de
 
 SAMPLE_ROOT=/home/eval/data/DSMITH/sample

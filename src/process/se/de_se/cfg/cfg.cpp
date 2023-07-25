@@ -999,6 +999,19 @@ void CFG::cfg_build()
             }
         }
     }
+
+    this->first_bb = NULL;
+    for (auto bb: this->basic_blocks) {
+        std::vector<TSNode> nodes = bb->get_contained_nodes();
+        for (auto n: nodes) {
+            std::string cnt = get_content(n, source);
+            if (cnt.find("rand") != std::string::npos) {
+                this->first_bb = bb;
+                break;
+            }
+        }
+        if (this->first_bb == bb) break;
+    }
 }
 
 void CFG::print_cfg()

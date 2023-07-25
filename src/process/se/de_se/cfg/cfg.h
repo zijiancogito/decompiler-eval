@@ -47,6 +47,7 @@ private:
     BasicBlock *parse_condition(BasicBlock *cur_bb, TSNode contidion_node, std::vector<BasicBlock*> &record_bbs);
 public:
     // construct function
+    BasicBlock *first_bb;
     CFG(TSTree *tree, const char *source);
     void cfg_build();
     BasicBlock *get_entry();

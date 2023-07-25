@@ -82,7 +82,6 @@ def parse_jump_instruction(instruction):
 def extract_bb_inst(block):
     bb_inst = None
     flag = False
-    print(block)
     for instruction in block.instructions:
         if instruction.opcode == 'call':
             func_name, plist, _ = parse_call(str(instruction).strip())
@@ -90,7 +89,6 @@ def extract_bb_inst(block):
                 flag = True
                 bb_inst = plist[-1]
                 break
-    print(flag)
     return bb_inst
 
 def parse_call(instruction):

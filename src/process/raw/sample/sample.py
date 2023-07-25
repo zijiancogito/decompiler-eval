@@ -26,8 +26,6 @@ def common_dec(dec_dir, optimizations, decompilers, compilers):
                 else:
                     sets = sets.intersection([i.split('.')[0] for i in os.listdir(dec_sub_dir)])
     return sets
-      
-
 
 def sample_all(ir_dir, dec_dir, ir_tar_dir, dec_tar_dir,
                compilers, decompilers, optimizations):

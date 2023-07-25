@@ -16,5 +16,18 @@ def execute_function(dec_path, save_to, exp):
 def dump_to_file(save, paths):
   with open(save, 'w') as f:
     json.dump(paths, f)
-    
+
+def symbolic_execution(de_file, exp):
+    dese = cdll.LoadLibrary("/home/eval/decompiler-eval/src/process/se/de_se/se/libse.so")
+    run_se = dese.process
+    run_se.argtypes = [POINTER(c_char), c_int]
+    run_se.restype = c_char_p
+    STR = (c_char * (len(de_file) + 2))(*bytes(de_file,'utf-8'))
+    cast(STR, POINTER(c_char))
+    paths = run_se(STR, 0)
+
+    if paths is not None:
+        paths = load_from_json(json.loads(paths.decode()), exp)
+
+    return paths
 

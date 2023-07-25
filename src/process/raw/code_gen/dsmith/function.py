@@ -16,6 +16,7 @@ class Function():
                  max_block_size,
                  min_block_size,
                  max_block_depth,
+                 max_branches,
                  max_funcs) -> None:
         self._max_args = max_args
         self._min_args = min_args
@@ -28,19 +29,25 @@ class Function():
         self._max_block_size = max_block_size
         self._min_block_size = min_block_size
         self._max_block_depth = max_block_depth
+        self._max_branches = max_branches
         self._max_funcs = max_funcs
         self._bb_idx = 0
         
     def input_inst(self, label):
         body = C.block(innerIndent=2)
         body.append(C.statement(f"{C.variable('v0', 'int')} = {C.fcall('rand')}"))
-        body.append(C.statement(C.fcall('printf', [f'"f_rand_{label}"'])))
+        body.append(C.statement(C.fcall('printf', [f'"f_rand_{label}: %d"', label])))
         body.append(C.statement('return v0'))
         head = C.function(f'f_rand_{label}', 'int')
         func = C.sequence()
         func.append(head)
         func.append(body)
         return f'f_rand_{label}', func
+
+    def input_inst_declare(self, label):
+        # head = C.function(f'f_rand_{label}', 'int')
+        dec = C.statement(f'int f_rand_{label}() __attribute__((noinline))')
+        return dec
 
     def basicblock_rec(self, local_out_bb, indent, stmt_generator:Statement, curr_depth=1):
         local_in_bb = []
@@ -50,7 +57,7 @@ class Function():
         isNewBB = False
         for i in range(self._max_block_size):
             insert_bb = random.choice([True, False])
-            if insert_bb and curr_depth < self._max_block_depth:
+            if insert_bb and curr_depth < self._max_block_depth and self._bb_idx < self._max_branches:
                 if isNewBB:
                     body.append(stmt_generator.basicblock_inst(self._bb_idx, indent=indent))
                     self._bb_idx += 1

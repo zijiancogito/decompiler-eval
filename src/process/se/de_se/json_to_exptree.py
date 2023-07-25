@@ -36,44 +36,21 @@ def json_to_exptree(json_data: dict):
 
 def load_from_json(json_data, exp):
     ret = {}
-    ret['symbols'] = []
-    scanf_num = json_data['scanf_num']
-    params_num = json_data['params_num']
-    global_num = json_data['global_num']
-    for i in range(scanf_num):
-        ret['symbols'].append('scanf' + str(i))
-    for i in range(params_num):
-        ret['symbols'].append('param' + str(i))
-    for i in range(global_num):
-        ret['symbols'].append('global' + str(i))
-    if json_data['callees'] is not None:
-        for i in json_data['callees']:
-            if i != 'f_scanf_nop' and i != 'f_printf':
-                ret['symbols'].append(i)
-    paths = json_data['paths']
+    
+    paths: dict = json_data['paths']
+    if paths is not None:
+        for key in paths.keys():
+            paths[key] = exptree_to_json(json_to_exptree(paths[key]))
+    else:
+        paths = {}
 
-    ret['expressions'] = []
-    for i in range(len(paths)):
-        path = {}
-        for j in range(len(paths[i]['outputs'])):
-            path[paths[i]['outputs'][j]['id']] = exptree_to_json(json_to_exptree(paths[i]['outputs'][j]))
-        ret['expressions'].append(path)
-
-    s_copy = copy.deepcopy(ret['symbols'])
-
-    if exp == 'df2':
-        ret['expressions'] = ret['expressions'][0]
-
-    expressions = str(ret['expressions'])
+    s_copy = copy.deepcopy(json_data['symbols'])
+    expressions = str(paths)
     for s in s_copy:
         if s not in expressions:
-            ret['symbols'].remove(s)
-    # else:
-    #     ret['conditions'] = []
-    #     for i in range(len(paths)):
-    #         path = []
-    #         for j in range(len(paths[i]['conditions'])):
-    #             path.append(exptree_to_json(json_to_exptree(paths[i]['conditions'][j])))
-    #         ret['conditions'].append(path)
+            json_data['symbols'].remove(s)
+    
+    ret['symbols'] = json_data['symbols']
+    ret['paths'] = paths
 
     return ret

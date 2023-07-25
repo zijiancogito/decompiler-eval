@@ -582,18 +582,20 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             for (int i = 0; i < arg_num; i ++ ) {
                 TSNode arg = ts_node_child(arg_list, i);
                 std::string arg_type = ts_node_type(arg);
-                if (arg_type == "string_literal") {
-                    std::string arg_cnt = get_content(arg, source);
-                    if (arg_cnt.find("Input") != std::string::npos) is_input = true;
-                    else if (arg_cnt.find("BB") != std::string::npos) is_bb = true;
-                } else if (arg_type == "number_literal") {
+                // if (arg_type == "string_literal") {
+                //     std::string arg_cnt = get_content(arg, source);
+                //     if (arg_cnt.find("Input") != std::string::npos) is_input = true;
+                //     else if (arg_cnt.find("BB") != std::string::npos) is_bb = true;
+                // } else 
+                if (arg_type == "number_literal") {
                     std::string arg_cnt = get_content(arg, source);
                     ret_value = std::to_string(std::stoi(arg_cnt));
                 }
             }
-            if (is_input) ret_type = "input_num";
-            else if (is_bb) ret_type = "bb_num";
-            ret["type"] = ret_type;
+            // if (is_input) ret_type = "input_num";
+            // else if (is_bb) ret_type = "bb_num";
+            // ret["type"] = ret_type;
+            ret["type"] = "bb_num";
             ret["value"] = ret_value;
         } else if (func_name == "f_scanf_nop" && var_id_map.find(ts_node_start_byte(expression_node)) != var_id_map.end()) {
             ret["type"] = "input_symbol";
@@ -960,9 +962,12 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
         if (node_type == "switch_statement" || node_type == "case_statement")
             continue;
         if (ret["type"].asString() == "bb_num") {
-            std::string bb_num = ret["value"].asString();
-            if (bb_num == "0") label += bb_num;
-            else label += "-" + bb_num;
+            if (cfg->first_bb == bb) 
+                label = "0";
+            else {
+                std::string bb_num = ret["value"].asString();
+                label += "-" + bb_num;
+            }
         }
         NodeList sub_nodes;
         TSTreeCursor cursor = ts_tree_cursor_new(node);
@@ -1147,6 +1152,7 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes, J
         // se_res["global_num"] = global_num;
         // se_res["callees"] = callees;
         // new task no need
+        se_res["symbols"] = Json::arrayValue;
         for (std::string symbol: symbols) 
             se_res["symbols"].append(symbol);
         char *ret = new char[strlen(se_res.toStyledString().c_str()) + 1];
