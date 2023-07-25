@@ -96,7 +96,7 @@ const char *unnecessary[] = {
     "  [64]",
     "  [128]",
     "(undefined)",
-    // "& 0xffffffff",
+    "& 0xffffffff",
     "__stdcall",
     "__fastcall",
     "__cdecl",

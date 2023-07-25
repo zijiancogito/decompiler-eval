@@ -21,12 +21,8 @@ def execute_all(ir_dir, save_dir, log_dir, optimizations):
       if not os.path.exists(os.path.join(save_dir, opt_level)):
         os.makedirs(os.path.join(save_dir, opt_level))
       save_path = os.path.join(save_dir, opt_level, f"{ir_file.split('.')[0]}.json")
-      try:
-        fail = execution.execute_function(ir_path, save_path)
-        if fail:
-          bugs.append(f"{opt_level}\t{ir_path}")
-          fail_cnt += 1
-      except:
+      fail = execution.execute_function(ir_path, save_path)
+      if fail:
         bugs.append(f"{opt_level}\t{ir_path}")
         fail_cnt += 1
     print(f"{fail_cnt}/{len(ir_files)} files execution failed in {opt_level}.")

@@ -16,6 +16,7 @@ class Function():
                  max_block_size,
                  min_block_size,
                  max_block_depth,
+                 max_branches,
                  max_funcs) -> None:
         self._max_args = max_args
         self._min_args = min_args
@@ -28,6 +29,7 @@ class Function():
         self._max_block_size = max_block_size
         self._min_block_size = min_block_size
         self._max_block_depth = max_block_depth
+        self._max_branches = max_branches
         self._max_funcs = max_funcs
         self._bb_idx = 0
         
@@ -55,7 +57,7 @@ class Function():
         isNewBB = False
         for i in range(self._max_block_size):
             insert_bb = random.choice([True, False])
-            if insert_bb and curr_depth < self._max_block_depth:
+            if insert_bb and curr_depth < self._max_block_depth and self._bb_idx < self._max_branches:
                 if isNewBB:
                     body.append(stmt_generator.basicblock_inst(self._bb_idx, indent=indent))
                     self._bb_idx += 1

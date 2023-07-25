@@ -1,13 +1,19 @@
 #!/bin/bash
+# RAW_DE=/home/eval/data/CF/raw/de
+# SAVE_DE=/home/eval/data/CF/process/de
+# ERR=/home/eval/data/CF/trash/de/extract_func_log
 
-RAW_DE=/home/eval/data/CF/raw/de
-SAVE_DE=/home/eval/data/CF/process/de
-ERR=/home/eval/data/CF/trash/de/extract_func_log
+ROOT=/home/eval/data/DSMITH
+RAW_DE=$ROOT/raw/de
+SAVE_DE=$ROOT/process/de
+ERR=$ROOT/trash/de/extract_func_log
+
 rm -r $ERR
 rm -r $SAVE_DE
-decoms=(angr BinaryNinja Ghidra Hex-Rays RetDec)
+# decoms=(angr BinaryNinja Ghidra Hex-Rays RetDec)
+decoms=(Ghidra RetDec)
 coms=(clang gcc)
-optis=(o0)
+optis=(o0 o1 o2 o3 os)
 for dec in ${decoms[@]}
 do
     for com in ${coms[@]}
@@ -20,7 +26,7 @@ do
             for file in `ls $datas_path`
             do
                 data_path=$datas_path/$file
-                python3 extractFunc.py -s $data_path -o $save_to -e $err_file -f func_1 >/dev/null
+                python3 extractFunc.py -s $data_path -o $save_to -e $err_file -f func0 >/dev/null
                 echo Over: $data_path
             done
         done

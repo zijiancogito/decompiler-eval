@@ -38,8 +38,11 @@ def load_from_json(json_data, exp):
     ret = {}
     
     paths: dict = json_data['paths']
-    for key in paths.keys():
-        paths[key] = exptree_to_json(json_to_exptree(paths[key]))
+    if paths is not None:
+        for key in paths.keys():
+            paths[key] = exptree_to_json(json_to_exptree(paths[key]))
+    else:
+        paths = {}
 
     s_copy = copy.deepcopy(json_data['symbols'])
     expressions = str(paths)

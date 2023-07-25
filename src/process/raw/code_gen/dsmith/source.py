@@ -11,6 +11,7 @@ def make_src_file(max_funcs,
                   max_block_size,
                   min_block_size,
                   max_block_depth,
+                  max_branch,
                   max_expr_complexity,
                   min_expr_complexity,
                   max_local_variables,
@@ -37,6 +38,7 @@ def make_src_file(max_funcs,
                               max_block_size,
                               min_block_size,
                               max_block_depth,
+                              max_branch,
                               max_funcs)
     stmt_generator = Statement(has_logic, has_divs, max_const_values)
     
@@ -84,6 +86,8 @@ if __name__ == '__main__':
 
     parser.add_argument('--max-block-depth', default=3, type=int,
                         help='limit depth of nested blocks to <num>')
+    parser.add_argument('--max-branches', default=10, type=int,
+                        help='limit numbers of blocks to <num>')
 
     parser.add_argument('--max-expr-complexity', default=3, type=int,
                         help='limit expression complexities to <num>')
@@ -125,6 +129,7 @@ if __name__ == '__main__':
                          args.max_block_size,
                          args.min_block_size,
                          args.max_block_depth,
+                         args.max_branches,
                          args.max_expr_complexity,
                          args.min_expr_complexity,
                          args.max_local_variables,

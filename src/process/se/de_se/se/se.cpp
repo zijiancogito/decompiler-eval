@@ -1152,6 +1152,7 @@ const char *run_se(TSTree *tree, const char * source, NodeList *analyze_nodes, J
         // se_res["global_num"] = global_num;
         // se_res["callees"] = callees;
         // new task no need
+        se_res["symbols"] = Json::arrayValue;
         for (std::string symbol: symbols) 
             se_res["symbols"].append(symbol);
         char *ret = new char[strlen(se_res.toStyledString().c_str()) + 1];

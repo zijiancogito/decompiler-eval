@@ -20,7 +20,6 @@ llvm.initialize()
 llvm.initialize_native_target()
 llvm.initialize_native_asmprinter()
 
-@func_set_timeout(10)
 def execute_function(ir_path, save_to, func_filter='func0'):
   llvm_ir = None
   with open(ir_path, 'r') as f:
@@ -32,7 +31,7 @@ def execute_function(ir_path, save_to, func_filter='func0'):
   for function in mod.functions:
     if function.name != 'func0':
       continue
-    paths, syms = None
+    paths, syms = None, None
     try:
       paths, syms = symbolic_execution(function)
     except:
