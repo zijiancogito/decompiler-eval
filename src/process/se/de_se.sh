@@ -10,7 +10,7 @@ rm -r $DE_SE_LOG_DIR_1
 mkdir -p $DE_SE_DIR_1
 mkdir -p $DE_SE_LOG_DIR_1
 # decompilers=(Ghidra RetDec)
-decompilers=(RetDec)
+decompilers=(Ghidra RetDec Hex-Rays BinaryNinja)
 compilers=(clang gcc)
 optis=(o0 o1 o2 o3 os)
 for dec in ${decompilers[@]}

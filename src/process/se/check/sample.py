@@ -3,14 +3,17 @@ import shutil
 import random
 import argparse
 
-from count_pathes import get_irs_topk
+import sys
+sys.path.append('.')
+from count_pathes import get_topk
+# import count_pathes 
 
 
 def valid_irs(ir_dir, optimizations, topk):
     sets = set()
     for opt_level in optimizations:
         ir_sub_dir = os.path.join(ir_dir, opt_level)
-        topk_set = get_irs_topk(ir_sub_dir, topk)
+        topk_set = get_topk(ir_sub_dir, topk)
 
         if len(sets) == 0:
             sets = set(topk_set)
@@ -23,8 +26,8 @@ def valid_des(de_dir, compilers, optimizations, decompilers, topk):
     for compiler in compilers:
         for opt in optimizations:
             for decompiler in decompilers:
-                dec_sub_dir = os.path.join(de_dir, compilers, opt, decompiler)
-                topk_set = get_irs_topk(dec_sub_dir, topk)
+                dec_sub_dir = os.path.join(de_dir, compiler, opt, decompiler)
+                topk_set = get_topk(dec_sub_dir, topk)
 
                 if len(sets) == 0:
                     sets = set(topk_set)
@@ -43,8 +46,10 @@ def sample_all(ir_dir,
     ir_set = valid_irs(ir_dir, optimizations, topk)
     dec_set = valid_des(dec_dir, compilers, optimizations, decompilers, topk)
     common_set = ir_set.intersection(dec_set)
-    print(len(common_set))
-    sample_set = random.choices(list(common_set), 500)
+    print(f"Valid IRs: {len(ir_set)}")
+    print(f"Valid DECs: {len(dec_set)}")
+    print(f"Valid Commons: {len(common_set)}")
+    sample_set = random.choices(list(common_set), k=500)
     for opt in optimizations:
         ir_tar_sub = os.path.join(ir_tar, opt)
         if not os.path.exists(ir_tar_sub):
@@ -63,7 +68,7 @@ def sample_all(ir_dir,
                 for sample in common_set:
                     src_path = os.path.join(dec_dir, compiler, opt, decompiler, sample)
                     dst_path = os.path.join(dec_tar_sub, sample)
-                    shutil.move(src_path, dst_path)
+                    shutil.copy(src_path, dst_path)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='sample.py', description='Sample 500')

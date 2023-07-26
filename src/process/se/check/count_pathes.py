@@ -17,13 +17,13 @@ def count_json(path):
     paths = list(exps.keys())
     return len(paths)
 
-def get_irs_topk(d, topk):
+def get_topk(d, topk):
     files = os.listdir(d)
     rets = []
     for f in files:
         path = os.path.join(d, f)
         cnt = count_json(path)
-        if cnt <= topk:
+        if cnt != None and cnt <= topk:
             rets.append(f)
     return set(rets)
 
@@ -40,7 +40,7 @@ def count_irs(root_dir, optimizations, topk):
                     paths[cnt] += 1
                 else:
                     paths[cnt] = 1
-        print(f"Opt {opt}")
+        print(f"Opt {opt}", end='\t')
         keys = list(paths.keys())
         keys.sort()
         topk_cnt = 0
@@ -55,7 +55,7 @@ def count_decs(root_dir, optimizations, compilers, decompilers, topk):
     for compiler in compilers:
         for opt in optimizations:
             for decompiler in decompilers:
-                sub_dir = os.path.join(root_dir, opt)
+                sub_dir = os.path.join(root_dir, compiler, opt, decompiler)
                 ir_files = os.listdir(sub_dir)
                 paths = {}
                 for ir_file in ir_files:
@@ -66,15 +66,15 @@ def count_decs(root_dir, optimizations, compilers, decompilers, topk):
                             paths[cnt] += 1
                         else:
                             paths[cnt] = 1
-                print(f"Opt {opt}")
+                print(f"Opt {opt}", end='\t')
                 keys = list(paths.keys())
                 keys.sort()
                 topk_cnt = 0
                 for key in keys:
                     if key <= topk:
                         topk_cnt += paths[key]
-                    print(f"{key} paths:\t{paths[key]}")
-                print()
+                    # print(f"{key} paths:\t{paths[key]}")
+                # print()
                 print(f"TOP {topk}:\t{topk_cnt}")
                 print()
 

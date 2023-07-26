@@ -11,7 +11,7 @@ ERR=$ROOT/trash/de/extract_func_log
 rm -r $ERR
 rm -r $SAVE_DE
 # decoms=(angr BinaryNinja Ghidra Hex-Rays RetDec)
-decoms=(Ghidra RetDec)
+decoms=(RetDec Ghidra Hex-Rays BinaryNinja)
 coms=(clang gcc)
 optis=(o0 o1 o2 o3 os)
 for dec in ${decoms[@]}

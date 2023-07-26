@@ -3,6 +3,7 @@ import sys
 sys.path.append('/home/eval/decompiler-eval/src/utils/exp_tree')
 import exp_tree
 import json
+import json_tools
 
 def func_acc(ir_json_file, c_json_file):
     """
@@ -137,4 +138,6 @@ def distance(ir_exp, c_exp):
     sum_dist = sum(dist) / all_sym
     return sum_dist
 
-
+def diff(ir_exp, c_exp):
+    json_diff = json_tools.diff(ir_exp, c_exp):
+    

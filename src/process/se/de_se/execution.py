@@ -1,8 +1,10 @@
 import sys
 import json
 from ctypes import *
+from func_timeout import func_set_timeout
 from json_to_exptree import load_from_json
 
+@func_set_timeout(15)
 def execute_function(dec_path, save_to, exp):
   paths = symbolic_execution(dec_path, exp)
   if paths is not None:
