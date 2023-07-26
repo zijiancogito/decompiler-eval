@@ -2,22 +2,22 @@
 
 ROOT=/home/eval/data/DSMITH
 echo "Execution decompiling results of DF-de1"
-DE_DIR_1=$ROOT/process/de
-DE_SE_DIR_1=$ROOT/se/de
-DE_SE_LOG_DIR_1=$ROOT/trash/se/de/exe_fail
+DE_DIR_1=$ROOT/process/de1
+DE_SE_DIR_1=$ROOT/se/de1
+DE_SE_LOG_DIR_1=$ROOT/trash/se/de1/exe_fail
 rm -r $DE_SE_DIR_1
 rm -r $DE_SE_LOG_DIR_1
 mkdir -p $DE_SE_DIR_1
 mkdir -p $DE_SE_LOG_DIR_1
-# decompilers=(Ghidra RetDec)
-decompilers=(Ghidra RetDec Hex-Rays BinaryNinja)
+decompilers=(Ghidra RetDec BinaryNinja Hex-Rays)
+# decompilers=(BinaryNinja)
 compilers=(clang gcc)
 optis=(o0 o1 o2 o3 os)
-for dec in ${decompilers[@]}
+for dec in ${decompilers[@]};
 do
-    for com in ${compilers[@]}
+    for com in ${compilers[@]};
     do
-        for opti in ${optis[@]}
+        for opti in ${optis[@]};
         do
             de_dir=$DE_DIR_1/$com/$opti/$dec
             se_dir=$DE_SE_DIR_1/$com/$opti/$dec

@@ -11,8 +11,8 @@ def execute_function(dec_path, save_to, exp):
     dump_to_file(save_to, paths)
     return False
   else:
-    with open(save_to, 'w') as f:
-      f.write("")
+    # with open(save_to, 'w') as f:
+    #   f.write("")
     return True
 
 def dump_to_file(save, paths):
