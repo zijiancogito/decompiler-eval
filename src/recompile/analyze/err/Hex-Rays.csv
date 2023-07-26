@@ -1,0 +1,18 @@
+address of overloaded,1
+conflicting types,127
+expected TOK,72
+member reference,6
+read-only ,11
+reference to,1
+subscript of pointer,1
+subscripted value,9
+too many/few,16
+unknown type name TOK,2
+use of undeclared identifier,815
+expression is,21
+incomplete type,4
+array type TOK,1
+using declaration,1
+TOK and TOK,1
+array subscript,1
+invalid operands,1
