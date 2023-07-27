@@ -2,6 +2,14 @@ import os
 import json
 import argparse
 
+def is_valid_path(p):
+    if p.strip() == "":
+        return False
+    for v in p.split('-'):
+        if v == '':
+            return False
+    return True
+
 def count_json(path):
     json_obj = None
     with open(path, 'r') as f:
@@ -16,7 +24,7 @@ def count_json(path):
     exps = json_obj["paths"]
     paths = []
     for k in list(exps.keys()):
-        if k != "":
+        if is_valid_path(k):
             paths.append(k)
     return len(paths)
 
