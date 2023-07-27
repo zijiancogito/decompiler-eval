@@ -42,14 +42,15 @@ def sample_all(ir_dir,
                compilers, 
                decompilers, 
                optimizations,
-               topk):
+               topk,
+               count):
     ir_set = valid_irs(ir_dir, optimizations, topk)
     dec_set = valid_des(dec_dir, compilers, optimizations, decompilers, topk)
     common_set = ir_set.intersection(dec_set)
     print(f"Valid IRs: {len(ir_set)}")
     print(f"Valid DECs: {len(dec_set)}")
     print(f"Valid Commons: {len(common_set)}")
-    sample_set = random.choices(list(common_set), k=500)
+    sample_set = random.choices(list(common_set), k=count)
     for opt in optimizations:
         ir_tar_sub = os.path.join(ir_tar, opt)
         if not os.path.exists(ir_tar_sub):
@@ -80,7 +81,7 @@ if __name__ == '__main__':
     parser.add_argument('-D', '--decompilers', nargs='+', help="Decompilers")
     parser.add_argument('-C', '--compilers', nargs='+', help="Compilers")
     parser.add_argument('-k', '--topk', type=int)
-
+    parser.add_argument('-n', '--count', type=int)
 
     args = parser.parse_args()
 
@@ -88,4 +89,5 @@ if __name__ == '__main__':
                args.compilers,
                args.decompilers,
                args.optimizations,
-               args.topk)
+               args.topk,
+               args.count)

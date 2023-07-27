@@ -1,6 +1,6 @@
 
 ROOT_DIR=/home/eval/data/DSMITH
-DE_DIR=$ROOT_DIR/se/de
+DE_DIR=$ROOT_DIR/se/de1
 
 DECOMPILERS="BinaryNinja Ghidra Hex-Rays RetDec"
 COMPILERS="clang gcc"
