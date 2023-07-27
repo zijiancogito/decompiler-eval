@@ -11,6 +11,7 @@ def execution_instruction(instruction, tmp_dict):
     if opcode == "br":
         pass
     if opcode == "switch":
+        # print(instruction)
         pass
     if opcode == "indirectbr":
         pass
@@ -218,8 +219,6 @@ def execution_instruction(instruction, tmp_dict):
         pass
     if opcode == "cleanuppad":
         pass
-
-
 
 def execution_callbr(instruction, tmp_dict):
     pattern_non_void = "(.*) = callbr .*"

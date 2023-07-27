@@ -53,6 +53,8 @@ def dump_to_file(save_to, paths, syms):
     
 @func_set_timeout(10)
 def symbolic_execution(function):
+  if "select" in str(function):
+    raise NotImplementedError
   blocks = {}
   labels = []
   for block in function.blocks:
@@ -80,9 +82,9 @@ def symbolic_execution(function):
     path_labels = []
     for idx, ver in enumerate(path):
       block = blocks[ver]
-      bb_inst = ir_parser.extract_bb_inst(block)
-      if bb_inst != None:
-        path_labels.append(bb_inst) 
+      bb_insts = ir_parser.extract_bb_inst(block)
+      if len(bb_insts) != 0:
+        path_labels.extend(bb_insts) 
       execution_block(block, path[idx - 1], tmp_dict)
       
     ret_var = ir_parser.find_return(blocks[cfg.exit])
@@ -115,10 +117,18 @@ def build_cfg(blocks):
     last_insn = None
     for insn in block.instructions:
       last_insn = insn
+    # print(last_insn)
     if last_insn.opcode == 'br':
       jump_to = ir_parser.parse_jump_instruction(last_insn)
       for addr in jump_to:
         cfg.cfg.add_edge(label, addr)
+    elif last_insn.opcode == 'switch':
+      dest_pat = r'label %([0-9]+)'
+      jump_to = [int(i) for i in re.findall(dest_pat, str(last_insn))]
+      for addr in jump_to:
+        cfg.cfg.add_edge(label, addr)
+    # print(jump_to)
+
   return cfg
 
 def test(ir_path):
@@ -129,10 +139,11 @@ def test(ir_path):
   
   for func in mod.functions:
     if func.name == 'func0':
-      symbolic_execution(func)
+      res, ins = symbolic_execution(func)
+      print(res)
 
 if __name__ == '__main__':
-  ir_path = "/home/eval/decompiler-eval/case/22.ll"
+  ir_path = "/home/eval/data/DSMITH/raw/ir/o3/657.ll"
   test(ir_path)
 
 

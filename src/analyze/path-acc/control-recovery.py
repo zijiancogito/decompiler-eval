@@ -40,11 +40,16 @@ def analyze_all(ir_dir, dec_dir, log_dir, compilers, decompilers, optimizations)
                         continue
                     
                     log_path = os.path.join(log_err_dir, path_process.change_ext(dec_file, 'csv', '.'))
-                    path_recall, path_precision, bb_recall, bb_precision = path_match.func_match(ir_path, dec_path, log_path)
-                    pr.append(path_recall)
-                    pp.append(path_precision)
-                    br.append(bb_recall)
-                    bp.append(bb_precision)
+                    flag, path_recall, path_precision, bb_recall, bb_precision = path_match.func_match(ir_path, dec_path, log_path)
+                    if flag == 0:
+                        if path_recall != -1:
+                            pr.append(path_recall)
+                        if path_precision != -1: 
+                            pp.append(path_precision)
+                        if bb_recall != -1:
+                            br.append(bb_recall)
+                        if bb_precision != -1:
+                            bp.append(bb_precision)
                     
                     log_line = f"{dec_file}\t{path_recall}\t{path_precision}\t{bb_recall}\t{bb_precision}"
                     logs.append(log_line)
@@ -59,8 +64,6 @@ def analyze_all(ir_dir, dec_dir, log_dir, compilers, decompilers, optimizations)
                 print("{0:12}".format(f"{pr_avg}/{pp_avg}/{br_avg}/{bp_avg}"), end='\t')
             print()
         print()
-                
-
                 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='path.py')

@@ -589,13 +589,25 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
                 // } else 
                 if (arg_type == "number_literal") {
                     std::string arg_cnt = get_content(arg, source);
-                    ret_value = std::to_string(std::stoi(arg_cnt));
+                    int base = 10;
+                    if (arg_cnt.find("0x") != std::string::npos) base = 16;
+                    ret_value = std::to_string(std::stoi(arg_cnt, nullptr, base));
+                    ret_type = "bb_num";
+                } else if (arg_type == "identifier") {
+                    Json::Value id = parse_expression(arg, source, var_map, changed_vars);
+                    if (id["type"] == "number_literal") {
+                        std::string num = id["value"].asString();
+                        int base = 10;
+                        if (num.find("0x") != std::string::npos) base = 16;
+                        ret_value = std::to_string(std::stoi(num, nullptr, base));
+                        ret_type = "bb_num";
+                    }
                 }
             }
             // if (is_input) ret_type = "input_num";
             // else if (is_bb) ret_type = "bb_num";
             // ret["type"] = ret_type;
-            ret["type"] = "bb_num";
+            ret["type"] = ret_type;
             ret["value"] = ret_value;
         } else if (func_name == "f_scanf_nop" && var_id_map.find(ts_node_start_byte(expression_node)) != var_id_map.end()) {
             ret["type"] = "input_symbol";
@@ -953,6 +965,7 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
     int output_num = 0;
 
     // parse statements in basic block
+    int bb_label_num = 0;
     for (int i = 0; i < nodes.size(); i ++ ) {
         TSNode node = nodes.at(i);
         std::string node_type = ts_node_type(node);
@@ -962,11 +975,15 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
         if (node_type == "switch_statement" || node_type == "case_statement")
             continue;
         if (ret["type"].asString() == "bb_num") {
-            if (cfg->first_bb == bb) 
-                label = "0";
-            else {
-                std::string bb_num = ret["value"].asString();
-                label += "-" + bb_num;
+            // if (cfg->first_bb == bb) 
+            //     label = "0";
+            std::string bb_label = ret["value"].asString();
+            if (bb_label == "0") {
+                label = bb_label;
+                bb_label_num += 1;
+            } else {
+                label += "-" + bb_label;
+                bb_label_num += 1 + bb_label.length();
             }
         }
         NodeList sub_nodes;
@@ -1098,8 +1115,7 @@ void symbolic_execution(CFG *cfg, CFGEdges *edge, std::unordered_map<CFGEdges*, 
     for (auto it = changed_vars.begin(); it != changed_vars.end(); it ++ ) {
         var_map.at((*it).first) = (*it).second;
     }
-    int pos = label.find_last_of("-");
-    if (pos != std::string::npos) label = label.substr(0, pos);
+    label = label.substr(0, label.length() - bb_label_num);
     visit.at(edge) = false;
 }
 

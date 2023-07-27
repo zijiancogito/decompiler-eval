@@ -35,6 +35,7 @@ def valid_des(de_dir, compilers, optimizations, decompilers, topk):
                     sets = sets.intersection(topk_set)
     return sets
 
+
 def sample_all(ir_dir,
                dec_dir, 
                ir_tar, 

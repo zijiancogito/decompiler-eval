@@ -80,16 +80,15 @@ def parse_jump_instruction(instruction):
     return findi
     
 def extract_bb_inst(block):
-    bb_inst = None
-    flag = False
+    # bb_inst = None
+    bb_insts = []
     for instruction in block.instructions:
         if instruction.opcode == 'call':
             func_name, plist, _ = parse_call(str(instruction).strip())
             if func_name == "printf" or func_name == "__isoc99_printf":
-                flag = True
-                bb_inst = plist[-1]
-                break
-    return bb_inst
+                bb_insts.append(plist[-1])
+                # break
+    return bb_insts
 
 def parse_call(instruction):
     pattern = "([\S]+)*( = )*[\s\S]*call [\s\S]*@([^(]+)[^\(]*\(([\s\S]*)\)"

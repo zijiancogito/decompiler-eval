@@ -5,6 +5,8 @@ import os
 import json
 
 def func_match(ir_json_file, c_json_file, log_path):
+    # print(ir_json_file)
+    # print(c_json_file)
     ir_json = None
     with open(ir_json_file, 'r') as f:
         try:
@@ -18,8 +20,9 @@ def func_match(ir_json_file, c_json_file, log_path):
             c_json = json.load(f)
         except:
             c_json = None
+    # assert c_json, f"Load C JSON {c_json_file} error."
     if ir_json == None or c_json == None:
-        return None, None, None, None
+        return 1, None, None, None, None
     
     matched_paths = 0
     unmatched_paths = []
@@ -35,19 +38,32 @@ def func_match(ir_json_file, c_json_file, log_path):
             unmatched_paths.append(path)
     
     uncover_bb = list(all_bb_ir - bb_covered)
-    log.log_line2file(unmatched_paths + uncover_bb, log_path)
+    log.log_list2file(unmatched_paths + uncover_bb, log_path)
     all_bb_c = set()
     for path in c_json["paths"]:
         bbs = parse_path(path)
         all_bb_c = all_bb_c.union(bbs)
+    
+    if len(c_json["paths"]) == 0 or len(all_bb_c) == 0:
+        return 1, None, None, None, None
+    
+    assert len(ir_json["paths"]) != 0, ir_json_file
 
     pcr = matched_paths / len(ir_json["paths"])
-    pcp = matched_paths / len(c_json["paths"])
+    pcp = matched_paths / len(c_json["paths"]) 
     bcr = len(bb_covered) / len(all_bb_ir)
     bcp = len(bb_covered) / len(all_bb_c)
-    return pcr, pcp, bcr, bcp
+    return 0, pcr, pcp, bcr, bcp
 
 def parse_path(path):
+    if path.strip() == '':
+        return set()
     tmp = path.split('-')
-    bbs = [int(i) for i in tmp]
+    bbs = []
+    for i in  tmp:
+        try:
+            bbs.append(int(i))
+        except:
+            continue
+    # bbs = [int(i) for i in tmp]
     return set(bbs)

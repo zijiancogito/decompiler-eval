@@ -23,7 +23,7 @@ def get_topk(d, topk):
     for f in files:
         path = os.path.join(d, f)
         cnt = count_json(path)
-        if cnt != None and cnt <= topk:
+        if cnt != None and cnt <= topk and cnt != 0:
             rets.append(f)
     return set(rets)
 
@@ -35,7 +35,7 @@ def count_irs(root_dir, optimizations, topk):
         for ir_file in ir_files:
             ir_path = os.path.join(sub_dir, ir_file)
             cnt = count_json(ir_path)
-            if cnt != None:
+            if cnt != None and cnt != 0:
                 if cnt in paths:
                     paths[cnt] += 1
                 else:
@@ -58,10 +58,13 @@ def count_decs(root_dir, optimizations, compilers, decompilers, topk):
                 sub_dir = os.path.join(root_dir, compiler, opt, decompiler)
                 ir_files = os.listdir(sub_dir)
                 paths = {}
+                null_cnt = 0
                 for ir_file in ir_files:
                     ir_path = os.path.join(sub_dir, ir_file)
                     cnt = count_json(ir_path)
-                    if cnt != None:
+                    if cnt == 0:
+                        null_cnt += 1
+                    if cnt != None and cnt != 0:
                         if cnt in paths:
                             paths[cnt] += 1
                         else:
@@ -75,7 +78,7 @@ def count_decs(root_dir, optimizations, compilers, decompilers, topk):
                         topk_cnt += paths[key]
                     # print(f"{key} paths:\t{paths[key]}")
                 # print()
-                print(f"TOP {topk}:\t{topk_cnt}")
+                print(f"TOP {topk}:\t{topk_cnt}\t NULL:\t{null_cnt}")
                 print()
 
 if __name__ == '__main__':
