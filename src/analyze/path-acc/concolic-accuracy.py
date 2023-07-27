@@ -27,8 +27,10 @@ def analyze_all(ir_dir, de_dir, log_dir, compilers, decompilers, optimizations):
                 logs = []
                 ps, rs = [], []
                 log_err_path_dir = os.path.join(log_sub_dir, decompiler)
+                if not os.path.exists(log_err_path_dir):
+                    os.makedirs(log_err_path_dir)
                 for dec_file in dec_files:
-                    dec_path = os.path.join(de_dir, compiler, opt_level, decompiler)
+                    dec_path = os.path.join(de_dir, compiler, opt_level, decompiler, dec_file)
                     ir_path = os.path.join(ir_dir, opt_level, dec_file)
                     if not os.path.exists(ir_path):
                         continue

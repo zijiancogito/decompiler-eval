@@ -25,6 +25,8 @@ def analyze_all(ir_dir, dec_dir, log_dir, compilers, optimizations, decompilers)
             for decompiler in decompilers:
                 dec_sub_dir = os.path.join(dec_dir, compiler, opt_level, decompiler)
                 log_err_dir = os.path.join(log_sub_dir, decompiler)
+                if not os.path.exists(log_err_dir):
+                    os.makedirs(log_err_dir)
                 dec_files = os.listdir(dec_sub_dir)
                 logs = []
                 avgs, sums = [], []
@@ -60,5 +62,5 @@ if __name__ == '__main__':
     parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
 
     args = parser.parse_args()
-    analyze_all(args.ir, args.dec, args.log, args.compilers, args.decompilers, args.optimizations)
+    analyze_all(args.ir, args.dec, args.log, args.compilers, args.optimizations, args.decompilers)
 

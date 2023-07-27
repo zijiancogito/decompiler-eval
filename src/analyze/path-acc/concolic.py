@@ -22,7 +22,7 @@ def func_acc(ir_json_file, c_json_file, log_path):
         except:
             c_json = None
     if ir_json == None or c_json == None:
-        return None
+        return None, None
     
     matched_paths = 0
     wrong_paths = []
@@ -40,7 +40,7 @@ def func_acc(ir_json_file, c_json_file, log_path):
                 matched_paths += 1
             else:
                 wrong_paths.append(path)
-    log.log_line2file(wrong_paths, log_path)
+    log.log_list2file(wrong_paths, log_path)
     recall = round(matched_paths / len(ir_json["paths"]), 2) if len(ir_json["paths"]) != 0 else 0
     precision = round(matched_paths / len(c_json["paths"]), 2) if len(c_json["paths"]) != 0 else 0
 
@@ -52,7 +52,7 @@ def sample(exp_ir, exp_c, symbols_ir, symbols_c):
     symbols_only_in_ir = set(symbols_ir) - common_symbols
     symbols_only_in_c = set(symbols_c) - common_symbols
     
-    st_ir, st_c = {}
+    st_ir, st_c = {}, {}
     for i in range(100):
         for sym in common_symbols:
             tmp = random.randint(1, 10)

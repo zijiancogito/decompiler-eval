@@ -4,6 +4,7 @@ from func_timeout import func_set_timeout
 import sys
 sys.path.append('/home/eval/decompiler-eval/src/utils/functools')
 from list_operation import list_lshift
+import copy
 
 class CFG():
     def __init__(self):
@@ -35,7 +36,6 @@ class CFG():
             else:
                 start = c[0]
                 end = c[-1]
-                succ = c[1]
                 self.norm_cfg.remove_edge(end, start)
                 for s in self.norm_cfg.successors(start):
                     if s == start:
@@ -46,7 +46,7 @@ class CFG():
             cycles_stack = []
             for tmp in cycles:
                 list_lshift(tmp)
-                cycles_stack.append(tmp)
+                cycles_stack.append(copy.deepcopy(tmp))
     
     def get_all_path(self):
         if len(self.cfg.nodes) == 1:
@@ -59,7 +59,7 @@ class CFG():
         for p in paths:
             # TODO: 对路径里面，不在原始CFG图中的边，寻找一条在原始CFG上的两个节点的最简路径，加入进去，确保路径上的相邻两个节点在原始CFG中都是可达的
             if len(p) <= 1:
-                new_paths.append(p)
+                new_paths.append(copy.deepcopy(p))
                 continue
             sub_path_dict = {}
             key_idx = 0
@@ -80,7 +80,7 @@ class CFG():
             graph_paths = nx.all_simple_paths(p_graph, self.entry, self.exit)
             for gp in graph_paths:
                 if len(gp) <= 1:
-                    new_paths.append(gp)
+                    new_paths.append(copy.deepcopy(gp))
                     continue
                 np =[]
                 for v in gp:
@@ -88,7 +88,10 @@ class CFG():
                         np.extend(sub_path_dict[v])
                     else:
                         np.append(v)
-                new_paths.append(np)
+                new_paths.append(copy.deepcopy(np))
+        # print()
+        # for np in new_paths:
+            # print(np)
         return new_paths
 
     def build_cfg(self, edges):

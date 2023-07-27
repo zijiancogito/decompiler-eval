@@ -5,8 +5,6 @@ import os
 import json
 
 def func_match(ir_json_file, c_json_file, log_path):
-    # print(ir_json_file)
-    # print(c_json_file)
     ir_json = None
     with open(ir_json_file, 'r') as f:
         try:
@@ -45,6 +43,7 @@ def func_match(ir_json_file, c_json_file, log_path):
         all_bb_c = all_bb_c.union(bbs)
     
     if len(c_json["paths"]) == 0 or len(all_bb_c) == 0:
+        print(c_json_file)
         return 1, None, None, None, None
     
     assert len(ir_json["paths"]) != 0, ir_json_file
@@ -56,8 +55,8 @@ def func_match(ir_json_file, c_json_file, log_path):
     return 0, pcr, pcp, bcr, bcp
 
 def parse_path(path):
-    if path.strip() == '':
-        return set()
+    # if path.strip() == '':
+        # return set()
     tmp = path.split('-')
     bbs = []
     for i in  tmp:

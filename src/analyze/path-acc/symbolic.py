@@ -29,6 +29,7 @@ def func_dist(ir_json_file, c_json_file, log_path):
         if path not in c_json["paths"]:
             distance_paths.append(1)
             unmatched_paths.append(path)
+            continue
         exp_ir = ir_json["paths"][path]
         exp_c = c_json["paths"][path]
         sum_distance = distance(exp_ir, exp_c)
@@ -66,5 +67,5 @@ def distance(exp_a, exp_b):
             
     if all_sym == 0:
         return 1
-    sum_dist = sum(dist) / all_sym
+    sum_dist = round(dist / all_sym, 2)
     return sum_dist

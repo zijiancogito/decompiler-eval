@@ -579,6 +579,7 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             std::string ret_value = "printf";
             int arg_num = ts_node_child_count(arg_list);
             bool is_bb = false, is_input = false;
+            bool is_num_arg = true;
             for (int i = 0; i < arg_num; i ++ ) {
                 TSNode arg = ts_node_child(arg_list, i);
                 std::string arg_type = ts_node_type(arg);
@@ -587,13 +588,15 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
                 //     if (arg_cnt.find("Input") != std::string::npos) is_input = true;
                 //     else if (arg_cnt.find("BB") != std::string::npos) is_bb = true;
                 // } else 
-                if (arg_type == "number_literal") {
+                if (arg_type == "number_literal" && is_num_arg) {
+                    is_num_arg = false;
                     std::string arg_cnt = get_content(arg, source);
                     int base = 10;
                     if (arg_cnt.find("0x") != std::string::npos) base = 16;
                     ret_value = std::to_string(std::stoi(arg_cnt, nullptr, base));
                     ret_type = "bb_num";
-                } else if (arg_type == "identifier") {
+                } else if (arg_type == "identifier" && is_num_arg) {
+                    is_num_arg = false;
                     Json::Value id = parse_expression(arg, source, var_map, changed_vars);
                     if (id["type"] == "number_literal") {
                         std::string num = id["value"].asString();

@@ -78,10 +78,13 @@ def symbolic_execution(function):
   ir_parser.find_inputs(blocks[cfg.entry], init_dict, in_symbols_table)
   in_symbols_list = list(in_symbols_table.keys())
   for path in paths:
+    # print(path)
     tmp_dict = copy.deepcopy(init_dict)
     path_labels = []
     for idx, ver in enumerate(path):
       block = blocks[ver]
+      # import pdb
+      # pdb.set_trace()
       bb_insts = ir_parser.extract_bb_inst(block)
       if len(bb_insts) != 0:
         path_labels.extend(bb_insts) 
@@ -92,7 +95,8 @@ def symbolic_execution(function):
     if ret_var != None and ret_var in tmp_dict:
       ret_value = tmp_dict[ret_var]
       # print(exptree_to_json(ret_value))
-    exe_results['-'.join(path_labels)] = copy.deepcopy(ret_value)
+      print(path_labels)
+      exe_results['-'.join(path_labels)] = copy.deepcopy(ret_value)
     
   return exe_results, in_symbols_list
       
@@ -143,7 +147,7 @@ def test(ir_path):
       print(res)
 
 if __name__ == '__main__':
-  ir_path = "/home/eval/data/DSMITH/raw/ir/o3/657.ll"
+  ir_path = "/home/eval/data/DSMITH/raw/ir/o0/722.ll"
   test(ir_path)
 
 

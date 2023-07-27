@@ -211,6 +211,51 @@ def summarize_errs_for_decompiler(err_log_dir, msg_log_dir, decompilers):
         log.log_dict2file(msgs_without_tok, msgs_without_tok_path)
         log.log_dict2file(msgs_with_tok, msgs_with_tok_path)
         log.log_dict2file(token_types, token_types_path)
+
+def get_err_type(err_msg: str):
+    tokens = re.findall(r"\'([^\']+)\'", err_msg)
+    msg_without_tok = err_msg
+    for tok in tokens:
+        msg_without_tok = msg_without_tok.replace(f"'{tok}'", 'TOK')
+
+    return msg_without_tok
+
+def class_errs(path):
+    errs_dict = {}
+    with open(path, 'r') as f:
+        msgs = f.readlines()
+        for msg in tqdm(msgs):
+            err_type = get_err_type(msg.strip())
+            if err_type in errs_dict:
+                errs_dict[err_type].append(msg)
+            else:
+                errs_dict[err_type] = [msg]
+        
+    # for k in errs_dict:
+        # errs_dict[k] = list(set(errs_dict[k]))
+    return errs_dict
+
+def class_errs_for_decompiler(raw_msg_dir, save_dir, decompilers):
+    for decompiler in decompilers:
+        path = os.path.join(raw_msg_dir, f"raw-compile-err-{decompiler}.csv")
+        errs_dict = class_errs(path)
+        save_sub_dir = os.path.join(save_dir, decompiler)
+        if not os.path.exists(save_sub_dir):
+            os.makedirs(save_sub_dir)
+
+        err_tps = list(errs_dict.keys())
+        err_tps.sort()
+
+        list_path = os.path.join(save_sub_dir, "errs-list.log")
+        with open(list_path, 'w') as lf:
+            lf.writelines([f"{l}\n" for l in err_tps])
+
+        for idx, err_tp in enumerate(err_tps):
+            raw_err_path = os.path.join(save_sub_dir, f"err-{idx}.log")
+            with open(raw_err_path, 'w') as f:
+                for l in list(set(errs_dict[err_tp])):
+                    f.write(l)
+                    f.write('\n')
         
 def summarize_errs_for_each_src(err_log_dir, msg_log_dir, compilers, optimizations, decompilers):
     for decompiler in decompilers:
@@ -277,7 +322,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-e', '--err-msg-dir', type=str, help='dir of DEC')
     parser.add_argument('-s', '--msg-save-dir', type=str, help='log dir')
-    parser.add_argument('-o', '--option', choices=['all', 'file', 'debug', 'count', 'summarize', 'reverse'], help='')
+    parser.add_argument('-o', '--option', choices=['all', 'file', 'debug', 'count', 'summarize', 'reverse', 'class'], help='')
     parser.add_argument('-D', '--decompilers', nargs='+', help='log dir')
     parser.add_argument('-C', '--compilers', nargs='+', help='Compilers')
     parser.add_argument('-O', '--optimizations', nargs='+', help='Optimizations')
@@ -296,3 +341,5 @@ if __name__ == '__main__':
         summarize_all_errs(args.err_msg_dir, args.msg_save_dir, args.decompilers)
     elif args.option == 'reverse':
         list_files_for_each_err_type(args.err_msg_dir, args.msg_save_dir, args.compilers, args.optimizations, args.decompilers)
+    elif args.option == 'class':
+        class_errs_for_decompiler(args.err_msg_dir, args.msg_save_dir, args.decompilers)

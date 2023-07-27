@@ -4,9 +4,9 @@ COMPILERS="clang gcc"
 DECOMPILERS="BinaryNinja Ghidra Hex-Rays RetDec"
 OPTIMIZATIONS="o0 o1 o2 o3 os"
 
-ROOT_DIR=/home/eval/data/DSMITH/se
+ROOT_DIR=/home/eval/data/DSMITH/se-sample
 IR_DIR=$ROOT_DIR/ir
-DEC_DIR=$ROOT_DIR/de
+DEC_DIR=$ROOT_DIR/de1
 
 LOG_DIR=/home/eval/data/DSMITH/analyze/symbolic
 rm -r $LOG_DIR

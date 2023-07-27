@@ -14,7 +14,10 @@ def count_json(path):
         return None
 
     exps = json_obj["paths"]
-    paths = list(exps.keys())
+    paths = []
+    for k in list(exps.keys()):
+        if k != "":
+            paths.append(k)
     return len(paths)
 
 def get_topk(d, topk):
@@ -32,9 +35,12 @@ def count_irs(root_dir, optimizations, topk):
         sub_dir = os.path.join(root_dir, opt)
         ir_files = os.listdir(sub_dir)
         paths = {}
+        null_cnt = 0
         for ir_file in ir_files:
             ir_path = os.path.join(sub_dir, ir_file)
             cnt = count_json(ir_path)
+            if cnt == 0:
+                null_cnt += 1
             if cnt != None and cnt != 0:
                 if cnt in paths:
                     paths[cnt] += 1
@@ -48,7 +54,7 @@ def count_irs(root_dir, optimizations, topk):
             if key <= topk:
                 topk_cnt += paths[key]
             # print(f"{key} paths:\t{paths[key]}")
-        print(f"TOP {topk}:\t{topk_cnt}")
+        print(f"TOP {topk}:\t{topk_cnt}\t NULL:\t{null_cnt}")
         print()
 
 def count_decs(root_dir, optimizations, compilers, decompilers, topk):
