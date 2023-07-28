@@ -5,7 +5,7 @@ DE_DIR=/home/eval/data/POJ/process/de
 SRC_DIR=/home/eval/data/POJ/raw/src
 
 COMPILERS="clang gcc"
-DECOMPILERS="angr BinaryNinja Ghidra Hex-Rays RetDec"
+DECOMPILERS="BinaryNinja Ghidra Hex-Rays RetDec"
 OPTIMIZATIONS="o0 o1 o2 o3 os"
 FUNC_FILTER=""
 

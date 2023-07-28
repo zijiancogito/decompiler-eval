@@ -577,10 +577,10 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
             TSNode arg_list = ts_node_child_by_field_name(expression_node, "arguments", strlen("arguments"));
             std::string ret_type = "call_expression";
             std::string ret_value = "printf";
-            int arg_num = ts_node_child_count(arg_list);
+            int args_num = ts_node_child_count(arg_list);
             bool is_bb = false, is_input = false;
-            bool is_num_arg = true;
-            for (int i = 0; i < arg_num; i ++ ) {
+            int arg_num = 0;
+            for (int i = 0; i < args_num; i ++ ) {
                 TSNode arg = ts_node_child(arg_list, i);
                 std::string arg_type = ts_node_type(arg);
                 // if (arg_type == "string_literal") {
@@ -588,22 +588,26 @@ Json::Value parse_expression(TSNode expression_node, const char* source, std::un
                 //     if (arg_cnt.find("Input") != std::string::npos) is_input = true;
                 //     else if (arg_cnt.find("BB") != std::string::npos) is_bb = true;
                 // } else 
-                if (arg_type == "number_literal" && is_num_arg) {
-                    is_num_arg = false;
-                    std::string arg_cnt = get_content(arg, source);
-                    int base = 10;
-                    if (arg_cnt.find("0x") != std::string::npos) base = 16;
-                    ret_value = std::to_string(std::stoi(arg_cnt, nullptr, base));
-                    ret_type = "bb_num";
-                } else if (arg_type == "identifier" && is_num_arg) {
-                    is_num_arg = false;
-                    Json::Value id = parse_expression(arg, source, var_map, changed_vars);
-                    if (id["type"] == "number_literal") {
-                        std::string num = id["value"].asString();
+                if (arg_type != "(" && arg_type != "," && arg_type != ")") {
+                    arg_num ++ ;
+                    if ((func_name == "__printf_chk" && arg_num != 3) || (func_name != "__printf_chk" && arg_num != 2)) {
+                        continue;
+                    }
+                    if (arg_type == "number_literal") {
+                        std::string arg_cnt = get_content(arg, source);
                         int base = 10;
-                        if (num.find("0x") != std::string::npos) base = 16;
-                        ret_value = std::to_string(std::stoi(num, nullptr, base));
+                        if (arg_cnt.find("0x") != std::string::npos) base = 16;
+                        ret_value = std::to_string(std::stoi(arg_cnt, nullptr, base));
                         ret_type = "bb_num";
+                    } else if (arg_type == "identifier") {
+                        Json::Value id = parse_expression(arg, source, var_map, changed_vars);
+                        if (id["type"] == "number_literal") {
+                            std::string num = id["value"].asString();
+                            int base = 10;
+                            if (num.find("0x") != std::string::npos) base = 16;
+                            ret_value = std::to_string(std::stoi(num, nullptr, base));
+                            ret_type = "bb_num";
+                        }
                     }
                 }
             }

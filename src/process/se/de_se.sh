@@ -5,13 +5,13 @@ echo "Execution decompiling results of DF-de1"
 DE_DIR_1=$ROOT/process/de1
 DE_SE_DIR_1=$ROOT/se/de1
 DE_SE_LOG_DIR_1=$ROOT/trash/se/de1/exe_fail
-rm -r $DE_SE_DIR_1
-rm -r $DE_SE_LOG_DIR_1
-mkdir -p $DE_SE_DIR_1
-mkdir -p $DE_SE_LOG_DIR_1
+# rm -r $DE_SE_DIR_1
+# rm -r $DE_SE_LOG_DIR_1
+# mkdir -p $DE_SE_DIR_1
+# mkdir -p $DE_SE_LOG_DIR_1
 decompilers=(Ghidra RetDec BinaryNinja Hex-Rays)
 # decompilers=(BinaryNinja)
-compilers=(clang gcc)
+compilers=(gcc)
 optis=(o0 o1 o2 o3 os)
 for dec in ${decompilers[@]};
 do

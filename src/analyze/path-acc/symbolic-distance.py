@@ -12,10 +12,10 @@ def analyze_all(ir_dir, dec_dir, log_dir, compilers, optimizations, decompilers)
     for compiler in compilers:
         print(f"{'-'*30}{'{0:5}'.format(f'{compiler}')}{'-'*30}")
         print("{0:15}".format("Optimization"), end='\t')
-        print("{0:12}".format("|BinaryNinja"), end='\t')
-        print("{0:12}".format("|Ghidra"), end='\t')
-        print("{0:12}".format("|Hex-Rays"), end='\t')
-        print("{0:12}".format("|RetDec"))
+        print("{0:20}".format("|BinaryNinja"), end='\t')
+        print("{0:20}".format("|Ghidra"), end='\t')
+        print("{0:20}".format("|Hex-Rays"), end='\t')
+        print("{0:20}".format("|RetDec"))
         for opt_level in optimizations:
             log_sub_dir = os.path.join(log_dir, compiler, opt_level)
             if not os.path.exists(log_sub_dir):
@@ -48,7 +48,7 @@ def analyze_all(ir_dir, dec_dir, log_dir, compilers, optimizations, decompilers)
                 
                 avg_avg = round(np.mean(avgs), 2) if len(avgs) != 0 else 0.0
                 sum_avg = round(np.mean(sums), 2) if len(sums) != 0 else 0.0
-                print("{0:12}".format(f"{avg_avg}/{sum_avg}"), end='\t')
+                print("{0:20}".format(f"{avg_avg}/{sum_avg}"), end='\t')
             print()
         print()
 

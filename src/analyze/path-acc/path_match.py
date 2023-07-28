@@ -5,7 +5,7 @@ import os
 import json
 
 def func_match(ir_json_file, c_json_file, log_path):
-    print(c_json_file)
+    # print(c_json_file)
     ir_json = None
     with open(ir_json_file, 'r') as f:
         try:

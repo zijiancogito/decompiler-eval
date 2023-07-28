@@ -48,6 +48,8 @@ def analyze_all(compilers, decompilers, optimizations, dec_dir, src_dir, ir_dir,
                 for dec_file in dec_files:
                     dec_path = os.path.join(dec_dir, compiler, opt_level, decompiler, dec_file)
                     ir_path = os.path.join(ir_dir, opt_level, f"{dec_file.split('.')[0]}.ll")
+                    if not os.path.exists(ir_path):
+                        continue
                     src_path = os.path.join(src_dir, f"{dec_file.split('.')[0]}.c")
                     dec_src = dec_vs_src(dec_path, src_path, func_filter)
                     dec_ir = dec_vs_ir(dec_path, ir_path, func_filter)
