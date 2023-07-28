@@ -8,6 +8,59 @@ import json
 
 import numpy as np
 
+def bb_acc(ir_json_file, c_json_file, log_path):
+    ir_json = None
+    with open(ir_json_file, 'r') as f:
+        try:
+            ir_json = json.load(f)
+        except:
+            ir_json = None
+    c_json = None
+    with open(c_json_file, 'r') as f:
+        try:
+            c_json = json.load(f)
+        except:
+            c_json = None
+    if ir_json == None or c_json == None:
+        return None, None
+    
+    matched_bbs = []
+    all_bbs_ir = []
+    all_bbs_c = []
+    for path in ir_json["paths"]:
+        bbs = path.split('-')
+        all_bbs_ir.extend(bbs)
+    for path in c_json["paths"]:
+        bbs = path.split('-')
+        all_bbs_c.extend(bbs)    
+    all_bbs_c = list(set(all_bbs_c))
+    all_bbs_ir = list(set(all_bbs_ir))
+    matched_paths = []
+    for path in ir_json["paths"]:
+        if path not in c_json["paths"]:
+            continue
+        exp_ir = exp_tree.json_to_exptree(ir_json["paths"][path])
+        exp_c = exp_tree.json_to_exptree(c_json["paths"][path])
+        pass_rate = sample(exp_ir, exp_c, ir_json["symbols"], c_json["symbols"])
+        if pass_rate > 0.9:
+            matched_paths.append(path)
+    for path in matched_paths:
+        bbs = path.split('-')
+        matched_bbs.extend(bbs)
+    matched_bbs = list(set(matched_bbs))
+   #  all_bbs_ir.sort()
+    # all_bbs_c.sort()
+    # matched_bbs.sort()
+    # print(all_bbs_ir)
+    # print(all_bbs_c)
+    # print(matched_bbs)
+    # import pdb
+    # pdb.set_trace()
+    recall = round(len(matched_bbs) / len(all_bbs_ir), 2) 
+    precision = round(len(matched_bbs) / len(all_bbs_c), 2)
+
+    return precision, recall
+
 def func_acc(ir_json_file, c_json_file, log_path):
     ir_json = None
     with open(ir_json_file, 'r') as f:

@@ -280,9 +280,9 @@ def execution_add(instruction, tmp_dict):
             if op2 in tmp_dict:
                 exp.add_child(tmp_dict[op2])
             else:
-                child1 = ExpTree('operator1', op2)
+                child1 = ExpTree('operator1', str(op2))
                 exp.add_child(child1)
-            child2 = ExpTree('operator2', -op1)
+            child2 = ExpTree('operator2', str(-op1))
             exp.add_child(child2)
             return result, exp
     except:
@@ -293,9 +293,9 @@ def execution_add(instruction, tmp_dict):
                 if op1 in tmp_dict:
                     exp.add_child(tmp_dict[op1])
                 else:
-                    child1 = ExpTree('operator1', op1)
+                    child1 = ExpTree('operator1', str(op1))
                     exp.add_child(child1)
-                child2 = ExpTree('operator2', -op2)
+                child2 = ExpTree('operator2', str(-op2))
                 exp.add_child(child2)
                 return result, exp
         except:
@@ -305,12 +305,12 @@ def execution_add(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -329,9 +329,9 @@ def execution_fadd(instruction, tmp_dict):
             if op2 in tmp_dict:
                 exp.add_child(tmp_dict[op2])
             else:
-                child1 = ExpTree('operator1', op2)
+                child1 = ExpTree('operator1', str(op2))
                 exp.add_child(child1)
-            child2 = ExpTree('operator2', -op1)
+            child2 = ExpTree('operator2', str(-op1))
             exp.add_child(child2)
             return result, exp
     except:
@@ -342,9 +342,9 @@ def execution_fadd(instruction, tmp_dict):
                 if op1 in tmp_dict:
                     exp.add_child(tmp_dict[op1])
                 else:
-                    child1 = ExpTree('operator1', op1)
+                    child1 = ExpTree('operator1', str(op1))
                     exp.add_child(child1)
-                child2 = ExpTree('operator2', -op2)
+                child2 = ExpTree('operator2', str(-op2))
                 return result, exp
         except:
             pass
@@ -353,12 +353,12 @@ def execution_fadd(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
     
@@ -375,12 +375,12 @@ def execution_sub(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2  = ExpTree('operator2', op2)
+        child2  = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -397,12 +397,12 @@ def execution_fsub(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -419,12 +419,12 @@ def execution_mul(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -441,12 +441,12 @@ def execution_fmul(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -463,12 +463,12 @@ def execution_udiv(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -485,12 +485,12 @@ def execution_sdiv(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -507,12 +507,12 @@ def execution_fdiv(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -529,12 +529,12 @@ def execution_urem(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -551,12 +551,12 @@ def execution_srem(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -573,12 +573,12 @@ def execution_frem(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -595,12 +595,12 @@ def execution_shl(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -617,12 +617,12 @@ def execution_lshr(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -639,12 +639,12 @@ def execution_ashr(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -657,16 +657,16 @@ def execution_and(instruction, tmp_dict):
     op1 = match.group(2)
     op2 = match.group(3)
 
-    exp = ExpTree('and', '*')
+    exp = ExpTree('and', '&')
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -683,12 +683,12 @@ def execution_or(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -705,12 +705,12 @@ def execution_xor(instruction, tmp_dict):
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        child1 = ExpTree('operator1', op1)
+        child1 = ExpTree('operator1', str(op1))
         exp.add_child(child1)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        child2 = ExpTree('operator2', op2)
+        child2 = ExpTree('operator2', str(op2))
         exp.add_child(child2)
     return result, exp
 
@@ -728,14 +728,14 @@ def execution_extractelement(instruction, tmp_dict):
     if op1 in tmp_dict:
         base = tmp_dict[op1]
     else:
-        base = ExpTree('pointer', op1)
+        base = ExpTree('pointer', str(op1))
     if op2 in tmp_dict:
         index = tmp_dict[op2]
     else:
         if op2 == '0':
             index = int(op2)
         else:
-            index = ExpTree('index', op2)
+            index = ExpTree('index', str(op2))
     if index == 0:
         exp.add_child(add)
     else:
@@ -751,19 +751,19 @@ def execution_insertelement(instruction, tmp_dict):
     if not match:
         return None
     result = match.group(1)
-    tmp1 = match.group(2)
-    tmp2 = match.group(3)
+    op1 = match.group(2)
+    op2 = match.group(3)
 
     exp = ExpTree('insertelement', '[]')
     if op1 in tmp_dict:
         exp.add_child(tmp_dict[op1])
     else:
-        op1_tree = ExpTree('pointer', op1)
+        op1_tree = ExpTree('pointer', str(op1))
         exp.add_child(op1_tree)
     if op2 in tmp_dict:
         exp.add_child(tmp_dict[op2])
     else:
-        op2_tree = ExpTree('index', op2)
+        op2_tree = ExpTree('index', str(op2))
         exp.add_child(op2_tree)
     return result, exp
 
@@ -1064,7 +1064,7 @@ def execution_phi(instruction, tmp_dict, pre_block):
     else:
         try:
             tmp = int(tmp)
-            exp = ExpTree('value', tmp)
+            exp = ExpTree('value', str(tmp))
         except:
             return None
     return result, exp

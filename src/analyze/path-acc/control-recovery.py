@@ -36,8 +36,8 @@ def analyze_all(ir_dir, dec_dir, log_dir, compilers, decompilers, optimizations)
                 for dec_file in dec_files:
                     dec_path = os.path.join(dec_sub_dir, dec_file)
                     ir_path = os.path.join(ir_dir, opt_level, dec_file)
-                    if not os.path.exists(ir_path):
-                        continue
+                    # if not os.path.exists(ir_path):
+                        # continue
                     
                     log_path = os.path.join(log_err_dir, path_process.change_ext(dec_file, 'csv', '.'))
                     flag, path_recall, path_precision, bb_recall, bb_precision = path_match.func_match(ir_path, dec_path, log_path)

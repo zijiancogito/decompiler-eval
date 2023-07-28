@@ -7,32 +7,35 @@ import sys
 sys.path.append('.')
 from count_pathes import get_topk
 # import count_pathes 
+import copy
 
 
 def valid_irs(ir_dir, optimizations, topk):
     sets = set()
-    for opt_level in optimizations:
+    for idx, opt_level in enumerate(optimizations):
         ir_sub_dir = os.path.join(ir_dir, opt_level)
         topk_set = get_topk(ir_sub_dir, topk)
 
-        if len(sets) == 0:
-            sets = set(topk_set)
+        if idx == 0:
+            sets = sets.union(copy.deepcopy(topk_set))
         else:
-            sets = sets.intersection(topk_set)
+            sets = sets.intersection(copy.deepcopy(topk_set))
     return sets
 
 def valid_des(de_dir, compilers, optimizations, decompilers, topk):
     sets = set()
+    flag = 0
     for compiler in compilers:
         for opt in optimizations:
             for decompiler in decompilers:
                 dec_sub_dir = os.path.join(de_dir, compiler, opt, decompiler)
                 topk_set = get_topk(dec_sub_dir, topk)
 
-                if len(sets) == 0:
-                    sets = set(topk_set)
+                if flag == 0:
+                    sets = sets.union(copy.deepcopy(topk_set))
+                    flag = 1
                 else:
-                    sets = sets.intersection(topk_set)
+                    sets = sets.intersection(copy.deepcopy(topk_set))
     return sets
 
 
@@ -51,7 +54,12 @@ def sample_all(ir_dir,
     print(f"Valid IRs: {len(ir_set)}")
     print(f"Valid DECs: {len(dec_set)}")
     print(f"Valid Commons: {len(common_set)}")
-    sample_set = random.choices(list(common_set), k=count)
+    for item in common_set:
+        assert item in ir_set, "Not in IR"
+        assert item in dec_set, "Not in DEC"
+    sample_set = random.sample(list(common_set), k=count)
+    print(f"Sampled SET: {len(sample_set)}")
+        
     for opt in optimizations:
         ir_tar_sub = os.path.join(ir_tar, opt)
         if not os.path.exists(ir_tar_sub):
@@ -67,7 +75,7 @@ def sample_all(ir_dir,
                 dec_tar_sub = os.path.join(dec_tar, compiler, opt, decompiler)
                 if not os.path.exists(dec_tar_sub):
                     os.makedirs(dec_tar_sub)
-                for sample in common_set:
+                for sample in sample_set:
                     src_path = os.path.join(dec_dir, compiler, opt, decompiler, sample)
                     dst_path = os.path.join(dec_tar_sub, sample)
                     shutil.copy(src_path, dst_path)
