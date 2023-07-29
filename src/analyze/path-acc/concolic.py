@@ -62,6 +62,8 @@ def bb_acc(ir_json_file, c_json_file, log_dir):
     unmatched_bbs_c = list(set(all_bbs_c) - set(matched_bbs))
     unmatched_bbs_ir = list(set(all_bbs_ir) - set(matched_bbs))
     
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
     umc_path = os.path.join(log_dir, "unmatched-c.csv")
     umi_path = os.path.join(log_dir, "unmatched-ir.csv")
     with open(umc_path, 'w') as f:

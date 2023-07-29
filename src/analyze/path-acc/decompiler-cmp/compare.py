@@ -27,8 +27,10 @@ def split_errs(errs):
         for err_file in errs[decompiler]:
             if err_file in common_files and flag == 0:
                 common_errs[err_file] = set().union(set(errs[decompiler][err_file]))
-            else:
+            elif err_file in common_files and flag != 0:
                 common_errs[err_file] = common_errs[err_file].intersection(set(errs[decompiler][err_file]))
+            else:
+                continue
         flag = 1
     
     other_errs = {}
@@ -73,7 +75,7 @@ def compare_all(root_dir, log_dir, compilers, optimizations, decompilers):
                 for path in other_errs[decompiler][key]:
                     f.write(path)
                     f.write('\n')
-    
+  
 
 if __name__ == '__main__':
     ROOT_DIR = '/home/eval/data/DSMITH/analyze/concolic'
