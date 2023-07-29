@@ -5,10 +5,11 @@ import exp_tree
 import log
 import random
 import json
+import os
 
 import numpy as np
 
-def bb_acc(ir_json_file, c_json_file, log_path):
+def bb_acc(ir_json_file, c_json_file, log_dir):
     ir_json = None
     with open(ir_json_file, 'r') as f:
         try:
@@ -58,8 +59,17 @@ def bb_acc(ir_json_file, c_json_file, log_path):
     # pdb.set_trace()
     recall = round(len(matched_bbs) / len(all_bbs_ir), 2) 
     precision = round(len(matched_bbs) / len(all_bbs_c), 2)
+    unmatched_bbs_c = list(set(all_bbs_c) - set(matched_bbs))
+    unmatched_bbs_ir = list(set(all_bbs_ir) - set(matched_bbs))
+    
+    umc_path = os.path.join(log_dir, "unmatched-c.csv")
+    umi_path = os.path.join(log_dir, "unmatched-ir.csv")
+    with open(umc_path, 'w') as f:
+        f.write('\n'.join(unmatched_bbs_c))
+    with open (umi_path, 'w') as f:
+        f.write('\n'.join(unmatched_bbs_ir))
 
-    return precision, recall
+    return precision, recall 
 
 def func_acc(ir_json_file, c_json_file, log_path):
     ir_json = None

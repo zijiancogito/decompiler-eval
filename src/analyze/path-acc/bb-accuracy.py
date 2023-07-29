@@ -34,7 +34,7 @@ def analyze_all(ir_dir, de_dir, log_dir, compilers, decompilers, optimizations):
                     ir_path = os.path.join(ir_dir, opt_level, dec_file)
                     #jif not os.path.exists(ir_path):
                         #jcontinue
-                    log_path = os.path.join(log_err_path_dir, path_process.change_ext(dec_file, 'csv', '.'))
+                    log_path = os.path.join(log_err_path_dir, os.path.splitext(dec_file)[0])
                     precision, recall = concolic.bb_acc(dec_path, ir_path, log_path)
                     ps.append(precision)
                     rs.append(recall)
@@ -42,7 +42,7 @@ def analyze_all(ir_dir, de_dir, log_dir, compilers, decompilers, optimizations):
                     log_line = f"{dec_file}\t{precision}\t{recall}"
                     logs.append(log_line)
                 
-                decompiler_log_path = os.path.join(log_sub_dir, f"concolic-accuracy-{decompiler}.csv")
+                decompiler_log_path = os.path.join(log_sub_dir, f"{decompiler}.csv")
                 # log.log_list2file(logs, decompiler_log_path)
                 
                 p_avg = round(np.mean(ps), 2) if len(ps) != 0 else 0
