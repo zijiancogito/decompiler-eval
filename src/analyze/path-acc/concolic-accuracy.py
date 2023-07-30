@@ -35,7 +35,7 @@ def analyze_all(ir_dir, de_dir, log_dir, compilers, decompilers, optimizations):
                     #jif not os.path.exists(ir_path):
                         #jcontinue
                     log_path = os.path.join(log_err_path_dir, path_process.change_ext(dec_file, 'csv', '.'))
-                    precision, recall = concolic.func_acc(dec_path, ir_path, log_path)
+                    precision, recall = concolic.func_acc(ir_path, dec_path, log_path)
                     ps.append(precision)
                     rs.append(recall)
                     

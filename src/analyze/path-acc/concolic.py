@@ -49,27 +49,20 @@ def bb_acc(ir_json_file, c_json_file, log_dir):
         bbs = path.split('-')
         matched_bbs.extend(bbs)
     matched_bbs = list(set(matched_bbs))
-   #  all_bbs_ir.sort()
-    # all_bbs_c.sort()
-    # matched_bbs.sort()
-    # print(all_bbs_ir)
-    # print(all_bbs_c)
-    # print(matched_bbs)
-    # import pdb
-    # pdb.set_trace()
     recall = round(len(matched_bbs) / len(all_bbs_ir), 2) 
     precision = round(len(matched_bbs) / len(all_bbs_c), 2)
     unmatched_bbs_c = list(set(all_bbs_c) - set(matched_bbs))
     unmatched_bbs_ir = list(set(all_bbs_ir) - set(matched_bbs))
     
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-    umc_path = os.path.join(log_dir, "unmatched-c.csv")
-    umi_path = os.path.join(log_dir, "unmatched-ir.csv")
-    with open(umc_path, 'w') as f:
-        f.write('\n'.join(unmatched_bbs_c))
-    with open (umi_path, 'w') as f:
-        f.write('\n'.join(unmatched_bbs_ir))
+    if len(unmatched_bbs_c) != 0:
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        umc_path = os.path.join(log_dir, "unmatched-c.csv")
+        umi_path = os.path.join(log_dir, "unmatched-ir.csv")
+        with open(umc_path, 'w') as f:
+            f.write('\n'.join(unmatched_bbs_c))
+        with open (umi_path, 'w') as f:
+            f.write('\n'.join(unmatched_bbs_ir))
 
     return precision, recall 
 
@@ -264,3 +257,14 @@ def not1(op1):                               # !
 
 def notbit(op1):
     return ~(int(op1))
+    
+
+def test():
+    c_json = '/home/eval/data/DSMITH/se-sample/de1/clang/o1/BinaryNinja/3.json'
+    ir_json = '/home/eval/data/DSMITH/se-sample/ir/o0/3.json'
+    
+    log_dir = './'
+    bb_acc(ir_json, c_json, log_dir)
+
+if __name__ == '__main__':
+    test()

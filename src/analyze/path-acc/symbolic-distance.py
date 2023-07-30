@@ -36,7 +36,7 @@ def analyze_all(ir_dir, dec_dir, log_dir, compilers, optimizations, decompilers)
                     # if not os.path.exists(ir_path):
                         # continue
                     log_path = os.path.join(log_err_dir, path_process.change_ext(dec_file, 'csv', '.'))
-                    avg_dist, sum_dist = symbolic.func_dist(dec_path, ir_path, log_path)
+                    avg_dist, sum_dist = symbolic.func_dist(ir_path, dec_path, log_path)
                     avgs.append(avg_dist)
                     sums.append(sum_dist)
                     

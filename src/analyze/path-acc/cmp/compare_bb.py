@@ -1,5 +1,6 @@
 import os
 import copy
+import shutil
 
 def err_bbs(err_dir):
     bb_irs = []
@@ -52,6 +53,8 @@ def split_errs(errs):
             else:
                 irs = set(errs[decompiler][f][0]) - common_errs[f][0]
                 cs = set(errs[decompiler][f][1]) - common_errs[f][1]
+                if len(irs) == 0 and len(cs) == 0:
+                    continue
                 other_errs[decompiler][f] = (copy.deepcopy(irs), copy.deepcopy(cs))
     return common_errs, other_errs
 
@@ -91,7 +94,7 @@ def compare_all(root_dir, log_dir, compilers, optimizations, decompilers):
             with open(os.path.join(f_sub_dir, "unmatched_irs.csv"), 'w') as f:
                 f.write("\n".join(list(other_errs[decompiler][key][0])))
             with open(os.path.join(f_sub_dir, "unmatched_cs.csv"), 'w' ) as f:
-                f.write("\n".join(list(other_errs[decompiler][key][0])))
+                f.write("\n".join(list(other_errs[decompiler][key][1])))
         
 if __name__ == '__main__':
     ROOT_DIR = '/home/eval/data/DSMITH/analyze/concolic-bb'
@@ -99,4 +102,6 @@ if __name__ == '__main__':
     COMPILERS = ['clang', 'gcc']
     OPTIMIZATIONS = ['o0', 'o1', 'o2', 'o3', 'os']
     LOG_DIR = '/home/eval/data/DSMITH/analyze/concolic-bb-common'
+    if os.path.exists(LOG_DIR):
+        shutil.rmtree(LOG_DIR)
     compare_all(ROOT_DIR, LOG_DIR, COMPILERS, OPTIMIZATIONS, DECOMPILERS)

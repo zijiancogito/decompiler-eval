@@ -154,7 +154,7 @@ def test(ir_path):
 
 if __name__ == '__main__':
     # /home/eval/data/DSMITH/se-sample/ir/o1/103.json
-  ir_path = "/home/eval/data/DSMITH/raw/ir/o1/103.ll"
+  ir_path = "/home/eval/data/DSMITH/raw/ir/o0/3.ll"
   test(ir_path)
 
 
