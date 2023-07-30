@@ -61,7 +61,7 @@ def analyze_all(ir_dir, dec_dir, log_dir, compilers, decompilers, optimizations)
                 pp_avg = round(np.mean(pp), 2) if len(pp) != 0 else 0
                 br_avg = round(np.mean(br), 2) if len(br) != 0 else 0
                 bp_avg = round(np.mean(bp), 2) if len(bp) != 0 else 0
-                print("{0:20}".format(f"{pr_avg}/{pp_avg}/{br_avg}/{bp_avg}"), end='\t')
+                print("{0:20}".format(f"{pp_avg}/{pr_avg}/{bp_avg}/{br_avg}"), end='\t')
             print()
         print()
                 

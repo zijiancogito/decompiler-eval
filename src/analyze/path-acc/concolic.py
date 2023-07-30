@@ -9,6 +9,55 @@ import os
 
 import numpy as np
 
+def bb_acc_without_control(ir_json_file, c_json_file, umc_path):
+    ir_json = None
+    with open(ir_json_file, 'r') as f:
+        try:
+            ir_json = json.load(f)
+        except:
+            ir_json = None
+    c_json = None
+    with open(c_json_file, 'r') as f:
+        try:
+            c_json = json.load(f)
+        except:
+            c_json = None
+    if ir_json == None or c_json == None:
+        return None, None
+    
+    matched_bbs = []
+    correct_bbs = []
+    matched_paths = []
+    correct_paths = []
+    for path in ir_json["paths"]:
+        if path not in c_json["paths"]:
+            continue
+        exp_ir = exp_tree.json_to_exptree(ir_json["paths"][path])
+        exp_c = exp_tree.json_to_exptree(c_json["paths"][path])
+        pass_rate = sample(exp_ir, exp_c, ir_json["symbols"], c_json["symbols"])
+        matched_paths.append(path)
+        if pass_rate > 0.9:
+            correct_paths.append(path)
+
+    for path in matched_paths:
+        bbs = path.split('-')
+        matched_bbs.extend(bbs)
+    for path in correct_paths:
+        bbs = path.split('-')
+        correct_bbs.extend(bbs)
+
+    matched_bbs = list(set(matched_bbs))
+    correct_bbs = list(set(correct_bbs))
+
+    precision = round(len(correct_bbs) / len(matched_bbs), 2) if len(matched_bbs) != 0 else 0
+    unmatched_bbs_c = list(set(matched_bbs) - set(correct_bbs))
+    
+    if len(unmatched_bbs_c) != 0:
+        with open(umc_path, 'w') as f:
+            f.write('\n'.join(unmatched_bbs_c))
+
+    return precision
+
 def bb_acc(ir_json_file, c_json_file, log_dir):
     ir_json = None
     with open(ir_json_file, 'r') as f:
