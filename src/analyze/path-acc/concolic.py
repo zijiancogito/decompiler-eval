@@ -49,7 +49,7 @@ def bb_acc_without_control(ir_json_file, c_json_file, umc_path):
     matched_bbs = list(set(matched_bbs))
     correct_bbs = list(set(correct_bbs))
 
-    precision = round(len(correct_bbs) / len(matched_bbs), 2) if len(matched_bbs) != 0 else 0
+    precision = round(len(correct_bbs) / len(matched_bbs), 2) if len(matched_bbs) != 0 else -1
     unmatched_bbs_c = list(set(matched_bbs) - set(correct_bbs))
     
     if len(unmatched_bbs_c) != 0:

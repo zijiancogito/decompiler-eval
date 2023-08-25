@@ -1,8 +1,10 @@
 import sys
+import csv
 import json
+import argparse
 from ctypes import *
 from func_timeout import func_set_timeout
-from json_to_exptree import load_from_json
+from json_to_exptree import load_from_json, no_return_num
 
 @func_set_timeout(15)
 def execute_function(dec_path, save_to, exp):
@@ -29,7 +31,25 @@ def symbolic_execution(de_file, exp):
     paths = run_se(STR, 0)
 
     if paths is not None:
-        paths = load_from_json(json.loads(paths.decode()), exp)
+        if exp == 'num':
+          paths =  no_return_num(json.loads(paths.decode()))
+        else:
+          paths = load_from_json(json.loads(paths.decode()), exp)
 
     return paths
 
+def process(de_file):
+   num = symbolic_execution(de_file, 'num')
+   tmp = de_file.split('/')
+   file = f'{tmp[9]}.csv'
+   with open(file, 'a') as f:
+      writer = csv.writer(f)
+      writer.writerow([num])
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-i', '--dec', type=str)
+
+    args = parser.parse_args()
+    process(args.dec)

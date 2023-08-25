@@ -36,7 +36,7 @@ def analyze_all(ir_dir, de_dir, log_dir, compilers, decompilers, optimizations):
                         #jcontinue
                     log_path = os.path.join(log_err_path_dir, f"{os.path.splitext(dec_file)[0]}.csv")
                     precision = concolic.bb_acc_without_control(ir_path, dec_path, log_path)
-                    if precision != 0:
+                    if precision != -1:
                         ps.append(precision)
                     
                     log_line = f"{dec_file}\t{precision}"

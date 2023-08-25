@@ -54,3 +54,16 @@ def load_from_json(json_data, exp):
     ret['paths'] = paths
 
     return ret
+
+def no_return_num(json_data):
+    num = 0
+    
+    paths: dict = json_data['paths']
+    if paths is not None:
+        for key in paths.keys():
+            if paths[key] is None:
+                num += 1
+    else:
+        num += 1
+    
+    return num

@@ -33,6 +33,15 @@ class ExpDiff:
         url = dump_html_output(self.left, self.right, self.diff, output_dir)
         # open_url(url)
     
+    @property
+    def count_diff(self):
+        cnt = 0
+        for key in self.diff:
+            if key == "ignore" or key == "just4vis:pairs":
+                continue
+            cnt += len(self.diff[key])
+        return cnt
+    
     def distance(self):
         dist = 0
         for key in self.diff:

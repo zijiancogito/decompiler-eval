@@ -1,7 +1,7 @@
 import os
 import sys
 import copy
-
+import shutil
 
 def err_paths(path):
     paths = []
@@ -40,7 +40,9 @@ def split_errs(errs):
             if f not in common_errs:
                 other_errs[decompiler][f] = copy.deepcopy(set(errs[decompiler][f]))
             else:
-                other_errs[decompiler][f] = set(errs[decompiler][f]) - set(common_errs[f])
+                tmp = set(errs[decompiler][f]) - set(common_errs[f])
+                if len(tmp) != 0:
+                    other_errs[decompiler][f] = copy.deepcopy(tmp)
     return common_errs, other_errs
 
 def compare_all(root_dir, log_dir, compilers, optimizations, decompilers):
@@ -61,6 +63,8 @@ def compare_all(root_dir, log_dir, compilers, optimizations, decompilers):
     if not os.path.exists(common_dir):
         os.makedirs(common_dir)
     for key in common_errs:
+        if len(common_errs[key]) == 0:
+            continue
         with open(os.path.join(common_dir, f"{key}.csv"), 'w') as f:
             for path in common_errs[key]:
                 f.write(path)
@@ -78,11 +82,13 @@ def compare_all(root_dir, log_dir, compilers, optimizations, decompilers):
   
 
 if __name__ == '__main__':
-    ROOT_DIR = '/home/eval/data/DSMITH/analyze/concolic'
+    ROOT_DIR = '/home/eval/data/DSMITH/analyze/concolic-bb-1'
     DECOMPILERS = ['BinaryNinja', 'Ghidra', 'Hex-Rays', 'RetDec']
     COMPILERS = ['clang', 'gcc']
     OPTIMIZATIONS = ['o0', 'o1', 'o2', 'o3', 'os']
-    LOG_DIR = '/home/eval/data/DSMITH/analyze/concolic-common'
+    LOG_DIR = '/home/eval/data/DSMITH/analyze/concolic-bb-common-1'
+    if os.path.exists(LOG_DIR):
+        shutil.rmtree(LOG_DIR)
     compare_all(ROOT_DIR, LOG_DIR, COMPILERS, OPTIMIZATIONS, DECOMPILERS)
     
      
