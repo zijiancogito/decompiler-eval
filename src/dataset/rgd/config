@@ -8,8 +8,8 @@
 --max-expr-complexity 5
 --max-local-variables 5
 --min-local-variables 3
---max-const-variables 5
---min-const-variables 3
+--max-const-variables 0
+--min-const-variables 0
 --max-const-values 1000
 --divs
 --logic

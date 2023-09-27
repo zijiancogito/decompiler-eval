@@ -21,7 +21,6 @@ def generate(dsmith, save_to, config_file, number):
         out = os.path.join(save_to, f"{i}.c")
         cmd = f"python3 {dsmith} {config} -o {out}"
         os.system(cmd)
-
     return 
 
 
@@ -35,3 +34,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     generate(args.script, args.save, args.config, args.number)
+
+# python 
