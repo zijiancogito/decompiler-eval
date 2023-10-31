@@ -2,6 +2,7 @@ import sys
 import os
 import argparse
 from tqdm import tqdm
+import re
 
 def load_config(config_file):
     config= []

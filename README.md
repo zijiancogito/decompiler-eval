@@ -4,7 +4,9 @@
 
 ```
 apt-get update
-apt-get install python3 python3-pip
+apt-get install python3 python3-pip clang
+
+pip install -r requirements.txt
 ```
 
 ## USAGE
@@ -15,9 +17,9 @@ apt-get install python3 python3-pip
 
 ```
 cd src/dataset/rgd
-
-python3 gen.py -n 1000 -c ./config -s ./dsmith/source.py -o $RGD/raw/src/
-python3 make.py ir --opt O0 O1 O2 O3 Os --src $RGD/raw/src/ --out $RGD/raw/ir/ --log $RGD/log/make.log 
-python3 make.py bin --opt O0 O1 O2 O3 Os --src $RGD/raw/src/ --out $RGD/raw/bin/ --log $RGD/log/make.log
+export RGD="/root/data/dsmith"
+python3 gen.py -n 2000 -c ./config -s ./dsmith/source.py -o $RGD/raw/src/
+python3 make.py --opt O0 O1 O2 O3 Os --src $RGD/raw/src/ --out $RGD/raw/ir/ --log $RGD/log/make.log ir
+python3 make.py --opt O0 O1 O2 O3 Os --src $RGD/raw/src/ --out $RGD/raw/bin/ --log $RGD/log/make.log bin
 
 ```
