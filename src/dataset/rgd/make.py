@@ -82,7 +82,13 @@ if __name__ == '__main__':
     if not os.path.exists(os.path.dirname(args.log)):
         os.makedirs(os.path.dirname(args.log))
 
-    logging.basicConfig(filename=args.log, encoding='utf-8', level=logging.DEBUG)
+    logging.basicConfig(filename=args.log,
+                        encoding='utf-8', 
+                        format='%(asctime)s %(filename)s : %(levelname)s %(message)s',
+                        datefmt='%Y-%m-%d %A %H:%M:%S',
+                        level=logging.DEBUG,
+                        filemode='a')
+
 
     cflags = ['-fno-inline-functions',
               '-fno-default-inline',
