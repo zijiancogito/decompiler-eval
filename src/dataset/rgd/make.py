@@ -106,7 +106,7 @@ if __name__ == '__main__':
         for opt in args.opt:
             config = {"cflags": cflags, "opt": opt, "cc": args.cc}
             src_dir = os.path.join(args.src)
-            out_dir = os.path.join(args.out, opt)
+            out_dir = os.path.join(args.out, args.cc, opt)
             make_bin(config, src_dir, out_dir)
 
     

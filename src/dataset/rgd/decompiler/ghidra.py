@@ -6,7 +6,7 @@ import os
 import tempfile
 from pathlib import Path
 
-GHIDRA_INSTALL = Path(os.getenv("GHIDRA_INSTALL_PATH", "/root/decompiler/ghidra_10.3.1_PUBLIC"))
+GHIDRA_INSTALL = Path(os.getenv("GHIDRA_INSTALL_PATH", "/root/decompiler/ghidra_10.4_PUBLIC"))
 GHIDRA_HEADLESS = GHIDRA_INSTALL / 'support' / 'analyzeHeadless'
 GHIDRA_APP_PROPERTIES = GHIDRA_INSTALL / 'Ghidra' / 'application.properties'
 
