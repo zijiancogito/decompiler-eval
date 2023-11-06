@@ -48,7 +48,7 @@ def make_bin(config, src_path, save_to):
         c_path = os.path.join(src_path, c)
         c_name = os.path.splitext(c)[0]
         binary_path = os.path.join(save_to, c_name)
-        cmd = f"{cc} -{opt} {' '.join(cflags)} {c_path} -o {binary_path}"
+        cmd = f"{cc} -{opt} {' '.join(cflags)} {c_path} -o {binary_path} -lm"
         with subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
             stdout, stderr = p.communicate()
             stderr = stderr.decode('ISO-8859-1')

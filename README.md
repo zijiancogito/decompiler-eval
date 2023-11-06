@@ -62,3 +62,17 @@ python3 decompile_linux.py --msg="GCC-O3-RetDec" --bin $RGD/raw/bin/gcc/O3 --out
 python3 decompile_linux.py --msg="GCC-Os-RetDec" --bin $RGD/raw/bin/gcc/Os --out $RGD/raw/dec/gcc/Os_RetDec/ --log $RGD/log/dec-gcc-os-retdec.log --decomp="RetDec"
 ```
 
+
+2. Real World Dataset
+
+```
+
+```
+
+### Preprocess
+
+#### IR
+
+```
+cp -r $RGD/raw/ir $RGD/raw/ir_preprocess
+```
