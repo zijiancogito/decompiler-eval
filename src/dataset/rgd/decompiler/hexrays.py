@@ -21,23 +21,22 @@ def delete_files(path, exts):
 def decompile(infile, outfile):
     signal = 0
     decompiler_outputs = ""
-    with tempfile.TemporaryDirectory() as tempdir:
-        poj_dir = tempfile.TemporaryDirectory(dir=tempdir)
-        temp_outfile = poj_dir.name + 'temp.c'
-        hexopt = f'-Ohexrays:-errs:{temp_outfile}:ALL'
-        decomp = subprocess.run([sys.executable, str(IDA_BATCH_PY), "--idadir", str(IDA_INSTALL), hexopt, infile])
-        if not Path(temp_outfile).exists():
-            signal = 0
-            decompiler_outputs = f"{decomp.stdout.decode()}\n{decomp.stderr.decode()}"
-            delete_files(infile, [".i64"])
-        else:
-            signal = 1
-            with open(temp_outfile, 'r') as f:
-                decompiler_outputs = f.read()
-            delete_files(infile, [".i64"])
+    poj_dir = tempfile.TemporaryDirectory(dir='./temp')
+    temp_outfile = poj_dir.name + 'temp.c'
+    hexopt = f'-Ohexrays:-errs:{temp_outfile}:ALL'
+    decomp = subprocess.run([sys.executable, str(IDA_BATCH_PY), "--idadir", str(IDA_INSTALL), hexopt, infile])
+    if not Path(temp_outfile).exists():
+        signal = 0
+        decompiler_outputs = f"{decomp.stdout.decode()}\n{decomp.stderr.decode()}"
+        delete_files(infile, [".i64"])
+    else:
+        signal = 1
+        with open(temp_outfile, 'r') as f:
+            decompiler_outputs = f.read()
+        delete_files(infile, [".i64"])
 
-        with open(outfile, 'w') as f:
-            f.write(decompiler_outputs)
+    with open(outfile, 'w') as f:
+        f.write(decompiler_outputs)
     
     return signal
             
