@@ -42,4 +42,5 @@ def decompile(infile, outfile):
     return signal
             
 
-            
+if __name__ == '__main__':
+    decompile('../../../../case/case.o', './test.c')

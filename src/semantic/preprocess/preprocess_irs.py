@@ -52,5 +52,5 @@ def try_load_ir(ir_path, out_dir):
 
 def delete(ir_dir, out_dir):
     ir_files = os.listdir(ir_dir)
-
+    
 
