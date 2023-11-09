@@ -104,8 +104,3 @@ if __name__ == '__main__':
     elif args.opt == 'chk':
         check(args.src)        
     
-    
-
-
-    
-
