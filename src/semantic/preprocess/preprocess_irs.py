@@ -77,7 +77,7 @@ def check(ir_dir):
         if chk_res == False:
             cnt += 1
             logging.error(f"File {ir_path} check failed.")
-    print(f"{cnt} files check failed. Please check log file for the details.")
+    print(f"{cnt}/{len(ir_files)} files check failed. Please check log file for the details.")
     
     
 if __name__ == '__main__':

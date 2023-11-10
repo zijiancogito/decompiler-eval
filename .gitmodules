@@ -28,3 +28,9 @@
 [submodule "src/readability/var/vendor/tree-sitter-c"]
 	path = src/readability/var/vendor/tree-sitter-c
 	url = https://github.com/tree-sitter/tree-sitter-c.git
+[submodule "src/utils/tree-sitter/tree-sitter"]
+	path = src/utils/tree-sitter/tree-sitter
+	url = https://github.com/tree-sitter/tree-sitter.git
+[submodule "src/utils/tree-sitter/vendor/tree-sitter-c"]
+	path = src/utils/tree-sitter/vendor/tree-sitter-c
+	url = https://github.com/tree-sitter/tree-sitter-c.git
