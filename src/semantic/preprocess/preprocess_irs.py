@@ -85,7 +85,7 @@ if __name__ == '__main__':
     parser.add_argument('--src', type=str, required=True, help='Path to source code')
     parser.add_argument('--log', type=str, required=True, help='Path to logging')
     parser.add_argument('--opt', choices=['del', 'chk'], required=True, help='Options')
-    parser.add_argument('--pass', nargs='+', required='True', help='Checking passes.')
+    parser.add_argument('--pass', nargs='+', required=True, help='Checking passes.')
     
     args = parser.parse_args()
 
