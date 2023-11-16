@@ -15,6 +15,8 @@ def decompile_all(bindir, outdir, decompiler):
         os.makedirs(outdir)
     
     binfiles = os.listdir(bindir)
+    cnt_0 = 0
+    cnt_1 = 0
     for binfile in tqdm(binfiles):
         binpath = os.path.join(bindir, binfile)
         outpath = os.path.join(outdir, f"{binfile}.c")
@@ -25,13 +27,15 @@ def decompile_all(bindir, outdir, decompiler):
             signal = retdec.main(binpath, outpath)
         else:
             raise NotImplementedError
-        cnt = 0
         if signal == 1:
             logging.info(f"Decompiling succeed, {binpath}")
-            cnt += 1
+            cnt_1 += 1
+        elif signal == 0:
+            cnt_0 += 1
         else:
             logging.error(f"Decompiling failed, {binpath}")
-    print(f"{cnt}/{len(binfiles)} BIN decompilation complete.")
+    print(f"{cnt_1}/{len(binfiles)} BIN decompilation complete.")
+    return cnt_0, cnt_1
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Decompilation')

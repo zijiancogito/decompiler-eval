@@ -18,8 +18,7 @@ def main(infile, outfile):
     signal = 0
     decompiler_outputs = ""
     with tempfile.TemporaryDirectory() as tempdir:
-        temp_outfile= tempfile.NamedTemporaryFile(dir=tempdir, delete=True, delete_on_close=False)
-        temp_outfile.close()
+        temp_outfile= tempfile.NamedTemporaryFile(dir=tempdir, delete=True)
         try:
             decomp = subprocess.run([RETDEC_DECOMPILER,
                                     '--output',
@@ -40,5 +39,6 @@ def main(infile, outfile):
             signal = -1
         with open(outfile, 'w') as f:
             f.write(decompiler_outputs)
+        temp_outfile.close()
         
     return signal

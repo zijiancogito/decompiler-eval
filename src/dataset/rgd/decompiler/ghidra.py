@@ -16,18 +16,18 @@ def main(infile, outfile):
     with tempfile.TemporaryDirectory() as tempdir:
         project_dir = tempfile.TemporaryDirectory(dir=tempdir)
         temp_outfile = project_dir.name + "/out"
-        parent_dir = Path.cwd()
+        parent_dir = os.path.dirname(Path(__file__).resolve())
 
         decompile_command = [
-            GHIDRA_HEADLESS,
+            f"{GHIDRA_HEADLESS}",
             project_dir.name,
             "temp",
             "-import",
             infile,
             "-scriptPath",
-            "./tools/ghidra",
+            os.path.join(parent_dir, "tools/ghidra"),
             "-postScript",
-            "./tools/ghidra/DecompilerExplorer.java",
+            os.path.join(parent_dir, "tools/ghidra/DecompilerExplorer.java"),
             temp_outfile
         ]
         

@@ -46,6 +46,22 @@ class Test_CFG():
         expected_paths = set(["0-1-2-4", f"0-1-3-4"])
 
         assert paths == expected_paths, f"CFG get_all_path() not pass: Expect {expected_paths}, get {paths}."
+        
+    def test_c(self):
+        edges = [(0, 1), (1, 2), (2, 3), (3, 2), (2, 4), (4, 5), (5, 2), (2, 6), (4, 7), (6, 7)] 
+        cfg = CFG(edges)
+        cfg.set_entry(0)
+        cfg.set_exit(7)
+        cfg.normalize()
+        expected_norm_edges = set([(0, 1), (2, 4), (1, 2), (3, 4), (5, 7), (2, 3), (6, 7), (4, 5), (2, 6), (5, 6), (3, 6), (4, 7)])
+        print(set(list(cfg.norm_cfg.edges)))
+        assert expected_norm_edges == set(list(cfg.norm_cfg.edges)), f"CFG normalize() not pass: Expect {expected_norm_edges}, get {list(cfg.norm_cfg.edges)}."
+
+        paths = cfg.get_all_path()
+        paths = set(['-'.join(list(map(str, i))) for i in paths])
+        print(paths)
+        expected_paths = set(['0-1-2-4-5-2-4-7', '0-1-2-3-2-4-5-2-6-7', '0-1-2-4-5-2-6-7', '0-1-2-4-7', '0-1-2-3-2-6-7', '0-1-2-6-7', '0-1-2-3-2-4-5-2-4-7', '0-1-2-3-2-4-7'])
+        assert paths == expected_paths, f"CFG get_all_path() not pass: Expect {expected_paths}, get {paths}."
 
 if __name__ == '__main__':
     pytest.main("-s test_cfg.py") 

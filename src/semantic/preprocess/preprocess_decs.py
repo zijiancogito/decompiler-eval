@@ -175,6 +175,7 @@ def check(src_dir):
                 chk_cnt += 1
     print(f"{con_cnt}/{len(src_files)} files failed to pass the concat check.")
     print(f"{chk_cnt}/{len(src_files)} files failed to pass the chk check.")
+    return con_cnt, chk_cnt
 
 
 if __name__ == '__main__':

@@ -32,6 +32,7 @@ def make_ir(config, src_path, save_to):
                 logging.info(f"IR PASS: {opt} {c_path}")
                 cnt += 1
     print(f"{cnt}/{total} {opt} IR compilation complete.")
+    return cnt
 
 def make_bin(config, src_path, save_to):
     if not os.path.exists(save_to):
@@ -59,6 +60,7 @@ def make_bin(config, src_path, save_to):
                 logging.info(f"BIN PASS: {cc} {opt} {c_path}")
                 cnt += 1
     print(f"{cnt}/{total} {opt} BIN compilation complete.")
+    return cnt
 
 
 if __name__ == '__main__':
