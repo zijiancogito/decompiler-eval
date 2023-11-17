@@ -1,6 +1,6 @@
 import sys
 import pytest
-from preprocess_decs import extract_func
+from preprocess_decs import process, check
 
 import shutil
 
@@ -9,6 +9,7 @@ class Test_Process_decs():
         print("-------->setup_method")
         self.test_root = '../../../test/'
         self.passes = ['chk', 'concat']
+        self.func_filter = ["func0"]
 
 
     def teardown_class(self):
@@ -24,5 +25,12 @@ class Test_Process_decs():
         for opt in ["O0", "O1", "O2", "O3", "Os"]:
             for decompiler in ["Ghidra", "RetDec"]:
                 src_dir = os.path.join(dec_dir, opt, decompiler)
+                process(src_dir, self.passes, self.func_filter)
+                con_cnt, chk_cnt = check(src_dir)
+                assert con_cnt == 0, f"Case b not pass. Expected 0, get {con_cnt}."
+                assert chk_cnt == 0, f"Case b not pass. Expected 0, get {chk_cnt}."
+
+if __name__ == '__main__':
+    pytest.main("-s test_preprocess_decs.py")     
 
 
