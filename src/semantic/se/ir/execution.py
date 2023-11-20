@@ -11,6 +11,8 @@ sys.path.append('../../../utils/exptree/')
 from exp_tree import ExpTree, exptree_to_json, json_to_exptree
 from cfg import CFG
 
+import ir_parser
+
 
 llvm.initialize()
 llvm.initialize_native_target()
@@ -31,7 +33,7 @@ def ir_execution(ir_path, out, func_filter=[]):
         try:
             paths, syms = symbolic_execution(function)
 
-
+@func_set_timeout(10)
 def function_execution(function):
     if "select" in str(function):
         raise NotImplementedError
@@ -45,10 +47,35 @@ def function_execution(function):
         labesl.append(label)
     # build cfg
     cfg = build_cfg(blocks)
+    cfg.set_entry(0)
+    cfg.set_exit(labels[-1])
+    paths = cfg.get_all_path()
+
+    exe_results = {}  # path: expression
+    init_dict = {}
+    in_symbols_table = {}
+    ir_parser.
 
 
 def build_cfg(blocks):
-    cfg = CFG()
+    edges = []
+
     for label in blocks:
-        cfg.cfg.add_node(label)
+        block = blocks[label]
+        last_insn = None
+        for insn in block.instructions:
+            last_insn = insn
+        if last_insn.opcode == 'br':
+            jump_tos = ir_parser.parse_jump_instruction(last_insn)
+            for addr in jump_tos:
+                edges.append((label, addr))
+        elif last_insn.opcode == 'switch':
+            dest_pat = r'label %([0-9]+)'
+            jump_tos = [int(i) for i in re.findall(dest_pat, str(last_insn))]
+            for addr in jump_tos:
+                edges.append((label, addr))
+    cfg = CFG(edges)
+    return cfg
+
+
     

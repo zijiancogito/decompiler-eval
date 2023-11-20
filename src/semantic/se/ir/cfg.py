@@ -17,6 +17,7 @@ class CFG():
         self.paths = None
 
         self.norm_cfg = nx.DiGraph(self.cfg)
+        self.normalize()
 
     def set_entry(self, entry):
         self.entry = entry
