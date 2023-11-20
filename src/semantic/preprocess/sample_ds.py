@@ -40,7 +40,7 @@ def common(ir_dir, de_dir, out_dir, k, decompilers):
 
 def sample_by_ir(ir_dir, de_dir, out_dir, k, decompilers):
     ir_files = set([os.path.splitext(f)[0] for f in os.listdir(ir_dir)])
-    sampled_set = random.choices(list(ir_files), k)
+    sample_set = random.choices(list(ir_files), k=k)
 
     ir_new_dir = os.path.join(out_dir, 'ir')
     if not os.path.exists(ir_new_dir):
@@ -55,7 +55,7 @@ def sample_by_ir(ir_dir, de_dir, out_dir, k, decompilers):
         de_new_dir = os.path.join(out_dir, decompiler)
         if not os.path.exists(de_new_dir):
             os.makedirs(de_new_dir)
-        for f in sampled_set:
+        for f in sample_set:
             de_raw = os.path.join(de_dir, decompiler, f'{f}.c')
             de_new = os.path.join(de_new_dir, f'{f}.c')
             shutil.copy(de_raw, de_new)

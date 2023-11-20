@@ -17,8 +17,8 @@ class Test_Sample_by_ir():
 
     def test_b(self):
         sample_dir = os.path.join(self.test_root, 'b/sample')
-        if os.path.exists(self.sample_dir):
-            shutil.rmtree(self.sample_dir)
+        if os.path.exists(sample_dir):
+            shutil.rmtree(sample_dir)
         os.makedirs(sample_dir)
 
         raw_dec_dir = os.path.join(self.test_root, 'b/dec')
@@ -31,9 +31,9 @@ class Test_Sample_by_ir():
             out_dir = os.path.join(sample_dir, opt_level)
             sample_by_ir(ir_dir, dec_dir, out_dir, k, self.decompilers)
 
-            ir_cnt = len(os.listdir(os.path.join(out_dir, opt_level, 'ir')))
+            ir_cnt = len(os.listdir(os.path.join(out_dir, 'ir')))
             for decompiler in self.decompilers:
-                cnt = len(os.listdir(os.path.join(out_dir, opt_level, decompiler))
+                cnt = len(os.listdir(os.path.join(out_dir, decompiler)))
             assert cnt == ir_cnt, f"Case b not pass. For {decompiler}, expect {ir_cnt} samples, get {cnt}."
 
 if __name__ == '__main__':
