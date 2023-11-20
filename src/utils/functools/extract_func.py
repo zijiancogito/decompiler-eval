@@ -25,7 +25,6 @@ def make_move_iter(cursor, stop=""):
         if up == False:
             if cursor.node.type == stop:
                 func_nodes.append(cursor.node)
-            if cursor.node.type == stop:
                 if cursor.goto_next_sibling():
                     up = False
                     stack.append(cursor.node)
@@ -77,9 +76,10 @@ def get_content(code, ts_range):
     return tmp 
 
 
-def get_functions(code_files):
+def get_functions(code_file):
+    print(code_file)
     funcs = {}
-    with open(code_files, 'r') as f:
+    with open(code_file, 'r') as f:
         src = f.read().strip()
         tree = c_parser.parse(bytes(src, 'utf8'))
         cursor = tree.walk()

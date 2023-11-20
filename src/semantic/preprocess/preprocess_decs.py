@@ -9,11 +9,11 @@ sys.path.append('../../utils/functools')
 import extract_func
 
 
-CHK1 = "\*\(fsbase[^\n]+;\n[^\n]+if [^\n]+\n[^\n]+\{\n[\s]+__stack_chk_fail\(\);\n[^\n]+\n[^\n]+\}"
-CHK2 = "[^\n]*fsbase[^\n]+;\n[^\n]*if [^\n]+\n[^\n]*\{\n[^\n]*__stack_chk_fail\(\);\n[^\n]*\n[^\n]*\}"
-CHK3 = "if[^\n]+\{\n[^\n]+(return[^\n]+;)\n[^\n]+\}\n[^\n]+\n[^\n]+__stack_chk_fail\(\);"
-CHK4 = "if[^\n]+\{\n[^\n]+\n[^\n]+(return[^\n]+;)\n[^\n]+\}\n[^\n]+\n[^\n]+__stack_chk_fail\(\);\n[^\n]+return[^\n]+;"
-CHK5 = "if[^\n]+{\n[^\n]+\n[\s]+__stack_chk_fail\(\);\n[^\n]+\n[^\n]*}"
+CHK1 = r"\*\(fsbase[^\n]+;\n[^\n]+if [^\n]+\n[^\n]+\{\n[\s]+__stack_chk_fail\(\);\n[^\n]+\n[^\n]+\}"
+CHK2 = r"[^\n]*fsbase[^\n]+;\n[^\n]*if [^\n]+\n[^\n]*\{\n[^\n]*__stack_chk_fail\(\);\n[^\n]*\n[^\n]*\}"
+CHK3 = r"if[^\n]+\{\n[^\n]+(return[^\n]+;)\n[^\n]+\}\n[^\n]+\n[^\n]+__stack_chk_fail\(\);"
+CHK4 = r"if[^\n]+\{\n[^\n]+\n[^\n]+(return[^\n]+;)\n[^\n]+\}\n[^\n]+\n[^\n]+__stack_chk_fail\(\);\n[^\n]+return[^\n]+;"
+CHK5 = r"if[^\n]+{\n[^\n]+\n[\s]+__stack_chk_fail\(\);\n[^\n]+\n[^\n]*}"
 
 CONCAT1 = r'COMBINE\([^\n]+\)' # HIGHW LOWW
 CONCAT1_PAT = r'COMBINE\(([^\n]+), [^\n]+\)'
@@ -21,6 +21,8 @@ CONCAT2 = r'HIGHW\([^\n]+\)'
 CONCAT2_PAT = r'HIGHW\(([^\n]+)\)'
 CONCAT3 = r'LOWW\([^\n]+\)'
 CONCAT3_PAT = r'LOWW\(([^\n]+)\)'
+
+UNDEF1 = r'undefined[\s]+\[[0-9]+\]\s'
 
 def extract_functions(src_path, filter):
     funcs = extract_func.get_functions(src_path)
@@ -53,6 +55,8 @@ def delete_chk(src_path):
             content = re.sub(CHK4, '', tmp)
         elif re.search(CHK5, tmp):
             content = re.sub(CHK5, '', tmp)
+        else:
+            content = tmp
 
     with open(src_path, 'w') as f:
         f.write(content)
@@ -101,8 +105,21 @@ def change_to_regex(s):
         elif ch == ' ':
             regex_s.append(ch)
         else:
-            regex_s.append(f"\{ch}")
+            regex_s.append(f"\\{ch}")
     return "".join(regex_s)
+
+def delete_func_decl_array(src_path):
+    content = None
+    with open(src_path, 'r') as f:
+        tmp = f.read()
+        if re.search(UNDEF1, tmp):
+            content = re.sub(UNDEF1, 'undefined ', tmp)
+        else:
+            content = tmp
+    with open(src_path, 'w') as f:
+        f.write(content)
+
+
 
 
 def delete_concat(src_path):
@@ -115,20 +132,23 @@ def delete_concat(src_path):
                 if re.search(CONCAT1, tmp):
                     matched = re.findall(CONCAT1, tmp)
                     c_str, s_str = match_concat(matched[0])
-                    c_str = change_to_regex(c_str)
-                    tmp = re.sub(c_str, s_str, tmp, 1)
+                    # c_str = change_to_regex(c_str)
+                    # tmp = re.sub(c_str, s_str, tmp, 1)
+                    tmp = s_str.replace(c_str, tmp, 1)
                 elif re.match(CONCAT2, tmp):
                     matched = re.findall(CONCAT2, tmp)
                     c_str, s_str = match_concat(matched[0])
                     s_str = re.match(CONCAT2_PAT, c_str)[1]
-                    c_str = change_to_regex(c_str)
-                    tmp = re.sub(c_str, s_str, tmp, 1)
+                    # c_str = change_to_regex(c_str)
+                    # tmp = re.sub(c_str, s_str, tmp, 1)
+                    tmp = s_str.replace(c_str, tmp, 1)
                 elif re.match(CONCAT3, tmp):
                     matched = re.findall(CONCAT3, tmp)
                     c_str, s_str = match_concat(matched[0])
                     s_str = re.match(CONCAT3_PAT, c_str)[1]
-                    c_str = change_to_regex(c_str)
-                    tmp = re.sub(c_str, s_str, tmp, 1)
+                    # c_str = change_to_regex(c_str)
+                    # tmp = re.sub(c_str, s_str, tmp, 1)
+                    tmp = s_str.replace(c_str, tmp, 1)
                 else:
                     content.append(tmp)
                     break
@@ -143,6 +163,9 @@ def process(src_dir, passes=[], func_filter=""):
     err_cnt = 0
     for src_file in tqdm(src_files):
         src_path = os.path.join(src_dir, src_file)
+        if 'undef' in passes:
+            delete_func_decl_array(src_path)
+            logging.info(f"Check undefined [] for the file {src_path}.")
         res = extract_functions(src_path, func_filter)
         if res == -1:
             logging.error('Fail to decompile {src_path}.')
@@ -162,11 +185,14 @@ def check(src_dir):
     src_files = os.listdir(src_dir)
     con_cnt = 0
     chk_cnt = 0
+    undef_cnt = 0
     for src_file in tqdm(src_files):
         src_path = os.path.join(src_dir, src_file)
         with open(src_path, 'r') as f:
             code = f.read()
-            
+            if re.search(UNDEF1, code):
+                logging.error(f"File {src_path} has invalid token undefined [].")
+                undef_cnt += 1
             if 'COMBINE' in code or 'HIGHW' in code or 'LOWW' in code:
                 logging.error(f"File {src_path} has invalid token CONCAT.")
                 con_cnt += 1
@@ -175,7 +201,7 @@ def check(src_dir):
                 chk_cnt += 1
     print(f"{con_cnt}/{len(src_files)} files failed to pass the concat check.")
     print(f"{chk_cnt}/{len(src_files)} files failed to pass the chk check.")
-    return con_cnt, chk_cnt
+    return undef_cnt, con_cnt, chk_cnt
 
 
 if __name__ == '__main__':
@@ -183,7 +209,7 @@ if __name__ == '__main__':
     parser.add_argument('--src', type=str, required=True, help='Path to source code')
     parser.add_argument('--log', type=str, required=True, help='Path to logging')
     parser.add_argument('--opt', choices=['pro', 'chk'], required=True, help='Options')
-    parser.add_argument('--pass', nargs='+', required='True', help='Checking passes.')
+    parser.add_argument('--passes', nargs='+', required='True', help='Checking passes.')
     parser.add_argument('--func-filter', nargs='+', required='True', help='Function filter.')
 
     args = parser.parse_args()
@@ -199,6 +225,6 @@ if __name__ == '__main__':
                         filemode='a')
     
     if args.opt == 'pro':
-        process(args.src, args.pass, args.func_filter)
+        process(args.src, args.passes, args.func_filter)
     elif args.opt == 'chk':
         check(args.src)

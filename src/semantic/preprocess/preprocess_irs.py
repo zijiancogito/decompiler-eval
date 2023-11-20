@@ -78,6 +78,7 @@ def check(ir_dir):
             cnt += 1
             logging.error(f"File {ir_path} check failed.")
     print(f"{cnt}/{len(ir_files)} files check failed. Please check log file for the details.")
+    return cnt
     
     
 if __name__ == '__main__':
@@ -85,7 +86,7 @@ if __name__ == '__main__':
     parser.add_argument('--src', type=str, required=True, help='Path to source code')
     parser.add_argument('--log', type=str, required=True, help='Path to logging')
     parser.add_argument('--opt', choices=['del', 'chk'], required=True, help='Options')
-    parser.add_argument('--pass', nargs='+', required=True, help='Checking passes.')
+    parser.add_argument('--passes', nargs='+', required=True, help='Checking passes.')
     
     args = parser.parse_args()
 
@@ -100,7 +101,7 @@ if __name__ == '__main__':
                         filemode='a')
 
     if args.opt == 'del':
-        delete(args.src, args.pass)
+        delete(args.src, args.passes)
     elif args.opt == 'chk':
         check(args.src)        
     
