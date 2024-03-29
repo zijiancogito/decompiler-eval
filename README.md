@@ -1,5 +1,6 @@
 # decompiler-eval
-
+Code for paper "Evaluating the Effectiveness of Decompilers" (will appare in ISSTA 2024).
+The code is still under maintenance.
 ## INSTALL
 
 ```
