@@ -1,6 +1,8 @@
 # decompiler-eval
 Code for paper "Evaluating the Effectiveness of Decompilers" (will appare in ISSTA 2024).
 The code is still under maintenance.
+
+Code for human-study platform is here => https://github.com/zijiancogito/dec_competition
 ## INSTALL
 
 ```
